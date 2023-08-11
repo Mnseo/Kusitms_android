@@ -1,4 +1,4 @@
-package com.kusitms.kusitms.ui.theme
+package com.kusitms.kusitms.common.theme
 
 import androidx.compose.ui.graphics.Color
 
