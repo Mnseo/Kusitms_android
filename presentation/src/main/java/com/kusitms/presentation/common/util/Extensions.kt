@@ -1,4 +1,4 @@
-package com.kusitms.kusitms.common.ui.util
+package com.kusitms.presentation.ui.ui.util
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalDensity

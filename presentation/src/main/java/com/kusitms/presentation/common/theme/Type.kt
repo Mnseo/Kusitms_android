@@ -1,4 +1,4 @@
-package com.kusitms.kusitms.common.ui.theme
+package com.kusitms.presentation.common.ui.theme
 
 import androidx.compose.material.Typography
 import androidx.compose.runtime.staticCompositionLocalOf

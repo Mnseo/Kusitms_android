@@ -1,4 +1,4 @@
-package com.kusitms.kusitms.common.ui.theme
+package com.kusitms.presentation.common.ui.theme
 
 import android.app.Activity
 import android.os.Build
