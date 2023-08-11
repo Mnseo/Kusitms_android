@@ -1,8 +1,52 @@
-package com.kusitms.kusitms.common.theme
+package com.kusitms.kusitms.common.ui.theme
 
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 
-val Purple200 = Color(0xFFBB86FC)
-val Purple500 = Color(0xFF6200EE)
-val Purple700 = Color(0xFF3700B3)
-val Teal200 = Color(0xFF03DAC5)
+data class ColorPalette(
+    val White: Color = Color(0xFFFFFFFF),
+    val Black: Color = Color(0xFF000000),
+
+    //Grey Color
+    val Grey900: Color = Color(0xFF0F1011),
+    val Grey800: Color = Color(0xFF15171E),
+    val Grey700: Color = Color(0xFF171A21),
+    val Grey600: Color = Color(0xFF20232D),
+    val Grey500: Color = Color(0xFF363C48),
+    val Grey400: Color = Color(0xFF8F95A2),
+    val Grey300: Color = Color(0xFFD9DCE1),
+    val Grey200: Color = Color(0xFFE8EBEF),
+    val Grey100: Color = Color(0xFFF4F6F8),
+
+    //Main Color 1 = blue
+    val Main900: Color = Color(0xFF102E6A),
+    val Main800: Color = Color(0xFF153C8B),
+    val Main700: Color = Color(0xFF1B4DB3),
+    val Main600: Color = Color(0xFF2363E5),
+    val Main500: Color = Color(0xFF266DFC),
+    val Main400: Color = Color(0xFF518AFD),
+    val Main300: Color = Color(0xFF6E9DFD),
+    val Main200: Color = Color(0xFFBCD2FE),
+    val Main100: Color = Color(0xFFE9F0FF),
+
+    //Main Color 2 = green
+    val Main2_900: Color = Color(0xFF2A615D),
+    val Main2_800: Color = Color(0xFF387F7A),
+    val Main2_700: Color = Color(0xFF48A49E),
+    val Main2_600: Color = Color(0xFF5CD2CA),
+    val Main2_500: Color = Color(0xFF65E7DE),
+    val Main2_400: Color = Color(0xFF84ECE5),
+    val Main2_300: Color = Color(0xFF98EFE9),
+    val Main2_200: Color = Color(0xFFB8F4F0),
+    val Main2_100: Color = Color(0xFFCFF8F5),
+
+    //Sub Color = Positive / Negative
+    val Sub1: Color = Color(0xFF65E7DE),
+    val Sub2: Color = Color(0xFFFE6F7B)
+
+
+
+
+    )
+
+val KusitmsColorPalette = staticCompositionLocalOf { ColorPalette() }
