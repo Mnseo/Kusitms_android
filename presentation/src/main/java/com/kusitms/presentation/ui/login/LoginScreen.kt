@@ -29,14 +29,14 @@ fun Login(navController: NavHostController) {
             Text(
                 text = "Login Screen", textAlign = TextAlign.Center, fontSize = 20.sp
             )
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(24.dp))
             Row(
                 modifier = Modifier.wrapContentWidth(),
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
+                horizontalArrangement = Arrangement.spacedBy(24.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 TestNavButton(route = NavRoutes.Splash.route, navController = navController)
-                TestNavButton(route = NavRoutes.Login.route, navController = navController)
+                TestNavButton(route = NavRoutes.Home.route, navController = navController)
             }
         }
     }
