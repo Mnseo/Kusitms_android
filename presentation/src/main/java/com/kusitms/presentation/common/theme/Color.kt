@@ -13,7 +13,7 @@ data class ColorPalette(
     val Grey700: Color = Color(0xFF171A21),
     val Grey600: Color = Color(0xFF20232D),
     val Grey500: Color = Color(0xFF363C48),
-    val Grey400: Color = Color(0xFF8F95A2),
+    val Grey400: Color = Color(0xFF727783),
     val Grey300: Color = Color(0xFFD9DCE1),
     val Grey200: Color = Color(0xFFE8EBEF),
     val Grey100: Color = Color(0xFFF4F6F8),
