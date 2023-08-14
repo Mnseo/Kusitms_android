@@ -1,7 +1,9 @@
 package com.kusitms.presentation.common.ui.theme
 
+import android.graphics.drawable.shapes.Shape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Shapes
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.unit.dp
 
 val Shapes = Shapes(
@@ -9,3 +11,5 @@ val Shapes = Shapes(
     medium = RoundedCornerShape(4.dp),
     large = RoundedCornerShape(0.dp)
 )
+
+val kusimsShapes= staticCompositionLocalOf { Shapes }

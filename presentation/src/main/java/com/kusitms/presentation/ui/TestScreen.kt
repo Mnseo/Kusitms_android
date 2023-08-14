@@ -10,6 +10,12 @@ import androidx.compose.ui.unit.dp
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 
 
+
+@Composable
+fun TestScreen() {
+
+}
+
 @Preview(showBackground = true)
 @Composable
 fun Test() {
