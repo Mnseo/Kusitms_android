@@ -1,45 +1,32 @@
 package com.kusitms.presentation.ui.login
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.kusitms.presentation.navigation.NavRoutes
-import com.kusitms.presentation.ui.splash.TestNavButton
+import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
+import com.kusitms.presentation.common.ui.theme.KusitmsTheme
 
 @Composable
-fun Login(navController: NavHostController) {
-    // NavHostController TestCode
-    Surface(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(20.dp)
-    ) {
+fun Login(
+    navController: NavHostController
+) {
         Column(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
+                .background(KusitmsColorPalette.current.Black),
+            horizontalAlignment = Alignment.CenterHorizontally
+            {
+                androidx.compose.foundation.layout.Spacer(modifier = )
+                    
+                })
         ) {
-            Text(
-                text = "Login Screen", textAlign = TextAlign.Center, fontSize = 20.sp
-            )
-            Spacer(modifier = Modifier.height(24.dp))
-            Row(
-                modifier = Modifier.wrapContentWidth(),
-                horizontalArrangement = Arrangement.spacedBy(24.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                TestNavButton(route = NavRoutes.Splash.route, navController = navController)
-                TestNavButton(route = NavRoutes.Home.route, navController = navController)
-            }
+            
         }
-    }
 }
 
 @Preview
