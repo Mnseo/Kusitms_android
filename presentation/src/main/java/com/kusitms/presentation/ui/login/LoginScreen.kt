@@ -31,13 +31,13 @@ fun Login(
             verticalArrangement = Arrangement.Center
         )
             {
-                Text(text = "비전을 가지고 성장하는 학회", style = KustimsTypo.current.Caption1, color = KusitmsColorPalette.current.Grey300)
+                Text(text = "비전을 가지고 함께 성장하는 학회", style = KustimsTypo.current.Caption1, color = KusitmsColorPalette.current.Grey300)
                 
                 Spacer(modifier = Modifier.height(6.dp))
 
                 LoginLogoIv._vector?.let {
                     Image(
-                        imageVector = LoginLogoIv._vector!!,
+                        imageVector = it,
                         contentDescription = null,
                         modifier = Modifier.size(260.dp),
                         contentScale = ContentScale.FillBounds,
