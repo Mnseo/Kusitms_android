@@ -15,5 +15,5 @@ dependencyResolutionManagement {
 rootProject.name = "Kusitms"
 include ':app'
 include ':presentation'
-include ':domain'
 include ':data'
+include ':domain'
