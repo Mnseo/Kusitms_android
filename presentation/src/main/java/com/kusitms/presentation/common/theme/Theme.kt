@@ -20,7 +20,8 @@ import androidx.core.view.WindowCompat
 
 @Composable
 fun KusitmsTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
+    // Dark Theme is fixed in Main Theme
+    darkTheme: Boolean = true,
     // Dynamic color is available on Android 12+
     dynamicColor: Boolean = true,
     content: @Composable () -> Unit) {
