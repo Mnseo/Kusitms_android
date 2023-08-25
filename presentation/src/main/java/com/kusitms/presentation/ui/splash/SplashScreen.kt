@@ -48,7 +48,7 @@ fun Splash(navController: NavHostController) {
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     TestNavButton(route = NavRoutes.Login.route, navController = navController)
-                    TestNavButton(route = NavRoutes.Onboarding.route, navController = navController)
+                    TestNavButton(route = NavRoutes.SignIn.route, navController = navController)
                     TestNavButton(route = NavRoutes.Home.route, navController = navController)
                     TestNavButton(route = NavRoutes.Setting.route, navController = navController)
                 }

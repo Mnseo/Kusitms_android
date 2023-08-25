@@ -28,6 +28,7 @@ import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsDimen
 import com.kusitms.presentation.common.ui.theme.KusitmsTheme
 import com.kusitms.presentation.common.ui.theme.KustimsTypo
+import com.kusitms.presentation.navigation.NavRoutes
 
 @Composable
 fun Login(
@@ -56,13 +57,19 @@ fun Login(
                 Spacer(modifier = Modifier.height(162.dp))
 
                 LoginButton1(
-                    text = "학회원으로 로그인"
+                    text = "학회원으로 로그인",
+                    route = NavRoutes.SignIn.route,
+                    navController = navController
                 )
+                
+                Spacer(modifier = Modifier.height(16.dp))
 
                 LoginButton(
                     borderColor = KusitmsColorPalette.current.Grey400,
-                    color = KusitmsColorPalette.current.Black,
+                    ButtonColor = KusitmsColorPalette.current.Black,
                     text = "관리자로 로그인",
+                    navController = navController,
+                    route = NavRoutes.Home.route
                 )
 
                 Spacer(modifier = Modifier.height(40.dp))
@@ -75,14 +82,23 @@ fun Login(
 
 //학회원으로 로그인 버튼
 @Composable 
-fun LoginButton1(text: String) {
+fun LoginButton1(text: String, navController: NavHostController, route: String) {
     Button(
         modifier = Modifier
             .width(335.dp)
             .height(56.dp)
-            .background(color = KusitmsColorPalette.current.Main500)
+            .background(color = Color(0xFF266DFC), shape = RoundedCornerShape(size = 16.dp))
             .padding(top = 16.dp, bottom = 16.dp),
-        onClick = { /*TODO*/ }) {
+
+        //Click 시 이벤트 - SignIn 으로 이동
+        onClick = {
+                  navController.navigate(route) {
+                      popUpTo(route) {
+                          inclusive = true
+                      }
+                  }
+        },
+    ) {
         Text(
             style = KustimsTypo.current.SubTitle2_Semibold,
             text = text,
@@ -93,20 +109,25 @@ fun LoginButton1(text: String) {
 
 //관리자로 로그인 버튼
 @Composable
-fun LoginButton(borderColor: Color, color: Color, text: String) {
+fun LoginButton(borderColor: Color, ButtonColor: Color, text: String, route:String, navController: NavHostController) {
     Button(
         modifier = Modifier
-            .padding(top = 16.dp, bottom = 16.dp)
             .fillMaxWidth()
+            .height(56.dp)
             .border(
                 width = 1.dp,
                 color = borderColor,
                 shape = RoundedCornerShape(16.dp)
             )
-            .background(color = color, shape = RoundedCornerShape(16.dp))
-            .height(56.dp),
+            .background(color = ButtonColor, shape = RoundedCornerShape(16.dp)),
         contentPadding = PaddingValues(0.dp),
-        onClick = { /*TODO*/ }
+        onClick = {
+            navController.navigate(route) {
+                popUpTo(route) {
+                    inclusive = true
+                }
+            }
+        }
     ) {
         Text(
             style = KustimsTypo.current.SubTitle2_Semibold,
