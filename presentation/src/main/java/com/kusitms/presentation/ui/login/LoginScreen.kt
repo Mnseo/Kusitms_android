@@ -23,6 +23,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.google.android.material.color.utilities.MaterialDynamicColors.background
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsDimen
 import com.kusitms.presentation.common.ui.theme.KusitmsTheme
@@ -41,7 +42,7 @@ fun Login(
         )
             {
 
-                Spacer(modifier = Modifier.height(100.dp))
+                Spacer(modifier = Modifier.height(180.dp))
 
                 Text(text = "비전을 가지고 함께 성장하는 학회", style = KustimsTypo.current.Caption1, color = KusitmsColorPalette.current.Grey300)
                 
@@ -52,22 +53,16 @@ fun Login(
                         .height(76.dp)
                         .width(257.26.dp))
 
-                Spacer(modifier = Modifier.height(200.dp))
+                Spacer(modifier = Modifier.height(162.dp))
 
-                LoginButton(
-                    borderColor = KusitmsColorPalette.current.Main500,
-                    color = KusitmsColorPalette.current.Main500,
-                    style = KustimsTypo.current.SubTitle2_Semibold ,
-                    textColor = KusitmsColorPalette.current.White,
-                    text = "학회원으로 로그인",
+                LoginButton1(
+                    text = "학회원으로 로그인"
                 )
 
                 LoginButton(
                     borderColor = KusitmsColorPalette.current.Grey400,
                     color = KusitmsColorPalette.current.Black,
                     text = "관리자로 로그인",
-                    style = KustimsTypo.current.SubTitle2_Semibold,
-                    textColor = KusitmsColorPalette.current.White
                 )
 
                 Spacer(modifier = Modifier.height(40.dp))
@@ -78,26 +73,45 @@ fun Login(
         
 }
 
-@Composable
-fun LoginButton(borderColor: Color, color: Color, style: TextStyle, text: String, textColor:Color) {
+//학회원으로 로그인 버튼
+@Composable 
+fun LoginButton1(text: String) {
     Button(
         modifier = Modifier
-            .padding(KusitmsDimen.current.defaultHorizontal)
+            .width(335.dp)
+            .height(56.dp)
+            .background(color = KusitmsColorPalette.current.Main500)
+            .padding(top = 16.dp, bottom = 16.dp),
+        onClick = { /*TODO*/ }) {
+        Text(
+            style = KustimsTypo.current.SubTitle2_Semibold,
+            text = text,
+            color = KusitmsColorPalette.current.Grey200
+        )
+    }
+}
+
+//관리자로 로그인 버튼
+@Composable
+fun LoginButton(borderColor: Color, color: Color, text: String) {
+    Button(
+        modifier = Modifier
+            .padding(top = 16.dp, bottom = 16.dp)
             .fillMaxWidth()
             .border(
                 width = 1.dp,
                 color = borderColor,
-                shape =  RoundedCornerShape(16.dp)
+                shape = RoundedCornerShape(16.dp)
             )
+            .background(color = color, shape = RoundedCornerShape(16.dp))
             .height(56.dp),
         contentPadding = PaddingValues(0.dp),
-        onClick = { /*TODO*/ },
-        colors = ButtonDefaults.buttonColors(containerColor = color)
+        onClick = { /*TODO*/ }
     ) {
         Text(
-            style = style,
+            style = KustimsTypo.current.SubTitle2_Semibold,
             text = text,
-            color = textColor
+            color = KusitmsColorPalette.current.Grey200
         )
     }
 

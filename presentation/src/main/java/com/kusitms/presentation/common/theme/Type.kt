@@ -68,7 +68,7 @@ data class CustomTypography(
         fontFamily = Pretendard,
         fontWeight = FontWeight.SemiBold,
         fontSize =  18.sp,
-        lineHeight = 24.sp
+        lineHeight = 24.sp,
     ),
 
     val Text_Medium: TextStyle = TextStyle(
