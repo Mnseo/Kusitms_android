@@ -43,7 +43,12 @@ fun topBar(string : String, booleanRight: Boolean) {
 
             }
             else {
-
+                //오른쪽에 icon 없다면
+                Spacer(
+                    modifier = Modifier
+                        .width(24.dp)
+                        .height(24.dp)
+                )
             }
 
         }
@@ -58,7 +63,6 @@ fun topBarText(string :String) {
         text = string,
     )
 }
-
 
 
 @Preview(showBackground = true)
