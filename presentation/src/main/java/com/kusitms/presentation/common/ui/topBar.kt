@@ -15,7 +15,7 @@ import com.kusitms.presentation.ui.ImageVector.tralingIcon
 
 
 @Composable
-fun topBar(string : String, booleanRight: Boolean) {
+fun topBar(booleanRight: Boolean) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -25,13 +25,8 @@ fun topBar(string : String, booleanRight: Boolean) {
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            RightArrow.DrawRightArrow(
-                modifier = Modifier
-                    .width(24.dp)
-                    .height(24.dp)
-            )
 
-            topBarText(string = string)
+            topBarLeft(string = "큐시즘 플러스")
 
             if (booleanRight) {
                 // 오른쪽에 icon 있다면
@@ -56,6 +51,32 @@ fun topBar(string : String, booleanRight: Boolean) {
     }
 
 @Composable
+fun topBarLeft(string : String) {
+    Row(
+        modifier = Modifier
+            .wrapContentWidth()
+            .height(48.dp)
+            .background(color = KusitmsColorPalette.current.Black),
+        horizontalArrangement = Arrangement.Start,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        RightArrow.DrawRightArrow(
+            modifier = Modifier
+                .width(24.dp)
+                .height(24.dp)
+        )
+
+        Spacer(modifier = Modifier
+            .width(15.dp)
+        )
+
+        topBarText(string = string)
+
+    }
+
+}
+
+@Composable
 fun topBarText(string :String) {
     Text(
         style = KustimsTypo.current.SubTitle2_Semibold,
@@ -68,5 +89,5 @@ fun topBarText(string :String) {
 @Preview(showBackground = true)
 @Composable
 fun preview() {
-    topBar(string = "큐시즘 둘러보기", booleanRight = true)
+    topBar(booleanRight = true)
 }
