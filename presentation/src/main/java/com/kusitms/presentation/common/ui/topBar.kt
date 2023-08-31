@@ -15,7 +15,7 @@ import com.kusitms.presentation.ui.ImageVector.tralingIcon
 
 
 @Composable
-fun topBar(booleanRight: Boolean) {
+fun topBar(string: String, booleanRight: Boolean) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -26,7 +26,7 @@ fun topBar(booleanRight: Boolean) {
             verticalAlignment = Alignment.CenterVertically
         ) {
 
-            topBarLeft(string = "큐시즘 플러스")
+            topBarLeft(string = string)
 
             if (booleanRight) {
                 // 오른쪽에 icon 있다면
@@ -67,7 +67,7 @@ fun topBarLeft(string : String) {
         )
 
         Spacer(modifier = Modifier
-            .width(15.dp)
+            .width(12.dp)
         )
 
         topBarText(string = string)
@@ -89,5 +89,5 @@ fun topBarText(string :String) {
 @Preview(showBackground = true)
 @Composable
 fun preview() {
-    topBar(booleanRight = true)
+    topBar("큐시즘 둘러보기", booleanRight = true)
 }
