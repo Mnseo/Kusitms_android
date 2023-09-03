@@ -1,6 +1,5 @@
 package com.kusitms.presentation.ui.login
 
-import android.service.autofill.CustomDescription
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -10,12 +9,9 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
@@ -24,8 +20,9 @@ import com.kusitms.presentation.common.ui.theme.KustimsTypo
 
 @Composable
 fun LoginNonMember(navController: NavController) {
-    val painter = painterResource(id = drawable)
-    ImageCard(painter = , contentDescription = , title = )
+    val img = com.kusitms.presentation.R.drawable.kusitms_non_member_1
+    val painter = painterResource(id = img)
+    ImageCard(painter = KusitmsColorPalette.current.Main500 , contentDescription = "Kustims Banner", title = )
 
 }
 
