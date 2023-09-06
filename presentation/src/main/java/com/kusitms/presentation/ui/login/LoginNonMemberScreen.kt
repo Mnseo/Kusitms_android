@@ -12,8 +12,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KustimsTypo
 
@@ -22,7 +24,7 @@ import com.kusitms.presentation.common.ui.theme.KustimsTypo
 fun LoginNonMember(navController: NavController) {
     val img = com.kusitms.presentation.R.drawable.kusitms_non_member_1
     val painter = painterResource(id = img)
-    ImageCard(painter = KusitmsColorPalette.current.Main500 , contentDescription = "Kustims Banner", title = )
+    ImageCard(painter = painter , contentDescription = "Kustims Banner", title = "Kustims Banner")
 
 }
 
@@ -48,7 +50,7 @@ fun ImageCard(
             Image(
                 painter = painter,
                 contentDescription = contentDescription,
-                contentScale = ContentScale.Crop
+                contentScale = ContentScale.FillBounds
             )
             Box(modifier = Modifier
                 .fillMaxSize()
@@ -65,7 +67,9 @@ fun ImageCard(
     }
 }
 
+@Preview(showBackground = true)
 @Composable
 fun snsSite() {
+    LoginNonMember(navController = rememberNavController())
 
 }
