@@ -9,8 +9,8 @@ sealed class NavRoutes(val route: String)
     object Login: NavRoutes("login")
 
     object SignIn: NavRoutes("SignIn")
-    object Home: NavRoutes("home")
-    object Setting: NavRoutes("setting")
+    object Home: NavRoutes("Home")
+    object Setting: NavRoutes("Setting")
 
 }
 
