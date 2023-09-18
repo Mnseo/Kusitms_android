@@ -1,18 +1,24 @@
 package com.kusitms.presentation.ui.login.member
 
+import android.graphics.drawable.Icon
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.kusitms.presentation.R
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KustimsTypo
 import com.kusitms.presentation.navigation.NavRoutes
+import com.kusitms.presentation.ui.ImageVector.StudyIcon
 import com.kusitms.presentation.ui.login.Login
 import com.kusitms.presentation.ui.login.LoginButton
 import com.kusitms.presentation.ui.login.LoginButton1
@@ -66,6 +72,56 @@ fun LoginMember1(
     }
 
 }
+
+@Composable
+fun TitleColumn() {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(KusitmsColorPalette.current.Black)
+            .height(109.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.Start)
+        verticalArrangement = Arrangement.Top
+
+    ) {
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.Start),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            StudyIcon._vector?.let {
+                Image(
+                    imageVector = StudyIcon._vector!!,
+                    contentDescription = null,
+                    modifier = Modifier.size(24.dp),
+                    contentScale = ContentScale.FillBounds,
+                    alignment = Alignment.Center
+                )
+            }
+        }
+        
+    }
+}
+
+@Composable
+fun TextColumn() {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(KusitmsColorPalette.current.Black)
+            .height(109.dp),
+        horizontalAlignment = Alignment.Start,
+        verticalArrangement = Arrangement.Top
+
+    ) {
+        Text(text = stringResource(id = R.string.text_column_1), fontStyle = KustimsTypo.current )
+
+    }
+}
+
+
+
+
+
 
 @Preview
 @Composable
