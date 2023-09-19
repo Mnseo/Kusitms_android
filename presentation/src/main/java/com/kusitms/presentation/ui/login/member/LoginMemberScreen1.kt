@@ -10,8 +10,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.kusitms.presentation.R
@@ -30,45 +32,14 @@ fun LoginMember1(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .padding(24.dp)
             .background(KusitmsColorPalette.current.Black),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     )
     {
 
-        Spacer(modifier = Modifier.height(180.dp))
-
-        Text(text = "비전을 가지고 함께 성장하는 학회", style = KustimsTypo.current.Caption1, color = KusitmsColorPalette.current.Grey300)
-
-        Spacer(modifier = Modifier.height(6.dp))
-
-        LoginLogoIv.DrawLogo(
-            modifier = Modifier
-                .height(76.dp)
-                .width(257.26.dp))
-
-        Spacer(modifier = Modifier.height(162.dp))
-
-        LoginButton1(
-            text = "학회원으로 로그인",
-            route = NavRoutes.SignIn.route,
-            navController = navController
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        LoginButton(
-            borderColor = KusitmsColorPalette.current.Grey400,
-            ButtonColor = KusitmsColorPalette.current.Black,
-            text = "관리자로 로그인",
-            navController = navController,
-            route = NavRoutes.Home.route
-        )
-
-        Spacer(modifier = Modifier.height(40.dp))
-
-        Text(text = "비회원이신가요? 큐시즘 둘러보기", style = KustimsTypo.current.Caption1, color = KusitmsColorPalette.current.Grey300)
-
+        TitleColumn()
     }
 
 }
@@ -80,8 +51,8 @@ fun TitleColumn() {
             .fillMaxSize()
             .background(KusitmsColorPalette.current.Black)
             .height(109.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.Start)
-        verticalArrangement = Arrangement.Top
+        verticalArrangement = Arrangement.Top,
+        horizontalAlignment = Alignment.Start
 
     ) {
         Row(
@@ -97,6 +68,7 @@ fun TitleColumn() {
                     alignment = Alignment.Center
                 )
             }
+            TextColumn()
         }
         
     }
@@ -113,7 +85,8 @@ fun TextColumn() {
         verticalArrangement = Arrangement.Top
 
     ) {
-        Text(text = stringResource(id = R.string.text_column_1), fontStyle = KustimsTypo.current )
+        Text(text = stringResource(id = R.string.text_column_1), style = KustimsTypo.current.SubTitle2_Semibold, color = KusitmsColorPalette.current.Grey300 )
+        Text(text = stringResource(id = R.string.text_column_2), style = KustimsTypo.current.Caption1, color = KusitmsColorPalette.current.Sub2)
 
     }
 }
