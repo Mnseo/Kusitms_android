@@ -13,7 +13,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 
 object StudyIcon {
-    var _vector: ImageVector? = null
+    public var _vector: ImageVector? = null
     val vector: ImageVector
         get() {
             if (_vector != null) {
