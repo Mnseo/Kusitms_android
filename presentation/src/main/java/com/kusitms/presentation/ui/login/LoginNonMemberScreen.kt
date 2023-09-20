@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
-import com.kusitms.presentation.common.ui.theme.KustimsTypo
+import com.kusitms.presentation.common.ui.theme.KusitmsTypo
 
 
 @Composable
@@ -60,7 +60,7 @@ fun ImageCard(
                 .fillMaxSize()
                 .padding(12.dp),
             contentAlignment = Alignment.BottomStart){
-                Text(title,style= KustimsTypo.current.Body1, color = KusitmsColorPalette.current.Main200)
+                Text(title,style= KusitmsTypo.current.Body1, color = KusitmsColorPalette.current.Main200)
             }
         }
 

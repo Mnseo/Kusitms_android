@@ -8,26 +8,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.MaterialTheme.colors
-import androidx.compose.material.SnackbarDefaults.backgroundColor
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.modifier.modifierLocalConsumer
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.google.android.material.color.utilities.MaterialDynamicColors.background
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
-import com.kusitms.presentation.common.ui.theme.KusitmsDimen
-import com.kusitms.presentation.common.ui.theme.KusitmsTheme
-import com.kusitms.presentation.common.ui.theme.KustimsTypo
+import com.kusitms.presentation.common.ui.theme.KusitmsTypo
 import com.kusitms.presentation.navigation.NavRoutes
 
 @Composable
@@ -45,7 +34,7 @@ fun Login(
 
                 Spacer(modifier = Modifier.height(180.dp))
 
-                Text(text = "비전을 가지고 함께 성장하는 학회", style = KustimsTypo.current.Caption1, color = KusitmsColorPalette.current.Grey300)
+                Text(text = "비전을 가지고 함께 성장하는 학회", style = KusitmsTypo.current.Caption1, color = KusitmsColorPalette.current.Grey300)
                 
                 Spacer(modifier = Modifier.height(6.dp))
 
@@ -74,7 +63,7 @@ fun Login(
 
                 Spacer(modifier = Modifier.height(40.dp))
 
-                Text(text = "비회원이신가요? 큐시즘 둘러보기", style = KustimsTypo.current.Caption1, color = KusitmsColorPalette.current.Grey300)
+                Text(text = "비회원이신가요? 큐시즘 둘러보기", style = KusitmsTypo.current.Caption1, color = KusitmsColorPalette.current.Grey300)
 
         }
         
@@ -100,7 +89,7 @@ fun LoginButton1(text: String, navController: NavHostController, route: String) 
         },
     ) {
         Text(
-            style = KustimsTypo.current.SubTitle2_Semibold,
+            style = KusitmsTypo.current.SubTitle2_Semibold,
             text = text,
             color = KusitmsColorPalette.current.Grey200
         )
@@ -130,7 +119,7 @@ fun LoginButton(borderColor: Color, ButtonColor: Color, text: String, route:Stri
         }
     ) {
         Text(
-            style = KustimsTypo.current.SubTitle2_Semibold,
+            style = KusitmsTypo.current.SubTitle2_Semibold,
             text = text,
             color = KusitmsColorPalette.current.Grey200
         )

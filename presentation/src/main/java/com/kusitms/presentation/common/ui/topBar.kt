@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
-import com.kusitms.presentation.common.ui.theme.KustimsTypo
+import com.kusitms.presentation.common.ui.theme.KusitmsTypo
 import com.kusitms.presentation.ui.ImageVector.RightArrow
 import com.kusitms.presentation.ui.ImageVector.tralingIcon
 
@@ -79,7 +79,7 @@ fun topBarLeft(string : String) {
 @Composable
 fun topBarText(string :String) {
     Text(
-        style = KustimsTypo.current.SubTitle2_Semibold,
+        style = KusitmsTypo.current.SubTitle2_Semibold,
         color = KusitmsColorPalette.current.Grey100,
         text = string,
     )

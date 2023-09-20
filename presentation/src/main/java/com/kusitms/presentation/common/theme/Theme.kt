@@ -2,7 +2,6 @@ package com.kusitms.presentation.common.ui.theme
 
 import android.app.Activity
 import android.os.Build
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material3.darkColorScheme
@@ -47,7 +46,7 @@ fun KusitmsTheme(
     CompositionLocalProvider(
         KusitmsColorPalette provides ColorPalette(),
         KusitmsDimen provides Dimen(),
-        KustimsTypo provides CustomTypography(),
+        KusitmsTypo provides CustomTypography(),
     ) {
         MaterialTheme(
             colors = colors,

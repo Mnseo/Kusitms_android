@@ -113,4 +113,4 @@ data class CustomTypography(
 
 
     )
-val KustimsTypo = staticCompositionLocalOf { CustomTypography() }
+val KusitmsTypo = staticCompositionLocalOf { CustomTypography() }
