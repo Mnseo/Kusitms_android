@@ -1,14 +1,14 @@
 package com.kusitms.presentation.ui.login.member
 
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.key.Key.Companion.D
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -40,6 +40,8 @@ fun LoginMember1(
 
         Text(text = stringResource(id = R.string.login_member_title1), style = KusitmsTypo.current.SubTitle2_Semibold, color = KusitmsColorPalette.current.Grey300)
 
+
+        ButtonRow()
 
     }
 
@@ -120,7 +122,46 @@ fun inputField(hint : String, maxlength: Int? = null) {
     }
 }
 
+@Composable
+fun ButtonRow() {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(72.dp)
+            .background(color = KusitmsColorPalette.current.Black),
+        horizontalArrangement = Arrangement.spacedBy(7.dp, Alignment.CenterHorizontally),
+        verticalAlignment = Alignment.Top
+    ) {
+        exBtn()
+        nextBtn()
+    }
+}
 
+@Composable
+fun exBtn() {
+    Button(
+        colors = ButtonDefaults.outlinedButtonColors(KusitmsColorPalette.current.Grey600),
+        border = BorderStroke(1.dp, KusitmsColorPalette.current.Grey600),
+        onClick = {
+
+        }
+    ) {
+        Text(stringResource(id = R.string.login_memeber1_btn_1))
+    }
+}
+
+@Composable
+fun nextBtn() {
+    Button(
+        colors = ButtonDefaults.outlinedButtonColors(KusitmsColorPalette.current.Grey600),
+        border = BorderStroke(1.dp, KusitmsColorPalette.current.Grey600),
+        onClick = {
+
+        }
+    ) {
+        Text(stringResource(id = R.string.login_memeber1_btn_2))
+    }
+}
 
 
 
