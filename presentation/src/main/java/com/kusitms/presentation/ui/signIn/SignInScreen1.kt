@@ -4,11 +4,11 @@ package com.kusitms.presentation.ui.login.member
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.key.Key.Companion.D
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -22,7 +22,7 @@ import com.kusitms.presentation.ui.ImageVector.StudyIcon
 
 
 @Composable
-fun LoginMember1(
+fun SignInMember1(
     navController: NavHostController,
 ) {
     Column(
@@ -31,8 +31,7 @@ fun LoginMember1(
             .background(KusitmsColorPalette.current.Black),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.Top)
-    )
-    {
+    ) {
 
         TitleColumn()
         
@@ -123,6 +122,11 @@ fun inputField(hint : String, maxlength: Int? = null) {
 }
 
 @Composable
+fun TextField(modifier: Modifier, values: PaddingValues, color) {
+
+}
+
+@Composable
 fun ButtonRow() {
     Row(
         modifier = Modifier
@@ -142,6 +146,7 @@ fun exBtn() {
     Button(
         colors = ButtonDefaults.outlinedButtonColors(KusitmsColorPalette.current.Grey600),
         border = BorderStroke(1.dp, KusitmsColorPalette.current.Grey600),
+        contentPadding = PaddingValues(horizontal = 12.dp, vertical = 16.dp),
         onClick = {
 
         }
@@ -155,6 +160,7 @@ fun nextBtn() {
     Button(
         colors = ButtonDefaults.outlinedButtonColors(KusitmsColorPalette.current.Grey600),
         border = BorderStroke(1.dp, KusitmsColorPalette.current.Grey600),
+        contentPadding = PaddingValues(horizontal = 12.dp, vertical = 16.dp),
         onClick = {
 
         }
@@ -164,11 +170,8 @@ fun nextBtn() {
 }
 
 
-
-
-
 @Preview
 @Composable
-fun LoginPreview() {
-    LoginMember1(navController = rememberNavController())
+fun SignIn1Preview() {
+    SignInMember1(navController = rememberNavController())
 }

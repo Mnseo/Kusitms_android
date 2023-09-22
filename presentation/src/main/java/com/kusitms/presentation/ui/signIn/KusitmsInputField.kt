@@ -1,4 +1,4 @@
-package com.kusitms.presentation.ui.login.member
+package com.kusitms.presentation.ui.signIn
 
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.runtime.Composable
