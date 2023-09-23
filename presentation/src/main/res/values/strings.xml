@@ -23,4 +23,7 @@
     <string name="signin_member_btn_1">이전으로</string>
     <string name="signin_member_btn_2">다음으로</string>
 
+    <string name="signin3_text1">가입이 완료되었습니다</string>
+    <string name="signin3_text2">큐밀리</string>
+
 </resources>
