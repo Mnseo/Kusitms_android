@@ -4,7 +4,6 @@ package com.kusitms.presentation.ui.login.member
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -108,23 +107,15 @@ fun inputField(hint : String, maxlength: Int? = null) {
             color = KusitmsColorPalette.current.Grey400
         )
 
-        TextField(
-            modifier = Modifier.fillMaxWidth(),
-            value = textState,
-            colors = androidx.compose.material.TextFieldDefaults.textFieldColors(
-                backgroundColor = originColor,
-            ),
-            hint = stringResource(id = R.string.login_member_hint1_2),
-
-        )
+//        TextField(
+//            modifier = Modifier.fillMaxWidth(),
+//            value = textState,
+//            colors = androidx.compose.material.TextFieldDefaults.textFieldColors(backgroundColor = originColor),
+//        )
 
     }
 }
 
-@Composable
-fun TextField(modifier: Modifier, values: PaddingValues, color) {
-
-}
 
 @Composable
 fun ButtonRow() {

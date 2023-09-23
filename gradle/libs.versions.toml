@@ -15,6 +15,7 @@ androidx-test-ext-junit = "1.1.1"
 
 compose = "1.1.1"
 coroutine = "1.6.4"
+coil = "2.2.2"
 
 espresso-core = "3.4.0"
 
@@ -53,6 +54,9 @@ androidx-compose-ui-util = { group = "androidx.compose.ui", name = "ui-util" }
 androidx-compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 
 
+coil-compose = {group = "io.coil-kt", name="coil-compose", version.ref="coil"}
+coil-svg = {group ="io.coil-kt", name="coil-svg", version.ref="coil"}
+
 javax-inject = { group = "javax.inject", name = "javax.inject", version.ref = "javax-inject" }
 lottie-compose = { group = "com.airbnb.android", name = "lottie-compose", version.ref = "lottie-compose" }
 timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
@@ -62,3 +66,10 @@ junit = { group = "junit", name = "junit", version.ref = "junit" }
 
 retrofit-retrofit = {module = "com.squareup.retrofit2:retrofit", version.ref="retrofit"}
 retrofit-converter-gson = {module = "com.squareup.retrofit2:converter-gson", version.ref="retrofit"}
+
+
+[bundles]
+coil = [
+    "coil-compose",
+    "coil-svg"
+]
