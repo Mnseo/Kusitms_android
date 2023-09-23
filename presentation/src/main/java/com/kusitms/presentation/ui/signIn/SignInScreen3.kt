@@ -11,6 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -38,6 +39,7 @@ fun SignInScreen3(navController: NavController) {
     ) {
         Spacer(modifier = Modifier.height(122.5.dp))
         middleCard()
+        Spacer(modifier = Modifier.height(32.dp))
         Text(text = stringResource(id = R.string.signin3_text3), style= KusitmsTypo.current.Body1, color = KusitmsColorPalette.current.Grey200)
         Text(text = stringResource(id = R.string.signin3_text4), style = KusitmsTypo.current.Body1, color = KusitmsColorPalette.current.Grey200)
         Spacer(modifier = Modifier.height(82.dp))
@@ -63,7 +65,8 @@ fun middleCard() {
         Column(
             modifier = Modifier
                 .align(Alignment.Center),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             rocket()
             nameBox(name = "이채연")
@@ -83,8 +86,9 @@ fun rocket() {
         painter = rememberAsyncImagePainter(R.drawable.screen3_rocket, imageLoader),
         contentDescription = null,
         modifier = Modifier
-            .height(200.dp)
             .width(200.dp)
+            .height(200.dp)
+
     )
 }
 
@@ -93,7 +97,7 @@ fun nameBox(name: String) {
     Column(
         modifier = Modifier
             .fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
+        verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.CenterVertically),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
@@ -101,7 +105,6 @@ fun nameBox(name: String) {
             style = KusitmsTypo.current.Text_Semibold,
             color = KusitmsColorPalette.current.Grey300
         )
-        Spacer(modifier = Modifier.height(20.dp))
         Text(
             text = name,
             style = KusitmsTypo.current.Header1,
