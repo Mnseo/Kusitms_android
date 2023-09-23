@@ -1,4 +1,4 @@
-package com.kusitms.data
+package com.kusitms.domain
 
 import org.junit.Test
 

@@ -1,4 +1,4 @@
-package com.kusitms.data.response
+package com.kusitms.domain.response
 
 import javax.inject.Inject
 
