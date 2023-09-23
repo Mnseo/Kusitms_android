@@ -4,9 +4,9 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.layout.ColumnScopeInstance.align
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -91,9 +91,9 @@ fun rocket() {
 fun nameBox(name: String) {
     Column(
         modifier = Modifier
-            .fillMaxWidth()
-            .align(Alignment.CenterHorizontally),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+            .fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
             text = stringResource(id = R.string.signin3_text1),
@@ -127,6 +127,7 @@ fun btn(color: Color, text: String, navController:NavController) {
                 shape = RoundedCornerShape(16.dp)
             )
             .background(color = color, shape = RoundedCornerShape(16.dp)),
+        colors = ButtonDefaults.buttonColors(containerColor = color), // 여기에서 배경색 지정
         contentPadding = PaddingValues(0.dp),
         onClick = {
             navController.navigate(route) {
