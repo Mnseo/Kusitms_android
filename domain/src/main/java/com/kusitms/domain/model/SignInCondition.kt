@@ -7,5 +7,4 @@ data class SignInCondition(
     val like: String,
     val email: String,
     val phoneNum: String,
-
 )

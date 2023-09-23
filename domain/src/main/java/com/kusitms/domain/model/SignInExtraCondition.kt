@@ -4,5 +4,5 @@ data class SignInExtraCondition(
     val imageUrl: String? = null,
     val introduce: String? = null,
     val linkCategory: String? = null,
-    val
+    val linkUrl: String? = null
 )

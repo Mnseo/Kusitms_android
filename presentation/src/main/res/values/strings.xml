@@ -16,14 +16,21 @@
 
     <string name="signin_member_hint1_2">"나의 전공 입력(최대 20자)"</string>
 
-
     <string name="signin_member_caption2_1">"이메일"</string>
     <string name="signin_member_caption2_2">"전화번호"</string>
 
     <string name="signin_member_btn_1">이전으로</string>
     <string name="signin_member_btn_2">다음으로</string>
 
+
+    <!-- SignInScreen3-->
+
     <string name="signin3_text1">가입이 완료되었습니다</string>
     <string name="signin3_text2">큐밀리</string>
+
+    <string name="signin3_text3">큐시즘과 함께 성장하는 채연님의</string>
+    <string name="signin3_text4">모습을 기대할게요</string>
+
+    <string name="signin3_btn">시작하기</string>
 
 </resources>
