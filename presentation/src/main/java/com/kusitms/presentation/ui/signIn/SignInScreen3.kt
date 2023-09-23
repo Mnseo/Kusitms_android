@@ -38,7 +38,9 @@ fun SignInScreen3(navController: NavController) {
     ) {
         Spacer(modifier = Modifier.height(122.5.dp))
         middleCard()
-
+        Text(text = stringResource(id = R.string.signin3_text3), style= KusitmsTypo.current.Body1, color = KusitmsColorPalette.current.Grey200)
+        Text(text = stringResource(id = R.string.signin3_text4), style = KusitmsTypo.current.Body1, color = KusitmsColorPalette.current.Grey200)
+        Spacer(modifier = Modifier.height(82.dp))
         btn(color = KusitmsColorPalette.current.Main500, text = stringResource(id = R.string.signin3_btn), navController = rememberNavController())
     }
 }
@@ -66,7 +68,6 @@ fun middleCard() {
             rocket()
             nameBox(name = "이채연")
         }
-
     }
 }
 
@@ -121,6 +122,7 @@ fun btn(color: Color, text: String, navController:NavController) {
         modifier = Modifier
             .fillMaxWidth()
             .height(56.dp)
+            .padding(start = 20.dp, end = 20.dp)
             .border(
                 width = 1.dp,
                 color = color,
