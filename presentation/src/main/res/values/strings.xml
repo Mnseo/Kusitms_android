@@ -6,21 +6,21 @@
     <string name="text_column_1">"기본 프로필을 등록해주세요"</string>
     <string name="text_column_2">"기본 프로필은 모두 필수 입력사항입니다"</string>
 
-    <string name="login_member_title1">"내 정보"</string>
-    <string name="login_member_title2">"연락처"</string>
+    <string name="signin_member_title1">"내 정보"</string>
+    <string name="signin_member_title2">"연락처"</string>
 
-    <string name="login_member_caption1_1">"이름"</string>
-    <string name="login_member_caption1_2">"전공"</string>
-    <string name="login_member_caption1_3">"파트"</string>
-    <string name="login_member_caption1_4">"관심 카테고리"</string>
+    <string name="signin_member_caption1_1">"이름"</string>
+    <string name="signin_member_caption1_2">"전공"</string>
+    <string name="signin_member_caption1_3">"파트"</string>
+    <string name="signin_member_caption1_4">"관심 카테고리"</string>
 
-    <string name="login_member_hint1_2">"나의 전공 입력(최대 20자)"</string>
+    <string name="signin_member_hint1_2">"나의 전공 입력(최대 20자)"</string>
 
 
-    <string name="login_member_caption2_1">"이메일"</string>
-    <string name="login_member_caption2_2">"전화번호"</string>
+    <string name="signin_member_caption2_1">"이메일"</string>
+    <string name="signin_member_caption2_2">"전화번호"</string>
 
-    <string name="login_memeber1_btn_1">이전으로</string>
-    <string name="login_memeber1_btn_2">다음으로</string>
+    <string name="signin_member_btn_1">이전으로</string>
+    <string name="signin_member_btn_2">다음으로</string>
 
 </resources>

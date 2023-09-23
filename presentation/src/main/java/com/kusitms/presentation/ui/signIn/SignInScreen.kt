@@ -36,7 +36,7 @@ fun SignInMember1(
         
         Spacer(modifier = Modifier.height(56.dp))
 
-        Text(text = stringResource(id = R.string.login_member_title1), style = KusitmsTypo.current.SubTitle2_Semibold, color = KusitmsColorPalette.current.Grey300)
+        Text(text = stringResource(id = R.string.signin_member_title1), style = KusitmsTypo.current.SubTitle2_Semibold, color = KusitmsColorPalette.current.Grey300)
 
 
         ButtonRow()
@@ -98,7 +98,7 @@ fun inputField(hint : String, maxlength: Int? = null) {
         val changeColor = KusitmsColorPalette.current.Main500
 
         Text(
-            text = stringResource(id = R.string.login_member_caption1_2),
+            text = stringResource(id = R.string.signin_member_caption1_2),
             style = KusitmsTypo.current.Caption1,
             modifier = Modifier
                 .fillMaxWidth()
@@ -142,7 +142,7 @@ fun exBtn() {
 
         }
     ) {
-        Text(stringResource(id = R.string.login_memeber1_btn_1))
+        Text(stringResource(id = R.string.signin_member_btn_1))
     }
 }
 
@@ -156,7 +156,7 @@ fun nextBtn() {
 
         }
     ) {
-        Text(stringResource(id = R.string.login_memeber1_btn_2))
+        Text(stringResource(id = R.string.signin_member_btn_2))
     }
 }
 
