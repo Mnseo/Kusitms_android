@@ -32,6 +32,8 @@
     <string name="signin2_btn1">이전으로</string>
     <string name="signin2_btn2">가입 완료</string>
 
+    <string name="signin2_placeholder">나만의 한 줄 소개를 작성해보세요</string>
+
 
     <!-- SignInScreen3-->
 
