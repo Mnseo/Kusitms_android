@@ -31,7 +31,8 @@ fun SignInScreen2(navController: NavController) {
         verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.Top)
     ) {
         TitleColumn()
-        Spacer(modifier = Modifier.height(56.dp))
+        Spacer(modifier = Modifier.height(32.dp))
+        PhotoBox()
 
     }
 
@@ -48,9 +49,11 @@ fun PhotoBox() {
     ) {
         Column(
             modifier = Modifier
-                .fillMaxSize()
+                .align(Alignment.Center),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
+            ImagePhoto()
         }
     }
 }
@@ -109,6 +112,23 @@ fun TextColumn() {
             .height(109.dp),
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.Top
+
+    ) {
+        Text(text = stringResource(id = R.string.signin2_text1), style = KusitmsTypo.current.SubTitle2_Semibold, color = KusitmsColorPalette.current.Grey300 )
+        Text(text = stringResource(id = R.string.signin2_text2), style = KusitmsTypo.current.Caption1, color = KusitmsColorPalette.current.Sub1)
+
+    }
+}
+
+@Composable
+fun introColumn() {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(KusitmsColorPalette.current.Black)
+            .height(186.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterVertically),
+        horizontalAlignment = Alignment.Start,
 
     ) {
         Text(text = stringResource(id = R.string.signin2_text1), style = KusitmsTypo.current.SubTitle2_Semibold, color = KusitmsColorPalette.current.Grey300 )
