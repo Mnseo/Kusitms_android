@@ -5,12 +5,16 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.ImageLoader
@@ -31,14 +35,18 @@ fun SignInScreen2(navController: NavController) {
         verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.Top)
     ) {
         TitleColumn()
-        Spacer(modifier = Modifier.height(56.dp))
+        Spacer(modifier = Modifier.height(32.dp))
+        PhotoColumn()
+        Spacer(modifier = Modifier.height(16.dp))
+        introColumn()
+        Spacer(modifier = Modifier.height(24.dp))
 
     }
 
 }
 
 @Composable
-fun PhotoBox() {
+fun PhotoColumn() {
     Box(
         modifier = Modifier
             .width(96.dp)
@@ -48,9 +56,11 @@ fun PhotoBox() {
     ) {
         Column(
             modifier = Modifier
-                .fillMaxSize()
+                .align(Alignment.Center),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
+            ImagePhoto()
         }
     }
 }
@@ -112,8 +122,45 @@ fun TextColumn() {
 
     ) {
         Text(text = stringResource(id = R.string.signin2_text1), style = KusitmsTypo.current.SubTitle2_Semibold, color = KusitmsColorPalette.current.Grey300 )
-        Text(text = stringResource(id = R.string.signin2_text2), style = KusitmsTypo.current.Caption1, color = KusitmsColorPalette.current.Sub2)
+        Text(text = stringResource(id = R.string.signin2_text2), style = KusitmsTypo.current.Caption1, color = KusitmsColorPalette.current.Sub1)
 
     }
+}
+
+@Composable
+fun introColumn() {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(KusitmsColorPalette.current.Black)
+            .height(186.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterVertically),
+        horizontalAlignment = Alignment.Start,
+
+    ) {
+        Text(text = stringResource(id = R.string.signin2_title1), style = KusitmsTypo.current.SubTitle2_Semibold, color = KusitmsColorPalette.current.Grey300 )
+        introTextField()
+    }
+}
+
+@Composable
+fun introTextField() {
+    val maxLength = 100
+    Column(
+        modifier = Modifier.padding(start = 20.dp, top =16.dp, end =20.dp, bottom =16.dp),
+        verticalArrangement = Arrangement.spacedBy(4.dp),
+        horizontalAlignment = Alignment.Start
+    ) {
+        val textState = remember { mutableStateOf(TextFieldValue()) }
+        TextField(
+            value = textState.value,
+            onValueChange = {
+                if(it.text.length <= maxLength) { textState.value = it }
+            },
+            placeholder = {Text(stringResource(id = R.string.signin2_placeholder), style = KusitmsTypo.current.Text_Medium, color = KusitmsColorPalette.current.Grey400 )}
+        )
+        Text(text = "${textState.value.text.length}/$maxLength", style = KusitmsTypo.current.Caption1, color = KusitmsColorPalette.current.Grey400)
+    }
+
 }
 
