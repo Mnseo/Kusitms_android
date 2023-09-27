@@ -2,6 +2,7 @@ package com.kusitms.presentation.ui.signIn
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -28,6 +29,7 @@ import com.kusitms.presentation.R
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
 import com.kusitms.presentation.ui.ImageVector.StudyIcon
+import com.kusitms.presentation.ui.login.member.ButtonRow
 
 @Composable
 fun SignInScreen2(navController: NavController) {
@@ -44,6 +46,8 @@ fun SignInScreen2(navController: NavController) {
         Spacer(modifier = Modifier.height(16.dp))
         introColumn()
         Spacer(modifier = Modifier.height(24.dp))
+        LinkColumn()
+        ButtonRow()
     }
 }
 
@@ -179,6 +183,37 @@ fun introTextField() {
 
 @Composable
 fun LinkColumn() {
+    val currentLength = remember { mutableStateOf(1) }
+    val maxLength = 4
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(35.dp)
+            .background(KusitmsColorPalette.current.Black)
+            .padding(start = 20.dp, top = 0.dp, end = 20.dp, bottom = 0.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Row(
+            modifier = Modifier,
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            // Text 클릭 시 길이를 1씩 증가
+            Text(
+                style = KusitmsTypo.current.Text_Semibold,
+                color = KusitmsColorPalette.current.Grey300,
+                text = "추가하기${currentLength.value}/4",
+                modifier = Modifier.clickable {
+                    if (currentLength.value < 4) { // 4개 이상 추가되지 않도록 제한
+                        currentLength.value += 1
+                    }
+                },
+            )
+        }
+        repeat(currentLength.value) {
+            LinkRow1()
+        }
+    }
 
 }
 
