@@ -10,11 +10,13 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
@@ -30,6 +32,7 @@ import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
 import com.kusitms.presentation.ui.ImageVector.ImagePhoto
 import com.kusitms.presentation.ui.ImageVector.StudyIcon
+import com.kusitms.presentation.ui.ImageVector.plusIcon
 import com.kusitms.presentation.ui.login.member.ButtonRow
 
 @Composable
@@ -189,20 +192,37 @@ fun LinkColumn() {
                 color = KusitmsColorPalette.current.Grey300,
                 text = stringResource(id = R.string.signin2_title2),
             )
+            LinkRow1(currentLength, maxLength) // currentLength를 파라미터로 전달
         }
         repeat(currentLength.value) {
-            LinkRow1()
+            LinkRow2()
         }
     }
 
 }
 
 @Composable
-fun LinkRow1() {
+fun LinkRow1(currentLength: MutableState<Int>, maxLength: Int) {
     Row(
+        modifier = Modifier
+            .width(125.dp)
+            .height(36.dp)
+            .background(color = Color(0xFF0F1011), shape = RoundedCornerShape(size = 8.dp))
+            .padding(start = 12.dp, top = 8.dp, end = 12.dp, bottom = 8.dp),
         horizontalArrangement = Arrangement.spacedBy(4.dp, Alignment.CenterHorizontally),
         verticalAlignment = Alignment.CenterVertically,
     ) {
+        plusIcon()
+        Text(
+            style= KusitmsTypo.current.Caption1,
+            color = KusitmsColorPalette.current.Grey300,
+            text = "추가하기${currentLength.value}/${maxLength}",
+            modifier = Modifier.clickable {
+                if (currentLength.value < maxLength) { // 4개 이상 추가되지 않도록 제한
+                    currentLength.value += 1
+                }
+            }
+        )
     }
 }
 
