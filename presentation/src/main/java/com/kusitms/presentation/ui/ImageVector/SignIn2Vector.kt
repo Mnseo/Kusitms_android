@@ -26,8 +26,8 @@ fun ImagePhoto() {
         contentDescription = null,
         modifier = Modifier
             .padding(0.83333.dp)
-            .width(20.dp)
-            .height(20.dp)
+            .width(44.dp)
+            .height(44.dp)
     )
 }
 
@@ -47,3 +47,4 @@ fun plusIcon() {
             .height(20.dp)
     )
 }
+
