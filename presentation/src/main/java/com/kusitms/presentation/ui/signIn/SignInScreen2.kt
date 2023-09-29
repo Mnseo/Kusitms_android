@@ -5,15 +5,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -32,7 +27,6 @@ import com.kusitms.presentation.common.ui.theme.KusitmsTypo
 import com.kusitms.presentation.ui.ImageVector.ImagePhoto
 import com.kusitms.presentation.ui.ImageVector.StudyIcon
 import com.kusitms.presentation.ui.ImageVector.plusIcon
-import com.kusitms.presentation.ui.login.member.ButtonRow
 
 @Composable
 fun SignInScreen2(navController: NavController) {
@@ -48,9 +42,10 @@ fun SignInScreen2(navController: NavController) {
         PhotoColumn()
         Spacer(modifier = Modifier.height(16.dp))
         introColumn()
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(4.dp))
         LinkColumn()
-        ButtonRow()
+        Spacer(modifier = Modifier.weight(1f))
+        ButtonRow("이전으로", "가입완료", navController)
     }
 }
 
@@ -192,7 +187,7 @@ fun LinkColumn() {
                 color = KusitmsColorPalette.current.Grey300,
                 text = stringResource(id = R.string.signin2_title2),
             )
-            LinkRow1(currentLength, maxLength) // currentLength를 파라미터로 전달
+            LinkRow1(currentLength, maxLength)
         }
         Spacer(modifier = Modifier .height(14.dp))
         repeat(currentLength.value) {
@@ -212,7 +207,7 @@ fun LinkRow1(currentLength: MutableState<Int>, maxLength: Int) {
                 color = KusitmsColorPalette.current.Black,
                 shape = RoundedCornerShape(size = 8.dp)
             )
-            .padding(start = 12.dp, top = 0.dp, end= 0.dp, bottom = 8.dp),
+            .padding(start = 12.dp, top = 0.dp, end = 0.dp, bottom = 8.dp),
         horizontalArrangement = Arrangement.spacedBy(4.dp, Alignment.CenterHorizontally),
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -239,7 +234,7 @@ fun LinkRow2() {
             .background(color = Color(0xFF0F1011), shape = RoundedCornerShape(size = 8.dp))
             .padding(start = 12.dp, top = 8.dp, end = 12.dp, bottom = 8.dp),
         horizontalArrangement = Arrangement.spacedBy(4.dp, Alignment.CenterHorizontally),
-        verticalAlignment = Alignment.CenterVertically,
+        verticalAlignment = Alignment.Top,
     ) {
 
         LinkInputField()
@@ -249,19 +244,22 @@ fun LinkRow2() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LinkInputField() {
-    val linkState = remember { mutableStateOf(TextFieldValue()) }
-    Row(
+    var text by remember { mutableStateOf("")}
+    TextField(
+        value = text,
+        colors = androidx.compose.material.TextFieldDefaults.textFieldColors(
+            backgroundColor = KusitmsColorPalette.current.Grey700,
+            cursorColor = KusitmsColorPalette.current.Main500,
+            focusedIndicatorColor = KusitmsColorPalette.current.Main500,
+            unfocusedIndicatorColor = KusitmsColorPalette.current.Grey700
+        ),
+        onValueChange = text = it,
         modifier = Modifier
-            .width(167.dp)
-            .height(48.dp)
-            .background(color = Color(0xFF0F1011), shape = RoundedCornerShape(size = 8.dp))
-            .padding(start = 12.dp, top = 8.dp, end = 12.dp, bottom = 8.dp),
-        horizontalArrangement = Arrangement.spacedBy(4.dp, Alignment.CenterHorizontally),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-
-        trashCan()
-    }
+            .fillMaxWidth()
+            .padding(vertical = 12.dp, horizontal = 16.dp),
+        shape = RoundedCornerShape(size = 12.dp),
+        }
+    )
 }
 
 @Composable
@@ -286,14 +284,15 @@ fun ButtonRow(text1:String, text2:String, navController: NavController) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .shadow(elevation = 24.dp, spotColor = Color(0x330A0A0A), ambientColor = Color(0x330A0A0A))
             .height(72.dp)
-            .background(color = Color(0xFF0F1011))
             .padding(start = 20.dp, top = 8.dp, end = 20.dp, bottom = 8.dp),
         horizontalArrangement = Arrangement.spacedBy(7.dp, Alignment.CenterHorizontally),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Button(
+            modifier = Modifier
+                .weight(1f)
+                .height(56.dp),
             onClick = { navController.popBackStack() },
             colors = ButtonDefaults.buttonColors(containerColor = KusitmsColorPalette.current.Grey600),
             shape = RoundedCornerShape(size = 12.dp)
@@ -302,6 +301,9 @@ fun ButtonRow(text1:String, text2:String, navController: NavController) {
         }
 
         Button(
+            modifier = Modifier
+                .weight(1f)
+                .height(56.dp),
             onClick = { /* TODO: Handle button click */ },
             colors = ButtonDefaults.buttonColors(containerColor = KusitmsColorPalette.current.Main500),
             shape = RoundedCornerShape(size = 12.dp)
@@ -310,7 +312,6 @@ fun ButtonRow(text1:String, text2:String, navController: NavController) {
         }
     }
 }
-
 
 
 @Preview
