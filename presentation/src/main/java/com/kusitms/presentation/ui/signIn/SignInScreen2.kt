@@ -29,10 +29,8 @@ import coil.decode.SvgDecoder
 import com.kusitms.presentation.R
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
-import com.kusitms.presentation.ui.ImageVector.ImagePhoto
-import com.kusitms.presentation.ui.ImageVector.StudyIcon
-import com.kusitms.presentation.ui.ImageVector.plusIcon
-import com.kusitms.presentation.ui.ImageVector.trashCan
+import com.kusitms.presentation.common.ui.theme.kusimsShapes
+import com.kusitms.presentation.ui.ImageVector.*
 
 @Composable
 fun SignInScreen2(navController: NavController) {
@@ -195,9 +193,7 @@ fun LinkColumn() {
             LinkRow1(currentLength, maxLength)
         }
         Spacer(modifier = Modifier .height(14.dp))
-        repeat(currentLength.value) {
-            LinkRow2()
-        }
+        LinkRow2()
     }
 
 }
@@ -234,14 +230,13 @@ fun LinkRow1(currentLength: MutableState<Int>, maxLength: Int) {
 fun LinkRow2() {
     Row(
         modifier = Modifier
-            .width(125.dp)
-            .fillMaxHeight()
-            .background(color = Color(0xFF0F1011), shape = RoundedCornerShape(size = 8.dp))
+            .fillMaxWidth()
+            .height(48.dp)
+            .background(color = KusitmsColorPalette.current.Black, shape = RoundedCornerShape(size = 8.dp))
             .padding(start = 12.dp, top = 8.dp, end = 12.dp, bottom = 8.dp),
         horizontalArrangement = Arrangement.spacedBy(4.dp, Alignment.CenterHorizontally),
         verticalAlignment = Alignment.Top,
     ) {
-
         LinkInputField()
     }
 }
@@ -254,10 +249,10 @@ fun LinkInputField() {
         value = link,
         onValueChange = {link = it},
         colors = TextFieldDefaults.textFieldColors(
-            containerColor = KusitmsColorPalette.current.Grey700,
+            containerColor = Color(0xFF171A21),
             cursorColor = KusitmsColorPalette.current.Main500,
             focusedIndicatorColor = KusitmsColorPalette.current.Main500,
-            unfocusedIndicatorColor = KusitmsColorPalette.current.Grey700
+            unfocusedIndicatorColor = Color(0xFF171A21)
         ),
         modifier = Modifier
             .fillMaxWidth()
@@ -265,12 +260,14 @@ fun LinkInputField() {
         shape =  RoundedCornerShape(size = 12.dp),
         trailingIcon = {
             if (link.text.isNotEmpty()) {
-                Icon(
-                    imageVector = trashCan(),
-                    contentDescription = null,
-                    tint = KusitmsColorPalette.current.Grey500,
-                    modifier = Modifier.clickable { link = TextFieldValue("")}
-                )
+                xIcon._vector?.let {
+                    Icon(
+                        imageVector = it,
+                        contentDescription = null,
+                        tint = KusitmsColorPalette.current.Grey500,
+                        modifier = Modifier.clickable { link = TextFieldValue("")}
+                    )
+                }
             }
         }
     )

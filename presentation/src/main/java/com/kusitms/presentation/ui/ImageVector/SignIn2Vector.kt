@@ -111,3 +111,51 @@ object trashCan {
         )
     }
 }
+
+object xIcon {
+    public var _vector: ImageVector? = null
+    val vector: ImageVector
+        get() {
+            if (_vector != null) {
+                return _vector!!
+            }
+
+            _vector = ImageVector.Builder(
+                name = "vector",
+                defaultWidth = 24.dp,
+                defaultHeight = 24.dp,
+                viewportWidth = 24f,
+                viewportHeight = 24f
+            ).apply {
+                path(
+                    fill = SolidColor(Color.Black),
+                    fillAlpha = 1.0f,
+                    stroke = SolidColor(Color(0xFF727783)),
+                    strokeAlpha = 1f,
+                    strokeLineWidth = 1.5f,
+                    strokeLineCap = StrokeCap.Round,
+                    strokeLineJoin = StrokeJoin.Round,
+                    strokeLineMiter = 1.0f,
+                    pathFillType = PathFillType.NonZero
+                ) {
+                    moveTo(16.2427f, 7.75738f)
+                    lineTo(7.75745f, 16.2427f)
+                    moveTo(16.2427f, 16.2426f)
+                    lineTo(7.75745f, 7.75732f)
+                }
+            }.build()
+            return _vector!!
+        }
+    @Composable
+    fun drawxIcon(modifier: Modifier = Modifier) {
+        Image(
+            imageVector = xIcon.vector,
+            contentDescription = null,
+            modifier = modifier,
+            contentScale = ContentScale.FillBounds,
+            alignment = Alignment.Center
+        )
+    }
+
+
+}
