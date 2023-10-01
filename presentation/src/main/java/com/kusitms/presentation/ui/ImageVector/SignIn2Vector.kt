@@ -156,6 +156,49 @@ object xIcon {
             alignment = Alignment.Center
         )
     }
+}
 
+object underArrow {
+    public var _vector: ImageVector? = null
+    val vector: ImageVector
+        get() {
+            if (_vector != null) {
+                return _vector!!
+            }
 
+            _vector = ImageVector.Builder(
+                name = "vector",
+                defaultWidth = 24.dp,
+                defaultHeight = 24.dp,
+                viewportWidth = 24f,
+                viewportHeight = 24f
+            ).apply {
+                path(
+                    fill = SolidColor(Color.Black),
+                    fillAlpha = 1.0f,
+                    stroke = SolidColor(Color(0xFFD9DCE1)),
+                    strokeAlpha = 1f,
+                    strokeLineWidth = 1.5f,
+                    strokeLineCap = StrokeCap.Round,
+                    strokeLineJoin = StrokeJoin.Round,
+                    strokeLineMiter = 1.0f,
+                    pathFillType = PathFillType.NonZero
+                ) {
+                    moveTo(7f, 10f)
+                    lineTo(12f, 14f)
+                    lineTo(17f, 10f)
+                }
+            }.build()
+            return _vector!!
+        }
+    @Composable
+    fun drawxUnderArrow(modifier: Modifier = Modifier) {
+        Image(
+            imageVector = underArrow.vector,
+            contentDescription = null,
+            modifier = modifier,
+            contentScale = ContentScale.FillBounds,
+            alignment = Alignment.Center
+        )
+    }
 }

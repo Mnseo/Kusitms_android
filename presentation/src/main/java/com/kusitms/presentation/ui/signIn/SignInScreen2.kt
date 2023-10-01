@@ -5,6 +5,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.ModalBottomSheetLayout
+import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.*
@@ -31,6 +34,7 @@ import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
 import com.kusitms.presentation.common.ui.theme.kusimsShapes
 import com.kusitms.presentation.ui.ImageVector.*
+import kotlinx.coroutines.launch
 
 @Composable
 fun SignInScreen2(navController: NavController) {
@@ -232,12 +236,79 @@ fun LinkRow2() {
         modifier = Modifier
             .fillMaxWidth()
             .height(48.dp)
-            .background(color = KusitmsColorPalette.current.Black, shape = RoundedCornerShape(size = 8.dp))
+            .background(
+                color = KusitmsColorPalette.current.Black,
+                shape = RoundedCornerShape(size = 8.dp)
+            )
             .padding(start = 12.dp, top = 8.dp, end = 12.dp, bottom = 8.dp),
         horizontalArrangement = Arrangement.spacedBy(4.dp, Alignment.CenterHorizontally),
-        verticalAlignment = Alignment.Top,
+        verticalAlignment = Alignment.CenterVertically,
     ) {
+        LinkColumnBottomSheet()
         LinkInputField()
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
+@Composable
+fun LinkColumnBottomSheet() {
+    val bottomSheetState = rememberBottomSheetScaffoldState()
+    val coroutineScope = rememberCoroutineScope()
+
+    BottomSheetScaffold(
+        scaffoldState = bottomSheetState,
+        sheetContent = {
+            // BottomSheet 내용
+            Text(text = "This is a BottomSheet", Modifier.padding(16.dp))
+        },
+    ) {
+       @Composable
+        fun LinkCheckRow() {
+            Row(
+                modifier = Modifier
+                    .width(110.dp)
+                    .height(48.dp)
+                    .padding(12.dp)
+                    .background(
+                        color = KusitmsColorPalette.current.Black,
+                        shape = RoundedCornerShape(size = 8.dp)
+                    )
+                    .padding(start = 12.dp, top = 8.dp, end = 12.dp, bottom = 8.dp),
+                horizontalArrangement = Arrangement.spacedBy(30.dp, Alignment.CenterHorizontally),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(text = "선택", style = KusitmsTypo.current.Text_Medium, color = KusitmsColorPalette.current.Grey400)
+                underArrow.drawxUnderArrow(
+                    modifier = Modifier.clickable {
+                        coroutineScope.launch {
+                            bottomSheetState.bottomSheetState.show() // BottomSheet를 표시합니다.
+                        }
+                    }
+                )
+            }
+        }
+
+        LinkCheckRow() // 메인 컨텐트를 호출합니다.
+    }
+}
+
+@Composable
+fun LinkCheckRow() {
+    Row(
+        modifier = Modifier
+            .width(110.dp)
+            .height(48.dp)
+            .padding(12.dp)
+            .background(
+                color = KusitmsColorPalette.current.Black,
+                shape = RoundedCornerShape(size = 8.dp)
+            )
+            .padding(start = 12.dp, top = 8.dp, end = 12.dp, bottom = 8.dp),
+        horizontalArrangement = Arrangement.spacedBy(30.dp, Alignment.CenterHorizontally),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(text = "선택", style = KusitmsTypo.current.Text_Medium, color = KusitmsColorPalette.current.Grey400)
+        underArrow.drawxUnderArrow()
     }
 }
 
@@ -256,6 +327,7 @@ fun LinkInputField() {
         ),
         modifier = Modifier
             .fillMaxWidth()
+            .height(48.dp)
             .padding(vertical = 12.dp, horizontal = 16.dp),
         shape =  RoundedCornerShape(size = 12.dp),
         trailingIcon = {
