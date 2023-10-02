@@ -200,7 +200,9 @@ fun LinkColumn() {
             LinkRow1(currentLength, maxLength)
         }
         Spacer(modifier = Modifier .height(14.dp))
-        LinkRow2()
+        repeat(currentLength.value) {
+            LinkRow2()
+        }
     }
 
 }
@@ -299,7 +301,12 @@ fun LinkCheckRow() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LinkInputField() {
-    val linkState = remember { mutableStateOf(TextFieldValue()) }
+    var linkState by remember { mutableStateOf("") }
+    val isVisible by remember {
+        derivedStateOf {
+            linkState.isNotBlank()
+        }
+    }
     Row(
         modifier = Modifier
             .fillMaxWidth(),
@@ -308,22 +315,40 @@ fun LinkInputField() {
     ) {
         Box(
             modifier = Modifier
-                .fillMaxWidth()
+                .width(167.dp)
                 .height(48.dp)
-                .background(KusitmsColorPalette.current.Grey700, shape =  RoundedCornerShape(16.dp))
+                .background(KusitmsColorPalette.current.Grey700, shape = RoundedCornerShape(16.dp))
         ){
             TextField(
-                value = linkState.value,
+                value = linkState,
                 onValueChange = { newValue ->
-                    if(newValue.text.startsWith("https://") || newValue.text.endsWith(".com")) {
-                        linkState.value = newValue
+                    if(newValue.startsWith("https://") || newValue.endsWith(".com")) {
+                        linkState = newValue
                     }
                 },
+                colors = TextFieldDefaults.textFieldColors(
+                    containerColor =  KusitmsColorPalette.current.Grey700,
+                    cursorColor = KusitmsColorPalette.current.Main500,
+                    focusedTextColor = KusitmsColorPalette.current.White,
+                    focusedTrailingIconColor = KusitmsColorPalette.current.Grey400,
+                    unfocusedTextColor = KusitmsColorPalette.current.Grey400,
+                    focusedIndicatorColor = KusitmsColorPalette.current.Main500
+                ),
+                placeholder = { Text(stringResource(id = R.string.signin2_title2), style = KusitmsTypo.current.Text_Medium, color = KusitmsColorPalette.current.Grey400)},
                 shape = RoundedCornerShape(16.dp),
+                trailingIcon = {
+                    if (isVisible) {
+                        IconButton(onClick = { linkState = "" }) {
+                            Icon(
+                                imageVector = xIcon.vector,
+                                contentDescription = null,
+
+                            )
+                        }
+                    }
+                }
             )
-
         }
-
         trashCan.drawTrashCan()
     }
 }
