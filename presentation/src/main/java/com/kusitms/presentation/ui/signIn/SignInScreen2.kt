@@ -46,12 +46,11 @@ fun SignInScreen2(navController: NavController) {
             .fillMaxSize()
             .background(KusitmsColorPalette.current.Black),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.Top)
+        verticalArrangement = Arrangement.spacedBy(0.dp, Alignment.Top)
     ) {
         TitleColumn()
-        Spacer(modifier = Modifier.height(32.dp))
         PhotoColumn()
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(10.dp))
         introColumn()
         Spacer(modifier = Modifier.height(4.dp))
         LinkColumn()
@@ -283,7 +282,7 @@ fun LinkCheckRow() {
             .height(48.dp)
             .padding(12.dp)
             .background(
-                color = KusitmsColorPalette.current.Black,
+                color = KusitmsColorPalette.current.Grey700,
                 shape = RoundedCornerShape(size = 8.dp)
             )
             .padding(start = 12.dp, top = 8.dp, end = 12.dp, bottom = 8.dp),
@@ -309,7 +308,7 @@ fun LinkInputField() {
     }
     Row(
         modifier = Modifier
-            .fillMaxWidth(),
+            .width(167.dp),
         horizontalArrangement = Arrangement.spacedBy(4.dp, Alignment.Start),
         verticalAlignment = Alignment.CenterVertically,
     ) {
