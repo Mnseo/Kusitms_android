@@ -245,7 +245,7 @@ fun LinkRow2() {
                 shape = RoundedCornerShape(size = 8.dp)
             )
             .padding(start = 12.dp, top = 8.dp, end = 12.dp, bottom = 8.dp),
-        horizontalArrangement = Arrangement.spacedBy(4.dp, Alignment.CenterHorizontally),
+        horizontalArrangement = Arrangement.spacedBy(30.dp, Alignment.Start),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         LinkCheckRow()
@@ -274,28 +274,6 @@ fun LinkColumnBottomSheet() {
     }
 }
 
-@Composable
-fun LinkCheckRow() {
-    Row(
-        modifier = Modifier
-            .width(110.dp)
-            .height(48.dp)
-            .padding(12.dp)
-            .background(
-                color = KusitmsColorPalette.current.Grey700,
-                shape = RoundedCornerShape(size = 8.dp)
-            )
-            .padding(start = 12.dp, top = 8.dp, end = 12.dp, bottom = 8.dp),
-        horizontalArrangement = Arrangement.spacedBy(30.dp, Alignment.CenterHorizontally),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(text = "선택", style = KusitmsTypo.current.Text_Medium, color = KusitmsColorPalette.current.Grey400)
-        underArrow.drawxUnderArrow(
-            modifier = Modifier.clickable {
-                })
-            }
-    }
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -308,14 +286,14 @@ fun LinkInputField() {
     }
     Row(
         modifier = Modifier
-            .width(167.dp),
+            .fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(4.dp, Alignment.Start),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Box(
             modifier = Modifier
-                .width(167.dp)
-                .height(48.dp)
+                .fillMaxWidth()
+                .fillMaxHeight()
                 .background(KusitmsColorPalette.current.Grey700, shape = RoundedCornerShape(16.dp))
         ){
             TextField(
