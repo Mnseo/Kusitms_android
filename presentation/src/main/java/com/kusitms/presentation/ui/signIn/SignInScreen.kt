@@ -18,6 +18,7 @@ import com.kusitms.presentation.R
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
 import com.kusitms.presentation.ui.ImageVector.StudyIcon
+import com.kusitms.presentation.ui.signIn.ButtonRow
 
 
 @Composable
@@ -38,8 +39,7 @@ fun SignInMember1(
 
         Text(text = stringResource(id = R.string.signin_member_title1), style = KusitmsTypo.current.SubTitle2_Semibold, color = KusitmsColorPalette.current.Grey300)
 
-
-        ButtonRow()
+        ButtonRow(text1 = "이전으로", text2 = "다음으로", navController = navController)
 
     }
 
@@ -117,48 +117,6 @@ fun inputField(hint : String, maxlength: Int? = null) {
 }
 
 
-@Composable
-fun ButtonRow() {
-    Row(
-        modifier = Modifier.padding(bottom=50.dp)
-            .fillMaxWidth()
-            .height(72.dp)
-            .background(color = KusitmsColorPalette.current.Black),
-        horizontalArrangement = Arrangement.spacedBy(7.dp, Alignment.CenterHorizontally),
-        verticalAlignment = Alignment.Top
-    ) {
-        exBtn()
-        nextBtn()
-    }
-}
-
-@Composable
-fun exBtn() {
-    Button(
-        colors = ButtonDefaults.outlinedButtonColors(KusitmsColorPalette.current.Grey600),
-        border = BorderStroke(1.dp, KusitmsColorPalette.current.Grey600),
-        contentPadding = PaddingValues(horizontal = 12.dp, vertical = 16.dp),
-        onClick = {
-
-        }
-    ) {
-        Text(stringResource(id = R.string.signin_member_btn_1))
-    }
-}
-
-@Composable
-fun nextBtn() {
-    Button(
-        colors = ButtonDefaults.outlinedButtonColors(KusitmsColorPalette.current.Grey600),
-        border = BorderStroke(1.dp, KusitmsColorPalette.current.Grey600),
-        contentPadding = PaddingValues(horizontal = 12.dp, vertical = 16.dp),
-        onClick = {
-
-        }
-    ) {
-        Text(stringResource(id = R.string.signin_member_btn_2))
-    }
-}
 
 
 @Preview

@@ -5,16 +5,17 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material.MaterialTheme.colors
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
@@ -30,6 +31,7 @@ import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
 import com.kusitms.presentation.ui.ImageVector.ImagePhoto
 import com.kusitms.presentation.ui.ImageVector.StudyIcon
+import com.kusitms.presentation.ui.ImageVector.plusIcon
 import com.kusitms.presentation.ui.login.member.ButtonRow
 
 @Composable
@@ -159,7 +161,7 @@ fun introTextField() {
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent
                 ),
-                placeholder = {Text(stringResource(id = R.string.signin2_placeholder), style = KusitmsTypo.current.Text_Medium, color = KusitmsColorPalette.current.Grey400 )}
+                placeholder = {Text(stringResource(id = R.string.signin2_placeholder1), style = KusitmsTypo.current.Text_Medium, color = KusitmsColorPalette.current.Grey400 )}
             )
         }
         Text(text = "${textState.value.text.length}/$maxLength", style = KusitmsTypo.current.Caption1, color = KusitmsColorPalette.current.Grey400)
@@ -179,7 +181,8 @@ fun LinkColumn() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Row(
-            modifier = Modifier,
+            modifier =
+            Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
         ) {
@@ -189,27 +192,126 @@ fun LinkColumn() {
                 color = KusitmsColorPalette.current.Grey300,
                 text = stringResource(id = R.string.signin2_title2),
             )
+            LinkRow1(currentLength, maxLength) // currentLength를 파라미터로 전달
         }
+        Spacer(modifier = Modifier .height(14.dp))
         repeat(currentLength.value) {
-            LinkRow1()
+            LinkRow2()
         }
     }
 
 }
 
 @Composable
-fun LinkRow1() {
+fun LinkRow1(currentLength: MutableState<Int>, maxLength: Int) {
     Row(
+        modifier = Modifier
+            .width(125.dp)
+            .height(36.dp)
+            .background(
+                color = KusitmsColorPalette.current.Black,
+                shape = RoundedCornerShape(size = 8.dp)
+            )
+            .padding(start = 12.dp, top = 0.dp, end= 0.dp, bottom = 8.dp),
         horizontalArrangement = Arrangement.spacedBy(4.dp, Alignment.CenterHorizontally),
         verticalAlignment = Alignment.CenterVertically,
     ) {
+        plusIcon()
+        Text(
+            style= KusitmsTypo.current.Caption1,
+            color = KusitmsColorPalette.current.Grey300,
+            text = "추가하기${currentLength.value}/${maxLength}",
+            modifier = Modifier.clickable {
+                if (currentLength.value < maxLength) { // 4개 이상 추가되지 않도록 제한
+                    currentLength.value += 1
+                }
+            }
+        )
     }
 }
 
 @Composable
 fun LinkRow2() {
+    Row(
+        modifier = Modifier
+            .width(125.dp)
+            .height(36.dp)
+            .background(color = Color(0xFF0F1011), shape = RoundedCornerShape(size = 8.dp))
+            .padding(start = 12.dp, top = 8.dp, end = 12.dp, bottom = 8.dp),
+        horizontalArrangement = Arrangement.spacedBy(4.dp, Alignment.CenterHorizontally),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
 
+        LinkInputField()
+    }
 }
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun LinkInputField() {
+    val linkState = remember { mutableStateOf(TextFieldValue()) }
+    Row(
+        modifier = Modifier
+            .width(167.dp)
+            .height(48.dp)
+            .background(color = Color(0xFF0F1011), shape = RoundedCornerShape(size = 8.dp))
+            .padding(start = 12.dp, top = 8.dp, end = 12.dp, bottom = 8.dp),
+        horizontalArrangement = Arrangement.spacedBy(4.dp, Alignment.CenterHorizontally),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+
+        trashCan()
+    }
+}
+
+@Composable
+fun trashCan() {
+    val imageLoader = ImageLoader.Builder(LocalContext.current)
+        .components {
+            add(SvgDecoder.Factory())
+        }
+        .build()
+    Image(
+        painter = rememberAsyncImagePainter(R.drawable.ic_trashcan, imageLoader),
+        contentDescription = null,
+        contentScale = ContentScale.None,
+        modifier = Modifier
+            .width(24.dp)
+            .height(24.dp)
+    )
+}
+
+@Composable
+fun ButtonRow(text1:String, text2:String, navController: NavController) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .shadow(elevation = 24.dp, spotColor = Color(0x330A0A0A), ambientColor = Color(0x330A0A0A))
+            .height(72.dp)
+            .background(color = Color(0xFF0F1011))
+            .padding(start = 20.dp, top = 8.dp, end = 20.dp, bottom = 8.dp),
+        horizontalArrangement = Arrangement.spacedBy(7.dp, Alignment.CenterHorizontally),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Button(
+            onClick = { navController.popBackStack() },
+            colors = ButtonDefaults.buttonColors(containerColor = KusitmsColorPalette.current.Grey600),
+            shape = RoundedCornerShape(size = 12.dp)
+        ) {
+            Text(text = text1, style = KusitmsTypo.current.Text_Semibold, color = KusitmsColorPalette.current.Grey100)
+        }
+
+        Button(
+            onClick = { /* TODO: Handle button click */ },
+            colors = ButtonDefaults.buttonColors(containerColor = KusitmsColorPalette.current.Main500),
+            shape = RoundedCornerShape(size = 12.dp)
+        ) {
+            Text(text = text2, style = KusitmsTypo.current.Text_Semibold, color = KusitmsColorPalette.current.Grey100)
+        }
+    }
+}
+
+
 
 @Preview
 @Composable
