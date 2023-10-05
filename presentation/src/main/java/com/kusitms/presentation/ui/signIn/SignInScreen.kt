@@ -120,7 +120,7 @@ fun inputField(hint : String, maxlength: Int? = null) {
 @Composable
 fun ButtonRow() {
     Row(
-        modifier = Modifier
+        modifier = Modifier.padding(bottom=50.dp)
             .fillMaxWidth()
             .height(72.dp)
             .background(color = KusitmsColorPalette.current.Black),

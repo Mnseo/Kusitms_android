@@ -2,10 +2,13 @@ package com.kusitms.presentation.ui.signIn
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -15,8 +18,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import coil.ImageLoader
 import coil.compose.rememberAsyncImagePainter
 import coil.decode.SvgDecoder
@@ -24,6 +29,7 @@ import com.kusitms.presentation.R
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
 import com.kusitms.presentation.ui.ImageVector.StudyIcon
+import com.kusitms.presentation.ui.login.member.ButtonRow
 
 @Composable
 fun SignInScreen2(navController: NavController) {
@@ -40,9 +46,9 @@ fun SignInScreen2(navController: NavController) {
         Spacer(modifier = Modifier.height(16.dp))
         introColumn()
         Spacer(modifier = Modifier.height(24.dp))
-
+        LinkColumn()
+        ButtonRow()
     }
-
 }
 
 @Composable
@@ -52,7 +58,6 @@ fun PhotoColumn() {
             .width(96.dp)
             .height(96.dp)
             .background(color = Color(0xFF20232D), shape = RoundedCornerShape(size = 12.dp))
-            .padding(12.dp)
     ) {
         Column(
             modifier = Modifier
@@ -72,14 +77,12 @@ fun ImagePhoto() {
             add(SvgDecoder.Factory())
         }
         .build()
-
     Image(
         painter = rememberAsyncImagePainter(R.drawable.screen2_photo, imageLoader),
         contentDescription = null,
         modifier = Modifier
             .width(44.dp)
             .height(44.dp)
-
     )
 }
 
@@ -88,7 +91,7 @@ fun TitleColumn() {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(24.dp)
+            .padding(20.dp)
             .background(KusitmsColorPalette.current.Black)
             .height(109.dp),
         verticalArrangement = Arrangement.Top,
@@ -102,11 +105,9 @@ fun TitleColumn() {
             StudyIcon.drawStudyIcon(
                 modifier = Modifier
                     .height(24.dp)
-                    .width(24.dp)
-            )
+                    .width(24.dp))
             TextColumn()
         }
-
     }
 }
 
@@ -123,7 +124,6 @@ fun TextColumn() {
     ) {
         Text(text = stringResource(id = R.string.signin2_text1), style = KusitmsTypo.current.SubTitle2_Semibold, color = KusitmsColorPalette.current.Grey300 )
         Text(text = stringResource(id = R.string.signin2_text2), style = KusitmsTypo.current.Caption1, color = KusitmsColorPalette.current.Sub1)
-
     }
 }
 
@@ -132,6 +132,7 @@ fun introColumn() {
     Column(
         modifier = Modifier
             .fillMaxWidth()
+            .padding(20.dp)
             .background(KusitmsColorPalette.current.Black)
             .height(186.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterVertically),
@@ -143,24 +144,86 @@ fun introColumn() {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun introTextField() {
     val maxLength = 100
+    val textState = remember { mutableStateOf(TextFieldValue()) }
     Column(
-        modifier = Modifier.padding(start = 20.dp, top =16.dp, end =20.dp, bottom =16.dp),
+        modifier = Modifier
+            .fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(4.dp),
         horizontalAlignment = Alignment.Start
     ) {
-        val textState = remember { mutableStateOf(TextFieldValue()) }
-        TextField(
-            value = textState.value,
-            onValueChange = {
-                if(it.text.length <= maxLength) { textState.value = it }
-            },
-            placeholder = {Text(stringResource(id = R.string.signin2_placeholder), style = KusitmsTypo.current.Text_Medium, color = KusitmsColorPalette.current.Grey400 )}
-        )
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(130.dp)
+                .background(KusitmsColorPalette.current.Grey600, shape = RoundedCornerShape(16.dp))
+        ) {
+            TextField(
+                value = textState.value,
+                onValueChange = {
+                    if(it.text.length <= maxLength) { textState.value = it }
+                },
+                shape = RoundedCornerShape(16.dp),
+                colors = TextFieldDefaults.textFieldColors(
+                    containerColor = KusitmsColorPalette.current.Grey600,
+                    cursorColor = KusitmsColorPalette.current.Grey600,
+                    disabledLabelColor = KusitmsColorPalette.current.Grey600,
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent
+                ),
+                placeholder = {Text(stringResource(id = R.string.signin2_placeholder), style = KusitmsTypo.current.Text_Medium, color = KusitmsColorPalette.current.Grey400 )}
+            )
+        }
         Text(text = "${textState.value.text.length}/$maxLength", style = KusitmsTypo.current.Caption1, color = KusitmsColorPalette.current.Grey400)
+    }
+}
+
+@Composable
+fun LinkColumn() {
+    val currentLength = remember { mutableStateOf(1) }
+    val maxLength = 4
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(35.dp)
+            .background(KusitmsColorPalette.current.Black)
+            .padding(start = 20.dp, top = 0.dp, end = 20.dp, bottom = 0.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Row(
+            modifier = Modifier,
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            // Text 클릭 시 길이를 1씩 증가
+            Text(
+                style = KusitmsTypo.current.Text_Semibold,
+                color = KusitmsColorPalette.current.Grey300,
+                text = "추가하기${currentLength.value}/4",
+                modifier = Modifier.clickable {
+                    if (currentLength.value < 4) { // 4개 이상 추가되지 않도록 제한
+                        currentLength.value += 1
+                    }
+                },
+            )
+        }
+        repeat(currentLength.value) {
+            LinkRow1()
+        }
     }
 
 }
 
+@Composable
+fun LinkRow1() {
+
+}
+
+@Preview
+@Composable
+fun example2() {
+    SignInScreen2(navController = rememberNavController())
+}
