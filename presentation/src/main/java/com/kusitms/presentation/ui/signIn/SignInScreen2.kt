@@ -28,6 +28,7 @@ import coil.decode.SvgDecoder
 import com.kusitms.presentation.R
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
+import com.kusitms.presentation.ui.ImageVector.ImagePhoto
 import com.kusitms.presentation.ui.ImageVector.StudyIcon
 import com.kusitms.presentation.ui.login.member.ButtonRow
 
@@ -68,22 +69,6 @@ fun PhotoColumn() {
             ImagePhoto()
         }
     }
-}
-
-@Composable
-fun ImagePhoto() {
-    val imageLoader = ImageLoader.Builder(LocalContext.current)
-        .components {
-            add(SvgDecoder.Factory())
-        }
-        .build()
-    Image(
-        painter = rememberAsyncImagePainter(R.drawable.screen2_photo, imageLoader),
-        contentDescription = null,
-        modifier = Modifier
-            .width(44.dp)
-            .height(44.dp)
-    )
 }
 
 @Composable
@@ -202,12 +187,7 @@ fun LinkColumn() {
             Text(
                 style = KusitmsTypo.current.Text_Semibold,
                 color = KusitmsColorPalette.current.Grey300,
-                text = "추가하기${currentLength.value}/4",
-                modifier = Modifier.clickable {
-                    if (currentLength.value < 4) { // 4개 이상 추가되지 않도록 제한
-                        currentLength.value += 1
-                    }
-                },
+                text = stringResource(id = R.string.signin2_title2),
             )
         }
         repeat(currentLength.value) {
@@ -219,6 +199,15 @@ fun LinkColumn() {
 
 @Composable
 fun LinkRow1() {
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(4.dp, Alignment.CenterHorizontally),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+    }
+}
+
+@Composable
+fun LinkRow2() {
 
 }
 
