@@ -248,8 +248,6 @@ fun LinkRow2() {
         horizontalArrangement = Arrangement.spacedBy(30.dp, Alignment.Start),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        LinkCheckRow()
-        LinkInputField()
     }
 }
 
@@ -273,65 +271,6 @@ fun LinkColumnBottomSheet() {
 
     }
 }
-
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun LinkInputField() {
-    var linkState by remember { mutableStateOf("") }
-    val isVisible by remember {
-        derivedStateOf {
-            linkState.isNotBlank()
-        }
-    }
-    Row(
-        modifier = Modifier
-            .fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(4.dp, Alignment.Start),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight()
-                .background(KusitmsColorPalette.current.Grey700, shape = RoundedCornerShape(16.dp))
-        ){
-            TextField(
-                value = linkState,
-                onValueChange = { newValue ->
-                    if(newValue.startsWith("https://") || newValue.endsWith(".com")) {
-                        linkState = newValue
-                    }
-                },
-                colors = TextFieldDefaults.textFieldColors(
-                    containerColor =  KusitmsColorPalette.current.Grey700,
-                    cursorColor = KusitmsColorPalette.current.Main500,
-                    focusedTextColor = KusitmsColorPalette.current.White,
-                    focusedTrailingIconColor = KusitmsColorPalette.current.Grey400,
-                    unfocusedTextColor = KusitmsColorPalette.current.Grey400,
-                    focusedIndicatorColor = KusitmsColorPalette.current.Main500
-                ),
-                placeholder = { Text(stringResource(id = R.string.signin2_title2), style = KusitmsTypo.current.Text_Medium, color = KusitmsColorPalette.current.Grey400)},
-                shape = RoundedCornerShape(16.dp),
-                trailingIcon = {
-                    if (isVisible) {
-                        IconButton(onClick = { linkState = "" }) {
-                            Icon(
-                                imageVector = xIcon.vector,
-                                contentDescription = null,
-
-                            )
-                        }
-                    }
-                }
-            )
-        }
-        trashCan.drawTrashCan()
-    }
-}
-
-
-
 
 @Composable
 fun ButtonRow(text1:String, text2:String, navController: NavController) {
