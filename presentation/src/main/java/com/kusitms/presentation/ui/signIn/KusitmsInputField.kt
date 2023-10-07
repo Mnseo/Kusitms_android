@@ -44,7 +44,7 @@ fun LinkCheckRowExample() {
 fun LinkTextField() {
     val textState = remember { mutableStateOf(TextFieldValue()) }
     var isClicked by remember { mutableStateOf(false)}
-    var borderColor by remember { mutableStateOf(KusitmsColorPalette.current.White) }
+//    var borderColor by remember { mutableStateOf(KusitmsColorPalette.current.White) }
     Row(
         modifier = Modifier
             .width(167.dp)
@@ -64,14 +64,14 @@ fun LinkTextField() {
                 .width(99.dp)
                 .height(48.dp)
                 .background(KusitmsColorPalette.current.Grey700)
-                .border(width = 1.dp, color = borderColor, shape=RoundedCornerShape(12.dp))
+                .border(width = 1.dp, color = KusitmsColorPalette.current.White, shape=RoundedCornerShape(12.dp))
                 .clickable {
                     isClicked = !isClicked
-                    borderColor = if(isClicked) {
-                        KusitmsColorPalette.current.Main500
-                    } else {
-                        KusitmsColorPalette.current.White
-                    }
+//                    borderColor = if(isClicked) {
+//                        KusitmsColorPalette.current.Main500
+//                    } else {
+//                        KusitmsColorPalette.current.White
+//                    }
                 }
         ) {
             TextField(

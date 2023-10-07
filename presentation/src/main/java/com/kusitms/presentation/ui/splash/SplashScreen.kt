@@ -30,6 +30,7 @@ fun Splash(navController: NavHostController) {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(24.dp)
+                .background(color = KusitmsColorPalette.current.Grey900)
         ) {
             Column(
                 modifier = Modifier
