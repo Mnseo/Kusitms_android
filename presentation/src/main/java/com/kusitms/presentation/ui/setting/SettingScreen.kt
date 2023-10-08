@@ -14,7 +14,6 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.kusitms.presentation.navigation.NavRoutes
-import com.kusitms.presentation.ui.splash.TestNavButton
 
 @Composable
 fun Setting(navController: NavHostController) {
@@ -31,14 +30,7 @@ fun Setting(navController: NavHostController) {
                 text = "Setting Screen", textAlign = TextAlign.Center, fontSize = 20.sp
             )
             Spacer(modifier = Modifier.height(24.dp))
-            Row(
-                modifier = Modifier.wrapContentWidth(),
-                horizontalArrangement = Arrangement.spacedBy(24.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                TestNavButton(route = NavRoutes.Login.route, navController = navController)
-                TestNavButton(route = NavRoutes.Home.route, navController = navController)
-            }
+
         }
     }
 }

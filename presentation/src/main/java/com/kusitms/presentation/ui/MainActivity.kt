@@ -15,6 +15,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.kusitms.presentation.common.ui.theme.KusitmsTheme
+import com.kusitms.presentation.navigation.KusitmsNavigation
 import com.kusitms.presentation.navigation.NavRoutes
 import com.kusitms.presentation.ui.home.Home
 import com.kusitms.presentation.ui.login.Login
@@ -32,40 +33,12 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                   NavHost()
+                    KusitmsNavigation()
                 }
             }
         }
     }
 }
 
-@Composable
-fun NavHost(
-    modifier: Modifier = Modifier,
-    navController: NavHostController = rememberNavController(),
-    startDestination: String = NavRoutes.Splash.route,
-) {
-    NavHost(
-        modifier = modifier.fillMaxSize(),
-        navController = navController,
-        startDestination = startDestination
-    ) {
-        composable(NavRoutes.Home.route) {
-            Home(navController)
-        }
-        composable(NavRoutes.Splash.route) {
-            Splash(navController)
-        }
-        composable(NavRoutes.Login.route) {
-            Login(navController)
-        }
-    }
-}
 
-@Preview(showBackground = true)
-@Composable
-fun MainPreview() {
-    KusitmsTheme {
-        NavHost()
-    }
-}
+
