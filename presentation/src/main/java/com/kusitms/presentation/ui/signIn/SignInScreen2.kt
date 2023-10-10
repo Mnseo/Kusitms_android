@@ -5,6 +5,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.MaterialTheme.colors
+import androidx.compose.material.ModalBottomSheetLayout
+import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.*
@@ -15,6 +19,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -31,6 +36,8 @@ import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
 import com.kusitms.presentation.common.ui.theme.kusimsShapes
 import com.kusitms.presentation.ui.ImageVector.*
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 
 @Composable
 fun SignInScreen2(navController: NavController) {
@@ -193,7 +200,9 @@ fun LinkColumn() {
             LinkRow1(currentLength, maxLength)
         }
         Spacer(modifier = Modifier .height(14.dp))
-        LinkRow2()
+        repeat(currentLength.value) {
+            LinkRow2()
+        }
     }
 
 }
@@ -232,45 +241,116 @@ fun LinkRow2() {
         modifier = Modifier
             .fillMaxWidth()
             .height(48.dp)
-            .background(color = KusitmsColorPalette.current.Black, shape = RoundedCornerShape(size = 8.dp))
+            .background(
+                color = KusitmsColorPalette.current.Black,
+                shape = RoundedCornerShape(size = 8.dp)
+            )
             .padding(start = 12.dp, top = 8.dp, end = 12.dp, bottom = 8.dp),
         horizontalArrangement = Arrangement.spacedBy(4.dp, Alignment.CenterHorizontally),
-        verticalAlignment = Alignment.Top,
+        verticalAlignment = Alignment.CenterVertically,
     ) {
+        LinkCheckRow()
         LinkInputField()
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
+@Composable
+fun LinkColumnBottomSheet() {
+    val scaffoldState = rememberBottomSheetScaffoldState(
+        bottomSheetState = SheetState(
+            skipPartiallyExpanded = false,
+            initialValue = SheetValue.Expanded)
+    )
+    val coroutineScope = rememberCoroutineScope()
+
+    BottomSheetScaffold(
+        scaffoldState = scaffoldState,
+        sheetContent = {
+            // BottomSheet 내용
+            Text(text = "This is a BottomSheet")
+        },
+    ) {
+
+    }
+}
+
+@Composable
+fun LinkCheckRow() {
+    Row(
+        modifier = Modifier
+            .width(110.dp)
+            .height(48.dp)
+            .padding(12.dp)
+            .background(
+                color = KusitmsColorPalette.current.Black,
+                shape = RoundedCornerShape(size = 8.dp)
+            )
+            .padding(start = 12.dp, top = 8.dp, end = 12.dp, bottom = 8.dp),
+        horizontalArrangement = Arrangement.spacedBy(30.dp, Alignment.CenterHorizontally),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(text = "선택", style = KusitmsTypo.current.Text_Medium, color = KusitmsColorPalette.current.Grey400)
+        underArrow.drawxUnderArrow(
+            modifier = Modifier.clickable {
+                })
+            }
+    }
+
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LinkInputField() {
-    var link by remember { mutableStateOf(TextFieldValue("https://www."))}
-    TextField(
-        value = link,
-        onValueChange = {link = it},
-        colors = TextFieldDefaults.textFieldColors(
-            containerColor = Color(0xFF171A21),
-            cursorColor = KusitmsColorPalette.current.Main500,
-            focusedIndicatorColor = KusitmsColorPalette.current.Main500,
-            unfocusedIndicatorColor = Color(0xFF171A21)
-        ),
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 12.dp, horizontal = 16.dp),
-        shape =  RoundedCornerShape(size = 12.dp),
-        trailingIcon = {
-            if (link.text.isNotEmpty()) {
-                xIcon._vector?.let {
-                    Icon(
-                        imageVector = it,
-                        contentDescription = null,
-                        tint = KusitmsColorPalette.current.Grey500,
-                        modifier = Modifier.clickable { link = TextFieldValue("")}
-                    )
-                }
-            }
+    var linkState by remember { mutableStateOf("") }
+    val isVisible by remember {
+        derivedStateOf {
+            linkState.isNotBlank()
         }
-    )
+    }
+    Row(
+        modifier = Modifier
+            .fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(4.dp, Alignment.Start),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Box(
+            modifier = Modifier
+                .width(167.dp)
+                .height(48.dp)
+                .background(KusitmsColorPalette.current.Grey700, shape = RoundedCornerShape(16.dp))
+        ){
+            TextField(
+                value = linkState,
+                onValueChange = { newValue ->
+                    if(newValue.startsWith("https://") || newValue.endsWith(".com")) {
+                        linkState = newValue
+                    }
+                },
+                colors = TextFieldDefaults.textFieldColors(
+                    containerColor =  KusitmsColorPalette.current.Grey700,
+                    cursorColor = KusitmsColorPalette.current.Main500,
+                    focusedTextColor = KusitmsColorPalette.current.White,
+                    focusedTrailingIconColor = KusitmsColorPalette.current.Grey400,
+                    unfocusedTextColor = KusitmsColorPalette.current.Grey400,
+                    focusedIndicatorColor = KusitmsColorPalette.current.Main500
+                ),
+                placeholder = { Text(stringResource(id = R.string.signin2_title2), style = KusitmsTypo.current.Text_Medium, color = KusitmsColorPalette.current.Grey400)},
+                shape = RoundedCornerShape(16.dp),
+                trailingIcon = {
+                    if (isVisible) {
+                        IconButton(onClick = { linkState = "" }) {
+                            Icon(
+                                imageVector = xIcon.vector,
+                                contentDescription = null,
+
+                            )
+                        }
+                    }
+                }
+            )
+        }
+        trashCan.drawTrashCan()
+    }
 }
 
 
