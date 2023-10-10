@@ -5,13 +5,18 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
@@ -24,9 +29,8 @@ import coil.decode.SvgDecoder
 import com.kusitms.presentation.R
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
-import com.kusitms.presentation.ui.ImageVector.ImagePhoto
-import com.kusitms.presentation.ui.ImageVector.StudyIcon
-import com.kusitms.presentation.ui.ImageVector.plusIcon
+import com.kusitms.presentation.common.ui.theme.kusimsShapes
+import com.kusitms.presentation.ui.ImageVector.*
 
 @Composable
 fun SignInScreen2(navController: NavController) {
@@ -170,7 +174,6 @@ fun LinkColumn() {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .height(35.dp)
             .background(KusitmsColorPalette.current.Black)
             .padding(start = 20.dp, top = 0.dp, end = 20.dp, bottom = 0.dp),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -190,9 +193,7 @@ fun LinkColumn() {
             LinkRow1(currentLength, maxLength)
         }
         Spacer(modifier = Modifier .height(14.dp))
-        repeat(currentLength.value) {
-            LinkRow2()
-        }
+        LinkRow2()
     }
 
 }
@@ -229,14 +230,13 @@ fun LinkRow1(currentLength: MutableState<Int>, maxLength: Int) {
 fun LinkRow2() {
     Row(
         modifier = Modifier
-            .width(125.dp)
-            .height(36.dp)
-            .background(color = Color(0xFF0F1011), shape = RoundedCornerShape(size = 8.dp))
+            .fillMaxWidth()
+            .height(48.dp)
+            .background(color = KusitmsColorPalette.current.Black, shape = RoundedCornerShape(size = 8.dp))
             .padding(start = 12.dp, top = 8.dp, end = 12.dp, bottom = 8.dp),
         horizontalArrangement = Arrangement.spacedBy(4.dp, Alignment.CenterHorizontally),
         verticalAlignment = Alignment.Top,
     ) {
-
         LinkInputField()
     }
 }
@@ -244,40 +244,37 @@ fun LinkRow2() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LinkInputField() {
-    var text by remember { mutableStateOf("")}
+    var link by remember { mutableStateOf(TextFieldValue("https://www."))}
     TextField(
-        value = text,
-        colors = androidx.compose.material.TextFieldDefaults.textFieldColors(
-            backgroundColor = KusitmsColorPalette.current.Grey700,
+        value = link,
+        onValueChange = {link = it},
+        colors = TextFieldDefaults.textFieldColors(
+            containerColor = Color(0xFF171A21),
             cursorColor = KusitmsColorPalette.current.Main500,
             focusedIndicatorColor = KusitmsColorPalette.current.Main500,
-            unfocusedIndicatorColor = KusitmsColorPalette.current.Grey700
+            unfocusedIndicatorColor = Color(0xFF171A21)
         ),
-        onValueChange = text = it,
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 12.dp, horizontal = 16.dp),
-        shape = RoundedCornerShape(size = 12.dp),
+        shape =  RoundedCornerShape(size = 12.dp),
+        trailingIcon = {
+            if (link.text.isNotEmpty()) {
+                xIcon._vector?.let {
+                    Icon(
+                        imageVector = it,
+                        contentDescription = null,
+                        tint = KusitmsColorPalette.current.Grey500,
+                        modifier = Modifier.clickable { link = TextFieldValue("")}
+                    )
+                }
+            }
         }
     )
 }
 
-@Composable
-fun trashCan() {
-    val imageLoader = ImageLoader.Builder(LocalContext.current)
-        .components {
-            add(SvgDecoder.Factory())
-        }
-        .build()
-    Image(
-        painter = rememberAsyncImagePainter(R.drawable.ic_trashcan, imageLoader),
-        contentDescription = null,
-        contentScale = ContentScale.None,
-        modifier = Modifier
-            .width(24.dp)
-            .height(24.dp)
-    )
-}
+
+
 
 @Composable
 fun ButtonRow(text1:String, text2:String, navController: NavController) {
