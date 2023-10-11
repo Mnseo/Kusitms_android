@@ -6,8 +6,7 @@ sealed class NavRoutes(val route: String)
 {
     object SplashScreen: NavRoutes("splash")
     object OpenScreen: NavRoutes("open")
-
-    object Login: NavRoutes("login")
+    object LoginScreen: NavRoutes("login")
 
     object SignIn: NavRoutes("SignIn")
     object Home: NavRoutes("Home")
