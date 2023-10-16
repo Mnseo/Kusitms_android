@@ -245,11 +245,9 @@ fun LinkRow2() {
                 shape = RoundedCornerShape(size = 8.dp)
             )
             .padding(start = 12.dp, top = 8.dp, end = 12.dp, bottom = 8.dp),
-        horizontalArrangement = Arrangement.spacedBy(4.dp, Alignment.CenterHorizontally),
+        horizontalArrangement = Arrangement.spacedBy(30.dp, Alignment.Start),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        LinkCheckRow()
-        LinkInputField()
     }
 }
 
@@ -273,87 +271,6 @@ fun LinkColumnBottomSheet() {
 
     }
 }
-
-@Composable
-fun LinkCheckRow() {
-    Row(
-        modifier = Modifier
-            .width(110.dp)
-            .height(48.dp)
-            .padding(12.dp)
-            .background(
-                color = KusitmsColorPalette.current.Grey700,
-                shape = RoundedCornerShape(size = 8.dp)
-            )
-            .padding(start = 12.dp, top = 8.dp, end = 12.dp, bottom = 8.dp),
-        horizontalArrangement = Arrangement.spacedBy(30.dp, Alignment.CenterHorizontally),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(text = "선택", style = KusitmsTypo.current.Text_Medium, color = KusitmsColorPalette.current.Grey400)
-        underArrow.drawxUnderArrow(
-            modifier = Modifier.clickable {
-                })
-            }
-    }
-
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun LinkInputField() {
-    var linkState by remember { mutableStateOf("") }
-    val isVisible by remember {
-        derivedStateOf {
-            linkState.isNotBlank()
-        }
-    }
-    Row(
-        modifier = Modifier
-            .width(167.dp),
-        horizontalArrangement = Arrangement.spacedBy(4.dp, Alignment.Start),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Box(
-            modifier = Modifier
-                .width(167.dp)
-                .height(48.dp)
-                .background(KusitmsColorPalette.current.Grey700, shape = RoundedCornerShape(16.dp))
-        ){
-            TextField(
-                value = linkState,
-                onValueChange = { newValue ->
-                    if(newValue.startsWith("https://") || newValue.endsWith(".com")) {
-                        linkState = newValue
-                    }
-                },
-                colors = TextFieldDefaults.textFieldColors(
-                    containerColor =  KusitmsColorPalette.current.Grey700,
-                    cursorColor = KusitmsColorPalette.current.Main500,
-                    focusedTextColor = KusitmsColorPalette.current.White,
-                    focusedTrailingIconColor = KusitmsColorPalette.current.Grey400,
-                    unfocusedTextColor = KusitmsColorPalette.current.Grey400,
-                    focusedIndicatorColor = KusitmsColorPalette.current.Main500
-                ),
-                placeholder = { Text(stringResource(id = R.string.signin2_title2), style = KusitmsTypo.current.Text_Medium, color = KusitmsColorPalette.current.Grey400)},
-                shape = RoundedCornerShape(16.dp),
-                trailingIcon = {
-                    if (isVisible) {
-                        IconButton(onClick = { linkState = "" }) {
-                            Icon(
-                                imageVector = xIcon.vector,
-                                contentDescription = null,
-
-                            )
-                        }
-                    }
-                }
-            )
-        }
-        trashCan.drawTrashCan()
-    }
-}
-
-
-
 
 @Composable
 fun ButtonRow(text1:String, text2:String, navController: NavController) {
