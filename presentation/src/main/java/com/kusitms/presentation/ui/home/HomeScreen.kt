@@ -13,8 +13,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.kusitms.presentation.navigation.NavRoutes
-import com.kusitms.presentation.ui.splash.TestNavButton
 
 @Composable
 fun Home(navController: NavHostController) {
@@ -36,8 +34,7 @@ fun Home(navController: NavHostController) {
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                TestNavButton(route = NavRoutes.Splash.route, navController = navController)
-                TestNavButton(route = NavRoutes.Home.route, navController = navController)
+
             }
         }
     }

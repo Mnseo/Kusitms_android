@@ -2,6 +2,8 @@
 <resources>
     <string name="app_name">"Kusitms Plus"</string>
 
+    <string name="splash_tv">큐시즘의 또 한번 도약</string>
+
     <!-- LoginMemberScreen 1 -->
     <string name="text_column_1">기본 프로필을 등록해주세요</string>
     <string name="text_column_2">기본 프로필은 모두 필수 입력사항입니다</string>

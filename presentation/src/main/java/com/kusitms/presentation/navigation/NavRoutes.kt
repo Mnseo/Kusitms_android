@@ -4,7 +4,8 @@ package com.kusitms.presentation.navigation
 //Main Route
 sealed class NavRoutes(val route: String)
 {
-    object Splash: NavRoutes("splash")
+    object SplashScreen: NavRoutes("splash")
+    object OpenScreen: NavRoutes("open")
 
     object Login: NavRoutes("login")
 
