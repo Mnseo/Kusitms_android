@@ -2,7 +2,17 @@
 <resources>
     <string name="app_name">"Kusitms Plus"</string>
 
+    <!-- LoginScreen-->
     <string name="splash_tv">큐시즘의 또 한번 도약</string>
+    <string name="login_top_tv">비전을 가지고 함께 성장하는 학회</string>
+    <string name="login_btn1">학회원으로 로그인</string>
+    <string name="login_btn2">운영진으로 로그인</string>
+    <string name="login_row_tv1">회원가입하기</string>
+    <string name="login_row_tv2">큐시즘 둘러보기</string>
+
+
+    <!-- Title -->
+    <string name="title1">큐시즘 둘러보기</string>
 
     <!-- LoginMemberScreen 1 -->
     <string name="text_column_1">기본 프로필을 등록해주세요</string>

@@ -8,127 +8,161 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
-import androidx.compose.ui.graphics.Color
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
 import com.kusitms.presentation.navigation.NavRoutes
+import com.kusitms.presentation.R
+import com.kusitms.presentation.ui.ImageVector.LoginTalkBall
 
 @Composable
-fun Login(
+fun LoginScreen(
     navController: NavHostController,
 ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(KusitmsColorPalette.current.Black),
+                .background(KusitmsColorPalette.current.Grey900),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+            verticalArrangement = Arrangement.Top
         )
             {
-
-                Spacer(modifier = Modifier.height(180.dp))
-
-                Text(text = "비전을 가지고 함께 성장하는 학회", style = KusitmsTypo.current.Caption1, color = KusitmsColorPalette.current.Grey300)
-                
-                Spacer(modifier = Modifier.height(6.dp))
-
-                LoginLogoIv.DrawLogo(
-                    modifier = Modifier
-                        .height(76.dp)
-                        .width(257.26.dp))
-
-                Spacer(modifier = Modifier.height(162.dp))
-
-                LoginButton1(
-                    text = "학회원으로 로그인",
-                    route = NavRoutes.SignIn.route,
-                    navController = navController
-                )
-                
-                Spacer(modifier = Modifier.height(16.dp))
-
-                LoginButton(
-                    borderColor = KusitmsColorPalette.current.Grey400,
-                    ButtonColor = KusitmsColorPalette.current.Black,
-                    text = "관리자로 로그인",
-                    navController = navController,
-                    route = NavRoutes.Home.route
-                )
-
-                Spacer(modifier = Modifier.height(40.dp))
-
-                Text(text = "비회원이신가요? 큐시즘 둘러보기", style = KusitmsTypo.current.Caption1, color = KusitmsColorPalette.current.Grey300)
-
+                Spacer(modifier = Modifier.weight(1f))
+                LoginLogo()
+                Spacer(modifier = Modifier.weight(1f))
+                ButtonColumn(navController)
         }
         
 }
 
-//학회원으로 로그인 버튼
-@Composable 
-fun LoginButton1(text: String, navController: NavHostController, route: String) {
-    Button(
-        modifier = Modifier
-            .width(335.dp)
-            .height(56.dp)
-            .background(color = Color(0xFF266DFC), shape = RoundedCornerShape(size = 16.dp))
-            .padding(top = 16.dp, bottom = 16.dp),
-
-        //Click 시 이벤트 - SignIn 으로 이동
-        onClick = {
-                  navController.navigate(route) {
-                      popUpTo(route) {
-                          inclusive = true
-                      }
-                  }
-        },
-    ) {
-        Text(
-            style = KusitmsTypo.current.SubTitle2_Semibold,
-            text = text,
-            color = KusitmsColorPalette.current.Grey200
-        )
-    }
-}
-
-//관리자로 로그인 버튼
 @Composable
-fun LoginButton(borderColor: Color, ButtonColor: Color, text: String, route:String, navController: NavHostController) {
-    Button(
+fun LoginLogo() {
+    Column(
         modifier = Modifier
             .fillMaxWidth()
-            .height(56.dp)
-            .border(
-                width = 1.dp,
-                color = borderColor,
-                shape = RoundedCornerShape(16.dp)
-            )
-            .background(color = ButtonColor, shape = RoundedCornerShape(16.dp)),
-        contentPadding = PaddingValues(0.dp),
-        onClick = {
-            navController.navigate(route) {
-                popUpTo(route) {
-                    inclusive = true
-                }
-            }
-        }
+            .background(color = KusitmsColorPalette.current.Grey900)
+            .height(102.dp)
+            .padding(0.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(
-            style = KusitmsTypo.current.SubTitle2_Semibold,
-            text = text,
-            color = KusitmsColorPalette.current.Grey200
-        )
+        Text(text= stringResource(id = R.string.login_top_tv),style= KusitmsTypo.current.Caption1, color = KusitmsColorPalette.current.Grey300)
+        Spacer(modifier = Modifier.height(6.dp))
+        LoginLogoIv.DrawLogo()
     }
-
 }
+
+@Composable
+fun ButtonColumn(navController: NavHostController) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 20.dp)
+            .height(255.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Top
+    ) {
+        Button(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(56.dp),
+            onClick = {
+                      navController.navigate(NavRoutes.LogInScreen.route)
+            },
+            colors = ButtonDefaults.buttonColors(containerColor = KusitmsColorPalette.current.Grey100),
+            shape = RoundedCornerShape(size = 16.dp)
+        ) {
+            Text(text = stringResource(id = R.string.login_btn1), style = KusitmsTypo.current.SubTitle2_Semibold, color = KusitmsColorPalette.current.Grey600)
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Button(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(56.dp),
+            onClick = {  },
+            colors = ButtonDefaults.buttonColors(containerColor = KusitmsColorPalette.current.Grey100),
+            shape = RoundedCornerShape(size = 16.dp)
+        ) {
+            Text(text = stringResource(id = R.string.login_btn2), style = KusitmsTypo.current.SubTitle2_Semibold, color = KusitmsColorPalette.current.Grey600)
+        }
+        Spacer(modifier = Modifier.height(20.dp))
+        loginBottomColumn(navController)
+    }
+}
+
+@Composable
+fun loginBottomColumn(navController: NavController) {
+    Column(
+        modifier = Modifier
+            .width(253.dp)
+            .padding(horizontal = 0.dp)
+            .height(90.dp),
+        horizontalAlignment = Alignment.Start,
+        verticalArrangement = Arrangement.Top
+    ) {
+        LoginTalkBall.DrawLoginTalk()
+        loginBottomRow(navController)
+    }
+}
+
+
+@Composable
+fun loginBottomRow(navController: NavController) {
+    Row(
+        modifier = Modifier
+            .width(253.dp)
+            .height(30.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        loginClickText1(navController)
+        Spacer(modifier = Modifier.weight(1f))
+        Icon(painter = painterResource(id = R.drawable.ic_login_row_spacer), contentDescription = null, tint = KusitmsColorPalette.current.Grey400)
+        Spacer(modifier = Modifier.weight(1f))
+        loginClickText2(navController)
+    }
+}
+
+@Composable
+fun loginClickText1(navController: NavController) {
+    Text(
+        modifier = Modifier
+            .clickable {
+                navController.navigate(NavRoutes.SignInScreen.route)
+            },
+        text = stringResource(id = R.string.login_row_tv1),
+        style = KusitmsTypo.current.Text_Semibold,
+        color = KusitmsColorPalette.current.Grey400
+    )
+}
+
+@Composable
+fun loginClickText2(navController: NavController) {
+    Text(
+        modifier = Modifier
+            .clickable {
+                navController.navigate(NavRoutes.OpenScreen.route)
+            },
+        text = stringResource(id = R.string.login_row_tv2),
+        style = KusitmsTypo.current.Text_Semibold,
+        color = KusitmsColorPalette.current.Grey400
+    )
+}
+
+
 
 @Preview
 @Composable
 fun LoginPreview() {
-    Login(navController = rememberNavController())
+    LoginScreen(navController = rememberNavController())
 }
