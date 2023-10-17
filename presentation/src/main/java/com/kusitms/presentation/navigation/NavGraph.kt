@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.kusitms.presentation.ui.login.LoginScreen
+import com.kusitms.presentation.ui.login.member.SignInScreen
 import com.kusitms.presentation.ui.splash.SplashScreen
 
 
@@ -24,6 +25,7 @@ fun KusitmsNavigation() {
         }
 
         composable(NavRoutes.SignInScreen.route) {
+            SignInScreen()
         }
 
         composable(NavRoutes.LogInScreen.route) {
