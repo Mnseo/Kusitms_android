@@ -1,7 +1,6 @@
 package com.kusitms.presentation.ui.login.member
 
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -27,7 +26,8 @@ import com.kusitms.presentation.ui.signIn.ButtonRow
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SignInScreen() {
+fun SignInScreen(navController: NavHostController) {
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -63,13 +63,16 @@ fun SignInScreen() {
             ) {
                 val list = (0..75).map { it.toString() }
                 items(count = list.size) {
-                    Text(
-                        text = list[it],
-                        style = MaterialTheme.typography.bodyLarge,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp)
-                    )
+                    Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp)
+                            ) {
+                        Text(
+                            text = list[it],
+                            style = MaterialTheme.typography.bodyLarge
+                        )
+                    }
                 }
             }
         }
