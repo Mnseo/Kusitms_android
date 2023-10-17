@@ -70,11 +70,13 @@ dependencies {
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_ui_version"
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_ui_version"
 
+    //navigation animation
+    implementation 'androidx.navigation:navigation-compose:2.7.0-alpha01'
+
     //hilt
     implementation "com.google.dagger:hilt-android:2.44"
     kapt "com.google.dagger:hilt-compiler:2.44"
 
-    implementation "androidx.navigation:navigation-compose:2.5.3"
 
     implementation(libs.bundles.coil)
 }

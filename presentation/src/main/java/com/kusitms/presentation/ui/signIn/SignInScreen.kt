@@ -1,6 +1,7 @@
 package com.kusitms.presentation.ui.login.member
 
 
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -12,6 +13,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -27,7 +29,20 @@ import com.kusitms.presentation.ui.signIn.ButtonRow
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SignInScreen() {
+fun SignInScreen(navController: NavHostController, slideInAlpha: Float) {
+    val targetOffsetX = if (slideIn) 0f else -300f
+    val targetAlpha = if (slideIn) 1f else 0f
+
+    val offsetX by animateFloatAsState(
+        targetValue = targetOffsetX,
+        animationSpec = tween(durationMillis = 300)
+    )
+
+    val alpha by animateFloatAsState(
+        targetValue = targetAlpha,
+        animationSpec = tween(durationMillis = 300)
+    )
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -63,13 +78,20 @@ fun SignInScreen() {
             ) {
                 val list = (0..75).map { it.toString() }
                 items(count = list.size) {
-                    Text(
-                        text = list[it],
-                        style = MaterialTheme.typography.bodyLarge,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp)
-                    )
+                    Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp)
+                                .graphicsLayer(
+                                    translationX = if (slideInAlpha == 1f) 0f else offsetX,
+                                    alpha = slideInAlpha * alpha
+                                )
+                            ) {
+                        Text(
+                            text = list[it],
+                            style = MaterialTheme.typography.bodyLarge
+                        )
+                    }
                 }
             }
         }
