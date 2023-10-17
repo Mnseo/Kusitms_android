@@ -1,8 +1,6 @@
 package com.kusitms.presentation.ui.login.member
 
 
-import androidx.compose.animation.core.*
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -13,7 +11,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -29,19 +26,7 @@ import com.kusitms.presentation.ui.signIn.ButtonRow
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SignInScreen(navController: NavHostController, slideInAlpha: Float) {
-    val targetOffsetX = if (slideIn) 0f else -300f
-    val targetAlpha = if (slideIn) 1f else 0f
-
-    val offsetX by animateFloatAsState(
-        targetValue = targetOffsetX,
-        animationSpec = tween(durationMillis = 300)
-    )
-
-    val alpha by animateFloatAsState(
-        targetValue = targetAlpha,
-        animationSpec = tween(durationMillis = 300)
-    )
+fun SignInScreen(navController: NavHostController) {
 
     Scaffold(
         topBar = {
@@ -82,10 +67,6 @@ fun SignInScreen(navController: NavHostController, slideInAlpha: Float) {
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(horizontal = 16.dp)
-                                .graphicsLayer(
-                                    translationX = if (slideInAlpha == 1f) 0f else offsetX,
-                                    alpha = slideInAlpha * alpha
-                                )
                             ) {
                         Text(
                             text = list[it],

@@ -1,7 +1,9 @@
 package com.kusitms.presentation.navigation
 
+import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -23,18 +25,25 @@ fun KusitmsNavigation() {
 
     NavHost(
         navController = navController,
-        startDestination = NavRoutes.SplashScreen.route)
-    {
-        composable(NavRoutes.SplashScreen.route) {
+        startDestination = NavRoutes.SplashScreen.route
+    ) {
+        composable(NavRoutes.SplashScreen.route ) {
             SplashScreen(navController)
         }
 
         composable(NavRoutes.OpenScreen.route) {
         }
 
-        composable(NavRoutes.SignInScreen.route) {
-            val alphaValue = if (currentRoute == NavRoutes.SignInScreen.route) 0.5f else 1.0f
-            SignInScreen(navController, alphaValue)
+        composable(
+            NavRoutes.SignInScreen.route,
+            enterTransition = {
+                slideIntoContainer(
+                    towards =  AnimatedContentTransitionScope.SlideDirection.Companion.Left,
+                    animationSpec = tween(700)
+                )
+            }
+        ) {
+            SignInScreen(navController)
         }
 
         composable(NavRoutes.LogInScreen.route) {
