@@ -3,10 +3,9 @@ package com.kusitms.presentation.ui.login.member
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -21,6 +20,7 @@ import androidx.navigation.compose.rememberNavController
 import com.kusitms.presentation.R
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
+import com.kusitms.presentation.ui.ImageVector.RightArrow
 import com.kusitms.presentation.ui.ImageVector.StudyIcon
 import com.kusitms.presentation.ui.signIn.ButtonRow
 
@@ -33,16 +33,26 @@ fun SignInScreen(navController: NavHostController) {
             TopAppBar(
                 title = {
                     Text(
-                        "Simple TopAppBar",
+                        "프로필 설정",
                         maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
+                        overflow = TextOverflow.Ellipsis,
+                        style = KusitmsTypo.current.SubTitle2_Semibold,
+                        color = KusitmsColorPalette.current.Grey100
                     )
                 },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = KusitmsColorPalette.current.Grey800,
+                    titleContentColor = KusitmsColorPalette.current.Grey100,
+                    navigationIconContentColor = KusitmsColorPalette.current.Grey400
+                ),
                 navigationIcon = {
-                    IconButton(onClick = { /* doSomething() */ }) {
+                    IconButton(
+                        onClick = { /* doSomething() */ },
+
+                    ) {
                         Icon(
-                            imageVector = Icons.Filled.Menu,
-                            contentDescription = "Localized description"
+                            imageVector = RightArrow.vector,
+                            contentDescription = "Localized description",
                         )
                     }
                 },
@@ -57,23 +67,8 @@ fun SignInScreen(navController: NavHostController) {
             )
         },
         content = { innerPadding ->
-            LazyColumn(
-                contentPadding = innerPadding,
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                val list = (0..75).map { it.toString() }
-                items(count = list.size) {
-                    Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 16.dp)
-                            ) {
-                        Text(
-                            text = list[it],
-                            style = MaterialTheme.typography.bodyLarge
-                        )
-                    }
-                }
+            Box(modifier=Modifier.padding(innerPadding)) {
+                SignInMember1(navController = navController)
             }
         }
     )
@@ -86,16 +81,12 @@ fun SignInMember1(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(KusitmsColorPalette.current.Black),
+            .background(KusitmsColorPalette.current.Grey800),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.Top)
     ) {
 
         TitleColumn()
-        
-        Spacer(modifier = Modifier.height(56.dp))
-
-        Text(text = stringResource(id = R.string.signin_member_title1), style = KusitmsTypo.current.SubTitle2_Semibold, color = KusitmsColorPalette.current.Grey300)
 
         ButtonRow(text1 = "이전으로", text2 = "다음으로", navController = navController)
 
@@ -104,13 +95,49 @@ fun SignInMember1(
 }
 
 @Composable
+fun NameField() {
+    var name by remember { mutableStateOf("이채연") }
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(KusitmsColorPalette.current.Grey800)
+            .height(350.dp),
+        verticalArrangement = Arrangement.Top,
+        horizontalAlignment = Alignment.Start
+
+    ) {
+        Text(text = stringResource(id = R.string.signin_member_title1), style = KusitmsTypo.current.SubTitle2_Semibold, color = KusitmsColorPalette.current.Grey300)
+        Spacer(modifier = Modifier.height(28.dp))
+        Text(text = stringResource(id = R.string.signin_member_caption1_1), style = KusitmsTypo.current.Caption1, color = KusitmsColorPalette.current.Grey400)
+        Spacer(modifier = Modifier.height(5.dp))
+        Box(modifier = Modifier
+            .fillMaxWidth()
+            .height(56.dp)
+            .background(
+                color = KusitmsColorPalette.current.Grey500,
+                shape = RoundedCornerShape(16.dp)
+            ),
+            contentAlignment = Alignment.CenterStart
+        ) {
+            Text(
+                text = "이채연",
+                style = KusitmsTypo.current.Text_Medium,
+                color = KusitmsColorPalette.current.Grey400,
+                modifier = Modifier.padding(start = 20.dp, top = 16.dp, bottom = 16.dp)
+            )
+        }
+
+    }
+}
+
+@Composable
 fun TitleColumn() {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(24.dp)
-            .background(KusitmsColorPalette.current.Black)
-            .height(109.dp),
+            .padding(20.dp)
+            .background(KusitmsColorPalette.current.Grey800)
+            .height(500.dp),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.Start
 
@@ -126,6 +153,8 @@ fun TitleColumn() {
             )
             TextColumn()
         }
+        Spacer(modifier = Modifier.height(40.dp))
+        NameField()
         
     }
 }
@@ -136,7 +165,7 @@ fun TextColumn() {
         modifier = Modifier
             .fillMaxWidth()
             .background(KusitmsColorPalette.current.Black)
-            .height(109.dp),
+            .height(64.dp),
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.Top
 
@@ -165,12 +194,6 @@ fun inputField(hint : String, maxlength: Int? = null) {
             color = KusitmsColorPalette.current.Grey400
         )
 
-//        TextField(
-//            modifier = Modifier.fillMaxWidth(),
-//            value = textState,
-//            colors = androidx.compose.material.TextFieldDefaults.textFieldColors(backgroundColor = originColor),
-//        )
-
     }
 }
 
@@ -180,5 +203,5 @@ fun inputField(hint : String, maxlength: Int? = null) {
 @Preview
 @Composable
 fun SignIn1Preview() {
-    SignInMember1(navController = rememberNavController())
+    SignInScreen(navController = rememberNavController())
 }
