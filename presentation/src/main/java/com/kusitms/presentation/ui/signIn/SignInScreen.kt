@@ -4,8 +4,6 @@ package com.kusitms.presentation.ui.login.member
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -53,14 +51,6 @@ fun SignInScreen(navController: NavHostController) {
                         Icon(
                             imageVector = RightArrow.vector,
                             contentDescription = "Localized description",
-                        )
-                    }
-                },
-                actions = {
-                    IconButton(onClick = { /* doSomething() */ }) {
-                        Icon(
-                            imageVector = Icons.Filled.Favorite,
-                            contentDescription = "Localized description"
                         )
                     }
                 }
@@ -126,6 +116,10 @@ fun NameField() {
                 modifier = Modifier.padding(start = 20.dp, top = 16.dp, bottom = 16.dp)
             )
         }
+        Spacer(modifier = Modifier.height(20.dp))
+        Text(text = stringResource(id = R.string.signin_member_caption1_2), style = KusitmsTypo.current.Caption1, color = KusitmsColorPalette.current.Grey400)
+        Spacer(modifier = Modifier.height(5.dp))
+
 
     }
 }
@@ -153,7 +147,7 @@ fun TitleColumn() {
             )
             TextColumn()
         }
-        Spacer(modifier = Modifier.height(40.dp))
+        Spacer(modifier = Modifier.height(20.dp))
         NameField()
         
     }
