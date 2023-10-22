@@ -9,7 +9,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -21,6 +20,7 @@ import com.kusitms.presentation.common.ui.theme.KusitmsTypo
 import com.kusitms.presentation.ui.ImageVector.RightArrow
 import com.kusitms.presentation.ui.ImageVector.StudyIcon
 import com.kusitms.presentation.ui.signIn.ButtonRow
+import com.kusitms.presentation.ui.signIn.KusitmsInputField
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -85,8 +85,15 @@ fun SignInMember1(
 }
 
 @Composable
-fun NameField() {
-    var name by remember { mutableStateOf("이채연") }
+fun InputFieldColumn(
+    major: String,
+    email: String,
+    phoneNum: String,
+    onMajorChange: (String) -> Unit,
+    onNameChange: (String) -> Unit,
+    onPhoneNumChange: (String) -> Unit
+) {
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -119,7 +126,7 @@ fun NameField() {
         Spacer(modifier = Modifier.height(20.dp))
         Text(text = stringResource(id = R.string.signin_member_caption1_2), style = KusitmsTypo.current.Caption1, color = KusitmsColorPalette.current.Grey400)
         Spacer(modifier = Modifier.height(5.dp))
-
+        KusitmsInputField(text = R.string.signin_member_hint1_1, value = major, onValueChange = onMajorChange)
 
 
     }
@@ -149,7 +156,7 @@ fun TitleColumn() {
             TextColumn()
         }
         Spacer(modifier = Modifier.height(20.dp))
-        NameField()
+        InputFieldColumn()
         
     }
 }
@@ -169,32 +176,6 @@ fun TextColumn() {
         Text(text = stringResource(id = R.string.text_column_2), style = KusitmsTypo.current.Caption1, color = KusitmsColorPalette.current.Sub2)
 
     }
-}
-
-@Composable
-fun inputField(hint : String, maxlength: Int? = null) {
-    Column {
-        var textState by remember { mutableStateOf("")}
-        val maxLength = maxlength
-        val originColor = KusitmsColorPalette.current.Grey700
-        val changeColor = KusitmsColorPalette.current.Main500
-
-        Text(
-            text = stringResource(id = R.string.signin_member_caption1_2),
-            style = KusitmsTypo.current.Caption1,
-            textAlign = TextAlign.Start,
-            color = KusitmsColorPalette.current.Grey400
-        )
-
-    }
-}
-
-@Composable
-fun majorField() {
-    var textState by remember { mutableStateOf("")}
-    val maxLength = 20
-
-    TextField
 }
 
 

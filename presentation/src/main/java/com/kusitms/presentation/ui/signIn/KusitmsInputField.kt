@@ -12,7 +12,6 @@ import com.kusitms.presentation.common.ui.theme.KusitmsTypo
 
 @Composable
 fun KusitmsInputField(
-    label: String,
     @StringRes text:Int,
     value:String,
     onValueChange: (String) -> Unit
@@ -23,7 +22,7 @@ fun KusitmsInputField(
             onValueChange = onValueChange,
             label = {
                 Text(
-                    text= label,
+                    text= text,
                     color= KusitmsColorPalette.current.Grey400,
                     style = KusitmsTypo.current.Text_Medium
                 )
