@@ -26,7 +26,9 @@
     <string name="signin_member_caption1_3">파트</string>
     <string name="signin_member_caption1_4">관심 카테고리</string>
 
-    <string name="signin_member_hint1_2">나의 전공 입력(최대 20자)</string>
+    <string name="signin_member_hint1_1">나의 전공 입력(최대 20자)</string>
+    <string name="signin_member_hint1_2">example@gmail.com</string>
+    <string name="signin_member_hint1_3">010-1234-1234</string>
 
     <string name="signin_member_caption2_1">이메일</string>
     <string name="signin_member_caption2_2">전화번호</string>

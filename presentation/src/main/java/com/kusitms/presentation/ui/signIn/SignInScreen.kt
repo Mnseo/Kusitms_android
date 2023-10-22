@@ -121,6 +121,7 @@ fun NameField() {
         Spacer(modifier = Modifier.height(5.dp))
 
 
+
     }
 }
 
@@ -181,14 +182,19 @@ fun inputField(hint : String, maxlength: Int? = null) {
         Text(
             text = stringResource(id = R.string.signin_member_caption1_2),
             style = KusitmsTypo.current.Caption1,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 4.dp),
             textAlign = TextAlign.Start,
             color = KusitmsColorPalette.current.Grey400
         )
 
     }
+}
+
+@Composable
+fun majorField() {
+    var textState by remember { mutableStateOf("")}
+    val maxLength = 20
+
+    TextField
 }
 
 
