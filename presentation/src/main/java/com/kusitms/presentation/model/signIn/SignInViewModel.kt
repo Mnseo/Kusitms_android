@@ -14,6 +14,9 @@ class SignInViewModel:ViewModel() {
     private val _phoneNum = MutableLiveData<String>("")
     val phoneNum: LiveData<String> = _phoneNum
 
+    private val _isAllFieldsValid = MutableLiveData<Boolean>(false)
+    val isAllFieldsValid: LiveData<Boolean> = _isAllFieldsValid
+
     fun updateMajor(newMajor: String) {
         _major.value = newMajor
     }
@@ -24,6 +27,14 @@ class SignInViewModel:ViewModel() {
 
     fun updatePhoneNum(newNumber: String) {
         _phoneNum.value = newNumber
+    }
+
+    fun onButtonClick(): Boolean {
+        return _isAllFieldsValid.value == true
+    }
+
+    private fun validateFields() {
+        _isAllFieldsValid.value = !(_email.value.isNullOrBlank() || _phoneNum.value.isNullOrBlank() || _major.value.isNullOrBlank())
     }
 
 }

@@ -3,9 +3,12 @@ package com.kusitms.presentation.ui.login.member
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -15,16 +18,23 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.kusitms.presentation.R
+import com.kusitms.presentation.common.ui.ButtonRow
+import com.kusitms.presentation.common.ui.KusitmsSnackField
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
+import com.kusitms.presentation.model.signIn.SignInViewModel
 import com.kusitms.presentation.ui.ImageVector.RightArrow
 import com.kusitms.presentation.ui.ImageVector.StudyIcon
-import com.kusitms.presentation.ui.signIn.ButtonRow
 import com.kusitms.presentation.ui.signIn.KusitmsInputField
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SignInScreen(navController: NavHostController) {
+fun SignInScreen(navController: NavHostController, viewModel: SignInViewModel) {
+    val major by viewModel.major.observeAsState("")
+    val email by viewModel.email.observeAsState("")
+    val phoneNum by viewModel.phoneNum.observeAsState("")
+
+    val scrollState = rememberScrollState()
 
     Scaffold(
         topBar = {
@@ -57,8 +67,20 @@ fun SignInScreen(navController: NavHostController) {
             )
         },
         content = { innerPadding ->
-            Box(modifier=Modifier.padding(innerPadding)) {
-                SignInMember1(navController = navController)
+            Box(
+                modifier=Modifier
+                    .padding(innerPadding)
+                    .verticalScroll(scrollState)
+            ) {
+                SignInMember1(
+                    navController = navController,
+                    major = major,
+                    email = email,
+                    phoneNum = phoneNum,
+                    onMajorChange = viewModel::updateMajor,
+                    onEmailChange = viewModel::updateEmail,
+                    onPhoneNumChange = viewModel::updatePhoneNum
+                )
             }
         }
     )
@@ -67,6 +89,12 @@ fun SignInScreen(navController: NavHostController) {
 @Composable
 fun SignInMember1(
     navController: NavHostController,
+    major: String,
+    email: String,
+    phoneNum: String,
+    onMajorChange: (String) -> Unit,
+    onEmailChange: (String) -> Unit,
+    onPhoneNumChange: (String) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -76,33 +104,45 @@ fun SignInMember1(
         verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.Top)
     ) {
 
-        TitleColumn()
+        TitleColumn(major = major, email = email, phoneNum = phoneNum, onMajorChange = onMajorChange, onEmailChange=onEmailChange, onPhoneNumChange= onPhoneNumChange)
 
-        ButtonRow(text1 = "이전으로", text2 = "다음으로", navController = navController)
+        ButtonRow(text1 = "이전으로", text2 = "다음으로", navController = navController, KusitmsColorPalette.current.Grey600, KusitmsColorPalette.current.Grey600)
 
     }
 
 }
 
 @Composable
-fun InputFieldColumn(
+fun TitleColumn(
     major: String,
     email: String,
     phoneNum: String,
     onMajorChange: (String) -> Unit,
-    onNameChange: (String) -> Unit,
+    onEmailChange: (String) -> Unit,
     onPhoneNumChange: (String) -> Unit
 ) {
-
     Column(
         modifier = Modifier
             .fillMaxWidth()
+            .padding(20.dp)
             .background(KusitmsColorPalette.current.Grey800)
-            .height(350.dp),
+            .height(840.dp),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.Start
 
     ) {
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.Start),
+            verticalAlignment = Alignment.Top,
+        ) {
+            StudyIcon.drawStudyIcon(
+                modifier = Modifier
+                    .height(24.dp)
+                    .width(24.dp)
+            )
+            TextColumn()
+        }
+        Spacer(modifier = Modifier.height(20.dp))
         Text(text = stringResource(id = R.string.signin_member_title1), style = KusitmsTypo.current.SubTitle2_Semibold, color = KusitmsColorPalette.current.Grey300)
         Spacer(modifier = Modifier.height(28.dp))
         Text(text = stringResource(id = R.string.signin_member_caption1_1), style = KusitmsTypo.current.Caption1, color = KusitmsColorPalette.current.Grey400)
@@ -124,40 +164,52 @@ fun InputFieldColumn(
             )
         }
         Spacer(modifier = Modifier.height(20.dp))
+
+        //전공
         Text(text = stringResource(id = R.string.signin_member_caption1_2), style = KusitmsTypo.current.Caption1, color = KusitmsColorPalette.current.Grey400)
         Spacer(modifier = Modifier.height(5.dp))
-        KusitmsInputField(text = R.string.signin_member_hint1_1, value = major, onValueChange = onMajorChange)
+        KusitmsInputField(
+            text = R.string.signin_member_hint1_1,
+            value = major,
+            onValueChange = onMajorChange)
+            if(major.length > 20) {
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = "최대 20자까지 입력할 수 있어요",
+                    style = KusitmsTypo.current.Caption1,
+                    color = KusitmsColorPalette.current.Grey400
+                )
+            }
 
+        Spacer(modifier = Modifier.height(24.dp))
 
-    }
-}
+        //파트 선택
+        Text(text = stringResource(id = R.string.signin_member_caption1_3), style = KusitmsTypo.current.Caption1, color = KusitmsColorPalette.current.Grey400)
+        Spacer(modifier = Modifier.height(5.dp))
+        KusitmsSnackField(text = R.string.signin_member_hint1_2)
 
-@Composable
-fun TitleColumn() {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(20.dp)
-            .background(KusitmsColorPalette.current.Grey800)
-            .height(500.dp),
-        verticalArrangement = Arrangement.Top,
-        horizontalAlignment = Alignment.Start
+        //관심 카테고리
+        Spacer(modifier = Modifier.height(24.dp))
+        Text(text = stringResource(id = R.string.signin_member_caption1_4), style = KusitmsTypo.current.Caption1, color = KusitmsColorPalette.current.Grey400)
+        Spacer(modifier = Modifier.height(5.dp))
+        KusitmsSnackField(text = R.string.signin_member_hint1_3)
 
-    ) {
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.Start),
-            verticalAlignment = Alignment.Top,
-        ) {
-            StudyIcon.drawStudyIcon(
-                modifier = Modifier
-                    .height(24.dp)
-                    .width(24.dp)
-            )
-            TextColumn()
-        }
+        //연락처
+        Spacer(modifier = Modifier.height(40.dp))
+        Text(text = stringResource(id = R.string.signin_member_title2), style = KusitmsTypo.current.SubTitle2_Semibold, color = KusitmsColorPalette.current.Grey300)
+
+        //이메일
+        Spacer(modifier = Modifier.height(24.dp))
+        Text(text = stringResource(id = R.string.signin_member_caption1_5), style = KusitmsTypo.current.Caption1, color = KusitmsColorPalette.current.Grey400)
+        Spacer(modifier = Modifier.height(5.dp))
+        KusitmsInputField(text = R.string.signin_member_hint1_4, value = email, onValueChange = onEmailChange)
+
+        //전화번호
         Spacer(modifier = Modifier.height(20.dp))
-        InputFieldColumn()
-        
+        Text(text = stringResource(id = R.string.signin_member_caption1_6), style = KusitmsTypo.current.Caption1, color = KusitmsColorPalette.current.Grey400)
+        Spacer(modifier = Modifier.height(5.dp))
+        KusitmsInputField(text = R.string.signin_member_hint1_5, value = phoneNum, onValueChange = onPhoneNumChange)
+
     }
 }
 
@@ -179,10 +231,8 @@ fun TextColumn() {
 }
 
 
-
-
 @Preview
 @Composable
 fun SignIn1Preview() {
-    SignInScreen(navController = rememberNavController())
+    SignInScreen(navController = rememberNavController(), viewModel = SignInViewModel())
 }
