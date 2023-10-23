@@ -17,6 +17,8 @@ import com.kusitms.presentation.ui.login.member.SignInScreen
 import com.kusitms.presentation.ui.splash.SplashScreen
 
 
+
+
 @Composable
 fun KusitmsNavigation() {
     val navController = rememberNavController()
@@ -41,12 +43,32 @@ fun KusitmsNavigation() {
                     towards =  AnimatedContentTransitionScope.SlideDirection.Companion.Left,
                     animationSpec = tween(700)
                 )
+            },
+            exitTransition = {
+                slideOutOfContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.Companion.Right,
+                    animationSpec = tween(700)
+                )
             }
         ) {
             SignInScreen(navController)
         }
 
-        composable(NavRoutes.LogInScreen.route) {
+        composable(
+            NavRoutes.LogInScreen.route,
+            enterTransition = {
+                slideIntoContainer(
+                    towards =  AnimatedContentTransitionScope.SlideDirection.Companion.Left,
+                    animationSpec = tween(700)
+                )
+            },
+            exitTransition = {
+                slideOutOfContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.Companion.Right,
+                    animationSpec = tween(700)
+                )
+            }
+        ) {
             LoginScreen(navController)
         }
 
