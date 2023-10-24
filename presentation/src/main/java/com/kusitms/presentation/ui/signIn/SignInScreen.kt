@@ -1,6 +1,7 @@
 package com.kusitms.presentation.ui.login.member
 
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -11,10 +12,12 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.kusitms.presentation.R
@@ -23,6 +26,7 @@ import com.kusitms.presentation.common.ui.KusitmsSnackField
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
 import com.kusitms.presentation.model.signIn.SignInViewModel
+import com.kusitms.presentation.navigation.NavRoutes
 import com.kusitms.presentation.ui.ImageVector.RightArrow
 import com.kusitms.presentation.ui.ImageVector.StudyIcon
 import com.kusitms.presentation.ui.signIn.KusitmsInputField
@@ -33,9 +37,7 @@ fun SignInScreen(navController: NavHostController, viewModel: SignInViewModel) {
     val major by viewModel.major.observeAsState("")
     val email by viewModel.email.observeAsState("")
     val phoneNum by viewModel.phoneNum.observeAsState("")
-
     val scrollState = rememberScrollState()
-
     Scaffold(
         topBar = {
             TopAppBar(
@@ -55,7 +57,7 @@ fun SignInScreen(navController: NavHostController, viewModel: SignInViewModel) {
                 ),
                 navigationIcon = {
                     IconButton(
-                        onClick = { /* doSomething() */ },
+                        onClick = { navController.popBackStack() },
 
                     ) {
                         Icon(
@@ -106,7 +108,9 @@ fun SignInMember1(
 
         TitleColumn(major = major, email = email, phoneNum = phoneNum, onMajorChange = onMajorChange, onEmailChange=onEmailChange, onPhoneNumChange= onPhoneNumChange)
 
-        ButtonRow(text1 = "이전으로", text2 = "다음으로", navController = navController, KusitmsColorPalette.current.Grey600, KusitmsColorPalette.current.Grey600)
+        ButtonRowSignIn1(text1 = "이전으로", text2 = "다음으로", navController = navController, KusitmsColorPalette.current.Grey600, KusitmsColorPalette.current.Grey600, onNextClick = { navController.navigate(
+            NavRoutes.SignInScreen2.route)})
+
 
     }
 
@@ -140,7 +144,7 @@ fun TitleColumn(
                     .height(24.dp)
                     .width(24.dp)
             )
-            TextColumn()
+            TextColumn1()
         }
         Spacer(modifier = Modifier.height(20.dp))
         Text(text = stringResource(id = R.string.signin_member_title1), style = KusitmsTypo.current.SubTitle2_Semibold, color = KusitmsColorPalette.current.Grey300)
@@ -214,7 +218,7 @@ fun TitleColumn(
 }
 
 @Composable
-fun TextColumn() {
+fun TextColumn1() {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -227,6 +231,50 @@ fun TextColumn() {
         Text(text = stringResource(id = R.string.text_column_1), style = KusitmsTypo.current.SubTitle2_Semibold, color = KusitmsColorPalette.current.Grey300 )
         Text(text = stringResource(id = R.string.text_column_2), style = KusitmsTypo.current.Caption1, color = KusitmsColorPalette.current.Sub2)
 
+    }
+}
+
+@Composable
+fun ButtonRowSignIn1(
+    text1:String,
+    text2:String,
+    navController: NavController,
+    color1: Color,
+    color2: Color,
+    onNextClick: () -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(72.dp)
+            .padding(start = 20.dp, top = 8.dp, end = 20.dp, bottom = 8.dp),
+        horizontalArrangement = Arrangement.spacedBy(7.dp, Alignment.CenterHorizontally),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Button(
+            modifier = Modifier
+                .weight(1f)
+                .height(56.dp),
+            onClick = { navController.popBackStack() },
+            colors = ButtonDefaults.buttonColors(containerColor = color1),
+            shape = RoundedCornerShape(size = 12.dp)
+        ) {
+            Text(text = text1, style = KusitmsTypo.current.Text_Semibold, color = KusitmsColorPalette.current.Grey400)
+        }
+
+        Button(
+            modifier = Modifier
+                .weight(1f)
+                .height(56.dp),
+            onClick = {
+                onNextClick()
+                Log.d("Click", "go to SignIn")
+            },
+            colors = ButtonDefaults.buttonColors(containerColor = color2),
+            shape = RoundedCornerShape(size = 12.dp)
+        ) {
+            Text(text = text2, style = KusitmsTypo.current.Text_Semibold, color = KusitmsColorPalette.current.Grey100)
+        }
     }
 }
 

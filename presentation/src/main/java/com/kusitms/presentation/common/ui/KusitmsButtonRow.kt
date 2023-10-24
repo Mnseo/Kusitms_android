@@ -1,5 +1,6 @@
 package com.kusitms.presentation.common.ui
 
+import android.util.Log
 import androidx.annotation.ColorRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.*
@@ -23,7 +24,8 @@ fun ButtonRow(
     text2:String,
     navController: NavController,
     color1: Color,
-    color2: Color
+    color2: Color,
+    onNextClick: () -> Unit
 ) {
     Row(
         modifier = Modifier
@@ -48,7 +50,10 @@ fun ButtonRow(
             modifier = Modifier
                 .weight(1f)
                 .height(56.dp),
-            onClick = { /* TODO: Handle button click */ },
+            onClick = {
+                onNextClick()
+                Log.d("Click", "go to SignIn")
+                      },
             colors = ButtonDefaults.buttonColors(containerColor = color2),
             shape = RoundedCornerShape(size = 12.dp)
         ) {
