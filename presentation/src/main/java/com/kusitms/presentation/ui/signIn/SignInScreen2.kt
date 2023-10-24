@@ -78,9 +78,9 @@ fun SignIn2Member(navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(KusitmsColorPalette.current.Black),
+            .background(KusitmsColorPalette.current.Grey800),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(0.dp, Alignment.Top)
+        verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.Top)
     ) {
         Title2Column()
         PhotoColumn()
