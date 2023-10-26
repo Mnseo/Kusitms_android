@@ -2,18 +2,23 @@ package com.kusitms.presentation.ui.signIn
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kusitms.presentation.R
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
+import com.kusitms.presentation.model.signIn.LikeCategory
+import com.kusitms.presentation.model.signIn.categories
 import com.kusitms.presentation.ui.ImageVector.xIcon
 
 @Composable
@@ -32,7 +37,21 @@ fun KusitmsPartSnack() {
     ) {
         Spacer(modifier = Modifier.height(24.dp))
         partSnackTitle()
+        Spacer(modifier = Modifier.height(20.dp))
+        partSelectColumn(likeCategories = categories)
+    }
+}
 
+@Composable
+fun partSelectColumn(likeCategories:List<LikeCategory>) {
+    val filteredCategories = categories.filter { it.name != "기타" }
+    LazyColumn(
+        modifier = Modifier
+            .padding(horizontal = 24.dp)
+    ) {
+        items(filteredCategories) { category ->
+            partSelectItem(category = category)
+        }
     }
 }
 
