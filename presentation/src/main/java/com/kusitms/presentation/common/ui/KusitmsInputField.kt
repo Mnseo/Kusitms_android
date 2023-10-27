@@ -1,17 +1,20 @@
 package com.kusitms.presentation.ui.signIn
 
 import androidx.annotation.StringRes
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Text
-import androidx.compose.material.TextFieldDefaults
-import androidx.compose.runtime.Composable
+import androidx.compose.material.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
+import com.kusitms.presentation.ui.ImageVector.xIcon
+import com.kusitms.presentation.R
 
 @Composable
 fun KusitmsInputField(
@@ -19,10 +22,14 @@ fun KusitmsInputField(
     value:String,
     onValueChange: (String) -> Unit
 ) {
+    val interactionSource = remember { MutableInteractionSource() }
+    val isFocused = interactionSource.collectIsFocusedAsState().value
+
     OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
             value = value,
             onValueChange = onValueChange,
+            interactionSource = interactionSource,
             placeholder = {
                 Text(
                     text= stringResource(text),
@@ -39,6 +46,29 @@ fun KusitmsInputField(
                 backgroundColor = KusitmsColorPalette.current.Grey700
             ),
             shape = RoundedCornerShape(16.dp),
-            maxLines = 1
+            maxLines = 1,
+            trailingIcon = {
+                if(isFocused && value.isNotEmpty()) {
+                    IconButton(onClick = { onValueChange("") }) {
+                        Icon(
+                            imageVector = xIcon.vector,
+                            contentDescription = "Clear Text"
+                        )
+
+                    }
+                }
+            }
+
         )
     }
+
+@Preview
+@Composable
+fun previewInput() {
+    var example by remember { mutableStateOf("example") }
+    KusitmsInputField(
+        text = R.string.login_member_id_caption,
+        value = example,
+        onValueChange = { newValue -> example = newValue }
+    )
+}
