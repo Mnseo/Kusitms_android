@@ -53,7 +53,7 @@ fun LoginMemberColumn1() {
     var example by remember { mutableStateOf("example") }
     Column(modifier = Modifier
         .fillMaxWidth()
-        .height(250.dp),
+        .height(450.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {

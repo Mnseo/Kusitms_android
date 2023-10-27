@@ -19,6 +19,9 @@
     <string name="login_member_id_placeholder">이메일을 입력해주세요</string>
     <string name="login_member_pw_placeholder">비밀번호를 입력해주세요</string>
 
+    <string name="login_id_validation">아이디 또는 비밀번호가 일치하지 않습니다</string>
+
+
     <string name="login_member_btn1">비밀번호 찾기</string>
     <string name="login_member_btn2">로그인하기</string>
 
