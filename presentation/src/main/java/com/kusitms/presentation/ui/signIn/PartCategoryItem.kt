@@ -1,5 +1,6 @@
 package com.kusitms.presentation.ui.signIn
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
 import androidx.compose.material3.Icon
@@ -15,10 +16,11 @@ import com.kusitms.presentation.common.ui.theme.KusitmsTypo
 import com.kusitms.presentation.model.signIn.LikeCategory
 
 @Composable
-fun partSelectItem(category: LikeCategory) {
+fun partSelectItem(category: LikeCategory, onClick: (LikeCategory) -> Unit) {
     Row(modifier = Modifier
         .fillMaxWidth()
         .height(56.dp)
+        .clickable { onClick(category) }
         .padding(horizontal = 12.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.Start),
         verticalAlignment = Alignment.CenterVertically,

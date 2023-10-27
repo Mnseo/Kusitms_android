@@ -51,4 +51,8 @@ class SignInViewModel:ViewModel() {
         _snackbarState.value = SnackbarState.Hidden
     }
 
+    fun updateSelectedPart(part: String) {
+        _selectedPart.value = part
+    }
+
 }
