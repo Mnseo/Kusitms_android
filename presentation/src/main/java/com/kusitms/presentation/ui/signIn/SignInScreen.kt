@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
@@ -38,7 +39,11 @@ fun SignInScreen(navController: NavHostController, viewModel: SignInViewModel) {
     val email by viewModel.email.observeAsState("")
     val phoneNum by viewModel.phoneNum.observeAsState("")
     val scrollState = rememberScrollState()
+    val scaffoldState = rememberScaffoldState(snackbarHostState = rememberSnackbarHostState())
+
     Scaffold(
+        scaffoldState = scaffoldState,
+        snackbarHost = { SnackbarHost(hostState = scaffoldState.snackbarHostState) }
         topBar = {
             TopAppBar(
                 title = {
@@ -70,7 +75,7 @@ fun SignInScreen(navController: NavHostController, viewModel: SignInViewModel) {
         },
         content = { innerPadding ->
             Box(
-                modifier=Modifier
+                modifier= Modifier
                     .padding(innerPadding)
                     .verticalScroll(scrollState)
             ) {
