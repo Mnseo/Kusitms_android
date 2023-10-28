@@ -10,6 +10,30 @@
     <string name="login_row_tv1">회원가입하기</string>
     <string name="login_row_tv2">큐시즘 둘러보기</string>
 
+    <!-- LoginMemberScreen-->
+    <string name="login_member_topbar">학회원 로그인</string>
+    <string name="login_member_title">학회원으로 로그인하기</string>
+    <string name="login_member_id_caption">아이디</string>
+    <string name="login_member_pw_caption">비밀번호</string>
+
+    <string name="login_member_id_placeholder">이메일을 입력해주세요</string>
+    <string name="login_member_pw_placeholder">비밀번호를 입력해주세요</string>
+
+    <string name="login_member_btn1">비밀번호 찾기</string>
+    <string name="login_member_btn2">로그인하기</string>
+
+    <!-- LoginManagerScreen-->
+    <string name="login_manager_topbar">운영진 로그인</string>
+    <string name="login_manager_title">운영진으로 로그인하기</string>
+    <string name="login_manager_id_caption">아이디</string>
+    <string name="login_manager_pw_caption">비밀번호</string>
+
+    <string name="login_manager_id_placeholder">아이디를 입력해주세요</string>
+    <string name="login_manager_pw_placeholder">비밀번호를 입력해주세요</string>
+
+    <string name="login_manager_button1">비밀번호 찾기</string>
+    <string name="login_manager_button2">로그인하기</string>
+
 
     <!-- Title -->
     <string name="title1">큐시즘 둘러보기</string>

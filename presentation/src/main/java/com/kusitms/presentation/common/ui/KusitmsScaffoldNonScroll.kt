@@ -16,7 +16,7 @@ import com.kusitms.presentation.ui.ImageVector.RightArrow
 fun KusitmsScaffoldNonScroll(
     topbarText: String,
     navController:NavHostController? = null,
-    content: @Composable (PaddingValues) -> Unit
+    content: @Composable () -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -50,6 +50,8 @@ fun KusitmsScaffoldNonScroll(
                 }
             )
         },
-        content = content
+        content = {
+            content()
+        }
     )
 }

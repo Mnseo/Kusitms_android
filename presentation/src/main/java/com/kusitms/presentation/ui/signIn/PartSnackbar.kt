@@ -97,7 +97,6 @@ fun ShowPartSnack(
                 actionLabel = "OK"
             )
             if (snackbarResult == androidx.compose.material.SnackbarResult.ActionPerformed) {
-                onItemClicked("Selected ITem")
             }
         }
     }
