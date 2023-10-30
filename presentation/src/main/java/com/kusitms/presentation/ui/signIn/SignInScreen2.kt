@@ -1,43 +1,26 @@
 package com.kusitms.presentation.ui.signIn
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.MaterialTheme.colors
-import androidx.compose.material.ModalBottomSheetLayout
-import androidx.compose.material.ModalBottomSheetValue
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.modifier.modifierLocalConsumer
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import coil.ImageLoader
-import coil.compose.rememberAsyncImagePainter
-import coil.decode.SvgDecoder
 import com.kusitms.presentation.R
+import com.kusitms.presentation.common.ui.ButtonRow
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
-import com.kusitms.presentation.common.ui.theme.kusimsShapes
 import com.kusitms.presentation.ui.ImageVector.*
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
 
 @Composable
 fun SignInScreen2(navController: NavController) {
@@ -48,14 +31,14 @@ fun SignInScreen2(navController: NavController) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(0.dp, Alignment.Top)
     ) {
-        TitleColumn()
+        Title2Column()
         PhotoColumn()
         Spacer(modifier = Modifier.height(10.dp))
         introColumn()
         Spacer(modifier = Modifier.height(4.dp))
         LinkColumn()
         Spacer(modifier = Modifier.weight(1f))
-        ButtonRow("이전으로", "가입완료", navController)
+        ButtonRow("이전으로", "가입완료", navController, KusitmsColorPalette.current.Grey400,KusitmsColorPalette.current.Main500)
     }
 }
 
@@ -79,7 +62,7 @@ fun PhotoColumn() {
 }
 
 @Composable
-fun TitleColumn() {
+fun Title2Column() {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -269,40 +252,6 @@ fun LinkColumnBottomSheet() {
         },
     ) {
 
-    }
-}
-
-@Composable
-fun ButtonRow(text1:String, text2:String, navController: NavController) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(72.dp)
-            .padding(start = 20.dp, top = 8.dp, end = 20.dp, bottom = 8.dp),
-        horizontalArrangement = Arrangement.spacedBy(7.dp, Alignment.CenterHorizontally),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Button(
-            modifier = Modifier
-                .weight(1f)
-                .height(56.dp),
-            onClick = { navController.popBackStack() },
-            colors = ButtonDefaults.buttonColors(containerColor = KusitmsColorPalette.current.Grey600),
-            shape = RoundedCornerShape(size = 12.dp)
-        ) {
-            Text(text = text1, style = KusitmsTypo.current.Text_Semibold, color = KusitmsColorPalette.current.Grey100)
-        }
-
-        Button(
-            modifier = Modifier
-                .weight(1f)
-                .height(56.dp),
-            onClick = { /* TODO: Handle button click */ },
-            colors = ButtonDefaults.buttonColors(containerColor = KusitmsColorPalette.current.Main500),
-            shape = RoundedCornerShape(size = 12.dp)
-        ) {
-            Text(text = text2, style = KusitmsTypo.current.Text_Semibold, color = KusitmsColorPalette.current.Grey100)
-        }
     }
 }
 
