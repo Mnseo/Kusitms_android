@@ -38,13 +38,19 @@
     <string name="signin_member_btn_1">이전으로</string>
     <string name="signin_member_btn_2">다음으로</string>
 
+
+    <!-- partSnackbar -->
+    <string name="part_snack_title">나의 파트</string>
+    <string name="part_snack_part1">기획</string>
+    <string name="part_snack_part2">개발</string>
+    <string name="part_snack_part3">디자인</string>
+
     <!-- SignInScreen2 -->
     <string name="signin2_text1">추가 프로필을 등록하실래요?</string>
     <string name="signin2_text2">추가 프로필은 선택사항입니다</string>
 
     <string name="signin2_title1">한 줄 소개</string>
     <string name="signin2_title2">나의 링크</string>
-
 
 
     <string name="signin2_btn1">이전으로</string>
