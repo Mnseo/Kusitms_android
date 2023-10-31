@@ -1,27 +1,20 @@
 package com.kusitms.presentation.navigation
 
 import androidx.compose.animation.AnimatedContentTransitionScope
-import androidx.compose.animation.EnterTransition
-import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.*
 import com.kusitms.presentation.model.signIn.SignInViewModel
 import com.kusitms.presentation.ui.login.LoginScreen
 import com.kusitms.presentation.ui.login.member.SignInScreen
+import com.kusitms.presentation.ui.signIn.SignInScreen2
+import com.kusitms.presentation.ui.signIn.SignInScreen3
 import com.kusitms.presentation.ui.splash.SplashScreen
 
-
-
-
 @Composable
-fun KusitmsNavigation() {
+fun MainNavigation() {
     val navController = rememberNavController()
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = currentBackStackEntry?.destination?.route
@@ -30,7 +23,7 @@ fun KusitmsNavigation() {
         navController = navController,
         startDestination = NavRoutes.SplashScreen.route
     ) {
-        composable(NavRoutes.SplashScreen.route ) {
+        composable(NavRoutes.SplashScreen.route) {
             SplashScreen(navController)
         }
 
@@ -41,8 +34,44 @@ fun KusitmsNavigation() {
             NavRoutes.SignInScreen.route,
             enterTransition = {
                 slideIntoContainer(
-                    towards =  AnimatedContentTransitionScope.SlideDirection.Companion.Left,
-                    animationSpec = tween(700)
+                    towards = AnimatedContentTransitionScope.SlideDirection.Companion.Left,
+                    animationSpec = tween(500)
+                )
+            },
+            exitTransition = {
+                slideOutOfContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.Companion.Right,
+                    animationSpec = tween(500)
+                )
+            }
+        ) {
+            SignInScreen(navController, SignInViewModel())
+        }
+
+        composable(
+            NavRoutes.SignInScreen2.route,
+            enterTransition = {
+                slideIntoContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.Companion.Left,
+                    animationSpec = tween(500)
+                )
+            },
+            exitTransition = {
+                slideOutOfContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.Companion.Right,
+                    animationSpec = tween(500)
+                )
+            }
+        ) {
+            SignInScreen2(navController)
+        }
+
+        composable(
+            NavRoutes.SignInScreen3.route,
+            enterTransition = {
+                slideIntoContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.Companion.Left,
+                    animationSpec = tween(500)
                 )
             },
             exitTransition = {
@@ -52,14 +81,14 @@ fun KusitmsNavigation() {
                 )
             }
         ) {
-            SignInScreen(navController, SignInViewModel())
+            SignInScreen3(navController)
         }
 
         composable(
             NavRoutes.LogInScreen.route,
             enterTransition = {
                 slideIntoContainer(
-                    towards =  AnimatedContentTransitionScope.SlideDirection.Companion.Left,
+                    towards = AnimatedContentTransitionScope.SlideDirection.Companion.Left,
                     animationSpec = tween(700)
                 )
             },
@@ -72,7 +101,7 @@ fun KusitmsNavigation() {
         ) {
             LoginScreen(navController)
         }
-
     }
-
 }
+
+

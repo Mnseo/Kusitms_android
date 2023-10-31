@@ -3,7 +3,9 @@ package com.kusitms.presentation.ui.signIn
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -12,24 +14,73 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.kusitms.presentation.R
-import com.kusitms.presentation.common.ui.ButtonRow
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
 import com.kusitms.presentation.ui.ImageVector.*
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SignInScreen2(navController: NavController) {
+fun SignInScreen2(navController: NavHostController) {
+    val scrollState = rememberScrollState()
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(
+                        "프로필 설정",
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        style = KusitmsTypo.current.SubTitle2_Semibold,
+                        color = KusitmsColorPalette.current.Grey100
+                    )
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = KusitmsColorPalette.current.Grey800,
+                    titleContentColor = KusitmsColorPalette.current.Grey100,
+                    navigationIconContentColor = KusitmsColorPalette.current.Grey400
+                ),
+                navigationIcon = {
+                    IconButton(
+                        onClick = { navController.popBackStack() },
+
+                        ) {
+                        Icon(
+                            imageVector = RightArrow.vector,
+                            contentDescription = "Localized description",
+                        )
+                    }
+                }
+            )
+        },
+        content = { innerPadding ->
+            Box(
+                modifier=Modifier
+                    .padding(innerPadding)
+                    .verticalScroll(scrollState)
+            ) {
+                SignIn2Member(
+                    navController = navController
+                )
+            }
+        }
+    )
+}
+
+@Composable
+fun SignIn2Member(navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(KusitmsColorPalette.current.Black),
+            .background(KusitmsColorPalette.current.Grey800),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(0.dp, Alignment.Top)
+        verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.Top)
     ) {
         Title2Column()
         PhotoColumn()
@@ -38,7 +89,8 @@ fun SignInScreen2(navController: NavController) {
         Spacer(modifier = Modifier.height(4.dp))
         LinkColumn()
         Spacer(modifier = Modifier.weight(1f))
-        ButtonRow("이전으로", "가입완료", navController, KusitmsColorPalette.current.Grey400,KusitmsColorPalette.current.Main500)
+//        ButtonRow("이전으로", "가입완료", navController, KusitmsColorPalette.current.Grey400,KusitmsColorPalette.current.Main500,onNextClick = { navController.navigate(
+//            NavRoutes.SignInScreen2.route)})
     }
 }
 
@@ -231,27 +283,6 @@ fun LinkRow2() {
         horizontalArrangement = Arrangement.spacedBy(30.dp, Alignment.Start),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
-@Composable
-fun LinkColumnBottomSheet() {
-    val scaffoldState = rememberBottomSheetScaffoldState(
-        bottomSheetState = SheetState(
-            skipPartiallyExpanded = false,
-            initialValue = SheetValue.Expanded)
-    )
-    val coroutineScope = rememberCoroutineScope()
-
-    BottomSheetScaffold(
-        scaffoldState = scaffoldState,
-        sheetContent = {
-            // BottomSheet 내용
-            Text(text = "This is a BottomSheet")
-        },
-    ) {
-
     }
 }
 

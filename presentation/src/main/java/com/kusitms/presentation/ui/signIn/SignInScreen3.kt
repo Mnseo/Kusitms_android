@@ -33,17 +33,32 @@ fun SignInScreen3(navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(KusitmsColorPalette.current.Black),
+            .background(KusitmsColorPalette.current.Grey900),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.Top)
+        verticalArrangement = Arrangement.Top
     ) {
-        Spacer(modifier = Modifier.height(122.5.dp))
+        Spacer(modifier = Modifier.weight(1f))
+        SignIn3Card()
+        Spacer(modifier = Modifier.weight(1f))
+        btn(color = KusitmsColorPalette.current.Main500, text = stringResource(id = R.string.signin3_btn), navController = rememberNavController())
+        Spacer(modifier = Modifier.height(20.dp))
+    }
+}
+
+@Composable
+fun SignIn3Card() {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(600.dp)
+            .background(KusitmsColorPalette.current.Grey800),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
         middleCard()
         Spacer(modifier = Modifier.height(32.dp))
         Text(text = stringResource(id = R.string.signin3_text3), style= KusitmsTypo.current.Body1, color = KusitmsColorPalette.current.Grey200)
         Text(text = stringResource(id = R.string.signin3_text4), style = KusitmsTypo.current.Body1, color = KusitmsColorPalette.current.Grey200)
-        Spacer(modifier = Modifier.height(82.dp))
-        btn(color = KusitmsColorPalette.current.Main500, text = stringResource(id = R.string.signin3_btn), navController = rememberNavController())
     }
 }
 
@@ -103,7 +118,8 @@ fun nameBox(name: String) {
         Text(
             text = stringResource(id = R.string.signin3_text1),
             style = KusitmsTypo.current.Text_Semibold,
-            color = KusitmsColorPalette.current.Grey300
+            color = KusitmsColorPalette.current.Grey300,
+            modifier = Modifier.padding(bottom = 15.dp)
         )
         Text(
             text = name,
