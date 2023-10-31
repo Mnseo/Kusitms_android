@@ -67,7 +67,7 @@ fun KusitmsInputField(
 fun previewInput() {
     var example by remember { mutableStateOf("example") }
     KusitmsInputField(
-        text = R.string.login_member_id_caption,
+        text = R.string.find_pw_placeholder1,
         value = example,
         onValueChange = { newValue -> example = newValue }
     )
