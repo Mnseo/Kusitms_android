@@ -1,12 +1,12 @@
-package com.kusitms.presentation.ui.login.member
+package com.kusitms.presentation.ui.login.manager
 
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Text
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -18,21 +18,19 @@ import com.kusitms.presentation.R
 import com.kusitms.presentation.common.theme.KusitmsScaffoldNonScroll
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
-import com.kusitms.presentation.ui.signIn.KusitmsInputField
-
 
 @Composable
-fun LoginMemberScreen() {
+fun LoginManagerScreen() {
     KusitmsScaffoldNonScroll(
-        topbarText = stringResource(id = R.string.login_member_topbar),
+        topbarText = stringResource(id = R.string.login_manager_topbar),
         navController = rememberNavController()
     ) {
-        LoginMemberColumn()
+        LoginManagerColumn()
     }
 }
 
 @Composable
-fun LoginMemberColumn() {
+fun LoginManagerColumn() {
     Column(modifier = Modifier
         .fillMaxSize()
         .background(color = KusitmsColorPalette.current.Grey800)
@@ -41,15 +39,15 @@ fun LoginMemberColumn() {
         verticalArrangement = Arrangement.Top
     ) {
         Spacer(modifier = Modifier.height(99.5.dp))
-        LoginMemberColumn1()
+        LoginManagerColumn1()
         Spacer(modifier = Modifier.weight(1f))
-        LoginMemberColumn2()
+        LoginManagerColumn2()
         Spacer(modifier = Modifier.height(24.dp))
     }
 }
 
 @Composable
-fun LoginMemberColumn1() {
+fun LoginManagerColumn1() {
     var example by remember { mutableStateOf("example") }
     Column(modifier = Modifier
         .fillMaxWidth()
@@ -58,12 +56,12 @@ fun LoginMemberColumn1() {
         verticalArrangement = Arrangement.Top
     ) {
         androidx.compose.material3.Text(
-            text= stringResource(id = R.string.login_member_title),
+            text= stringResource(id = R.string.login_manager_title),
             style = KusitmsTypo.current.SubTitle2_Semibold,
             color = KusitmsColorPalette.current.Grey300
         )
         Spacer(modifier = Modifier.height(72.dp))
-        LoginMemberInputColumn(
+        LoginManagerInputColumn(
             id = example,
             pw = example,
             onIdChange = {newValue-> example = newValue},
@@ -72,9 +70,8 @@ fun LoginMemberColumn1() {
     }
 }
 
-
 @Composable
-fun LoginMemberColumn2() {
+fun LoginManagerColumn2() {
     Column(modifier = Modifier
         .fillMaxWidth()
         .height(128.dp),
@@ -104,9 +101,8 @@ fun LoginMemberColumn2() {
     }
 }
 
-
 @Preview
 @Composable
 fun previewLoginMember() {
-    LoginMemberScreen()
+    LoginManagerScreen()
 }

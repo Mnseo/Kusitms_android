@@ -22,9 +22,9 @@ fun LoginMemberInputColumn(
 
     Column(modifier = Modifier
         .fillMaxWidth()
-        .height(128.dp),
+        .height(200.dp),
         horizontalAlignment = Alignment.Start,
-        verticalArrangement = Arrangement.spacedBy(24.dp)
+        verticalArrangement = Arrangement.Top
     ) {
         //id Input
         androidx.compose.material3.Text(
@@ -32,8 +32,9 @@ fun LoginMemberInputColumn(
             style = KusitmsTypo.current.Caption1,
             color = KusitmsColorPalette.current.Grey400
         )
+        Spacer(modifier = Modifier.height(4.dp))
         KusitmsInputField(text = R.string.login_member_id_placeholder, value = id, onValueChange = onIdChange)
-        Spacer(modifier = Modifier.height(40.dp))
+        Spacer(modifier = Modifier.height(24.dp))
 
         //pw Input
         androidx.compose.material3.Text(
@@ -41,7 +42,18 @@ fun LoginMemberInputColumn(
             style = KusitmsTypo.current.Caption1,
             color = KusitmsColorPalette.current.Grey400
         )
-        KusitmsInputField(text = R.string.login_member_pw_placeholder, value = id, onValueChange = onIdChange)
+        Spacer(modifier = Modifier.height(4.dp))
+        LoginMemberPwInput(text = R.string.login_member_pw_placeholder, value = pw, onValueChange = onPwChange)
+        Spacer(modifier = Modifier.height(24.dp))
+
+        //id- pw검증
+        if(id != "example" || pw != "example") {
+            Text(
+                text = stringResource(id = R.string.login_id_validation),
+                style = KusitmsTypo.current.Text_Medium,
+                color = KusitmsColorPalette.current.Sub2
+            )
+        }
 
     }
 }
