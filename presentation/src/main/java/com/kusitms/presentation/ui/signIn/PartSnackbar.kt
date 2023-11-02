@@ -5,9 +5,11 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Text
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.modifier.modifierLocalConsumer
@@ -18,11 +20,13 @@ import com.kusitms.presentation.R
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
 import com.kusitms.presentation.model.signIn.LikeCategory
+import com.kusitms.presentation.model.signIn.SignInViewModel
 import com.kusitms.presentation.model.signIn.categories
 import com.kusitms.presentation.ui.ImageVector.xIcon
+import kotlinx.coroutines.launch
 
 @Composable
-fun KusitmsPartSnack() {
+fun KusitmsPartSnack(viewModel: SignInViewModel) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -38,19 +42,21 @@ fun KusitmsPartSnack() {
         Spacer(modifier = Modifier.height(24.dp))
         partSnackTitle()
         Spacer(modifier = Modifier.height(20.dp))
-        partSelectColumn(likeCategories = categories)
+        partSelectColumn(viewModel = viewModel)
     }
 }
 
 @Composable
-fun partSelectColumn(likeCategories:List<LikeCategory>) {
+fun partSelectColumn(viewModel:SignInViewModel) {
     val filteredCategories = categories.filter { it.name != "기타" }
     LazyColumn(
         modifier = Modifier
             .padding(horizontal = 24.dp)
     ) {
         items(filteredCategories) { category ->
-            partSelectItem(category = category)
+            partSelectItem(category = category) { selectedCategory ->
+                viewModel.updateSelectedPart(selectedCategory.name)
+            }
         }
     }
 }
@@ -76,8 +82,30 @@ fun partRow() {
 
 }
 
+@Composable
+fun ShowPartSnack(
+    scaffoldState: ScaffoldState,
+    viewModel: SignInViewModel,
+    items: List<String>
+) {
+    val scope = rememberCoroutineScope()
+
+    fun showPartSnack(item: String) {
+        scope.launch {
+            val snackbarResult = scaffoldState.snackbarHostState.showSnackbar(
+                message ="Selected: $item",
+                actionLabel = "OK"
+            )
+            if (snackbarResult == androidx.compose.material.SnackbarResult.ActionPerformed) {
+            }
+        }
+    }
+}
+
+
+
 @Preview
 @Composable
 fun ExamplePartSnack() {
-    KusitmsPartSnack()
+    KusitmsPartSnack(viewModel = SignInViewModel())
 }

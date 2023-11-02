@@ -17,6 +17,12 @@ class SignInViewModel:ViewModel() {
     private val _isAllFieldsValid = MutableLiveData<Boolean>(false)
     val isAllFieldsValid: LiveData<Boolean> = _isAllFieldsValid
 
+    private val _snackbarState = MutableLiveData<SnackbarState>(SnackbarState.Hidden)
+    val snackbarState: LiveData<SnackbarState> = _snackbarState
+
+    private val _selectedPart = MutableLiveData<String?>()
+    val selectedPart: LiveData<String?> = _selectedPart
+
     fun updateMajor(newMajor: String) {
         _major.value = newMajor
     }
@@ -35,6 +41,18 @@ class SignInViewModel:ViewModel() {
 
     private fun validateFields() {
         _isAllFieldsValid.value = !(_email.value.isNullOrBlank() || _phoneNum.value.isNullOrBlank() || _major.value.isNullOrBlank())
+    }
+
+    fun showSnackbar() {
+        _snackbarState.value = SnackbarState.Shown
+    }
+
+    fun hideSnackbar() {
+        _snackbarState.value = SnackbarState.Hidden
+    }
+
+    fun updateSelectedPart(part: String) {
+        _selectedPart.value = part
     }
 
 }

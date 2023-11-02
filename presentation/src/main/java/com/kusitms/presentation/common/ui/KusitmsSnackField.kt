@@ -2,6 +2,7 @@ package com.kusitms.presentation.common.ui
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
@@ -21,10 +22,12 @@ import com.kusitms.presentation.ui.ImageVector.underArrow
 @Composable
 fun KusitmsSnackField(
     @StringRes text:Int,
+    onSnackClick: () -> Unit
 ) {
     Box(modifier = Modifier
         .fillMaxWidth()
         .height(56.dp)
+        .clickable { onSnackClick() }
         .background(
             color = KusitmsColorPalette.current.Grey700,
             shape = RoundedCornerShape(16.dp)

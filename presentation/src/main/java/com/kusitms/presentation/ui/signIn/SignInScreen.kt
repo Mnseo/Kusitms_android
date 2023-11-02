@@ -7,6 +7,9 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.ScaffoldState
+import androidx.compose.material.SnackbarDuration
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
@@ -21,7 +24,6 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.kusitms.presentation.R
-import com.kusitms.presentation.common.ui.ButtonRow
 import com.kusitms.presentation.common.ui.KusitmsSnackField
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
@@ -30,6 +32,7 @@ import com.kusitms.presentation.navigation.NavRoutes
 import com.kusitms.presentation.ui.ImageVector.RightArrow
 import com.kusitms.presentation.ui.ImageVector.StudyIcon
 import com.kusitms.presentation.ui.signIn.KusitmsInputField
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -38,6 +41,9 @@ fun SignInScreen(navController: NavHostController, viewModel: SignInViewModel) {
     val email by viewModel.email.observeAsState("")
     val phoneNum by viewModel.phoneNum.observeAsState("")
     val scrollState = rememberScrollState()
+    val scope = rememberCoroutineScope()
+    val scaffoldState = rememberScaffoldState()
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -70,7 +76,7 @@ fun SignInScreen(navController: NavHostController, viewModel: SignInViewModel) {
         },
         content = { innerPadding ->
             Box(
-                modifier=Modifier
+                modifier= Modifier
                     .padding(innerPadding)
                     .verticalScroll(scrollState)
             ) {
@@ -190,13 +196,15 @@ fun TitleColumn(
         //파트 선택
         Text(text = stringResource(id = R.string.signin_member_caption1_3), style = KusitmsTypo.current.Caption1, color = KusitmsColorPalette.current.Grey400)
         Spacer(modifier = Modifier.height(5.dp))
-        KusitmsSnackField(text = R.string.signin_member_hint1_2)
+        KusitmsSnackField(text = R.string.signin_member_hint1_2, onSnackClick = {
+
+        })
 
         //관심 카테고리
         Spacer(modifier = Modifier.height(24.dp))
         Text(text = stringResource(id = R.string.signin_member_caption1_4), style = KusitmsTypo.current.Caption1, color = KusitmsColorPalette.current.Grey400)
         Spacer(modifier = Modifier.height(5.dp))
-        KusitmsSnackField(text = R.string.signin_member_hint1_3)
+        KusitmsSnackField(text = R.string.signin_member_hint1_3, onSnackClick = {})
 
         //연락처
         Spacer(modifier = Modifier.height(40.dp))
@@ -277,6 +285,16 @@ fun ButtonRowSignIn1(
         }
     }
 }
+
+@Composable
+fun ShowPartSnack(scaffoldState: ScaffoldState) {
+    val coroutineScope = rememberCoroutineScope()
+
+    coroutineScope.launch {
+        scaffoldState.snackbarHostState.currentSnackbarData?.dismiss()
+    }
+}
+
 
 
 @Preview
