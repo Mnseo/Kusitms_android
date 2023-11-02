@@ -19,7 +19,10 @@ import androidx.navigation.compose.rememberNavController
 import com.kusitms.presentation.common.theme.KusitmsScaffoldNonScroll
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
+import com.kusitms.presentation.ui.login.member.LoginMemberColumn2
+import com.kusitms.presentation.ui.login.nonMember.NonMemberBanner
 import com.kusitms.presentation.ui.login.nonMember.NonMemberLogo
+import com.kusitms.presentation.ui.login.nonMember.NonMemberPage
 
 
 @Composable
@@ -44,13 +47,17 @@ fun NonMemberColumn() {
     ) {
         Spacer(modifier = Modifier.height(95.5.dp))
         NonMemberLogoColumn()
+        Spacer(modifier = Modifier.weight(1f))
+        NonMemberBanner()
+        Spacer(modifier = Modifier.height(61.dp))
     }
 }
 
 @Composable
 fun NonMemberLogoColumn() {
     Column(modifier = Modifier
-        .fillMaxSize()
+        .fillMaxWidth()
+        .height(420.dp)
         .background(color = KusitmsColorPalette.current.Grey800),
         horizontalAlignment =  Alignment.Start,
         verticalArrangement = Arrangement.Top
@@ -81,11 +88,11 @@ fun NonMemberLogoColumn() {
                 modifier = Modifier.padding(vertical = 2.dp)
             )
         }
+
+        Spacer(modifier = Modifier.height(84.dp))
+        NonMemberPage()
     }
 }
-
-
-
 
 
 
