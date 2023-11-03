@@ -1,10 +1,9 @@
 package com.kusitms.presentation.ui.login.nonMember
 
-import android.graphics.drawable.Icon
 import androidx.annotation.DrawableRes
-import androidx.annotation.IntegerRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
@@ -12,8 +11,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -22,6 +21,7 @@ import com.kusitms.presentation.R
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
 import com.kusitms.presentation.model.login.nonmember.Channel
+import com.kusitms.presentation.model.login.nonmember.Channels.channels
 
 @Composable
 fun NonMemberBanner() {
@@ -31,7 +31,7 @@ fun NonMemberBanner() {
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.Top
     ) {
-        InstaYoutubeRow()
+        InstaYoutubeRow(channels)
         Spacer(modifier = Modifier.height(12.dp))
         KusitmsNaverCafe()
     }
@@ -46,29 +46,32 @@ fun InstaYoutubeRow(channels: List<Channel>) {
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        channels.forEach { channel ->
+        channels.take(2).forEach { channel ->
             channelItem(
                 imageResId = channel.imageRes,
                 stringRes = channel.stringRes,
-                modifier = Modifier.weight(1f) // 여기에 weight를 추가합니다.
+                modifier = Modifier.weight(1f),
+                uri = channel.uri// 여기에 weight를 추가합니다.
             )
         }
     }
 }
 
 @Composable
-fun channelItem(@DrawableRes imageResId:Int, @StringRes stringRes:Int, modifier: Modifier) {
+fun channelItem(@DrawableRes imageResId:Int, @StringRes stringRes:Int, modifier: Modifier, uri:String) {
+    val uriHandler = LocalUriHandler.current
     Box(modifier = modifier
         .height(60.dp)
         .background(
             color = KusitmsColorPalette.current.Grey600,
             shape = RoundedCornerShape(size = 16.dp)
         )
+        .clickable { uriHandler.openUri(uri) }
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .fillMaxHeight()
+                .height(60.dp)
                 .padding(horizontal = 20.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalAlignment = Alignment.CenterVertically
@@ -91,12 +94,16 @@ fun channelItem(@DrawableRes imageResId:Int, @StringRes stringRes:Int, modifier:
 
 @Composable
 fun KusitmsNaverCafe() {
+    val uriHandler = LocalUriHandler.current
     Box(modifier = Modifier
         .height(80.dp)
         .background(
             color = KusitmsColorPalette.current.Grey600,
             shape = RoundedCornerShape(size = 16.dp)
         )
+        .clickable {
+            uriHandler.openUri("https://cafe.naver.com/kusitms")
+        }
     ) {
         Row(
             modifier = Modifier

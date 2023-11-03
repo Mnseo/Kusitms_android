@@ -3,6 +3,7 @@ package com.kusitms.presentation.ui.login.nonMember
 import android.graphics.drawable.Icon
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
@@ -13,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role.Companion.Image
@@ -21,14 +23,18 @@ import androidx.compose.ui.unit.dp
 import com.kusitms.presentation.R
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
+import com.kusitms.presentation.model.login.nonmember.Channels
 
 @Composable
 fun NonMemberPage() {
+    val uriHandler = LocalUriHandler.current
     Box(modifier = Modifier
         .fillMaxWidth()
         .height(160.dp)
         .background(color = KusitmsColorPalette.current.Main500, shape = RoundedCornerShape(16.dp))
-    ) {
+        .clickable { uriHandler.openUri("https://www.kusitms.com/") }
+    )
+    {
     Image(
         painter = painterResource(id = R.drawable.kusitms_non_member_1),
         contentDescription = null,
@@ -89,7 +95,7 @@ fun NonBottomPageRow() {
             style = KusitmsTypo.current.Body1,
             color = KusitmsColorPalette.current.Main200,
             modifier = Modifier
-                .width(168.dp)
+                .width(175.dp)
                 .height(48.dp)
         )
 

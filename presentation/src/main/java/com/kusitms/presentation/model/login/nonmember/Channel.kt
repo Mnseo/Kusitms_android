@@ -4,7 +4,8 @@ import androidx.compose.runtime.Composable
 
 data class Channel(
     val imageRes:Int,
-    val stringRes: Int
+    val stringRes: Int,
+    val uri: String
     )
 
 
