@@ -38,8 +38,8 @@ fun NonMemberPage() {
     Image(
         painter = painterResource(id = R.drawable.kusitms_non_member_1),
         contentDescription = null,
-        contentScale = ContentScale.Crop, // 이미지가 Box를 채우도록 조정
-        modifier = Modifier.matchParentSize() // 부모의 크기에 맞춤
+        contentScale = ContentScale.Crop,
+        modifier = Modifier.matchParentSize()
     )
         Column(modifier = Modifier
             .fillMaxWidth()

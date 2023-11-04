@@ -51,7 +51,7 @@ fun InstaYoutubeRow(channels: List<Channel>) {
                 imageResId = channel.imageRes,
                 stringRes = channel.stringRes,
                 modifier = Modifier.weight(1f),
-                uri = channel.uri// 여기에 weight를 추가합니다.
+                uri = channel.uri
             )
         }
     }
