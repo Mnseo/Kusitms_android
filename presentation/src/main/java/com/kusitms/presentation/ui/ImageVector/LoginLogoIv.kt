@@ -1,4 +1,5 @@
 
+import LoginLogoIv._vector
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -8,6 +9,7 @@ import androidx.compose.ui.graphics.*
 import androidx.compose.ui.graphics.vector.path
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 object LoginLogoIv {
@@ -156,6 +158,7 @@ object LoginLogoIv {
         return _vector!!
     }
 
+
     @Composable
     fun DrawLogo(modifier: Modifier = Modifier) {
         Image(
@@ -168,6 +171,8 @@ object LoginLogoIv {
     }
 
 }
+
+
 
 @Preview(showBackground = true)
 @Composable

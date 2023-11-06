@@ -28,6 +28,6 @@ fun FindPwBtn1(isValid: Boolean) {
         ,
         shape = RoundedCornerShape(size = 16.dp)
     ) {
-        Text(text = stringResource(id = R.string.login_member_btn2), style = KusitmsTypo.current.Text_Semibold, color = if (isValid) KusitmsColorPalette.current.White else KusitmsColorPalette.current.Grey400)
+        Text(text = stringResource(id = R.string.find_pw_btn1), style = KusitmsTypo.current.SubTitle2_Semibold, color = if (isValid) KusitmsColorPalette.current.White else KusitmsColorPalette.current.Grey400)
     }
 }

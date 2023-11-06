@@ -2,6 +2,16 @@
 <resources>
     <string name="app_name">"Kusitms Plus"</string>
 
+    <!-- NonMember -->
+    <string name="nonMember_topbar">큐시즘 둘러보기</string>
+    <string name="nonMember_caption1">"IT'S TIME TO TAKE A LEAP"</string>
+    <string name="nonMember_caption2">비회원</string>
+    <string name="nonMember_subtitle">KUSITMS 공식 홈페이지</string>
+    <string name="nonMember_body1">큐시즘에서 도전, 성장\n그리고 도약을 경험하세요</string>
+    <string name="nonMember_banner1">인스타그램</string>
+    <string name="nonMember_banner2">유튜브</string>
+    <string name="nonMember_banner3">KUSITMS 네이버 카페</string>
+
     <!-- LoginScreen-->
     <string name="splash_tv">큐시즘의 또 한번 도약</string>
     <string name="login_top_tv">비전을 가지고 함께 성장하는 학회</string>
