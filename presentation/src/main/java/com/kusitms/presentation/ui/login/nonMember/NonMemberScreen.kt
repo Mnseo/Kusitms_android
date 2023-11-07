@@ -104,10 +104,6 @@ fun NonMemberColumn2() {
     }
 }
 
-
-
-
-
 @Preview(showBackground = true)
 @Composable
 fun snsSite() {
