@@ -46,6 +46,7 @@ fun FindPw1Column(id: String, isValid:Boolean, onIdChange: (String) -> Unit) {
         ) {
             Spacer(modifier = Modifier.height(148.dp))
             FindPwEmailInput(id = id, onIdChange = onIdChange)
+
             Spacer(modifier = Modifier.weight(1f))
             FindPwBtn1(isValid)
             Spacer(modifier = Modifier.height(24.dp))
