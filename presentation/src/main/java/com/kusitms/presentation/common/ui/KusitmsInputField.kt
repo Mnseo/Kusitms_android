@@ -20,7 +20,8 @@ import com.kusitms.presentation.R
 fun KusitmsInputField(
     @StringRes text:Int,
     value:String,
-    onValueChange: (String) -> Unit
+    onValueChange: (String) -> Unit,
+    isError:Boolean = false
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val isFocused = interactionSource.collectIsFocusedAsState().value
@@ -40,7 +41,7 @@ fun KusitmsInputField(
             colors = TextFieldDefaults.outlinedTextFieldColors(
                 textColor = KusitmsColorPalette.current.White,
                 focusedBorderColor = KusitmsColorPalette.current.Main500,
-                unfocusedBorderColor = KusitmsColorPalette.current.Grey700,
+                unfocusedBorderColor = if(isError) KusitmsColorPalette.current.Sub2 else KusitmsColorPalette.current.Grey700,
                 unfocusedLabelColor = KusitmsColorPalette.current.Grey400,
                 focusedLabelColor = KusitmsColorPalette.current.White,
                 backgroundColor = KusitmsColorPalette.current.Grey700
