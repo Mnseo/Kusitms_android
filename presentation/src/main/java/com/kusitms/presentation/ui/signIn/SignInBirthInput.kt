@@ -13,9 +13,9 @@ import com.kusitms.presentation.common.ui.theme.KusitmsTypo
 import com.kusitms.presentation.ui.signIn.KusitmsInputField
 
 @Composable
-fun FindPwEmailInput(
-    id:String,
-    onIdChange: (String) -> Unit,
+fun SignInBirthInput(
+    birth:String,
+    onBirthChange: (String) -> Unit,
 ) {
 
     Column(modifier = Modifier
@@ -31,11 +31,11 @@ fun FindPwEmailInput(
             color = KusitmsColorPalette.current.Grey400
         )
         Spacer(modifier = Modifier.height(4.dp))
-        KusitmsInputField(text = R.string.login_manager_id_placeholder, value = id, onValueChange = onIdChange)
+        KusitmsInputField(text = R.string.login_manager_id_placeholder, value = birth, onValueChange = onBirthChange)
         Spacer(modifier = Modifier.height(24.dp))
 
         //id 검증
-        if(id != "example") {
+        if(birth != "example") {
             Text(
                 text = stringResource(id = R.string.find_pw_validation1),
                 style = KusitmsTypo.current.Text_Medium,
