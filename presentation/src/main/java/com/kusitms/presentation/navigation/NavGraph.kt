@@ -48,41 +48,6 @@ fun MainNavigation() {
             SignInScreen(navController, SignInViewModel())
         }
 
-        composable(
-            NavRoutes.SignInScreen2.route,
-            enterTransition = {
-                slideIntoContainer(
-                    towards = AnimatedContentTransitionScope.SlideDirection.Companion.Left,
-                    animationSpec = tween(500)
-                )
-            },
-            exitTransition = {
-                slideOutOfContainer(
-                    towards = AnimatedContentTransitionScope.SlideDirection.Companion.Right,
-                    animationSpec = tween(500)
-                )
-            }
-        ) {
-            SignInScreen2(navController)
-        }
-
-        composable(
-            NavRoutes.SignInScreen3.route,
-            enterTransition = {
-                slideIntoContainer(
-                    towards = AnimatedContentTransitionScope.SlideDirection.Companion.Left,
-                    animationSpec = tween(500)
-                )
-            },
-            exitTransition = {
-                slideOutOfContainer(
-                    towards = AnimatedContentTransitionScope.SlideDirection.Companion.Right,
-                    animationSpec = tween(700)
-                )
-            }
-        ) {
-            SignInScreen3(navController)
-        }
 
         composable(
             NavRoutes.LogInScreen.route,

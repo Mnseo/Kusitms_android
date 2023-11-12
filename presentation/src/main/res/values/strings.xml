@@ -50,9 +50,19 @@
     <!-- FindPwScreen -->
     <string name="find_pw_topbar">비밀번호 찾기</string>
     <string name="find_pw_caption1">현재 비밀번호</string>
+    <string name="find_pw_caption_email">이메일</string>
+    <string name="find_pw_caption2">새 비밀번호</string>
+    <string name="find_pw_caption3">새 비밀번호 확인</string>
+
+    <string name="find_pw_placeholder_email">현재 비밀번호를 입력해주세요</string>
     <string name="find_pw_placeholder1">현재 비밀번호를 입력해주세요</string>
+    <string name="find_pw_placeholder2">영문,숫자,특수문자 포함 8자 이상</string>
+    <string name="find_pw_placeholder3">비밀번호를 입력해주세요</string>
+
+    <string name="find_pw_validation_email">현재 학회원으로 등록되어 있지 않습니다</string>
     <string name="find_pw_validation1">현재 비밀번호와 일치하지 않습니다</string>
-    <string name="find_pw_validation2">이미 회원가입을 완료했습니다</string>
+    <string name="find_pw_validation2">영문,숫자,특수문자를 조합하여 8자 이상으로 입력해주세요</string>
+    <string name="find_pw_validation3">비밀번호와 일치하지 않습니다</string>
 
     <string name="find_pw_btn1">인증코드 전송</string>
 

@@ -1,6 +1,7 @@
 package com.kusitms.presentation.ui.login
 
 import LoginLogoIv
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Text
@@ -13,6 +14,11 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RadialGradient
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -47,18 +53,24 @@ fun LoginScreen(
 
 @Composable
 fun LoginLogo() {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(color = KusitmsColorPalette.current.Grey900)
-            .height(102.dp)
-            .padding(0.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(text= stringResource(id = R.string.login_top_tv),style= KusitmsTypo.current.Caption1, color = KusitmsColorPalette.current.Grey300)
-        Spacer(modifier = Modifier.height(6.dp))
-        LoginLogoIv.DrawLogo()
-    }
+    val blueAndgray = listOf(Color(0x50266DFC).copy(alpha =0.1f),KusitmsColorPalette.current.Grey900)
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(500.dp)
+                .background(
+                    brush = Brush.radialGradient(blueAndgray),
+                    shape = RectangleShape
+                )
+                .padding(0.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Text(text= stringResource(id = R.string.login_top_tv),style= KusitmsTypo.current.Caption1, color = KusitmsColorPalette.current.Grey300)
+            Spacer(modifier = Modifier.height(6.dp))
+            LoginLogoIv.DrawLogo()
+        }
+
 }
 
 @Composable
