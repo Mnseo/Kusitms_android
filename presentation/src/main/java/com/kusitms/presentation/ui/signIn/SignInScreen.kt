@@ -115,7 +115,7 @@ fun SignInMember1(
         TitleColumn(major = major, email = email, phoneNum = phoneNum, onMajorChange = onMajorChange, onEmailChange=onEmailChange, onPhoneNumChange= onPhoneNumChange)
 
         ButtonRowSignIn1(text1 = "이전으로", text2 = "다음으로", navController = navController, KusitmsColorPalette.current.Grey600, KusitmsColorPalette.current.Grey600,
-            onNextClick = { }
+            onNextClick = { navController.navigate(NavRoutes.LoginMemberScreen.route)}
         )
     }
 

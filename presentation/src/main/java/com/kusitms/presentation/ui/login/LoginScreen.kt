@@ -53,14 +53,13 @@ fun LoginScreen(
 
 @Composable
 fun LoginLogo() {
-    val blueAndgray = listOf(Color(0x50266DFC).copy(alpha =0.1f),KusitmsColorPalette.current.Grey900)
+
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(500.dp)
                 .background(
-                    brush = Brush.radialGradient(blueAndgray),
-                    shape = RectangleShape
+                    color = KusitmsColorPalette.current.Grey900
                 )
                 .padding(0.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -88,7 +87,7 @@ fun ButtonColumn(navController: NavHostController) {
                 .fillMaxWidth()
                 .height(56.dp),
             onClick = {
-                      navController.navigate(NavRoutes.LogInScreen.route)
+                      navController.navigate(NavRoutes.LoginMemberScreen.route)
             },
             colors = ButtonDefaults.buttonColors(containerColor = KusitmsColorPalette.current.Grey100),
             shape = RoundedCornerShape(size = 16.dp)

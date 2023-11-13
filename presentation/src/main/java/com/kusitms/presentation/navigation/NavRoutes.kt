@@ -14,11 +14,15 @@ sealed class NavRoutes(val route: String)
     object LogInScreen: NavRoutes("login")
 
     object LoginNonMember: NavRoutes("loginNonMember")
-    object LoginMember: NavRoutes("loginMember")
+    object LoginMemberScreen: NavRoutes("loginMember")
 
     object SignInScreen: NavRoutes("signin")
     object SignInScreen2 : NavRoutes("signin2")
     object SignInScreen3 : NavRoutes("signin3")
+
+    object FindPwScreen1 : NavRoutes("findpw1")
+    object FindPwScreen2 : NavRoutes("findpw1")
+
 
     object Home: NavRoutes("Home")
     object Setting: NavRoutes("Setting")
@@ -26,13 +30,6 @@ sealed class NavRoutes(val route: String)
 }
 
 
-//Login Route
-sealed class LoginNavRoutes(val route: String)
-{
-    object LoginWithMember : NavRoutes("loginMember")
-    object LoginWithManager : NavRoutes("loginManager")
-    object LoginNonMember : NavRoutes ("loginNonMember")
-}
 
 //SignIn Route
 sealed class SignInNavRoutes(val route: String)

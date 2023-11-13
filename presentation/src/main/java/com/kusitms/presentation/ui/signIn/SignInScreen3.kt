@@ -26,7 +26,7 @@ import coil.decode.SvgDecoder
 import com.kusitms.presentation.R
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
-import com.kusitms.presentation.navigation.LoginNavRoutes.LoginNonMember.route
+import com.kusitms.presentation.navigation.NavRoutes.LoginNonMember.route
 
 @Composable
 fun SignInScreen3(navController: NavController) {

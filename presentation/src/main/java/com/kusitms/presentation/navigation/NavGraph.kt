@@ -17,6 +17,7 @@ import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavDeepLink
 import androidx.navigation.NavGraphBuilder
+import com.kusitms.presentation.ui.login.member.LoginMemberScreen
 import com.kusitms.presentation.ui.signIn.SignInScreen3
 import com.kusitms.presentation.ui.splash.SplashScreen
 
@@ -39,6 +40,13 @@ fun MainNavigation() {
         ) {
             SignInScreen(navController, SignInViewModel())
         }
+
+        kusitmsComposableWithAnimation(
+            NavRoutes.LoginMemberScreen.route
+        ) {
+            LoginMemberScreen(navController)
+        }
+
         kusitmsComposableWithAnimation(
             NavRoutes.SignInScreen2.route
         ) {
@@ -82,14 +90,15 @@ fun NavGraphBuilder.kusitmsComposableWithAnimation(
         exitTransition,
     content: @Composable AnimatedContentScope.(NavBackStackEntry) -> Unit
 ) {
-    composable(
-        route,
-        arguments,
-        deepLinks,
-        enterTransition,
-        exitTransition,
-        popEnterTransition,
-        popExitTransition,
-        content
-    )
+        composable(
+            route,
+            arguments,
+            deepLinks,
+            enterTransition,
+            exitTransition,
+            popEnterTransition,
+            popExitTransition,
+            content
+        )
+
 }
