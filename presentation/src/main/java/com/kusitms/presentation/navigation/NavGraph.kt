@@ -10,6 +10,13 @@ import com.kusitms.presentation.model.signIn.SignInViewModel
 import com.kusitms.presentation.ui.login.LoginScreen
 import com.kusitms.presentation.ui.login.member.SignInScreen
 import com.kusitms.presentation.ui.signIn.SignInScreen2
+import androidx.compose.animation.AnimatedContentScope
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.navigation.NamedNavArgument
+import androidx.navigation.NavBackStackEntry
+import androidx.navigation.NavDeepLink
+import androidx.navigation.NavGraphBuilder
 import com.kusitms.presentation.ui.signIn.SignInScreen3
 import com.kusitms.presentation.ui.splash.SplashScreen
 
@@ -18,55 +25,71 @@ fun MainNavigation() {
     val navController = rememberNavController()
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = currentBackStackEntry?.destination?.route
-
     NavHost(
         navController = navController,
         startDestination = NavRoutes.SplashScreen.route
     ) {
-        composable(NavRoutes.SplashScreen.route) {
+        kusitmsComposableWithAnimation(NavRoutes.SplashScreen.route) {
             SplashScreen(navController)
         }
-
-        composable(NavRoutes.OpenScreen.route) {
+        kusitmsComposableWithAnimation(NavRoutes.OpenScreen.route) {
         }
-
-        composable(
-            NavRoutes.SignInScreen.route,
-            enterTransition = {
-                slideIntoContainer(
-                    towards = AnimatedContentTransitionScope.SlideDirection.Companion.Left,
-                    animationSpec = tween(500)
-                )
-            },
-            exitTransition = {
-                slideOutOfContainer(
-                    towards = AnimatedContentTransitionScope.SlideDirection.Companion.Right,
-                    animationSpec = tween(500)
-                )
-            }
+        kusitmsComposableWithAnimation(
+            NavRoutes.SignInScreen.route
         ) {
             SignInScreen(navController, SignInViewModel())
         }
-
-
-        composable(
-            NavRoutes.LogInScreen.route,
-            enterTransition = {
-                slideIntoContainer(
-                    towards = AnimatedContentTransitionScope.SlideDirection.Companion.Left,
-                    animationSpec = tween(700)
-                )
-            },
-            exitTransition = {
-                slideOutOfContainer(
-                    towards = AnimatedContentTransitionScope.SlideDirection.Companion.Right,
-                    animationSpec = tween(700)
-                )
-            }
+        kusitmsComposableWithAnimation(
+            NavRoutes.SignInScreen2.route
+        ) {
+            SignInScreen2(navController)
+        }
+        kusitmsComposableWithAnimation(
+            NavRoutes.SignInScreen3.route
+        ) {
+            SignInScreen3(navController)
+        }
+        kusitmsComposableWithAnimation(
+            NavRoutes.LogInScreen.route
         ) {
             LoginScreen(navController)
         }
     }
 }
-
-
+fun NavGraphBuilder.kusitmsComposableWithAnimation(
+    route: String,
+    arguments: List<NamedNavArgument> = emptyList(),
+    deepLinks: List<NavDeepLink> = emptyList(),
+    enterTransition: (@JvmSuppressWildcards
+    AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition?)? = {
+        slideIntoContainer(
+            towards = AnimatedContentTransitionScope.SlideDirection.Companion.Left,
+            animationSpec = tween(500)
+        )
+    },
+    exitTransition: (@JvmSuppressWildcards
+    AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition?)? = {
+        slideOutOfContainer(
+            towards = AnimatedContentTransitionScope.SlideDirection.Companion.Right,
+            animationSpec = tween(700)
+        )
+    },
+    popEnterTransition: (@JvmSuppressWildcards
+    AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition?)? =
+        enterTransition,
+    popExitTransition: (@JvmSuppressWildcards
+    AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition?)? =
+        exitTransition,
+    content: @Composable AnimatedContentScope.(NavBackStackEntry) -> Unit
+) {
+    composable(
+        route,
+        arguments,
+        deepLinks,
+        enterTransition,
+        exitTransition,
+        popEnterTransition,
+        popExitTransition,
+        content
+    )
+}

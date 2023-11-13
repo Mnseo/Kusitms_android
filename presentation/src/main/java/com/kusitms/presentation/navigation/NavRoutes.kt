@@ -17,6 +17,8 @@ sealed class NavRoutes(val route: String)
     object LoginMember: NavRoutes("loginMember")
 
     object SignInScreen: NavRoutes("signin")
+    object SignInScreen2 : NavRoutes("signin2")
+    object SignInScreen3 : NavRoutes("signin3")
 
     object Home: NavRoutes("Home")
     object Setting: NavRoutes("Setting")
@@ -35,7 +37,7 @@ sealed class LoginNavRoutes(val route: String)
 //SignIn Route
 sealed class SignInNavRoutes(val route: String)
 {
-    object SignIn1 : NavRoutes("signin1")
-    object SignIn2 : NavRoutes("signin2")
-    object SignIn3 : NavRoutes("signin3")
+    object SignInScreen1 : NavRoutes("signin1")
+    object SignInScreen2 : NavRoutes("signin2")
+    object SignInScreen3 : NavRoutes("signin3")
 }
