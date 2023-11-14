@@ -4,11 +4,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 class FindPwViewModel: ViewModel() {
-    val id = MutableLiveData("")
+    val pw = MutableLiveData("")
     val isValid = MutableLiveData(false)
 
     init {
-        id.observeForever {
+        pw.observeForever {
             isValid.value = it.isNotEmpty()
         }
     }

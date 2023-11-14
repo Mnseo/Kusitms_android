@@ -26,20 +26,21 @@ fun FindPwPwInput(
         verticalArrangement = Arrangement.Top
     ) {
         val isError = pw!="example"
+
         //id Input
         Text(
-            text= stringResource(id = R.string.find_pw_caption1),
+            text= stringResource(id = R.string.find_pw_caption_email),
             style = KusitmsTypo.current.Caption1,
             color = KusitmsColorPalette.current.Grey400
         )
         Spacer(modifier = Modifier.height(4.dp))
-        KusitmsInputField(text = R.string.login_manager_id_placeholder, value = pw, onValueChange = onPwChange, isError = isError)
+        KusitmsInputField(text = R.string.find_pw_placeholder_email, value = pw, onValueChange = onPwChange, isError = isError)
         Spacer(modifier = Modifier.height(24.dp))
 
         //id 검증
         if(isError) {
             Text(
-                text = stringResource(id = R.string.find_pw_validation1),
+                text = stringResource(id = R.string.find_pw_validation_email),
                 style = KusitmsTypo.current.Text_Medium,
                 color = KusitmsColorPalette.current.Sub2
             )
