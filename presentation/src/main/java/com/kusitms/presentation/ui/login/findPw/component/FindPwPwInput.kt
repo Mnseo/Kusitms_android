@@ -14,9 +14,9 @@ import com.kusitms.presentation.common.ui.theme.KusitmsTypo
 import com.kusitms.presentation.ui.signIn.KusitmsInputField
 
 @Composable
-fun FindPwPwInput(
-    pw:String,
-    onPwChange: (String) -> Unit,
+fun FindPwEmailInput(
+    email:String,
+    onEmailChange: (String) -> Unit,
 ) {
 
     Column(modifier = Modifier
@@ -25,7 +25,7 @@ fun FindPwPwInput(
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.Top
     ) {
-        val isError = pw!="example"
+        val isError = email!="example"
 
         //id Input
         Text(
@@ -34,7 +34,7 @@ fun FindPwPwInput(
             color = KusitmsColorPalette.current.Grey400
         )
         Spacer(modifier = Modifier.height(4.dp))
-        KusitmsInputField(text = R.string.find_pw_placeholder_email, value = pw, onValueChange = onPwChange, isError = isError)
+        KusitmsInputField(text = R.string.find_pw_placeholder_email, value = email, onValueChange = onEmailChange, isError = isError)
         Spacer(modifier = Modifier.height(24.dp))
 
         //id 검증
@@ -53,5 +53,5 @@ fun FindPwPwInput(
 @Composable
 fun PreviewPw() {
     var example by remember { mutableStateOf("examples") }
-    FindPwPwInput(pw = example, onPwChange = {newValue->example =example} )
+    FindPwEmailInput(email = example, onEmailChange = { newValue->example =example} )
 }

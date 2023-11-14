@@ -21,7 +21,8 @@ sealed class NavRoutes(val route: String)
     object SignInScreen3 : NavRoutes("signin3")
 
     object FindPwScreen1 : NavRoutes("findpw1")
-    object FindPwScreen2 : NavRoutes("findpw1")
+    object FindPwScreen2 : NavRoutes("findpw2")
+    object FindPwScreen3 : NavRoutes("findpw3")
 
 
     object Home: NavRoutes("Home")

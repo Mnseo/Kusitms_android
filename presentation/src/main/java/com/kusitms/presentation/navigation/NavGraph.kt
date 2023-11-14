@@ -17,6 +17,7 @@ import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavDeepLink
 import androidx.navigation.NavGraphBuilder
+import com.kusitms.presentation.ui.login.findPw.FindPwScreen1
 import com.kusitms.presentation.ui.login.member.LoginMemberScreen
 import com.kusitms.presentation.ui.signIn.SignInScreen3
 import com.kusitms.presentation.ui.splash.SplashScreen
@@ -33,37 +34,23 @@ fun MainNavigation() {
         kusitmsComposableWithAnimation(NavRoutes.SplashScreen.route) {
             SplashScreen(navController)
         }
-        kusitmsComposableWithAnimation(NavRoutes.OpenScreen.route) {
-        }
-        kusitmsComposableWithAnimation(
-            NavRoutes.SignInScreen.route
-        ) {
-            SignInScreen(navController, SignInViewModel())
-        }
 
-        kusitmsComposableWithAnimation(
-            NavRoutes.LoginMemberScreen.route
-        ) {
-            LoginMemberScreen(navController)
-        }
+        //SignInScreen
+        kusitmsComposableWithAnimation(NavRoutes.SignInScreen.route) { SignInScreen(navController, SignInViewModel()) }
+        kusitmsComposableWithAnimation(NavRoutes.SignInScreen2.route) { SignInScreen2(navController) }
+        kusitmsComposableWithAnimation(NavRoutes.SignInScreen3.route) { SignInScreen3(navController) }
 
-        kusitmsComposableWithAnimation(
-            NavRoutes.SignInScreen2.route
-        ) {
-            SignInScreen2(navController)
-        }
-        kusitmsComposableWithAnimation(
-            NavRoutes.SignInScreen3.route
-        ) {
-            SignInScreen3(navController)
-        }
-        kusitmsComposableWithAnimation(
-            NavRoutes.LogInScreen.route
-        ) {
-            LoginScreen(navController)
-        }
+        //LoginScreen
+        kusitmsComposableWithAnimation(NavRoutes.LoginMemberScreen.route) { LoginMemberScreen(navController) }
+        kusitmsComposableWithAnimation(NavRoutes.LogInScreen.route) { LoginScreen(navController) }
+
+        //FindPwScreen
+        kusitmsComposableWithAnimation(NavRoutes.FindPwScreen1.route) { FindPwScreen1(navController)}
+
     }
 }
+
+//NavGraph Builder Function
 fun NavGraphBuilder.kusitmsComposableWithAnimation(
     route: String,
     arguments: List<NamedNavArgument> = emptyList(),
@@ -90,15 +77,14 @@ fun NavGraphBuilder.kusitmsComposableWithAnimation(
         exitTransition,
     content: @Composable AnimatedContentScope.(NavBackStackEntry) -> Unit
 ) {
-        composable(
-            route,
-            arguments,
-            deepLinks,
-            enterTransition,
-            exitTransition,
-            popEnterTransition,
-            popExitTransition,
-            content
-        )
-
+    composable(
+        route,
+        arguments,
+        deepLinks,
+        enterTransition,
+        exitTransition,
+        popEnterTransition,
+        popExitTransition,
+        content
+    )
 }
