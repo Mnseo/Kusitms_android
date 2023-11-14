@@ -21,7 +21,7 @@ import com.kusitms.presentation.model.login.findPw.FindPwViewModel
 @Composable
 fun FindPwScreen1(navController:NavHostController) {
     val viewModel: FindPwViewModel = viewModel()
-    val pw by viewModel.pw.observeAsState("")
+    val pw by viewModel.email.observeAsState("")
     val isValid by viewModel.isValid.observeAsState(false)
 
     KusitmsScaffoldNonScroll(
@@ -29,7 +29,7 @@ fun FindPwScreen1(navController:NavHostController) {
         navController = navController
     ) {
         FindPw1Column(pw, isValid,
-            onIdChange = {viewModel.pw.value = it},
+            onIdChange = {viewModel.email.value = it},
             navController = navController
         )
     }
