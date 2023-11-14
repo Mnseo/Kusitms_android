@@ -11,18 +11,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.kusitms.presentation.R
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
+import com.kusitms.presentation.navigation.NavRoutes
 
 @Composable
-fun FindPwBtn1(isValid: Boolean) {
+fun FindPwBtn1(isValid: Boolean, navController:NavHostController) {
     Button(
         modifier = Modifier
             .fillMaxWidth()
             .height(56.dp),
         onClick = {
-            Log.d("Click", "go to SignIn")
+            navController.navigate(NavRoutes.FindPwScreen2.route)
         },
         colors = ButtonDefaults.buttonColors(containerColor = if (isValid) KusitmsColorPalette.current.Main500 else KusitmsColorPalette.current.Grey500)
         ,

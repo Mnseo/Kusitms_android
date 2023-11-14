@@ -10,6 +10,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.kusitms.presentation.R
 import com.kusitms.presentation.common.theme.KusitmsScaffoldNonScroll
@@ -18,23 +19,24 @@ import com.kusitms.presentation.model.login.findPw.FindPwViewModel
 
 
 @Composable
-fun FindPwScreen1() {
+fun FindPwScreen1(navController:NavHostController) {
     val viewModel: FindPwViewModel = viewModel()
     val pw by viewModel.pw.observeAsState("")
     val isValid by viewModel.isValid.observeAsState(false)
 
     KusitmsScaffoldNonScroll(
         topbarText = stringResource(id = R.string.find_pw_topbar),
-        navController = rememberNavController()
+        navController = navController
     ) {
         FindPw1Column(pw, isValid,
-            onIdChange = {viewModel.pw.value = it}
+            onIdChange = {viewModel.pw.value = it},
+            navController = navController
         )
     }
 }
 
 @Composable
-fun FindPw1Column(id: String, isValid:Boolean, onIdChange: (String) -> Unit) {
+fun FindPw1Column(id: String, isValid:Boolean, onIdChange: (String) -> Unit, navController: NavHostController) {
     var example by remember { mutableStateOf("examples") }
         Column(modifier = Modifier
             .fillMaxSize()
@@ -44,18 +46,16 @@ fun FindPw1Column(id: String, isValid:Boolean, onIdChange: (String) -> Unit) {
             verticalArrangement = Arrangement.Top
         ) {
             Spacer(modifier = Modifier.height(148.dp))
-            FindPwPwInput(pw = id, onPwChange = onIdChange)
+            FindPwEmailInput(email = id, onEmailChange = onIdChange)
             Spacer(modifier = Modifier.weight(1f))
-            FindPwBtn1(isValid)
+            FindPwBtn1(isValid, navController)
             Spacer(modifier = Modifier.height(24.dp))
         }
 }
 
 
-
-
 @Preview
 @Composable
 fun PreviewFindPw1() {
-    FindPwScreen1()
+    FindPwScreen1(rememberNavController())
 }

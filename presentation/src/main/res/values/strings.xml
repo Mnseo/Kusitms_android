@@ -54,7 +54,7 @@
     <string name="find_pw_caption2">새 비밀번호</string>
     <string name="find_pw_caption3">새 비밀번호 확인</string>
 
-    <string name="find_pw_placeholder_email">현재 비밀번호를 입력해주세요</string>
+    <string name="find_pw_placeholder_email">이메일을 입력해주세요.</string>
     <string name="find_pw_placeholder1">현재 비밀번호를 입력해주세요</string>
     <string name="find_pw_placeholder2">영문,숫자,특수문자 포함 8자 이상</string>
     <string name="find_pw_placeholder3">비밀번호를 입력해주세요</string>
