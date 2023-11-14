@@ -14,7 +14,10 @@ import com.kusitms.presentation.R
 import com.kusitms.presentation.common.theme.KusitmsScaffoldNonScroll
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
+import com.kusitms.presentation.model.login.findPw.FindPwViewModel
 import com.kusitms.presentation.navigation.NavRoutes
+import com.kusitms.presentation.ui.login.findPw.component.FindPw2CodeInput
+import com.kusitms.presentation.ui.login.findPw.component.FindPwEmailComval
 import com.kusitms.presentation.ui.signIn.KusitmsInputField
 
 
@@ -37,6 +40,9 @@ fun FindPw2Column() {
         horizontalAlignment =  Alignment.Start,
         verticalArrangement = Arrangement.Top
     ) {
+        Spacer(modifier = Modifier.height(176.5.dp))
+        FindPwEmailComval(text = R.string.find_pw_caption_email, validStr = FindPwViewModel().email.toString())
+        Spacer(modifier = Modifier.height(24.dp))
 
     }
 }
