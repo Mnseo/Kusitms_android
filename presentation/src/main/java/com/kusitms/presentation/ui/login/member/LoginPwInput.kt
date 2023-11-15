@@ -57,7 +57,8 @@ fun LoginMemberPwInput(
                 IconButton(onClick = { onValueChange("") }) {
                     Icon(
                         imageVector = xIcon.vector,
-                        contentDescription = "Clear Text"
+                        contentDescription = "Clear Text",
+                        tint = Color.Unspecified
                     )
 
                 }

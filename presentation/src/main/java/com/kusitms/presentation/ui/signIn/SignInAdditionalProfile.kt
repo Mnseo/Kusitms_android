@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -21,13 +20,15 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.kusitms.presentation.R
+import com.kusitms.presentation.common.ui.ButtonRow
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
+import com.kusitms.presentation.navigation.NavRoutes
 import com.kusitms.presentation.ui.ImageVector.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SignInScreen2(navController: NavHostController) {
+fun SignInAdditionalProfile(navController: NavHostController) {
     val scrollState = rememberScrollState()
     Scaffold(
         topBar = {
@@ -42,7 +43,7 @@ fun SignInScreen2(navController: NavHostController) {
                     )
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = KusitmsColorPalette.current.Grey800,
+                    containerColor = KusitmsColorPalette.current.Grey900,
                     titleContentColor = KusitmsColorPalette.current.Grey100,
                     navigationIconContentColor = KusitmsColorPalette.current.Grey400
                 ),
@@ -78,7 +79,7 @@ fun SignIn2Member(navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(KusitmsColorPalette.current.Grey800),
+            .background(KusitmsColorPalette.current.Grey900),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.Top)
     ) {
@@ -89,8 +90,8 @@ fun SignIn2Member(navController: NavController) {
         Spacer(modifier = Modifier.height(4.dp))
         LinkColumn()
         Spacer(modifier = Modifier.weight(1f))
-//        ButtonRow("이전으로", "가입완료", navController, KusitmsColorPalette.current.Grey400,KusitmsColorPalette.current.Main500,onNextClick = { navController.navigate(
-//            NavRoutes.SignInScreen2.route)})
+        ButtonRow("이전으로", "가입완료", navController, KusitmsColorPalette.current.Grey600,KusitmsColorPalette.current.Main500,
+            onNextClick = { navController.navigate(NavRoutes.SignInProfileComplete.route)})
     }
 }
 
@@ -119,7 +120,7 @@ fun Title2Column() {
         modifier = Modifier
             .fillMaxWidth()
             .padding(20.dp)
-            .background(KusitmsColorPalette.current.Black)
+            .background(KusitmsColorPalette.current.Grey900)
             .height(109.dp),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.Start
@@ -143,7 +144,7 @@ fun TextColumn() {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(KusitmsColorPalette.current.Black)
+            .background(KusitmsColorPalette.current.Grey900)
             .height(109.dp),
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.Top
@@ -160,7 +161,7 @@ fun introColumn() {
         modifier = Modifier
             .fillMaxWidth()
             .padding(20.dp)
-            .background(KusitmsColorPalette.current.Black)
+            .background(KusitmsColorPalette.current.Grey900)
             .height(186.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterVertically),
         horizontalAlignment = Alignment.Start,
@@ -215,8 +216,8 @@ fun LinkColumn() {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(KusitmsColorPalette.current.Black)
-            .padding(start = 20.dp, top = 0.dp, end = 20.dp, bottom = 0.dp),
+            .padding(20.dp)
+            .background(KusitmsColorPalette.current.Grey900),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Row(
@@ -248,10 +249,9 @@ fun LinkRow1(currentLength: MutableState<Int>, maxLength: Int) {
             .width(125.dp)
             .height(36.dp)
             .background(
-                color = KusitmsColorPalette.current.Black,
+                color = KusitmsColorPalette.current.Grey900,
                 shape = RoundedCornerShape(size = 8.dp)
-            )
-            .padding(start = 12.dp, top = 0.dp, end = 0.dp, bottom = 8.dp),
+            ),
         horizontalArrangement = Arrangement.spacedBy(4.dp, Alignment.CenterHorizontally),
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -276,10 +276,9 @@ fun LinkRow2() {
             .fillMaxWidth()
             .height(48.dp)
             .background(
-                color = KusitmsColorPalette.current.Black,
+                color = KusitmsColorPalette.current.Grey700,
                 shape = RoundedCornerShape(size = 8.dp)
-            )
-            .padding(start = 12.dp, top = 8.dp, end = 12.dp, bottom = 8.dp),
+            ),
         horizontalArrangement = Arrangement.spacedBy(30.dp, Alignment.Start),
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -290,5 +289,5 @@ fun LinkRow2() {
 @Preview
 @Composable
 fun example2() {
-    SignInScreen2(navController = rememberNavController())
+    SignInAdditionalProfile(navController = rememberNavController())
 }

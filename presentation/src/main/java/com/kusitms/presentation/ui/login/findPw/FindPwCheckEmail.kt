@@ -19,7 +19,7 @@ import com.kusitms.presentation.model.login.findPw.FindPwViewModel
 
 
 @Composable
-fun FindPwScreen1(navController:NavHostController) {
+fun FindPwCheckEmail(navController:NavHostController) {
     val viewModel: FindPwViewModel = viewModel()
     val email by viewModel.email.observeAsState("")
     val isValid by viewModel.isValid.observeAsState(false)
@@ -57,5 +57,5 @@ fun FindPw1Column(id: String, isValid:Boolean, onIdChange: (String) -> Unit, nav
 @Preview
 @Composable
 fun PreviewFindPw1() {
-    FindPwScreen1(rememberNavController())
+    FindPwCheckEmail(rememberNavController())
 }

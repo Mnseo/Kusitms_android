@@ -43,7 +43,7 @@ fun ButtonRow(
             colors = ButtonDefaults.buttonColors(containerColor = color1),
             shape = RoundedCornerShape(size = 12.dp)
         ) {
-            Text(text = text1, style = KusitmsTypo.current.Text_Semibold, color = KusitmsColorPalette.current.Grey400)
+            Text(text = text1, style = KusitmsTypo.current.Text_Semibold, color = KusitmsColorPalette.current.Grey100)
         }
 
         Button(

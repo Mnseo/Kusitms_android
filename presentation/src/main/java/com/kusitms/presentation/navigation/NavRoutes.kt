@@ -10,22 +10,21 @@ import androidx.compose.runtime.Composable
 sealed class NavRoutes(val route: String)
 {
     object SplashScreen: NavRoutes("splash")
-    object OpenScreen: NavRoutes("open")
     object LogInScreen: NavRoutes("login")
 
     object LoginNonMember: NavRoutes("loginNonMember")
     object LoginMemberScreen: NavRoutes("loginMember")
 
-    object SignInScreen: NavRoutes("signin")
-    object SignInScreen2 : NavRoutes("signin2")
-    object SignInScreen3 : NavRoutes("signin3")
+    object SignInDefault: NavRoutes("signInDefault")
+    object SignInAdditionalProfile : NavRoutes("signInAdditionalProfile")
+    object SignInProfileComplete: NavRoutes("signInProfileComplete")
 
-    object FindPwScreen1 : NavRoutes("findpw1")
-    object FindPwScreen2 : NavRoutes("findpw2")
-    object FindPwScreen3 : NavRoutes("findpw3")
+    object FindPwCheckEmail : NavRoutes("findPwCheckEmail")
+    object FindPwCodeValidation : NavRoutes("findPwCodeValidation")
+    object FindPwSetNewPw : NavRoutes("findPwSetNewPW")
 
 
-    object Home: NavRoutes("Home")
+    object HomeScreen: NavRoutes("Home")
     object Setting: NavRoutes("Setting")
 
 }

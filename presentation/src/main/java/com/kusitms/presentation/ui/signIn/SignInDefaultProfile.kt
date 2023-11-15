@@ -8,7 +8,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ScaffoldState
-import androidx.compose.material.SnackbarDuration
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -36,14 +35,13 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SignInScreen(navController: NavHostController, viewModel: SignInViewModel) {
+fun SignInDefaultProfile(navController: NavHostController, viewModel: SignInViewModel) {
     val major by viewModel.major.observeAsState("")
     val email by viewModel.email.observeAsState("")
     val phoneNum by viewModel.phoneNum.observeAsState("")
     val scrollState = rememberScrollState()
     val scope = rememberCoroutineScope()
     val scaffoldState = rememberScaffoldState()
-
     Scaffold(
         topBar = {
             TopAppBar(
@@ -57,7 +55,7 @@ fun SignInScreen(navController: NavHostController, viewModel: SignInViewModel) {
                     )
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = KusitmsColorPalette.current.Grey800,
+                    containerColor = KusitmsColorPalette.current.Grey900,
                     titleContentColor = KusitmsColorPalette.current.Grey100,
                     navigationIconContentColor = KusitmsColorPalette.current.Grey400
                 ),
@@ -107,7 +105,7 @@ fun SignInMember1(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(KusitmsColorPalette.current.Grey800),
+            .background(KusitmsColorPalette.current.Grey900),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.Top)
     ) {
@@ -115,7 +113,7 @@ fun SignInMember1(
         TitleColumn(major = major, email = email, phoneNum = phoneNum, onMajorChange = onMajorChange, onEmailChange=onEmailChange, onPhoneNumChange= onPhoneNumChange)
 
         ButtonRowSignIn1(text1 = "이전으로", text2 = "다음으로", navController = navController, KusitmsColorPalette.current.Grey600, KusitmsColorPalette.current.Grey600,
-            onNextClick = { navController.navigate(NavRoutes.LoginMemberScreen.route)}
+            onNextClick = { navController.navigate(NavRoutes.SignInAdditionalProfile.route)}
         )
     }
 
@@ -134,7 +132,7 @@ fun TitleColumn(
         modifier = Modifier
             .fillMaxWidth()
             .padding(20.dp)
-            .background(KusitmsColorPalette.current.Grey800)
+            .background(KusitmsColorPalette.current.Grey900)
             .height(840.dp),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.Start
@@ -229,7 +227,7 @@ fun TextColumn1() {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(KusitmsColorPalette.current.Black)
+            .background(KusitmsColorPalette.current.Grey900)
             .height(64.dp),
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.Top
@@ -299,5 +297,5 @@ fun ShowPartSnack(scaffoldState: ScaffoldState) {
 @Preview
 @Composable
 fun SignIn1Preview() {
-    SignInScreen(navController = rememberNavController(), viewModel = SignInViewModel())
+    SignInDefaultProfile(navController = rememberNavController(), viewModel = SignInViewModel())
 }

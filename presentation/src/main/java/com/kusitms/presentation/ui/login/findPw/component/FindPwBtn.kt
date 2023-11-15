@@ -23,7 +23,7 @@ fun FindPwBtn(@StringRes text:Int, isValid: Boolean, navController:NavHostContro
             .fillMaxWidth()
             .height(56.dp),
         onClick = {
-            navController.navigate(NavRoutes.FindPwScreen2.route)
+            navController.navigate(NavRoutes.FindPwCodeValidation.route)
         },
         colors = ButtonDefaults.buttonColors(containerColor = if (isValid) KusitmsColorPalette.current.Main500 else KusitmsColorPalette.current.Grey500)
         ,

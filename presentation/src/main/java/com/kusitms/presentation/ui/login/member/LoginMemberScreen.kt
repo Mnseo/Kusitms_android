@@ -40,7 +40,7 @@ fun LoginMemberScreen(
 fun LoginMemberColumn(navController: NavHostController) {
     Column(modifier = Modifier
         .fillMaxSize()
-        .background(color = KusitmsColorPalette.current.Grey800)
+        .background(color = KusitmsColorPalette.current.Grey900)
         .padding(horizontal = 20.dp),
         horizontalAlignment =  Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
@@ -94,7 +94,7 @@ fun LoginMemberColumn2(navController: NavHostController) {
             modifier = Modifier
                 .padding(start = 20.dp, top = 16.dp, bottom = 16.dp, end = 20.dp)
                 .clickable {
-                    navController.navigate(NavRoutes.FindPwScreen1.route)
+                    navController.navigate(NavRoutes.FindPwCheckEmail.route)
                 }
         )
         Button(
@@ -102,7 +102,7 @@ fun LoginMemberColumn2(navController: NavHostController) {
                 .fillMaxWidth()
                 .height(56.dp),
             onClick = {
-                navController.navigate(NavRoutes.Home.route)
+                navController.navigate(NavRoutes.SignInDefault.route)
             },
             colors = ButtonDefaults.buttonColors(containerColor = KusitmsColorPalette.current.Main500),
             shape = RoundedCornerShape(size = 16.dp)

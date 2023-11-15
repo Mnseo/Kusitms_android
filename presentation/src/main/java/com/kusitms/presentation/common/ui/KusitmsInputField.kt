@@ -9,6 +9,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -53,23 +54,15 @@ fun KusitmsInputField(
             trailingIcon = {
                 if(isFocused && value.isNotEmpty()) {
                     IconButton(onClick = { onValueChange("") }) {
-                        Icon(
-                            imageVector = xIcon.vector,
-                            contentDescription = "Clear Text"
-                        )
-
+                        Icon(imageVector = xIcon.vector, contentDescription = "Clear Text", tint = Color.Unspecified)
                     }
                 }
                 if(isError && !isFocused) {
                     IconButton(onClick = { }) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_finpw_warning),
-                            contentDescription = "warning")
-
+                        Icon(painter = painterResource(id = R.drawable.ic_finpw_warning), contentDescription = "warning", tint = Color.Unspecified)
                     }
                 }
             }
-
         )
     }
 
