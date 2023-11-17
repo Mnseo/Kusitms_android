@@ -22,6 +22,17 @@ class SignInViewModel:ViewModel() {
     private val _favoriteCategory = MutableStateFlow<List<String>?>(null)
     val favoriteCategory: StateFlow<List<String>?> = _favoriteCategory
 
+    private val _name = MutableStateFlow("이채연")
+    val name: StateFlow<String> = _name
+
+    private val _phoneNum = MutableStateFlow("010-1234-1234")
+    val phoneNum: StateFlow<String> = _phoneNum
+
+    private val _email = MutableStateFlow("kusitms@gmail.com")
+    val email: StateFlow<String> = _email
+
+
+
     fun updateMajor(newMajor: String) {
         _major.value = newMajor
     }
@@ -32,6 +43,18 @@ class SignInViewModel:ViewModel() {
 
     fun updateFavoriteCategory(categories: List<String>) {
         _favoriteCategory.value = categories
+    }
+
+    fun updateName(newName: String) {
+        _name.value = newName
+    }
+
+    fun updatePhoneNum(newPhoneNum: String) {
+        _phoneNum.value = newPhoneNum
+    }
+
+    fun updateEmail(newEmail: String) {
+        _email.value = newEmail
     }
 
 

@@ -89,7 +89,6 @@ fun ShowPartSnack(
     items: List<String>
 ) {
     val scope = rememberCoroutineScope()
-
     fun showPartSnack(item: String) {
         scope.launch {
             val snackbarResult = scaffoldState.snackbarHostState.showSnackbar(

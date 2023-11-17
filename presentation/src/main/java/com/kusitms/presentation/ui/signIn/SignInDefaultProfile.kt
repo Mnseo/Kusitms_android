@@ -23,6 +23,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.kusitms.presentation.R
+import com.kusitms.presentation.common.theme.KusitmsScaffoldNonScroll
 import com.kusitms.presentation.common.ui.KusitmsSnackField
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
@@ -31,76 +32,32 @@ import com.kusitms.presentation.navigation.NavRoutes
 import com.kusitms.presentation.ui.ImageVector.RightArrow
 import com.kusitms.presentation.ui.ImageVector.StudyIcon
 import com.kusitms.presentation.ui.signIn.KusitmsInputField
+import com.kusitms.presentation.ui.signIn.SignInFixedInput
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SignInDefaultProfile(navController: NavHostController, viewModel: SignInViewModel) {
-    val major by viewModel.major.observeAsState("")
-    val email by viewModel.email.observeAsState("")
-    val phoneNum by viewModel.phoneNum.observeAsState("")
+fun SignInDefaultProfile(viewModel: SignInViewModel, navController: NavHostController) {
+    val major by viewModel.major.collectAsState()
     val scrollState = rememberScrollState()
     val scope = rememberCoroutineScope()
     val scaffoldState = rememberScaffoldState()
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        "프로필 설정",
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        style = KusitmsTypo.current.SubTitle2_Semibold,
-                        color = KusitmsColorPalette.current.Grey100
-                    )
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = KusitmsColorPalette.current.Grey900,
-                    titleContentColor = KusitmsColorPalette.current.Grey100,
-                    navigationIconContentColor = KusitmsColorPalette.current.Grey400
-                ),
-                navigationIcon = {
-                    IconButton(
-                        onClick = { navController.popBackStack() },
-
-                    ) {
-                        Icon(
-                            imageVector = RightArrow.vector,
-                            contentDescription = "Localized description",
-                        )
-                    }
-                }
-            )
-        },
-        content = { innerPadding ->
-            Box(
-                modifier= Modifier
-                    .padding(innerPadding)
-                    .verticalScroll(scrollState)
-            ) {
-                SignInMember1(
-                    navController = navController,
-                    major = major,
-                    email = email,
-                    phoneNum = phoneNum,
-                    onMajorChange = viewModel::updateMajor,
-                    onEmailChange = viewModel::updateEmail,
-                    onPhoneNumChange = viewModel::updatePhoneNum
-                )
-            }
-        }
-    )
+    KusitmsScaffoldNonScroll(topbarText = "프로필 설정", navController = navController) {
+        SignInMember1(
+            navController = navController,
+            viewModel = viewModel,
+            major = major,
+            onMajorChange = viewModel::updateMajor,
+        )
+    }
 }
 
 @Composable
 fun SignInMember1(
     navController: NavHostController,
+    viewModel: SignInViewModel,
     major: String,
-    email: String,
-    phoneNum: String,
     onMajorChange: (String) -> Unit,
-    onEmailChange: (String) -> Unit,
-    onPhoneNumChange: (String) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -110,7 +67,7 @@ fun SignInMember1(
         verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.Top)
     ) {
 
-        TitleColumn(major = major, email = email, phoneNum = phoneNum, onMajorChange = onMajorChange, onEmailChange=onEmailChange, onPhoneNumChange= onPhoneNumChange)
+        TitleColumn(major = major, onMajorChange = onMajorChange, viewModel = viewModel)
 
         ButtonRowSignIn1(text1 = "이전으로", text2 = "다음으로", navController = navController, KusitmsColorPalette.current.Grey600, KusitmsColorPalette.current.Grey600,
             onNextClick = { navController.navigate(NavRoutes.SignInAdditionalProfile.route)}
@@ -122,12 +79,13 @@ fun SignInMember1(
 @Composable
 fun TitleColumn(
     major: String,
-    email: String,
-    phoneNum: String,
     onMajorChange: (String) -> Unit,
-    onEmailChange: (String) -> Unit,
-    onPhoneNumChange: (String) -> Unit
+    viewModel: SignInViewModel
 ) {
+    val email by viewModel.email.collectAsState()
+    val phoneNum by viewModel.phoneNum.collectAsState()
+    val name by viewModel.name.collectAsState()
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -154,22 +112,7 @@ fun TitleColumn(
         Spacer(modifier = Modifier.height(28.dp))
         Text(text = stringResource(id = R.string.signin_member_caption1_1), style = KusitmsTypo.current.Caption1, color = KusitmsColorPalette.current.Grey400)
         Spacer(modifier = Modifier.height(5.dp))
-        Box(modifier = Modifier
-            .fillMaxWidth()
-            .height(56.dp)
-            .background(
-                color = KusitmsColorPalette.current.Grey500,
-                shape = RoundedCornerShape(16.dp)
-            ),
-            contentAlignment = Alignment.CenterStart
-        ) {
-            Text(
-                text = "이채연",
-                style = KusitmsTypo.current.Text_Medium,
-                color = KusitmsColorPalette.current.Grey400,
-                modifier = Modifier.padding(start = 20.dp, top = 16.dp, bottom = 16.dp)
-            )
-        }
+        SignInFixedInput(modelValue = name)
         Spacer(modifier = Modifier.height(20.dp))
 
         //전공
@@ -203,21 +146,20 @@ fun TitleColumn(
         Spacer(modifier = Modifier.height(5.dp))
         KusitmsSnackField(text = R.string.signin_member_hint1_3, onSnackClick = {})
 
-        //연락처
+
         Spacer(modifier = Modifier.height(40.dp))
         Text(text = stringResource(id = R.string.signin_member_title2), style = KusitmsTypo.current.SubTitle2_Semibold, color = KusitmsColorPalette.current.Grey300)
-
         //이메일
         Spacer(modifier = Modifier.height(24.dp))
         Text(text = stringResource(id = R.string.signin_member_caption1_5), style = KusitmsTypo.current.Caption1, color = KusitmsColorPalette.current.Grey400)
         Spacer(modifier = Modifier.height(5.dp))
-        KusitmsInputField(text = R.string.signin_member_hint1_4, value = email, onValueChange = onEmailChange)
+        SignInFixedInput(modelValue = email)
 
         //전화번호
         Spacer(modifier = Modifier.height(20.dp))
         Text(text = stringResource(id = R.string.signin_member_caption1_6), style = KusitmsTypo.current.Caption1, color = KusitmsColorPalette.current.Grey400)
         Spacer(modifier = Modifier.height(5.dp))
-        KusitmsInputField(text = R.string.signin_member_hint1_5, value = phoneNum, onValueChange = onPhoneNumChange)
+        SignInFixedInput(modelValue = phoneNum)
 
     }
 }
