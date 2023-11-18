@@ -7,19 +7,16 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Text
-import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kusitms.presentation.R
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
-import com.kusitms.presentation.model.signIn.LikeCategory
 import com.kusitms.presentation.model.signIn.SignInViewModel
 import com.kusitms.presentation.model.signIn.categories
 import com.kusitms.presentation.ui.ImageVector.xIcon
@@ -83,13 +80,13 @@ fun partRow() {
 }
 
 @Composable
-fun ShowPartSnack(
+fun ShowPartSheet(
     scaffoldState: ScaffoldState,
     viewModel: SignInViewModel,
     items: List<String>
 ) {
     val scope = rememberCoroutineScope()
-    fun showPartSnack(item: String) {
+    fun showPartSheet(item: String) {
         scope.launch {
             val snackbarResult = scaffoldState.snackbarHostState.showSnackbar(
                 message ="Selected: $item",

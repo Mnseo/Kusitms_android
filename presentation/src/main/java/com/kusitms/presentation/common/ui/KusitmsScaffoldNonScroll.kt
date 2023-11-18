@@ -1,9 +1,13 @@
 package com.kusitms.presentation.common.theme
 
 
-import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextDirection.Companion.Content
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.navigation.NavHostController
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
@@ -18,6 +22,7 @@ fun KusitmsScaffoldNonScroll(
     navController:NavHostController? = null,
     content: @Composable () -> Unit
 ) {
+    val scrollState = rememberScrollState()
     Scaffold(
         topBar = {
             TopAppBar(
@@ -31,7 +36,7 @@ fun KusitmsScaffoldNonScroll(
                     )
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = KusitmsColorPalette.current.Grey800,
+                    containerColor = KusitmsColorPalette.current.Grey900,
                     titleContentColor = KusitmsColorPalette.current.Grey100,
                     navigationIconContentColor = KusitmsColorPalette.current.Grey400
                 ),
@@ -39,7 +44,6 @@ fun KusitmsScaffoldNonScroll(
                     if(navController != null) {
                         IconButton(
                             onClick = { navController.popBackStack() },
-
                             ) {
                             Icon(
                                 imageVector = RightArrow.vector,
@@ -50,7 +54,7 @@ fun KusitmsScaffoldNonScroll(
                 }
             )
         },
-        content = {
+        content = { innerPadding ->
             content()
         }
     )

@@ -20,59 +20,21 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.kusitms.presentation.R
+import com.kusitms.presentation.common.theme.KusitmsScaffoldNonScroll
 import com.kusitms.presentation.common.ui.ButtonRow
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
 import com.kusitms.presentation.navigation.NavRoutes
 import com.kusitms.presentation.ui.ImageVector.*
 
-@OptIn(ExperimentalMaterial3Api::class)
+
 @Composable
 fun SignInAdditionalProfile(navController: NavHostController) {
-    val scrollState = rememberScrollState()
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        "프로필 설정",
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        style = KusitmsTypo.current.SubTitle2_Semibold,
-                        color = KusitmsColorPalette.current.Grey100
-                    )
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = KusitmsColorPalette.current.Grey900,
-                    titleContentColor = KusitmsColorPalette.current.Grey100,
-                    navigationIconContentColor = KusitmsColorPalette.current.Grey400
-                ),
-                navigationIcon = {
-                    IconButton(
-                        onClick = { navController.popBackStack() },
-
-                        ) {
-                        Icon(
-                            imageVector = RightArrow.vector,
-                            contentDescription = "Localized description",
-                        )
-                    }
-                }
-            )
-        },
-        content = { innerPadding ->
-            Box(
-                modifier=Modifier
-                    .padding(innerPadding)
-                    .verticalScroll(scrollState)
-            ) {
-                SignIn2Member(
-                    navController = navController
-                )
-            }
-        }
-    )
+    KusitmsScaffoldNonScroll(topbarText = "프로필 설정", navController = navController) {
+        SignIn2Member(navController = navController)
+    }
 }
+
 
 @Composable
 fun SignIn2Member(navController: NavController) {

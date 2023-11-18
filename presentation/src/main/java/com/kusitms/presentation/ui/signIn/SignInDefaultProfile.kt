@@ -35,11 +35,9 @@ import com.kusitms.presentation.ui.signIn.KusitmsInputField
 import com.kusitms.presentation.ui.signIn.SignInFixedInput
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SignInDefaultProfile(viewModel: SignInViewModel, navController: NavHostController) {
     val major by viewModel.major.collectAsState()
-    val scrollState = rememberScrollState()
     val scope = rememberCoroutineScope()
     val scaffoldState = rememberScaffoldState()
     KusitmsScaffoldNonScroll(topbarText = "프로필 설정", navController = navController) {
@@ -59,9 +57,11 @@ fun SignInMember1(
     major: String,
     onMajorChange: (String) -> Unit,
 ) {
+    val scrollState = rememberScrollState()
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .verticalScroll(scrollState)
             .background(KusitmsColorPalette.current.Grey900),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.Top)
@@ -233,8 +233,6 @@ fun ShowPartSnack(scaffoldState: ScaffoldState) {
         scaffoldState.snackbarHostState.currentSnackbarData?.dismiss()
     }
 }
-
-
 
 @Preview
 @Composable
