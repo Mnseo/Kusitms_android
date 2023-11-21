@@ -11,7 +11,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -19,6 +18,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import coil.ImageLoader
 import coil.compose.rememberAsyncImagePainter
@@ -26,10 +26,11 @@ import coil.decode.SvgDecoder
 import com.kusitms.presentation.R
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
+import com.kusitms.presentation.navigation.NavRoutes
 import com.kusitms.presentation.navigation.NavRoutes.LoginNonMember.route
 
 @Composable
-fun SignInScreen3(navController: NavController) {
+fun SignInProfileComplete(navController: NavHostController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -40,7 +41,7 @@ fun SignInScreen3(navController: NavController) {
         Spacer(modifier = Modifier.weight(1f))
         SignIn3Card()
         Spacer(modifier = Modifier.weight(1f))
-        btn(color = KusitmsColorPalette.current.Main500, text = stringResource(id = R.string.signin3_btn), navController = rememberNavController())
+        btn(color = KusitmsColorPalette.current.Main500, text = stringResource(id = R.string.signin3_btn), navController = navController)
         Spacer(modifier = Modifier.height(20.dp))
     }
 }
@@ -51,7 +52,7 @@ fun SignIn3Card() {
         modifier = Modifier
             .fillMaxWidth()
             .height(600.dp)
-            .background(KusitmsColorPalette.current.Grey800),
+            .background(KusitmsColorPalette.current.Grey900),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
@@ -136,7 +137,7 @@ fun nameBox(name: String) {
 
 
 @Composable
-fun btn(color: Color, text: String, navController:NavController) {
+fun btn(color: Color, text: String, navController: NavHostController) {
     Button(
         modifier = Modifier
             .fillMaxWidth()
@@ -150,13 +151,7 @@ fun btn(color: Color, text: String, navController:NavController) {
             .background(color = color, shape = RoundedCornerShape(16.dp)),
         colors = ButtonDefaults.buttonColors(containerColor = color), // 여기에서 배경색 지정
         contentPadding = PaddingValues(0.dp),
-        onClick = {
-            navController.navigate(route) {
-                popUpTo(route) {
-                    inclusive = true
-                }
-            }
-        }
+        onClick = { navController.navigate(NavRoutes.HomeScreen.route) }
     ) {
         Text(
             style = KusitmsTypo.current.SubTitle2_Semibold,
@@ -170,5 +165,5 @@ fun btn(color: Color, text: String, navController:NavController) {
 @Preview
 @Composable
 fun example() {
-    SignInScreen3(navController = rememberNavController())
+    SignInProfileComplete(navController = rememberNavController())
 }

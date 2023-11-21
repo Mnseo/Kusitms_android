@@ -19,7 +19,6 @@ import androidx.navigation.NavController
 import com.kusitms.presentation.R
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
-import com.kusitms.presentation.navigation.KusitmsScreens
 import com.kusitms.presentation.navigation.NavRoutes
 import kotlinx.coroutines.delay
 
