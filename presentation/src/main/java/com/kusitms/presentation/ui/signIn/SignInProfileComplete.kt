@@ -151,7 +151,7 @@ fun btn(color: Color, text: String, navController: NavHostController) {
             .background(color = color, shape = RoundedCornerShape(16.dp)),
         colors = ButtonDefaults.buttonColors(containerColor = color), // 여기에서 배경색 지정
         contentPadding = PaddingValues(0.dp),
-        onClick = { navController.navigate(NavRoutes.HomeScreen.route) }
+        onClick = { navController.navigate(NavRoutes.Notice.route) }
     ) {
         Text(
             style = KusitmsTypo.current.SubTitle2_Semibold,
