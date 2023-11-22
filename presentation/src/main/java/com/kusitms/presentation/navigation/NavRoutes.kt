@@ -27,6 +27,8 @@ sealed class NavRoutes(val route: String)
     object HomeScreen: NavRoutes("Home")
     object Setting: NavRoutes("Setting")
 
+    object Notice : NavRoutes("Notice")
+
 }
 
 

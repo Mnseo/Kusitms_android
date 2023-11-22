@@ -21,6 +21,7 @@ import com.kusitms.presentation.ui.login.findPw.FindPwCheckEmail
 import com.kusitms.presentation.ui.login.findPw.FindPwCodeValidation
 import com.kusitms.presentation.ui.login.findPw.FindPwSetNewPw
 import com.kusitms.presentation.ui.login.member.LoginMemberScreen
+import com.kusitms.presentation.ui.notice.NoticeScreen
 import com.kusitms.presentation.ui.signIn.SignInProfileComplete
 import com.kusitms.presentation.ui.splash.SplashScreen
 
@@ -53,6 +54,8 @@ fun MainNavigation() {
 
         //HomeScreen
         kusitmsComposableWithAnimation(NavRoutes.HomeScreen.route) { HomeScreen(navController)}
+
+        kusitmsComposableWithAnimation(NavRoutes.Notice.route) { NoticeScreen() }
 
     }
 }
