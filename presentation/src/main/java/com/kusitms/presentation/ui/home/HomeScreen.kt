@@ -35,7 +35,7 @@ fun HomeScreen(navController: NavHostController) {
 fun HomeColumn() {
     Column(modifier = Modifier
         .fillMaxSize()
-        .background(color = KusitmsColorPalette.current.Grey800)
+        .background(color = KusitmsColorPalette.current.Grey900)
         .padding(horizontal = 20.dp),
         horizontalAlignment =  Alignment.Start,
         verticalArrangement = Arrangement.Top

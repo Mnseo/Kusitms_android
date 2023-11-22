@@ -38,7 +38,7 @@ fun MainNavigation() {
         }
 
         //SignInScreen
-        kusitmsComposableWithAnimation(NavRoutes.SignInDefault.route) { SignInDefaultProfile(navController, SignInViewModel()) }
+        kusitmsComposableWithAnimation(NavRoutes.SignInDefault.route) { SignInDefaultProfile(SignInViewModel(), navController) }
         kusitmsComposableWithAnimation(NavRoutes.SignInAdditionalProfile.route) { SignInAdditionalProfile(navController) }
         kusitmsComposableWithAnimation(NavRoutes.SignInProfileComplete.route) { SignInProfileComplete(navController) }
 
