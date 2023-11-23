@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.*
@@ -35,11 +37,10 @@ import com.kusitms.presentation.ui.signIn.KusitmsInputField
 import com.kusitms.presentation.ui.signIn.SignInFixedInput
 import kotlinx.coroutines.launch
 
+
 @Composable
 fun SignInDefaultProfile(viewModel: SignInViewModel, navController: NavHostController) {
     val major by viewModel.major.collectAsState()
-    val scope = rememberCoroutineScope()
-    val scaffoldState = rememberScaffoldState()
     KusitmsScaffoldNonScroll(topbarText = "프로필 설정", navController = navController) {
         SignInMember1(
             navController = navController,
@@ -73,9 +74,9 @@ fun SignInMember1(
             onNextClick = { navController.navigate(NavRoutes.SignInAdditionalProfile.route)}
         )
     }
-
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TitleColumn(
     major: String,

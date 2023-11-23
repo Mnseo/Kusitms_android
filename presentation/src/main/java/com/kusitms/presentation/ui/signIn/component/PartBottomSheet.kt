@@ -7,6 +7,10 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Text
+import androidx.compose.material3.BottomSheetDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -22,38 +26,40 @@ import com.kusitms.presentation.model.signIn.categories
 import com.kusitms.presentation.ui.ImageVector.xIcon
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun KusitmsPartSnack(viewModel: SignInViewModel) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 24.dp)
-            .background(
-                color = KusitmsColorPalette.current.Grey600,
-                shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp)
-            )
-            .height(260.dp),
-        horizontalAlignment = Alignment.Start,
-        verticalArrangement = Arrangement.Top
-    ) {
-        Spacer(modifier = Modifier.height(24.dp))
-        partSnackTitle()
-        Spacer(modifier = Modifier.height(20.dp))
-        partSelectColumn(viewModel = viewModel)
-    }
+fun PartBottomSheet(viewModel: SignInViewModel) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(vertical = 0.dp)
+                .background(
+                    color = KusitmsColorPalette.current.Grey600,
+                    shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp)
+                ),
+            horizontalAlignment = Alignment.Start,
+            verticalArrangement = Arrangement.Top
+        ) {
+            Spacer(modifier = Modifier.height(24.dp))
+            partSnackTitle()
+            Spacer(modifier = Modifier.height(20.dp))
+            partSelectColumn(viewModel = viewModel)
+        }
+
 }
 
 @Composable
-fun partSelectColumn(viewModel:SignInViewModel) {
+fun partSelectColumn(viewModel: SignInViewModel) {
     val filteredCategories = categories.filter { it.name != "기타" }
     LazyColumn(
         modifier = Modifier
             .padding(horizontal = 24.dp)
     ) {
         items(filteredCategories) { category ->
-            partSelectItem(category = category) { selectedCategory ->
-                viewModel.updateSelectedPart(selectedCategory.name)
-            }
+            partSelectItem(category = category,
+                onClick = { selectedCategory ->
+                viewModel.updateSelectedPart(selectedCategory.name) },
+                viewModel = viewModel)
         }
     }
 }
@@ -72,11 +78,6 @@ fun partSnackTitle() {
         xIcon.drawxIcon()
 
     }
-}
-
-@Composable
-fun partRow() {
-
 }
 
 @Composable
@@ -103,5 +104,5 @@ fun ShowPartSheet(
 @Preview
 @Composable
 fun ExamplePartSnack() {
-    KusitmsPartSnack(viewModel = SignInViewModel())
+    PartBottomSheet(viewModel = SignInViewModel())
 }
