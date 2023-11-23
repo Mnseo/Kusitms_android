@@ -66,12 +66,5 @@ class SignInViewModel:ViewModel() {
         _isAllFieldsValid.value = !(_selectedPart.value.isNullOrBlank() || _favoriteCategory.value.isNullOrEmpty() || _major.value.isNullOrBlank())
     }
 
-    fun showSnackbar() {
-        _snackbarState.value = SnackbarState.Shown
-    }
-
-    fun hideSnackbar() {
-        _snackbarState.value = SnackbarState.Hidden
-    }
 
 }
