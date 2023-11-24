@@ -7,7 +7,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.kusitms.presentation.R
 import com.kusitms.presentation.common.theme.KusitmsScaffoldNonScroll
@@ -15,8 +14,7 @@ import com.kusitms.presentation.common.ui.KusitmsMarginVerticalSpacer
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
 import com.kusitms.presentation.model.signIn.SignInRequestModel
-import com.kusitms.presentation.ui.login.manager.LoginManagerInputColumn
-import com.kusitms.presentation.ui.login.member.LoginMemberPwInput
+
 
 
 @Composable
@@ -65,33 +63,40 @@ fun SignInRequestSubColumn2(viewModel: SignInRequestModel) {
         verticalArrangement = Arrangement.Top
     ) {
         androidx.compose.material3.Text(
-            text= stringResource(id = R.string.signin_request_caption1),
+            text = stringResource(id = R.string.signin_request_caption1),
             style = KusitmsTypo.current.Caption1,
             color = KusitmsColorPalette.current.Grey400
         )
         Spacer(modifier = Modifier.height(4.dp))
-        KusitmsInputField(text = R.string.signin_request_placeholder1, value = email.value, onValueChange = {viewModel.updateEmail(it)})
+        KusitmsInputField(
+            text = R.string.signin_request_placeholder1,
+            value = email.value,
+            onValueChange = { viewModel.updateEmail(it) })
         Spacer(modifier = Modifier.height(24.dp))
 
         androidx.compose.material3.Text(
-            text= stringResource(id = R.string.signin_request_caption2),
+            text = stringResource(id = R.string.signin_request_caption2),
             style = KusitmsTypo.current.Caption1,
             color = KusitmsColorPalette.current.Grey400
         )
         Spacer(modifier = Modifier.height(4.dp))
         KusitmsInputField(text = R.string.signin_request_placeholder2)
         Spacer(modifier = Modifier.height(24.dp))
+    }
 }
 
 
 @Composable
 fun SigInRequestBtn(viewModel: SignInRequestModel) {
-    val buttonColor = if(viewModel.isEmailValid) {
-
+    val emailInputState = viewModel.emailInputState.collectAsState()
+    val buttonColor = when (emailInputState.value) {
+        SignInRequestModel.EmailInputState.DEFAULT -> KusitmsColorPalette.current.Grey300
+        SignInRequestModel.EmailInputState.ENTERED -> KusitmsColorPalette.current.Main500
+        SignInRequestModel.EmailInputState.INVALID -> KusitmsColorPalette.current.Grey300
+        SignInRequestModel.EmailInputState.VALID -> KusitmsColorPalette.current.Main500
     }
 }
 
-}
 
 
 
