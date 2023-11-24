@@ -12,6 +12,17 @@
     <string name="nonMember_banner2">유튜브</string>
     <string name="nonMember_banner3">KUSITMS 네이버 카페</string>
 
+    <!-- SignInRequest -->
+    <string name="signin_request_topbar">회원가입</string>
+    <string name="signin_request_title">큐시즘에 오신걸 환영합니다</string>
+    <string name="signin_request_caption1">이메일</string>
+    <string name="signin_request_caption2">생년월일</string>
+    <string name="signin_request_placeholder1">아이디를 입력해주세요</string>
+    <string name="signin_request_placeholder2">생년월일을 입력해주세요(ex: 990123)</string>
+    <string name="signin_request_warning1">현재 학회원으로 등록되어 있지 않습니다</string>
+    <string name="signin_request_warning2">이미 회원가입을 완료했습니다</string>
+
+
     <!-- LoginScreen-->
     <string name="splash_tv">큐시즘의 또 한번 도약</string>
     <string name="login_top_tv">비전을 가지고 함께 성장하는 학회</string>
