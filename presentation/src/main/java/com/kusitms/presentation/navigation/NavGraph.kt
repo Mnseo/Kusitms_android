@@ -44,7 +44,7 @@ fun MainNavigation() {
         kusitmsComposableWithAnimation(NavRoutes.SignInDefault.route) { SignInDefaultProfile(SignInViewModel(), navController) }
         kusitmsComposableWithAnimation(NavRoutes.SignInAdditionalProfile.route) { SignInAdditionalProfile(navController) }
         kusitmsComposableWithAnimation(NavRoutes.SignInProfileComplete.route) { SignInProfileComplete(navController)}
-        kusitmsComposableWithAnimation(NavRoutes.SignInProfileComplete.route) { SignInRequestScreen(SignInRequestModel(), navController) }
+        kusitmsComposableWithAnimation(NavRoutes.SignInRequest.route) { SignInRequestScreen(SignInRequestModel(), navController) }
 
         //LoginScreen
         kusitmsComposableWithAnimation(NavRoutes.LoginMemberScreen.route) { LoginMemberScreen(navController) }

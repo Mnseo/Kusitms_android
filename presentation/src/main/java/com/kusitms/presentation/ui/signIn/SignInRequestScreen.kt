@@ -4,8 +4,9 @@ package com.kusitms.presentation.ui.signIn
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
+import androidx.compose.material3.Button
 import androidx.compose.material.Text
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -32,7 +33,9 @@ fun SignInRequestScreen(viewModel: SignInRequestModel, navController: NavHostCon
 fun SignInRequestColumn(viewModel: SignInRequestModel, navController: NavHostController) {
     Column(
         modifier = Modifier
-            .fillMaxSize(),
+            .fillMaxSize()
+            .padding(horizontal = 20.dp)
+            .background(color = KusitmsColorPalette.current.Grey900),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -108,12 +111,13 @@ fun SignInRequestBtn(viewModel: SignInRequestModel, onNextClick: () -> Unit) {
     }
     Button(modifier = Modifier
         .fillMaxWidth()
-        .background(color = buttonColor, shape = RoundedCornerShape(16.dp))
         .height(56.dp),
         onClick = {
             onNextClick()
-        }
-    ) {
+        },
+        colors = ButtonDefaults.buttonColors(containerColor = buttonColor),
+        shape = RoundedCornerShape(16.dp)
+        ) {
         androidx.compose.material3.Text(
             text = stringResource(id = R.string.signin_request_btn),
             style = KusitmsTypo.current.Text_Semibold,
