@@ -17,6 +17,7 @@
     <string name="signin_request_title">큐시즘에 오신걸 환영합니다</string>
     <string name="signin_request_caption1">이메일</string>
     <string name="signin_request_caption2">생년월일</string>
+    <string name="signin_request_btn">회원가입하기</string>
     <string name="signin_request_placeholder1">아이디를 입력해주세요</string>
     <string name="signin_request_placeholder2">생년월일을 입력해주세요(ex: 990123)</string>
     <string name="signin_request_warning1">현재 학회원으로 등록되어 있지 않습니다</string>

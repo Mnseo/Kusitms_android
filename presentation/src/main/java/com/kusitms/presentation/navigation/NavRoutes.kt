@@ -18,6 +18,7 @@ sealed class NavRoutes(val route: String)
     object SignInDefault: NavRoutes("signInDefault")
     object SignInAdditionalProfile : NavRoutes("signInAdditionalProfile")
     object SignInProfileComplete: NavRoutes("signInProfileComplete")
+    object SignInRequest: NavRoutes("signInRequest")
 
     object FindPwCheckEmail : NavRoutes("findPwCheckEmail")
     object FindPwCodeValidation : NavRoutes("findPwCodeValidation")

@@ -1,6 +1,10 @@
 package com.kusitms.presentation.ui.signIn
 
+
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -14,18 +18,18 @@ import com.kusitms.presentation.common.ui.KusitmsMarginVerticalSpacer
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
 import com.kusitms.presentation.model.signIn.SignInRequestModel
-
+import com.kusitms.presentation.navigation.NavRoutes
 
 
 @Composable
 fun SignInRequestScreen(viewModel: SignInRequestModel, navController: NavHostController) {
     KusitmsScaffoldNonScroll(topbarText = stringResource(id = R.string.signin_request_topbar), navController = navController) {
-        SignInRequestColumn(viewModel = viewModel)
+        SignInRequestColumn(viewModel = viewModel, navController = navController)
     }
 }
 
 @Composable
-fun SignInRequestColumn(viewModel: SignInRequestModel) {
+fun SignInRequestColumn(viewModel: SignInRequestModel, navController: NavHostController) {
     Column(
         modifier = Modifier
             .fillMaxSize(),
@@ -33,14 +37,13 @@ fun SignInRequestColumn(viewModel: SignInRequestModel) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         KusitmsMarginVerticalSpacer(size = 120)
-        SignInRequestSubColumn1(viewModel = viewModel)
-
+        SignInRequestSubColumn1(viewModel = viewModel, navController = navController)
     }
 
 }
 
 @Composable
-fun SignInRequestSubColumn1(viewModel: SignInRequestModel) {
+fun SignInRequestSubColumn1(viewModel: SignInRequestModel, navController: NavHostController) {
     Column(modifier = Modifier
         .fillMaxWidth()
         .height(450.dp),
@@ -50,6 +53,8 @@ fun SignInRequestSubColumn1(viewModel: SignInRequestModel) {
         Text(text = stringResource(id = R.string.signin_request_title), style= KusitmsTypo.current.SubTitle2_Semibold, color = KusitmsColorPalette.current.Grey300)
         Spacer(modifier = Modifier.height(72.dp))
         SignInRequestSubColumn2(viewModel = viewModel)
+        Spacer(modifier = Modifier.weight(1f))
+        SignInRequestBtn(viewModel = viewModel, onNextClick = { navController.navigate(NavRoutes.LogInScreen.route)})
     }
 }
 
@@ -87,7 +92,7 @@ fun SignInRequestSubColumn2(viewModel: SignInRequestModel) {
 
 
 @Composable
-fun SigInRequestBtn(viewModel: SignInRequestModel) {
+fun SignInRequestBtn(viewModel: SignInRequestModel, onNextClick: () -> Unit) {
     val emailInputState = viewModel.emailInputState.collectAsState()
     val buttonColor = when (emailInputState.value) {
         SignInRequestModel.EmailInputState.DEFAULT -> KusitmsColorPalette.current.Grey300
@@ -95,8 +100,27 @@ fun SigInRequestBtn(viewModel: SignInRequestModel) {
         SignInRequestModel.EmailInputState.INVALID -> KusitmsColorPalette.current.Grey300
         SignInRequestModel.EmailInputState.VALID -> KusitmsColorPalette.current.Main500
     }
+    val textColor = when(emailInputState.value) {
+        SignInRequestModel.EmailInputState.DEFAULT -> KusitmsColorPalette.current.Grey400
+        SignInRequestModel.EmailInputState.ENTERED -> KusitmsColorPalette.current.White
+        SignInRequestModel.EmailInputState.INVALID -> KusitmsColorPalette.current.Grey400
+        SignInRequestModel.EmailInputState.VALID -> KusitmsColorPalette.current.White
+    }
+    Button(modifier = Modifier
+        .fillMaxWidth()
+        .background(color = buttonColor, shape = RoundedCornerShape(16.dp))
+        .height(56.dp),
+        onClick = {
+            onNextClick()
+        }
+    ) {
+        androidx.compose.material3.Text(
+            text = stringResource(id = R.string.signin_request_btn),
+            style = KusitmsTypo.current.Text_Semibold,
+            color = textColor
+        )
+    }
 }
-
 
 
 

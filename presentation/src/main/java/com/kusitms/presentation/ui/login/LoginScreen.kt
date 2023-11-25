@@ -149,7 +149,7 @@ fun loginClickText1(navController: NavController) {
     Text(
         modifier = Modifier
             .clickable {
-                navController.navigate(NavRoutes.SignInDefault.route)
+                navController.navigate(NavRoutes.SignInRequest.route)
             },
         text = stringResource(id = R.string.login_row_tv1),
         style = KusitmsTypo.current.Text_Semibold,
