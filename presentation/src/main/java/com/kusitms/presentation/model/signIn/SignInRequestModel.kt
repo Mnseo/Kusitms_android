@@ -7,11 +7,14 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 class SignInRequestModel: ViewModel() {
-    private val _email = MutableStateFlow("kusitms1234@naver.com")
+    private val _email = MutableStateFlow("")
     val email: StateFlow<String> = _email
 
     private val _emailInputState = MutableStateFlow(EmailInputState.DEFAULT)
     val emailInputState: StateFlow<EmailInputState> = _emailInputState
+
+    private val _password = MutableStateFlow("")
+    val password: StateFlow<String> = _password
 
     val isEmailValid: Boolean
         get() = email.value == "kusitms1234@naver.com"
@@ -19,6 +22,10 @@ class SignInRequestModel: ViewModel() {
     fun updateEmail(newEmail: String) {
         _email.value = newEmail
         _emailInputState.value = if (newEmail.isBlank()) EmailInputState.DEFAULT else EmailInputState.ENTERED
+    }
+
+    fun updatePassword(password: String) {
+        _password.value = password
     }
 
     fun validateEmail() {
