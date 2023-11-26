@@ -40,10 +40,7 @@
 
     <string name="login_member_id_placeholder">아이디를 입력해주세요</string>
     <string name="login_member_pw_placeholder">비밀번호를 입력해주세요</string>
-
     <string name="login_id_validation">아이디 또는 비밀번호가 일치하지 않습니다</string>
-
-
     <string name="login_member_btn1">비밀번호 찾기</string>
     <string name="login_member_btn2">로그인하기</string>
 
@@ -132,13 +129,16 @@
 
 
     <!-- SignInScreen3-->
-
     <string name="signin3_text1">가입이 완료되었습니다</string>
     <string name="signin3_text2">큐밀리</string>
-
     <string name="signin3_text3">큐시즘과 함께 성장하는 채연님의</string>
     <string name="signin3_text4">모습을 기대할게요</string>
-
     <string name="signin3_btn">시작하기</string>
+
+    <!-- SettingNonMember -->
+    <string name="setting_topbar">설정</string>
+    <string name="setting_nonmember_title1">개인정보 처리 방침</string>
+    <string name="setting_nonmember_title2">서비스 이용약관</string>
+    <string name="setting_nonmember_title3">로그인</string>
 
 </resources>

@@ -1,18 +1,14 @@
 package com.kusitms.presentation.common.theme
 
 
-import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextDirection.Companion.Content
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.navigation.NavHostController
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
-import com.kusitms.presentation.ui.ImageVector.RightArrow
+import com.kusitms.presentation.ui.ImageVector.LeftArrow
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -36,7 +32,7 @@ fun KusitmsScaffoldNonScroll(
                     )
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = KusitmsColorPalette.current.Grey900,
+                    containerColor = KusitmsColorPalette.current.Grey800,
                     titleContentColor = KusitmsColorPalette.current.Grey100,
                     navigationIconContentColor = KusitmsColorPalette.current.Grey400
                 ),
@@ -46,7 +42,7 @@ fun KusitmsScaffoldNonScroll(
                             onClick = { navController.popBackStack() },
                             ) {
                             Icon(
-                                imageVector = RightArrow.vector,
+                                imageVector = LeftArrow.vector,
                                 contentDescription = "Localized description",
                             )
                         }
