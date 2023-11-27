@@ -10,30 +10,33 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.kusitms.presentation.R
 import com.kusitms.presentation.common.theme.KusitmsScaffoldNonScroll
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
+import com.kusitms.presentation.navigation.NavRoutes
 
 @Composable
-fun LoginManagerScreen() {
+fun LoginManagerScreen(navController: NavHostController) {
     KusitmsScaffoldNonScroll(
         topbarText = stringResource(id = R.string.login_manager_topbar),
         navController = rememberNavController()
     ) {
-        LoginManagerColumn()
+        LoginManagerColumn(navController)
     }
 }
 
 @Composable
-fun LoginManagerColumn() {
+fun LoginManagerColumn(navController: NavHostController) {
     Column(modifier = Modifier
         .fillMaxSize()
-        .background(color = KusitmsColorPalette.current.Grey800)
+        .background(color = KusitmsColorPalette.current.Grey900)
         .padding(horizontal = 20.dp),
         horizontalAlignment =  Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
@@ -41,7 +44,7 @@ fun LoginManagerColumn() {
         Spacer(modifier = Modifier.height(99.5.dp))
         LoginManagerColumn1()
         Spacer(modifier = Modifier.weight(1f))
-        LoginManagerColumn2()
+        LoginManagerColumn2(navController)
         Spacer(modifier = Modifier.height(24.dp))
     }
 }
@@ -71,7 +74,7 @@ fun LoginManagerColumn1() {
 }
 
 @Composable
-fun LoginManagerColumn2() {
+fun LoginManagerColumn2(navController: NavHostController) {
     Column(modifier = Modifier
         .fillMaxWidth()
         .height(128.dp),
@@ -79,19 +82,25 @@ fun LoginManagerColumn2() {
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
 
-        androidx.compose.material3.Text(
-            text = stringResource(id = R.string.login_member_btn1),
-            style = KusitmsTypo.current.Text_Semibold,
-            color = KusitmsColorPalette.current.Grey400,
-            modifier = Modifier.padding(start = 20.dp, top = 16.dp, bottom = 16.dp, end = 20.dp)
-        )
         Button(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(56.dp),
             onClick = {
+                      navController.navigate(NavRoutes.FindPwCheckEmail.route)
+            },
+            colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
+            shape = RoundedCornerShape(size = 16.dp)
+        ) {
+            Text(text = stringResource(id = R.string.login_member_btn1), style = KusitmsTypo.current.Text_Semibold, color = KusitmsColorPalette.current.Grey400)
+        }
 
-                Log.d("Click", "go to SignIn")
+        Button(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(56.dp),
+            onClick = {
+                navController.navigate(NavRoutes.Notice.route)
             },
             colors = ButtonDefaults.buttonColors(containerColor = KusitmsColorPalette.current.Main500),
             shape = RoundedCornerShape(size = 16.dp)
@@ -104,5 +113,5 @@ fun LoginManagerColumn2() {
 @Preview
 @Composable
 fun previewLoginMember() {
-    LoginManagerScreen()
+    LoginManagerScreen(rememberNavController())
 }

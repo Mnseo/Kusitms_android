@@ -7,18 +7,13 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.ScaffoldState
-import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -31,7 +26,6 @@ import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
 import com.kusitms.presentation.model.signIn.SignInViewModel
 import com.kusitms.presentation.navigation.NavRoutes
-import com.kusitms.presentation.ui.ImageVector.RightArrow
 import com.kusitms.presentation.ui.ImageVector.StudyIcon
 import com.kusitms.presentation.ui.signIn.KusitmsInputField
 import com.kusitms.presentation.ui.signIn.SignInFixedInput

@@ -16,6 +16,7 @@ import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavDeepLink
 import androidx.navigation.NavGraphBuilder
+import com.kusitms.presentation.model.signIn.SignInRequestModel
 import com.kusitms.presentation.ui.home.HomeScreen
 import com.kusitms.presentation.ui.login.findPw.FindPwCheckEmail
 import com.kusitms.presentation.ui.login.findPw.FindPwCodeValidation
@@ -23,6 +24,7 @@ import com.kusitms.presentation.ui.login.findPw.FindPwSetNewPw
 import com.kusitms.presentation.ui.login.member.LoginMemberScreen
 import com.kusitms.presentation.ui.notice.NoticeScreen
 import com.kusitms.presentation.ui.signIn.SignInProfileComplete
+import com.kusitms.presentation.ui.signIn.SignInRequestScreen
 import com.kusitms.presentation.ui.splash.SplashScreen
 
 @Composable
@@ -41,7 +43,8 @@ fun MainNavigation() {
         //SignInScreen
         kusitmsComposableWithAnimation(NavRoutes.SignInDefault.route) { SignInDefaultProfile(SignInViewModel(), navController) }
         kusitmsComposableWithAnimation(NavRoutes.SignInAdditionalProfile.route) { SignInAdditionalProfile(navController) }
-        kusitmsComposableWithAnimation(NavRoutes.SignInProfileComplete.route) { SignInProfileComplete(navController) }
+        kusitmsComposableWithAnimation(NavRoutes.SignInProfileComplete.route) { SignInProfileComplete(navController)}
+        kusitmsComposableWithAnimation(NavRoutes.SignInRequest.route) { SignInRequestScreen(SignInRequestModel(), navController) }
 
         //LoginScreen
         kusitmsComposableWithAnimation(NavRoutes.LoginMemberScreen.route) { LoginMemberScreen(navController) }
@@ -54,7 +57,6 @@ fun MainNavigation() {
 
         //HomeScreen
         kusitmsComposableWithAnimation(NavRoutes.HomeScreen.route) { HomeScreen(navController)}
-
         kusitmsComposableWithAnimation(NavRoutes.Notice.route) { NoticeScreen() }
 
     }

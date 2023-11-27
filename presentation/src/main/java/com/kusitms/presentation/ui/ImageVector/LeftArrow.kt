@@ -12,7 +12,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
-object RightArrow {
+object LeftArrow {
     var _vector: ImageVector? = null
     val vector: ImageVector
         get() {
@@ -62,5 +62,5 @@ object RightArrow {
 @Preview(showBackground = true)
 @Composable
 fun previewArrow() {
-    RightArrow.DrawRightArrow()
+    LeftArrow.DrawRightArrow()
 }

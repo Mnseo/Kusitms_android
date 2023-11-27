@@ -22,8 +22,8 @@ import com.kusitms.presentation.R
 @Composable
 fun KusitmsInputField(
     @StringRes text:Int,
-    value:String,
-    onValueChange: (String) -> Unit,
+    value:String = "",
+    onValueChange: (String) -> Unit = {},
     isError:Boolean = false
 ) {
     val interactionSource = remember { MutableInteractionSource() }
