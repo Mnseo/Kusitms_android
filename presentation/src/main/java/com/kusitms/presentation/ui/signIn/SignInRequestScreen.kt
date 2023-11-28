@@ -19,6 +19,7 @@ import com.kusitms.presentation.common.theme.KusitmsScaffoldNonScroll
 import com.kusitms.presentation.common.ui.KusitmsMarginVerticalSpacer
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
+import com.kusitms.presentation.model.signIn.InputState
 import com.kusitms.presentation.model.signIn.SignInRequestViewModel
 import com.kusitms.presentation.navigation.NavRoutes
 
@@ -57,7 +58,7 @@ fun SignInRequestSubColumn1(viewModel: SignInRequestViewModel, navController: Na
         SignInRequestSubColumn2(viewModel = viewModel)
         Spacer(modifier = Modifier.weight(1f))
         SignInRequestBtn(viewModel = viewModel, onNextClick = { viewModel.validateEmail()
-                if(viewModel.inputState.value == SignInRequestViewModel.EmailInputState.VALID) { navController.navigate(NavRoutes.LogInScreen.route)}
+                if(viewModel.inputState.value == InputState.VALID) { navController.navigate(NavRoutes.LogInScreen.route)}
             }
         )
         KusitmsMarginVerticalSpacer(size = 24)
@@ -100,7 +101,7 @@ fun SignInRequestSubColumn2(viewModel: SignInRequestViewModel) {
         androidx.compose.material3.Text(
             text = stringResource(id = R.string.signin_request_warning1),
             style = KusitmsTypo.current.Text_Medium,
-            color = if(viewModel.inputState.value == SignInRequestViewModel.EmailInputState.INVALID) {
+            color = if(viewModel.inputState.value == InputState.INVALID) {
                 KusitmsColorPalette.current.Sub2
             } else Color.Transparent
         )
@@ -111,16 +112,16 @@ fun SignInRequestSubColumn2(viewModel: SignInRequestViewModel) {
 fun SignInRequestBtn(viewModel: SignInRequestViewModel, onNextClick: () -> Unit) {
     val emailInputState = viewModel.inputState.collectAsState()
     val buttonColor = when (emailInputState.value) {
-        SignInRequestViewModel.EmailInputState.DEFAULT -> KusitmsColorPalette.current.Grey500
-        SignInRequestViewModel.EmailInputState.ENTERED -> KusitmsColorPalette.current.Main500
-        SignInRequestViewModel.EmailInputState.INVALID -> KusitmsColorPalette.current.Grey500
-        SignInRequestViewModel.EmailInputState.VALID -> KusitmsColorPalette.current.Main500
+        InputState.DEFAULT -> KusitmsColorPalette.current.Grey500
+        InputState.ENTERED -> KusitmsColorPalette.current.Main500
+        InputState.INVALID -> KusitmsColorPalette.current.Grey500
+        InputState.VALID -> KusitmsColorPalette.current.Main500
     }
     val textColor = when(emailInputState.value) {
-        SignInRequestViewModel.EmailInputState.DEFAULT -> KusitmsColorPalette.current.Grey400
-        SignInRequestViewModel.EmailInputState.ENTERED -> KusitmsColorPalette.current.White
-        SignInRequestViewModel.EmailInputState.INVALID -> KusitmsColorPalette.current.Grey400
-        SignInRequestViewModel.EmailInputState.VALID -> KusitmsColorPalette.current.White
+        InputState.DEFAULT -> KusitmsColorPalette.current.Grey400
+        InputState.ENTERED -> KusitmsColorPalette.current.White
+        InputState.INVALID -> KusitmsColorPalette.current.Grey400
+        InputState.VALID -> KusitmsColorPalette.current.White
     }
     Button(modifier = Modifier
         .fillMaxWidth()
