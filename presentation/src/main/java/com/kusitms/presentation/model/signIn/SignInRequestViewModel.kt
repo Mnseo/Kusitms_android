@@ -1,17 +1,19 @@
 package com.kusitms.presentation.model.signIn
 
-import androidx.compose.runtime.MutableState
 import androidx.lifecycle.ViewModel
-import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
-class SignInRequestModel: ViewModel() {
+enum class InputState {
+    DEFAULT, ENTERED, VALID, INVALID
+}
+
+class SignInRequestViewModel: ViewModel() {
     private val _email = MutableStateFlow("")
     val email: StateFlow<String> = _email
 
-    private val _emailInputState = MutableStateFlow(EmailInputState.DEFAULT)
-    val emailInputState: StateFlow<EmailInputState> = _emailInputState
+    private val _inputState = MutableStateFlow(InputState.DEFAULT)
+    val inputState: StateFlow<InputState> = _inputState
 
     private val _password = MutableStateFlow("")
     val password: StateFlow<String> = _password
@@ -21,7 +23,7 @@ class SignInRequestModel: ViewModel() {
 
     fun updateEmail(newEmail: String) {
         _email.value = newEmail
-        _emailInputState.value = if (newEmail.isBlank()) EmailInputState.DEFAULT else EmailInputState.ENTERED
+        _inputState.value = if (newEmail.isBlank()) InputState.DEFAULT else InputState.ENTERED
     }
 
     fun updatePassword(password: String) {
@@ -29,11 +31,8 @@ class SignInRequestModel: ViewModel() {
     }
 
     fun validateEmail() {
-        _emailInputState.value = if(isEmailValid) EmailInputState.VALID else EmailInputState.INVALID
+        _inputState.value = if(isEmailValid) InputState.VALID else InputState.INVALID
     }
 
-    enum class EmailInputState {
-        DEFAULT, ENTERED, VALID, INVALID
-    }
 
 }

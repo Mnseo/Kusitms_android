@@ -11,7 +11,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.PointerEventPass
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -20,19 +19,19 @@ import com.kusitms.presentation.common.theme.KusitmsScaffoldNonScroll
 import com.kusitms.presentation.common.ui.KusitmsMarginVerticalSpacer
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
-import com.kusitms.presentation.model.signIn.SignInRequestModel
+import com.kusitms.presentation.model.signIn.SignInRequestViewModel
 import com.kusitms.presentation.navigation.NavRoutes
 
 
 @Composable
-fun SignInRequestScreen(viewModel: SignInRequestModel, navController: NavHostController) {
+fun SignInRequestScreen(viewModel: SignInRequestViewModel, navController: NavHostController) {
     KusitmsScaffoldNonScroll(topbarText = stringResource(id = R.string.signin_request_topbar), navController = navController) {
         SignInRequestColumn(viewModel = viewModel, navController = navController)
     }
 }
 
 @Composable
-fun SignInRequestColumn(viewModel: SignInRequestModel, navController: NavHostController) {
+fun SignInRequestColumn(viewModel: SignInRequestViewModel, navController: NavHostController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -46,7 +45,7 @@ fun SignInRequestColumn(viewModel: SignInRequestModel, navController: NavHostCon
 }
 
 @Composable
-fun SignInRequestSubColumn1(viewModel: SignInRequestModel, navController: NavHostController) {
+fun SignInRequestSubColumn1(viewModel: SignInRequestViewModel, navController: NavHostController) {
     Column(modifier = Modifier
         .fillMaxSize()
         .padding(horizontal = 20.dp),
@@ -58,7 +57,7 @@ fun SignInRequestSubColumn1(viewModel: SignInRequestModel, navController: NavHos
         SignInRequestSubColumn2(viewModel = viewModel)
         Spacer(modifier = Modifier.weight(1f))
         SignInRequestBtn(viewModel = viewModel, onNextClick = { viewModel.validateEmail()
-                if(viewModel.emailInputState.value == SignInRequestModel.EmailInputState.VALID) { navController.navigate(NavRoutes.LogInScreen.route)}
+                if(viewModel.inputState.value == SignInRequestViewModel.EmailInputState.VALID) { navController.navigate(NavRoutes.LogInScreen.route)}
             }
         )
         KusitmsMarginVerticalSpacer(size = 24)
@@ -66,7 +65,7 @@ fun SignInRequestSubColumn1(viewModel: SignInRequestModel, navController: NavHos
 }
 
 @Composable
-fun SignInRequestSubColumn2(viewModel: SignInRequestModel) {
+fun SignInRequestSubColumn2(viewModel: SignInRequestViewModel) {
     val email = viewModel.email.collectAsState()
     val password = viewModel.password.collectAsState()
     Column(modifier = Modifier
@@ -101,7 +100,7 @@ fun SignInRequestSubColumn2(viewModel: SignInRequestModel) {
         androidx.compose.material3.Text(
             text = stringResource(id = R.string.signin_request_warning1),
             style = KusitmsTypo.current.Text_Medium,
-            color = if(viewModel.emailInputState.value == SignInRequestModel.EmailInputState.INVALID) {
+            color = if(viewModel.inputState.value == SignInRequestViewModel.EmailInputState.INVALID) {
                 KusitmsColorPalette.current.Sub2
             } else Color.Transparent
         )
@@ -109,19 +108,19 @@ fun SignInRequestSubColumn2(viewModel: SignInRequestModel) {
 }
 
 @Composable
-fun SignInRequestBtn(viewModel: SignInRequestModel, onNextClick: () -> Unit) {
-    val emailInputState = viewModel.emailInputState.collectAsState()
+fun SignInRequestBtn(viewModel: SignInRequestViewModel, onNextClick: () -> Unit) {
+    val emailInputState = viewModel.inputState.collectAsState()
     val buttonColor = when (emailInputState.value) {
-        SignInRequestModel.EmailInputState.DEFAULT -> KusitmsColorPalette.current.Grey500
-        SignInRequestModel.EmailInputState.ENTERED -> KusitmsColorPalette.current.Main500
-        SignInRequestModel.EmailInputState.INVALID -> KusitmsColorPalette.current.Grey500
-        SignInRequestModel.EmailInputState.VALID -> KusitmsColorPalette.current.Main500
+        SignInRequestViewModel.EmailInputState.DEFAULT -> KusitmsColorPalette.current.Grey500
+        SignInRequestViewModel.EmailInputState.ENTERED -> KusitmsColorPalette.current.Main500
+        SignInRequestViewModel.EmailInputState.INVALID -> KusitmsColorPalette.current.Grey500
+        SignInRequestViewModel.EmailInputState.VALID -> KusitmsColorPalette.current.Main500
     }
     val textColor = when(emailInputState.value) {
-        SignInRequestModel.EmailInputState.DEFAULT -> KusitmsColorPalette.current.Grey400
-        SignInRequestModel.EmailInputState.ENTERED -> KusitmsColorPalette.current.White
-        SignInRequestModel.EmailInputState.INVALID -> KusitmsColorPalette.current.Grey400
-        SignInRequestModel.EmailInputState.VALID -> KusitmsColorPalette.current.White
+        SignInRequestViewModel.EmailInputState.DEFAULT -> KusitmsColorPalette.current.Grey400
+        SignInRequestViewModel.EmailInputState.ENTERED -> KusitmsColorPalette.current.White
+        SignInRequestViewModel.EmailInputState.INVALID -> KusitmsColorPalette.current.Grey400
+        SignInRequestViewModel.EmailInputState.VALID -> KusitmsColorPalette.current.White
     }
     Button(modifier = Modifier
         .fillMaxWidth()
