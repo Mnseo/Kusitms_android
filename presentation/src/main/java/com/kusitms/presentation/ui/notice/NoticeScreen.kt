@@ -62,7 +62,7 @@ fun NoticeScreen(){
                 NoticeList()
             }
             NoticeTab.CURRICULUM-> {
-
+                CurriculumList()
             }
         }
     }
