@@ -24,13 +24,14 @@ fun KusitmsInputField(
     @StringRes text:Int,
     value:String = "",
     onValueChange: (String) -> Unit = {},
-    isError:Boolean = false
+    isError:Boolean = false,
+    modifier: Modifier = Modifier
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val isFocused = interactionSource.collectIsFocusedAsState().value
 
     OutlinedTextField(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = modifier.then(Modifier.fillMaxWidth()),
             value = value,
             onValueChange = onValueChange,
             interactionSource = interactionSource,
