@@ -11,6 +11,7 @@ import androidx.compose.ui.unit.dp
 import com.kusitms.presentation.R
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
+import com.kusitms.presentation.model.login.findPw.FindPwViewModel
 import com.kusitms.presentation.ui.signIn.KusitmsInputField
 
 @Composable
@@ -18,7 +19,6 @@ fun FindPwEmailInput(
     email:String,
     onEmailChange: (String) -> Unit,
 ) {
-
     Column(modifier = Modifier
         .fillMaxWidth()
         .height(200.dp),

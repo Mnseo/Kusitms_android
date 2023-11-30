@@ -19,9 +19,8 @@ import com.kusitms.presentation.model.login.findPw.FindPwViewModel
 
 
 @Composable
-fun FindPwCheckEmail(navController:NavHostController) {
-    val viewModel: FindPwViewModel = viewModel()
-    val email by viewModel.email.observeAsState("")
+fun FindPwCheckEmail(navController:NavHostController, viewModel: FindPwViewModel) {
+    val email by viewModel.email.collectAsState()
     val isValid by viewModel.isValid.observeAsState(false)
 
     KusitmsScaffoldNonScroll(
@@ -29,14 +28,14 @@ fun FindPwCheckEmail(navController:NavHostController) {
         navController = navController
     ) {
         FindPw1Column(email, isValid,
-            onIdChange = {viewModel.email.value = it},
+            onEmailChange = {viewModel.updateEmail(it)},
             navController = navController
         )
     }
 }
 
 @Composable
-fun FindPw1Column(id: String, isValid:Boolean, onIdChange: (String) -> Unit, navController: NavHostController) {
+fun FindPw1Column(email: String, isValid:Boolean, onEmailChange: (String) -> Unit, navController: NavHostController) {
     var example by remember { mutableStateOf("examples") }
         Column(modifier = Modifier
             .fillMaxSize()
@@ -46,7 +45,7 @@ fun FindPw1Column(id: String, isValid:Boolean, onIdChange: (String) -> Unit, nav
             verticalArrangement = Arrangement.Top
         ) {
             Spacer(modifier = Modifier.height(148.dp))
-            FindPwEmailInput(email = id, onEmailChange = onIdChange)
+            FindPwEmailInput(email = email, onEmailChange = onEmailChange)
             Spacer(modifier = Modifier.weight(1f))
             FindPwBtn(R.string.find_pw_btn1,isValid, navController)
             Spacer(modifier = Modifier.height(24.dp))
@@ -57,5 +56,5 @@ fun FindPw1Column(id: String, isValid:Boolean, onIdChange: (String) -> Unit, nav
 @Preview
 @Composable
 fun PreviewFindPw1() {
-    FindPwCheckEmail(rememberNavController())
+    FindPwCheckEmail(rememberNavController(), FindPwViewModel())
 }

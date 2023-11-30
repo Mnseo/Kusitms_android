@@ -76,6 +76,7 @@
     <string name="find_pw_validation3">비밀번호와 일치하지 않습니다</string>
 
     <string name="find_pw_btn1">인증코드 전송</string>
+    <string name="find_pw_btn2">인증하기</string>
 
 
     <!-- Title -->
