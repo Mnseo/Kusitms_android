@@ -32,7 +32,7 @@ fun FindPwEmailComval(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .height(200.dp),
+            .height(83.dp),
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.Top
     ) {

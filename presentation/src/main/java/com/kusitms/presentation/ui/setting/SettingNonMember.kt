@@ -46,7 +46,7 @@ fun SettingNonMemberColumn1(navController: NavHostController) {
 @Composable
 fun SettingNonMemberColumn2(navController: NavHostController) {
     val uriHandler = LocalUriHandler.current
-        LazyColumn(
+    LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
                 .background(color = KusitmsColorPalette.current.Grey900),
@@ -62,7 +62,7 @@ fun SettingNonMemberColumn2(navController: NavHostController) {
                     }
                 )
             }
-        }
+    }
 }
 
 

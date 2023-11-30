@@ -59,7 +59,9 @@ fun ToggleBtn(
         shape = RoundedCornerShape(16.dp)
     ) {
         Box(
-            modifier = Modifier.background(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(
                 if (selected) KusitmsColorPalette.current.Main500
                 else KusitmsColorPalette.current.Main300.copy(0.4f),
             ), contentAlignment = if (selected) Alignment.CenterEnd else Alignment.CenterStart
