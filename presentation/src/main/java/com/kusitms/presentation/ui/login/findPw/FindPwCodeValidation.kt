@@ -1,5 +1,7 @@
 package com.kusitms.presentation.ui.login.findPw
 
+import android.util.Log
+import androidx.activity.ComponentActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -13,9 +15,11 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.kusitms.presentation.R
@@ -31,7 +35,8 @@ import com.kusitms.presentation.ui.signIn.KusitmsInputField
 
 
 @Composable
-fun FindPwCodeValidation(viewModel: FindPwViewModel, navController: NavHostController) {
+fun FindPwCodeValidation(navController: NavHostController) {
+    val viewModel: FindPwViewModel = viewModel(LocalContext.current as ComponentActivity)
     KusitmsScaffoldNonScroll(
         topbarText = stringResource(id = R.string.find_pw_topbar),
         navController = navController
@@ -42,6 +47,7 @@ fun FindPwCodeValidation(viewModel: FindPwViewModel, navController: NavHostContr
 
 @Composable
 fun FindPw2Column(viewModel: FindPwViewModel, navController: NavHostController) {
+    val Error by viewModel.inputState.collectAsState()
     Column(modifier = Modifier
         .fillMaxSize()
         .background(color = KusitmsColorPalette.current.Grey800)
@@ -50,13 +56,13 @@ fun FindPw2Column(viewModel: FindPwViewModel, navController: NavHostController) 
         verticalArrangement = Arrangement.Top
     ) {
         Spacer(modifier = Modifier.height(176.5.dp))
-        FindPwEmailComval(text = R.string.find_pw_caption_email, validStr = FindPwViewModel().email.toString())
+        FindPwEmailComval(text = R.string.find_pw_caption_email, viewModel = viewModel)
         KusitmsMarginVerticalSpacer(size = 24)
         Text(text = stringResource(id = R.string.find_pw_caption4), style = KusitmsTypo.current.Caption1, color = KusitmsColorPalette.current.Grey400)
         KusitmsMarginVerticalSpacer(size = 4)
         FindPw2GetCode(viewModel = viewModel)
         KusitmsMarginVerticalSpacer(size = 4)
-        if(viewModel.inputState.value == InputState.INVALID) {
+        if(Error == InputState.INVALID) {
             Text(
                 text = stringResource(id = R.string.find_pw_validation_warning),
                 style= KusitmsTypo.current.Caption1,
@@ -67,7 +73,7 @@ fun FindPw2Column(viewModel: FindPwViewModel, navController: NavHostController) 
         FindPwCodeBtn(
             viewModel = viewModel,
             onNextClick = { viewModel.validateCode()
-                if (viewModel.inputState.value == InputState.VALID) {
+                if (Error == InputState.VALID) {
                     navController.navigate(NavRoutes.FindPwSetNewPw.route)
                 }
             }
@@ -81,7 +87,10 @@ fun FindPw2Column(viewModel: FindPwViewModel, navController: NavHostController) 
 fun FindPw2GetCode(viewModel: FindPwViewModel) {
     val code by viewModel.code.collectAsState()
     val timeLeft by viewModel.timeLeft.collectAsState()
-    LaunchedEffect(Unit) {
+    val Error by viewModel.inputState.collectAsState()
+    LaunchedEffect(viewModel) {
+        Log.d("email2", viewModel.email.value)
+        Log.d("InputState", viewModel.inputState.value.toString())
         viewModel.startCountDown(5*60)
     }
     Box(
@@ -95,7 +104,8 @@ fun FindPw2GetCode(viewModel: FindPwViewModel) {
             onValueChange = { viewModel.updateCode(it) },
             modifier = Modifier
                 .fillMaxWidth()
-                .align(Alignment.CenterStart)
+                .align(Alignment.CenterStart),
+            isError = (Error == InputState.INVALID)
         )
         Text(
             text = formatTime(timeLeft),
@@ -148,6 +158,6 @@ fun formatTime(seconds: Int): String {
 @Preview
 @Composable
 fun previewSetNewPw() {
-    FindPwCodeValidation(FindPwViewModel(),rememberNavController())
+    FindPwCodeValidation(rememberNavController())
 }
 

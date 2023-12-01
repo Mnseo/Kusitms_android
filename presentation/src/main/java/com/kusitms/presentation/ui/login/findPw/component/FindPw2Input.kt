@@ -7,10 +7,7 @@ import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -27,8 +24,9 @@ import kotlinx.coroutines.delay
 @Composable
 fun FindPwEmailComval(
     @StringRes text:Int,
-    validStr: String
+    viewModel: FindPwViewModel
 ) {
+    val email by viewModel.email.collectAsState()
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -52,7 +50,7 @@ fun FindPwEmailComval(
                 )
         ) {
             Text(
-                text= validStr,
+                text= email,
                 color= KusitmsColorPalette.current.Grey400,
                 style = KusitmsTypo.current.Text_Medium,
                 modifier = Modifier.padding(horizontal = 20.dp, vertical = 16.dp)
@@ -60,69 +58,6 @@ fun FindPwEmailComval(
         }
     }
 
-
 }
 
-@Composable
-fun FindPw2CodeInput(
-    @StringRes text:Int,
-    value:String,
-    onValueChange: (String) -> Unit,
-    isError:Boolean = false,
-    onTimerEnd: () -> Unit = {}
-) {
-    val interactionSource = remember { MutableInteractionSource() }
-    val isFocused = interactionSource.collectIsFocusedAsState().value
 
-    val totalSeconds = remember { mutableStateOf(300) }
-    val timerText = remember { mutableStateOf("") }
-
-    LaunchedEffect(key1 = "timer") {
-        while (totalSeconds.value > 0) {
-            delay(1000)
-            totalSeconds.value -= 1
-            timerText.value = String.format("%02d:%02d", totalSeconds.value / 60, totalSeconds.value % 60)
-        }
-    }
-
-    OutlinedTextField(
-        modifier = Modifier.fillMaxWidth(),
-        value = value,
-        onValueChange = onValueChange,
-        interactionSource = interactionSource,
-        placeholder = {
-            Text(
-                text= stringResource(text),
-                color= KusitmsColorPalette.current.Grey400,
-                style = KusitmsTypo.current.Text_Medium
-            )
-        },
-        colors = TextFieldDefaults.outlinedTextFieldColors(
-            textColor = KusitmsColorPalette.current.White,
-            focusedBorderColor = KusitmsColorPalette.current.Main500,
-            unfocusedBorderColor = if(isError) KusitmsColorPalette.current.Sub2 else KusitmsColorPalette.current.Grey700,
-            unfocusedLabelColor = KusitmsColorPalette.current.Grey400,
-            focusedLabelColor = KusitmsColorPalette.current.White,
-            backgroundColor = KusitmsColorPalette.current.Grey700
-        ),
-        shape = RoundedCornerShape(16.dp),
-        maxLines = 1,
-        trailingIcon = {
-            when {
-                isFocused && value.isNotEmpty() -> {
-                    IconButton(onClick = { onValueChange("") }) { Icon(imageVector = xIcon.vector, contentDescription = "Clear Text") }
-                }
-                isError && !isFocused -> {
-                    IconButton(onClick = { }) { Icon(painter = painterResource(id = R.drawable.ic_finpw_warning), contentDescription = "warning") }
-                }
-            }
-        }
-
-    )
-}
-
-@Preview
-@Composable
-fun EmailComvalExample() {
-    FindPwEmailComval(text = R.string.find_pw_caption_email, validStr = FindPwViewModel().email.toString())
-}

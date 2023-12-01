@@ -52,9 +52,8 @@ fun MainNavigation() {
         kusitmsComposableWithAnimation(NavRoutes.LogInScreen.route) { LoginScreen(navController) }
 
         //FindPwScreen
-        kusitmsComposableWithAnimation(NavRoutes.FindPwCheckEmail.route) { FindPwCheckEmail(navController, FindPwViewModel())}
-        kusitmsComposableWithAnimation(NavRoutes.FindPwCodeValidation.route) { FindPwCodeValidation(
-            FindPwViewModel(), navController)}
+        kusitmsComposableWithAnimation(NavRoutes.FindPwCheckEmail.route) { FindPwCheckEmail(navController)}
+        kusitmsComposableWithAnimation(NavRoutes.FindPwCodeValidation.route) { FindPwCodeValidation(navController)}
         kusitmsComposableWithAnimation(NavRoutes.FindPwSetNewPw.route) { FindPwSetNewPw(navController) }
 
         //HomeScreen
