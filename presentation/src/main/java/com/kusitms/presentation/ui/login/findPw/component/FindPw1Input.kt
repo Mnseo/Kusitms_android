@@ -12,6 +12,7 @@ import com.kusitms.presentation.R
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
 import com.kusitms.presentation.model.login.findPw.FindPwViewModel
+import com.kusitms.presentation.model.signIn.InputState
 import com.kusitms.presentation.ui.signIn.KusitmsInputField
 
 @Composable
@@ -19,6 +20,7 @@ fun FindPwEmailInput(
     viewModel: FindPwViewModel
 ) {
     val email by viewModel.email.collectAsState()
+    val Error by viewModel.inputState.collectAsState()
     Column(modifier = Modifier
         .fillMaxWidth()
         .height(200.dp),
@@ -36,13 +38,13 @@ fun FindPwEmailInput(
         KusitmsInputField(
             text = R.string.find_pw_placeholder_email,
             value = email,
-            onValueChange = viewModel::updateEmail,
-            isError = !viewModel.isEmailValid
+            onValueChange = {viewModel.updateEmail(it)},
+            isError = (Error == InputState.INVALID)
         )
         Spacer(modifier = Modifier.height(24.dp))
 
         //id 검증
-        if(!viewModel.isEmailValid) {
+        if(viewModel.inputState.value == InputState.INVALID) {
             Text(
                 text = stringResource(id = R.string.find_pw_validation_email),
                 style = KusitmsTypo.current.Text_Medium,

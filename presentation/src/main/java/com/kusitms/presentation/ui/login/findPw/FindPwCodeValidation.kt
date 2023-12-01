@@ -55,9 +55,13 @@ fun FindPw2Column(viewModel: FindPwViewModel, navController: NavHostController) 
         Text(text = stringResource(id = R.string.find_pw_caption4), style = KusitmsTypo.current.Caption1, color = KusitmsColorPalette.current.Grey400)
         KusitmsMarginVerticalSpacer(size = 4)
         FindPw2GetCode(viewModel = viewModel)
-        KusitmsMarginVerticalSpacer(size = 24)
-        if(viewModel.isCodeValid) {
-
+        KusitmsMarginVerticalSpacer(size = 4)
+        if(viewModel.inputState.value == InputState.INVALID) {
+            Text(
+                text = stringResource(id = R.string.find_pw_validation_warning),
+                style= KusitmsTypo.current.Caption1,
+                color = KusitmsColorPalette.current.Sub2
+            )
         }
         Spacer(modifier = Modifier.weight(1f))
         FindPwCodeBtn(

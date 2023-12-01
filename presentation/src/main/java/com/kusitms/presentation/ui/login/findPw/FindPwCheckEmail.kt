@@ -1,5 +1,6 @@
 package com.kusitms.presentation.ui.login.findPw
 
+import android.util.Log
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -18,11 +19,14 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.kusitms.presentation.R
 import com.kusitms.presentation.common.theme.KusitmsScaffoldNonScroll
+import com.kusitms.presentation.common.ui.KusitmsMarginVerticalSpacer
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
 import com.kusitms.presentation.model.login.findPw.FindPwViewModel
 import com.kusitms.presentation.model.signIn.InputState
+import com.kusitms.presentation.model.signIn.SignInRequestViewModel
 import com.kusitms.presentation.navigation.NavRoutes
+import com.kusitms.presentation.ui.signIn.SignInRequestBtn
 import kotlinx.coroutines.flow.map
 
 
@@ -33,19 +37,14 @@ fun FindPwCheckEmail(navController:NavHostController, viewModel: FindPwViewModel
         navController = navController
     ) {
         FindPw1Column(
-            onNextClick = {
-                viewModel.validateEmail()
-                if (viewModel.inputState.value == InputState.VALID) {
-                    navController.navigate(NavRoutes.FindPwSetNewPw.route)
-                }
-            },
-            viewModel = viewModel
+            viewModel = viewModel,
+            navController = navController
         )
     }
 }
 
 @Composable
-fun FindPw1Column(onNextClick: () -> Unit, viewModel: FindPwViewModel) {
+fun FindPw1Column(viewModel: FindPwViewModel, navController: NavHostController) {
     Column(modifier = Modifier
         .fillMaxSize()
         .background(color = KusitmsColorPalette.current.Grey800)
@@ -56,13 +55,14 @@ fun FindPw1Column(onNextClick: () -> Unit, viewModel: FindPwViewModel) {
             Spacer(modifier = Modifier.height(148.dp))
             FindPwEmailInput(viewModel = viewModel)
             Spacer(modifier = Modifier.weight(1f))
-            FindPwBtn(R.string.find_pw_btn1,viewModel, onNextClick)
+            FindPwBtn(R.string.find_pw_btn1, viewModel = viewModel, navController = navController)
             Spacer(modifier = Modifier.height(24.dp))
         }
 }
 
+
 @Composable
-fun FindPwBtn(@StringRes text:Int, viewModel:FindPwViewModel, onNextClick: ()-> Unit) {
+fun FindPwBtn(@StringRes text:Int, viewModel:FindPwViewModel, navController: NavHostController) {
     val emailInputState = viewModel.inputState.collectAsState()
     val buttonColor = getButtonColor(inputState = emailInputState.value)
     val textColor = getTextColor(inputState = emailInputState.value)
@@ -71,7 +71,11 @@ fun FindPwBtn(@StringRes text:Int, viewModel:FindPwViewModel, onNextClick: ()-> 
             .fillMaxWidth()
             .height(56.dp),
         onClick = {
-            onNextClick
+            viewModel.validateEmail()
+            Log.d("inputState", viewModel.inputState.value.toString())
+            if (viewModel.inputState.value == InputState.VALID) {
+                navController.navigate(NavRoutes.FindPwCodeValidation.route)
+            }
         },
         colors = ButtonDefaults.buttonColors(containerColor = buttonColor)
         ,

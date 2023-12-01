@@ -1,10 +1,8 @@
 package com.kusitms.presentation.model.login.findPw
 
-import androidx.compose.ui.graphics.Color
-import androidx.lifecycle.MutableLiveData
+
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.model.signIn.InputState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -38,6 +36,11 @@ class FindPwViewModel: ViewModel() {
 
     fun updateEmail(email: String) {
         _email.value = email
+        if (email.isNotBlank()) {
+            _inputState.value = InputState.ENTERED
+        } else {
+            _inputState.value = InputState.DEFAULT
+        }
     }
 
     fun updateNewPassword(newPw: String) {
@@ -46,6 +49,11 @@ class FindPwViewModel: ViewModel() {
 
     fun updateCode(newCode: String) {
         _code.value = newCode
+        if (newCode.isNotBlank()) {
+            _inputState.value = InputState.ENTERED
+        } else {
+            _inputState.value = InputState.DEFAULT
+        }
     }
 
     fun startCountDown(totalSeconds: Int) {
