@@ -16,16 +16,15 @@ import com.kusitms.presentation.ui.signIn.KusitmsInputField
 
 @Composable
 fun FindPwEmailInput(
-    email:String,
-    onEmailChange: (String) -> Unit,
+    viewModel: FindPwViewModel
 ) {
+    val email by viewModel.email.collectAsState()
     Column(modifier = Modifier
         .fillMaxWidth()
         .height(200.dp),
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.Top
     ) {
-        val isError = email!="example"
 
         //id Input
         Text(
@@ -34,11 +33,16 @@ fun FindPwEmailInput(
             color = KusitmsColorPalette.current.Grey400
         )
         Spacer(modifier = Modifier.height(4.dp))
-        KusitmsInputField(text = R.string.find_pw_placeholder_email, value = email, onValueChange = onEmailChange, isError = isError)
+        KusitmsInputField(
+            text = R.string.find_pw_placeholder_email,
+            value = email,
+            onValueChange = viewModel::updateEmail,
+            isError = !viewModel.isEmailValid
+        )
         Spacer(modifier = Modifier.height(24.dp))
 
         //id 검증
-        if(isError) {
+        if(!viewModel.isEmailValid) {
             Text(
                 text = stringResource(id = R.string.find_pw_validation_email),
                 style = KusitmsTypo.current.Text_Medium,
@@ -47,11 +51,4 @@ fun FindPwEmailInput(
         }
 
     }
-}
-
-@Preview
-@Composable
-fun PreviewPw() {
-    var example by remember { mutableStateOf("examples") }
-    FindPwEmailInput(email = example, onEmailChange = { newValue->example =example} )
 }

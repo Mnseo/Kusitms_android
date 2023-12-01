@@ -1,8 +1,10 @@
 package com.kusitms.presentation.model.login.findPw
 
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.model.signIn.InputState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -28,10 +30,11 @@ class FindPwViewModel: ViewModel() {
     private val _timeLeft = MutableStateFlow(300)
     val timeLeft:StateFlow<Int> = _timeLeft
 
-    val isValid = MutableLiveData(false)
-
     val isCodeValid:Boolean
         get() = code.value == "123456"
+
+    val isEmailValid:Boolean
+        get() = email.value == "kusitms1234@naver.com"
 
     fun updateEmail(email: String) {
         _email.value = email
@@ -53,8 +56,13 @@ class FindPwViewModel: ViewModel() {
             }
         }
     }
+    fun validateEmail() {
+        _inputState.value = if(isEmailValid) InputState.VALID else InputState.INVALID
+    }
 
     fun validateCode() {
         _inputState.value = if(isCodeValid) InputState.VALID else InputState.INVALID
     }
+
+
 }
