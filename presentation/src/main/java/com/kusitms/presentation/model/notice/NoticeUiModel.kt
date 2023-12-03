@@ -8,7 +8,9 @@ data class NoticeUiModel(
     val content : String,
     val date : String,
     val imageUrl : String = "",
-    val isRead : Boolean = false
+    val isRead : Boolean = false,
+    val name : String = "",
+    val profileImage : String = ""
 )
 
 val noticeDummy = listOf(
@@ -19,7 +21,8 @@ val noticeDummy = listOf(
         "학회비 공지",
         "안녕하세요! 큐시즘 27기 경영총괄팀 회계 담당 하현정입니다☺️ 먼저 큐시즘에 합격하신 여러분들을 진심으로 환영합니다!!\uD83E\uDD39\uD83C\uDFFB\u200D♀️",
         "09.05",
-        isRead = true
+        isRead = true,
+        name = "이지현"
     ),
     NoticeUiModel(
         1,
