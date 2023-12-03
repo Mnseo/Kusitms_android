@@ -213,6 +213,7 @@ fun CommentInput(
             modifier = Modifier
                 .clip(RoundedCornerShape(8.dp)).clickable {
                     onClickSend(textFieldValue.text)
+                    textFieldValue = TextFieldValue()
                 }.padding(16.dp),
             contentAlignment = Alignment.Center
         ){
