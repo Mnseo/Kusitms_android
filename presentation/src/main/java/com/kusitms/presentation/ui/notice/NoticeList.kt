@@ -42,7 +42,8 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun NoticeList(
-    notices : List<NoticeUiModel> = noticeDummy
+    notices : List<NoticeUiModel> = noticeDummy,
+    onNoticeClick : (NoticeUiModel) -> Unit
 ){
 
     val listState = rememberLazyListState()
@@ -128,7 +129,7 @@ fun NoticeList(
                     KusitmsNoticeItem(
                         notice = it,
                         onClick = {
-
+                            onNoticeClick(it)
                         }
                     )
                 }

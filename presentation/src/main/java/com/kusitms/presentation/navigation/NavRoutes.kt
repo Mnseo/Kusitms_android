@@ -30,6 +30,8 @@ sealed class NavRoutes(val route: String)
 
     object Notice : NavRoutes("Notice")
 
+    class NoticeDetail(val id : Int = 0) : NavRoutes("NoticeDetail")
+
 }
 
 
