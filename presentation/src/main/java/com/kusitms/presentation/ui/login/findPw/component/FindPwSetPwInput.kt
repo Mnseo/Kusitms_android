@@ -11,28 +11,22 @@ import androidx.compose.ui.unit.dp
 import com.kusitms.presentation.R
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
+import com.kusitms.presentation.model.login.findPw.FindPwViewModel
 import com.kusitms.presentation.ui.signIn.KusitmsInputField
 
 
 @Composable
-fun FindPwValidation(
-    pw:String,
-    pwValidation: String,
-    onPwChange: (String) -> Unit,
-    onValidationChange: (String) -> Unit
-    ) {
-    var newPwLength by remember {mutableStateOf(0)}
+fun FindPwSetPwInput(viewModel:FindPwViewModel) {
+    val newPassword by viewModel.newPw.collectAsState()
+    val newPasswordConfirm by viewModel.newPwConfirm.collectAsState()
+    val passwordError by viewModel.passwordErrorState.collectAsState()
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(200.dp),
+                .height(220.dp),
             horizontalAlignment = Alignment.Start,
             verticalArrangement = Arrangement.Top
         ) {
-            //Error 1: 8자 이하 , Error2: 비밀번호 일치 x
-            val isError1 = pw.length < 8
-            val isError2 = pw != pwValidation
-
             //pwInput1
             Text(
                 text = stringResource(id = R.string.find_pw_caption2),
@@ -42,15 +36,16 @@ fun FindPwValidation(
             Spacer(modifier = Modifier.height(4.dp))
             KusitmsInputField(
                 text = R.string.find_pw_placeholder2,
-                value = pw,
+                value = newPassword,
                 onValueChange = {
-                    onPwChange(it)
-                    newPwLength = it.length
+                    viewModel.updateNewPassword(it)
+                    viewModel.validatePassword()
                 },
-                isError = isError1)
+                isError = passwordError == FindPwViewModel.PasswordErrorState.ShortPassword
+            )
             Spacer(modifier = Modifier.height(4.dp))
             //Error1
-            if(isError1) {
+            if(passwordError == FindPwViewModel.PasswordErrorState.ShortPassword) {
                 Text(
                     text = stringResource(id = R.string.find_pw_validation2),
                     style = KusitmsTypo.current.Text_Medium,
@@ -68,17 +63,18 @@ fun FindPwValidation(
             Spacer(modifier = Modifier.height(4.dp))
             KusitmsInputField(
                 text = R.string.find_pw_placeholder3,
-                value = pwValidation,
+                value = newPasswordConfirm,
                 onValueChange = {
-                                onValidationChange(it)
+                    viewModel.updateNewPasswordConfirm(it)
+                    viewModel.validatePassword()
                 },
-                isError = isError2
+                isError = passwordError == FindPwViewModel.PasswordErrorState.PasswordsDoNotMatch
             )
             Spacer(modifier = Modifier.height(4.dp))
-            //Error1
-            if(isError1) {
+            //Error2
+            if(passwordError == FindPwViewModel.PasswordErrorState.PasswordsDoNotMatch) {
                 Text(
-                    text = stringResource(id = R.string.find_pw_validation2),
+                    text = stringResource(id = R.string.find_pw_validation3),
                     style = KusitmsTypo.current.Text_Medium,
                     color = KusitmsColorPalette.current.Sub2
                 )

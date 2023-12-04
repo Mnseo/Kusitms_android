@@ -1,5 +1,6 @@
 package com.kusitms.presentation.ui.signIn.component
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -12,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kusitms.presentation.R
@@ -21,9 +23,11 @@ import com.kusitms.presentation.common.ui.KusitmsTabItem
 import com.kusitms.presentation.common.ui.KusitmsTabRow
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
+import com.kusitms.presentation.model.signIn.InputState
 import com.kusitms.presentation.model.signIn.PartCategory
 import com.kusitms.presentation.model.signIn.SignInViewModel
 import com.kusitms.presentation.model.signIn.categories
+import com.kusitms.presentation.navigation.NavRoutes
 import com.kusitms.presentation.ui.ImageVector.xIcon
 import kotlinx.coroutines.launch
 
@@ -102,6 +106,26 @@ fun LikeBottomSheetContent(viewModel: SignInViewModel) {
         LikeCategoryTab(selectedCategory = selectedCategory, onCategorySelected = { category->
             selectedCategory = category
         })
+        Spacer(modifier = Modifier.weight(1f))
+        Button(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp)
+                .height(56.dp),
+            onClick = {
+                      /* bottom sheet 닫힘 */
+            },
+            colors = ButtonDefaults.buttonColors(containerColor = KusitmsColorPalette.current.Grey500)
+            ,
+            shape = RoundedCornerShape(size = 16.dp)
+        ) {
+            androidx.compose.material.Text(
+                text = "관심 카테고리를 선택해주세요",
+                style = KusitmsTypo.current.SubTitle2_Semibold,
+                color = KusitmsColorPalette.current.Grey400
+            )
+        }
+        KusitmsMarginVerticalSpacer(size = 24)
     }
 
 }
@@ -138,7 +162,6 @@ fun CategoryBottomSheetTitle(viewModel: SignInViewModel) {
         Text(text = "개 선택", style = KusitmsTypo.current.Caption1, color = KusitmsColorPalette.current.Grey400)
         Spacer(modifier = Modifier.weight(1f))
         IconButton(onClick = {
-
         }) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_inputx),

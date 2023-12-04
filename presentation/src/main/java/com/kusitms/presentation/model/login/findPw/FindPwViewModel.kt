@@ -1,15 +1,18 @@
 package com.kusitms.presentation.model.login.findPw
 
-import androidx.lifecycle.MutableLiveData
+
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kusitms.presentation.model.signIn.InputState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class FindPwViewModel: ViewModel() {
+@HiltViewModel
+class FindPwViewModel @Inject constructor(): ViewModel() {
     private val _email = MutableStateFlow("")
     val email: StateFlow<String> = _email
 
@@ -18,6 +21,12 @@ class FindPwViewModel: ViewModel() {
 
     private val _newPw = MutableStateFlow("")
     val newPw: StateFlow<String> = _newPw
+
+    private val _newPwConfirm = MutableStateFlow("")
+    val newPwConfirm: StateFlow<String> = _newPwConfirm
+
+    private val _passwordErrorState = MutableStateFlow<PasswordErrorState>(PasswordErrorState.None)
+    val passwordErrorState: StateFlow<PasswordErrorState> = _passwordErrorState
 
     private val _code = MutableStateFlow("")
     val code: StateFlow<String> = _code
@@ -28,21 +37,38 @@ class FindPwViewModel: ViewModel() {
     private val _timeLeft = MutableStateFlow(300)
     val timeLeft:StateFlow<Int> = _timeLeft
 
-    val isValid = MutableLiveData(false)
-
     val isCodeValid:Boolean
         get() = code.value == "123456"
 
+    val isEmailValid:Boolean
+        get() = email.value == "kusitms1234@naver.com"
+
     fun updateEmail(email: String) {
         _email.value = email
+        if (email.isNotBlank()) {
+            _inputState.value = InputState.ENTERED
+        } else {
+            _inputState.value = InputState.DEFAULT
+        }
     }
 
     fun updateNewPassword(newPw: String) {
         _newPw.value = newPw
+        validatePassword()
+    }
+
+    fun updateNewPasswordConfirm(pw: String) {
+        _newPwConfirm.value = pw
+        validatePassword()
     }
 
     fun updateCode(newCode: String) {
         _code.value = newCode
+        if (newCode.isNotBlank()) {
+            _inputState.value = InputState.ENTERED
+        } else {
+            _inputState.value = InputState.DEFAULT
+        }
     }
 
     fun startCountDown(totalSeconds: Int) {
@@ -53,8 +79,28 @@ class FindPwViewModel: ViewModel() {
             }
         }
     }
+    fun validateEmail() {
+        _inputState.value = if(isEmailValid) InputState.VALID else InputState.INVALID
+    }
 
     fun validateCode() {
         _inputState.value = if(isCodeValid) InputState.VALID else InputState.INVALID
     }
+
+
+    fun validatePassword() {
+        when {
+            _newPw.value.length < 8 -> _passwordErrorState.value = PasswordErrorState.ShortPassword
+            _newPw.value != _newPwConfirm.value -> _passwordErrorState.value = PasswordErrorState.PasswordsDoNotMatch
+            else -> _passwordErrorState.value = PasswordErrorState.None
+        }
+    }
+
+    enum class PasswordErrorState {
+        None,
+        ShortPassword,
+        PasswordsDoNotMatch
+    }
+
+
 }

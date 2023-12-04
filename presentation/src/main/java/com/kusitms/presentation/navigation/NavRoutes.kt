@@ -23,6 +23,7 @@ sealed class NavRoutes(val route: String)
     object FindPwCheckEmail : NavRoutes("findPwCheckEmail")
     object FindPwCodeValidation : NavRoutes("findPwCodeValidation")
     object FindPwSetNewPw : NavRoutes("findPwSetNewPW")
+    object FindPwMemberCurrent :NavRoutes("findPwMemberCurrent")
 
 
     object HomeScreen: NavRoutes("Home")

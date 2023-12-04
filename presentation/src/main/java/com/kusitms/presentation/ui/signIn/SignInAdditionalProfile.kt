@@ -11,9 +11,9 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -22,6 +22,7 @@ import androidx.navigation.compose.rememberNavController
 import com.kusitms.presentation.R
 import com.kusitms.presentation.common.theme.KusitmsScaffoldNonScroll
 import com.kusitms.presentation.common.ui.ButtonRow
+import com.kusitms.presentation.common.ui.KusitmsMarginVerticalSpacer
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
 import com.kusitms.presentation.navigation.NavRoutes
@@ -38,22 +39,25 @@ fun SignInAdditionalProfile(navController: NavHostController) {
 
 @Composable
 fun SignIn2Member(navController: NavController) {
+    val scrollState = rememberScrollState()
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .verticalScroll(scrollState)
             .background(KusitmsColorPalette.current.Grey900),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.Top)
     ) {
         Title2Column()
         PhotoColumn()
-        Spacer(modifier = Modifier.height(10.dp))
+        KusitmsMarginVerticalSpacer(size = 10)
         introColumn()
-        Spacer(modifier = Modifier.height(4.dp))
+        KusitmsMarginVerticalSpacer(size = 4)
         LinkColumn()
         Spacer(modifier = Modifier.weight(1f))
         ButtonRow("이전으로", "가입완료", navController, KusitmsColorPalette.current.Grey600,KusitmsColorPalette.current.Main500,
             onNextClick = { navController.navigate(NavRoutes.SignInProfileComplete.route)})
+        KusitmsMarginVerticalSpacer(size = 24)
     }
 }
 
@@ -236,14 +240,22 @@ fun LinkRow2() {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .height(48.dp)
-            .background(
-                color = KusitmsColorPalette.current.Grey700,
-                shape = RoundedCornerShape(size = 8.dp)
-            ),
-        horizontalArrangement = Arrangement.spacedBy(30.dp, Alignment.Start),
+            .height(48.dp),
+        horizontalArrangement = Arrangement.spacedBy(0.dp, Alignment.Start),
         verticalAlignment = Alignment.CenterVertically,
     ) {
+        KusitmsLinkCheck()
+        IconButton(
+            onClick = {  },
+        ) {
+            Icon(
+                painterResource(id = R.drawable.ic_trashcan),
+                contentDescription = "Localized description",
+                tint = Color.Unspecified,
+                modifier = Modifier
+                    .size(25.dp)
+            )
+        }
     }
 }
 

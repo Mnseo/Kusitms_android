@@ -1,36 +1,44 @@
 package com.kusitms.presentation.ui.login.findPw
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.kusitms.presentation.R
 import com.kusitms.presentation.common.theme.KusitmsScaffoldNonScroll
+import com.kusitms.presentation.common.ui.KusitmsMarginVerticalSpacer
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
+import com.kusitms.presentation.model.login.findPw.FindPwViewModel
+import com.kusitms.presentation.navigation.NavRoutes
 
 @Composable
-fun FindPwSetNewPw(navController: NavHostController) {
+fun FindPwSetNewPw(
+    navController: NavHostController,
+    viewModel: FindPwViewModel
+) {
     KusitmsScaffoldNonScroll(
         topbarText = stringResource(id = R.string.find_pw_topbar),
         navController = navController
     ) {
-        FindPw3Column()
+        SetNewPwColumn(viewModel =  viewModel, navController)
     }
 }
 
 @Composable
-fun FindPw3Column() {
+fun SetNewPwColumn(viewModel: FindPwViewModel, navController: NavHostController) {
     Column(modifier = Modifier
         .fillMaxSize()
         .background(color = KusitmsColorPalette.current.Grey800)
@@ -38,12 +46,47 @@ fun FindPw3Column() {
         horizontalAlignment =  Alignment.Start,
         verticalArrangement = Arrangement.Top
     ) {
-        Text(text = "비밀번호 설정 화면", style = KusitmsTypo.current.SubTitle2_Semibold, color = KusitmsColorPalette.current.Grey300 )
+        KusitmsMarginVerticalSpacer(size = 204)
+        FindPwSetPwInput(viewModel = viewModel)
+        Spacer(modifier = Modifier.weight(1f))
+        SetNewPwButton(viewModel = viewModel, navController = navController)
+        KusitmsMarginVerticalSpacer(size = 24)
     }
 }
 
-@Preview
 @Composable
-fun SetPwPreview() {
-    FindPwSetNewPw(navController = rememberNavController())
+fun SetNewPwButton(viewModel: FindPwViewModel, navController: NavHostController) {
+    val passwordErrorState = viewModel.passwordErrorState.collectAsState()
+    val isInitialState = viewModel.newPw.value.isEmpty() && viewModel.newPwConfirm.value.isEmpty()
+
+    val buttonColor = when {
+        isInitialState -> KusitmsColorPalette.current.Grey500
+        passwordErrorState.value == FindPwViewModel.PasswordErrorState.None -> KusitmsColorPalette.current.Main500
+        else -> KusitmsColorPalette.current.Grey500
+    }
+    val textColor = when {
+        isInitialState -> KusitmsColorPalette.current.Grey400
+        passwordErrorState.value == FindPwViewModel.PasswordErrorState.None -> KusitmsColorPalette.current.White
+        else -> KusitmsColorPalette.current.Grey400
+    }
+
+    Button(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(56.dp),
+        onClick = {
+            if (passwordErrorState.value == FindPwViewModel.PasswordErrorState.None) {
+                navController.navigate(NavRoutes.LogInScreen.route)
+            }
+        },
+        colors = ButtonDefaults.buttonColors(containerColor = buttonColor),
+        shape = RoundedCornerShape(16.dp)
+    ) {
+        Text(
+            text = stringResource(id = R.string.find_pw_btn3),
+            style = KusitmsTypo.current.SubTitle2_Semibold,
+            color = textColor
+        )
+    }
 }
+

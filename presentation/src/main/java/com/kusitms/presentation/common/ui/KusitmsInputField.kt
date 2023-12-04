@@ -44,7 +44,7 @@ fun KusitmsInputField(
             },
             colors = TextFieldDefaults.outlinedTextFieldColors(
                 textColor = KusitmsColorPalette.current.White,
-                focusedBorderColor = KusitmsColorPalette.current.Main500,
+                focusedBorderColor = if(!isError)KusitmsColorPalette.current.Main500 else KusitmsColorPalette.current.Sub2,
                 unfocusedBorderColor = if(isError) KusitmsColorPalette.current.Sub2 else KusitmsColorPalette.current.Grey700,
                 unfocusedLabelColor = KusitmsColorPalette.current.Grey400,
                 focusedLabelColor = KusitmsColorPalette.current.White,
@@ -58,7 +58,7 @@ fun KusitmsInputField(
                         Icon(imageVector = xIcon.vector, contentDescription = "Clear Text", tint = Color.Unspecified)
                     }
                 }
-                if(isError && !isFocused) {
+                if(isError) {
                     IconButton(onClick = { }) {
                         Icon(painter = painterResource(id = R.drawable.ic_finpw_warning), contentDescription = "warning", tint = Color.Unspecified)
                     }
