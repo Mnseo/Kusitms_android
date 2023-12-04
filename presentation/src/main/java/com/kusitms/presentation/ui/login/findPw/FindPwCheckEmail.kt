@@ -90,7 +90,7 @@ fun FindPwBtn(@StringRes text:Int, viewModel:FindPwViewModel, navController: Nav
         ,
         shape = RoundedCornerShape(size = 16.dp)
     ) {
-        Text(text = stringResource(id = text), style = KusitmsTypo.current.SubTitle2_Semibold, color = textColor)
+        Text(text = stringResource(id = text), style = KusitmsTypo.current.SubTitle2_Semibold, color = textColor, modifier =  Modifier.padding(start = 12.dp))
     }
 }
 

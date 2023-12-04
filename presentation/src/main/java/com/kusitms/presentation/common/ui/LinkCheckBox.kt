@@ -22,20 +22,15 @@ fun LinkCheckBox() {
         modifier = Modifier
             .width(110.dp)
             .height(48.dp)
-            .border(
-                width = 1.dp,
-                color = KusitmsColorPalette.current.White,
-                shape = RoundedCornerShape(12.dp)
-            )
             .height(48.dp)
-            .background(color = KusitmsColorPalette.current.Grey700)
+            .background(color = KusitmsColorPalette.current.Grey700, shape = RoundedCornerShape(12.dp))
             .padding(start = 12.dp, top = 12.dp, end = 12.dp, bottom = 12.dp),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(text = stringResource(id = R.string.signin2_checkbox), style = KusitmsTypo.current.Text_Medium, color = KusitmsColorPalette.current.Grey400)
         IconButton(
             modifier= Modifier.size(24.dp),
-            onClick = { /*TODO*/ }) {
+            onClick = { /* 클릭시 bottomSheet 떠야함 */ }) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_under_errow),
                 contentDescription = null,

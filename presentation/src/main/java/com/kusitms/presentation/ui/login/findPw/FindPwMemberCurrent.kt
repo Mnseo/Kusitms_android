@@ -36,6 +36,6 @@ fun PwCurrentColumn() {
         horizontalAlignment =  Alignment.Start,
         verticalArrangement = Arrangement.Top
     ) {
-        Text(text = "비밀번호 설정 화면", style = KusitmsTypo.current.SubTitle2_Semibold, color = KusitmsColorPalette.current.Grey300 )
+
     }
 }

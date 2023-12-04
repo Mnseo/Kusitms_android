@@ -21,14 +21,16 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kusitms.presentation.R
+import com.kusitms.presentation.common.ui.KusitmsMarginHorizontalSpacer
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
+import com.kusitms.presentation.common.ui.theme.kusimsShapes
 
 @Composable
 fun KusitmsLinkCheck() {
     Row(
         modifier = Modifier
-            .fillMaxWidth()
+            .width(295.dp)
             .height(48.dp),
         horizontalArrangement = Arrangement.spacedBy(4.dp, Alignment.Start),
         verticalAlignment = Alignment.CenterVertically
@@ -46,33 +48,27 @@ fun LinkTextField() {
 //    var borderColor by remember { mutableStateOf(KusitmsColorPalette.current.White) }
     Row(
         modifier = Modifier
-            .width(167.dp)
-            .fillMaxHeight()
+            .width(177.dp)
+            .height(48.dp)
             .border(
                 width = 1.dp,
-                color = KusitmsColorPalette.current.White,
+                color = KusitmsColorPalette.current.Grey700,
                 shape = RoundedCornerShape(12.dp)
             )
-            .background(color = KusitmsColorPalette.current.Grey700)
-            .padding(start = 16.dp, top = 12.dp, end = 16.dp, bottom = 12.dp),
+            .background(
+                color = KusitmsColorPalette.current.Grey700,
+                shape = RoundedCornerShape(12.dp)
+            ),
         horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.Start),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Box(
             modifier = Modifier
-                .width(99.dp)
+                .width(129.dp)
                 .height(48.dp)
                 .background(KusitmsColorPalette.current.Grey700)
-                .border(width = 1.dp, color = KusitmsColorPalette.current.White, shape= RoundedCornerShape(12.dp))
-                .clickable {
-                    isClicked = !isClicked
-//                    borderColor = if(isClicked) {
-//                        KusitmsColorPalette.current.Main500
-//                    } else {
-//                        KusitmsColorPalette.current.White
-//                    }
-                }
         ) {
+            KusitmsMarginHorizontalSpacer(size = 0)
             TextField(
                 value = textState.value,
                 onValueChange = {
@@ -81,11 +77,11 @@ fun LinkTextField() {
                 colors = TextFieldDefaults.textFieldColors(
                     containerColor = Color.Transparent,
                     cursorColor = KusitmsColorPalette.current.Main500,
-                    disabledLabelColor = Color.Unspecified,
+                    disabledLabelColor = Color.Transparent,
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent
                 ),
-                placeholder = { Text(stringResource(id = R.string.signin2_placeholder1), style = KusitmsTypo.current.Text_Medium, color = KusitmsColorPalette.current.White ) }
+                placeholder = { Text(stringResource(id = R.string.signin2_placeholder2), style = KusitmsTypo.current.Text_Medium, color = KusitmsColorPalette.current.White ) }
             )
         }
 

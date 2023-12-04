@@ -24,6 +24,7 @@
     <string name="signin_request_warning2">이미 회원가입을 완료했습니다</string>
 
 
+
     <!-- LoginScreen-->
     <string name="splash_tv">큐시즘의 또 한번 도약</string>
     <string name="login_top_tv">비전을 가지고 함께 성장하는 학회</string>
@@ -130,6 +131,8 @@
     <string name="signin2_placeholder1">나만의 한 줄 소개를 작성해보세요</string>
     <string name="signin2_placeholder2">https://</string>
     <string name="signin2_checkbox">선택</string>
+
+
 
 
     <!-- SignInScreen3-->
