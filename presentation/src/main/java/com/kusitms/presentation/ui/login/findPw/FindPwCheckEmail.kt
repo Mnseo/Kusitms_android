@@ -17,6 +17,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -34,8 +35,11 @@ import kotlinx.coroutines.flow.map
 
 
 @Composable
-fun FindPwCheckEmail(navController:NavHostController) {
-    val viewModel: FindPwViewModel = viewModel(LocalContext.current as ComponentActivity)
+fun FindPwCheckEmail(
+    navController:NavHostController,
+    viewModel: FindPwViewModel
+) {
+//    val viewModel: FindPwViewModel = viewModel(LocalContext.current as ComponentActivity)
     KusitmsScaffoldNonScroll(
         topbarText = stringResource(id = R.string.find_pw_topbar),
         navController = navController
@@ -104,11 +108,4 @@ fun getTextColor(inputState: InputState): Color {
         InputState.DEFAULT, InputState.INVALID -> KusitmsColorPalette.current.Grey400
         InputState.ENTERED, InputState.VALID -> KusitmsColorPalette.current.White
     }
-}
-
-
-@Preview
-@Composable
-fun PreviewFindPw1() {
-    FindPwCheckEmail(rememberNavController())
 }

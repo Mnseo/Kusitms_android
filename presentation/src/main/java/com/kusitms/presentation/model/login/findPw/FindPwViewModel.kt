@@ -88,7 +88,7 @@ class FindPwViewModel @Inject constructor(): ViewModel() {
     }
 
 
-    private fun validatePassword() {
+    fun validatePassword() {
         when {
             _newPw.value.length < 8 -> _passwordErrorState.value = PasswordErrorState.ShortPassword
             _newPw.value != _newPwConfirm.value -> _passwordErrorState.value = PasswordErrorState.PasswordsDoNotMatch

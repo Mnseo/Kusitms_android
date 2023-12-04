@@ -37,7 +37,10 @@ fun FindPwSetPwInput(viewModel:FindPwViewModel) {
             KusitmsInputField(
                 text = R.string.find_pw_placeholder2,
                 value = newPassword,
-                onValueChange = viewModel::updateNewPassword,
+                onValueChange = {
+                    viewModel.updateNewPassword(it)
+                    viewModel.validatePassword()
+                },
                 isError = passwordError == FindPwViewModel.PasswordErrorState.ShortPassword
             )
             Spacer(modifier = Modifier.height(4.dp))
@@ -61,7 +64,10 @@ fun FindPwSetPwInput(viewModel:FindPwViewModel) {
             KusitmsInputField(
                 text = R.string.find_pw_placeholder3,
                 value = newPasswordConfirm,
-                onValueChange = viewModel::updateNewPasswordConfirm,
+                onValueChange = {
+                    viewModel.updateNewPasswordConfirm(it)
+                    viewModel.validatePassword()
+                },
                 isError = passwordError == FindPwViewModel.PasswordErrorState.PasswordsDoNotMatch
             )
             Spacer(modifier = Modifier.height(4.dp))

@@ -19,6 +19,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -35,8 +36,11 @@ import com.kusitms.presentation.ui.signIn.KusitmsInputField
 
 
 @Composable
-fun FindPwCodeValidation(navController: NavHostController) {
-    val viewModel: FindPwViewModel = viewModel(LocalContext.current as ComponentActivity)
+fun FindPwCodeValidation(
+    navController: NavHostController,
+    viewModel: FindPwViewModel
+) {
+//    val viewModel: FindPwViewModel = viewModel(LocalContext.current as ComponentActivity)
     KusitmsScaffoldNonScroll(
         topbarText = stringResource(id = R.string.find_pw_topbar),
         navController = navController
@@ -155,9 +159,4 @@ fun formatTime(seconds: Int): String {
 }
 
 
-@Preview
-@Composable
-fun previewSetNewPw() {
-    FindPwCodeValidation(rememberNavController())
-}
 
