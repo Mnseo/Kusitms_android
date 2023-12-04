@@ -19,6 +19,12 @@ class FindPwViewModel: ViewModel() {
     private val _newPw = MutableStateFlow("")
     val newPw: StateFlow<String> = _newPw
 
+    private val _newPwConfirm = MutableStateFlow("")
+    val newPwConfirm: StateFlow<String> = _newPwConfirm
+
+    private val _passwordErrorState = MutableStateFlow<PasswordErrorState>(PasswordErrorState.None)
+    val passwordErrorState: StateFlow<PasswordErrorState> = _passwordErrorState
+
     private val _code = MutableStateFlow("")
     val code: StateFlow<String> = _code
 
@@ -45,6 +51,12 @@ class FindPwViewModel: ViewModel() {
 
     fun updateNewPassword(newPw: String) {
         _newPw.value = newPw
+        validatePassword()
+    }
+
+    fun updateNewPasswordConfirm(pw: String) {
+        _newPwConfirm.value = pw
+        validatePassword()
     }
 
     fun updateCode(newCode: String) {
@@ -70,6 +82,21 @@ class FindPwViewModel: ViewModel() {
 
     fun validateCode() {
         _inputState.value = if(isCodeValid) InputState.VALID else InputState.INVALID
+    }
+
+
+    private fun validatePassword() {
+        when {
+            _newPw.value.length < 8 -> _passwordErrorState.value = PasswordErrorState.ShortPassword
+            _newPw.value != _newPwConfirm.value -> _passwordErrorState.value = PasswordErrorState.PasswordsDoNotMatch
+            else -> _passwordErrorState.value = PasswordErrorState.None
+        }
+    }
+
+    enum class PasswordErrorState {
+        None,
+        ShortPassword,
+        PasswordsDoNotMatch
     }
 
 

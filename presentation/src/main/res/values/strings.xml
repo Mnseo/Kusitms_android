@@ -75,7 +75,7 @@
     <string name="find_pw_validation_email">현재 학회원으로 등록되어 있지 않습니다</string>
     <string name="find_pw_validation1">현재 비밀번호와 일치하지 않습니다</string>
     <string name="find_pw_validation2">영문,숫자,특수문자를 조합하여 8자 이상으로 입력해주세요</string>
-    <string name="find_pw_validation3">비밀번호와 일치하지 않습니다</string>
+    <string name="find_pw_validation3">새 비밀번호와 일치하지 않습니다</string>
 
     <string name="find_pw_btn1">인증코드 전송</string>
     <string name="find_pw_btn2">인증하기</string>

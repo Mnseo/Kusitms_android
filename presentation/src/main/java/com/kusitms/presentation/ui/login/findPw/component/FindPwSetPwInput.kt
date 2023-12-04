@@ -11,17 +11,14 @@ import androidx.compose.ui.unit.dp
 import com.kusitms.presentation.R
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
+import com.kusitms.presentation.model.login.findPw.FindPwViewModel
 import com.kusitms.presentation.ui.signIn.KusitmsInputField
 
 
 @Composable
-fun FindPwValidation(
-    pw:String,
-    pwValidation: String,
-    onPwChange: (String) -> Unit,
-    onValidationChange: (String) -> Unit
-    ) {
-    var newPwLength by remember {mutableStateOf(0)}
+fun FindPwSetPwInput(viewModel:FindPwViewModel) {
+    val newPassword by viewModel.newPw.collectAsState()
+    val newPasswordConfirm by viewModel.newPwConfirm.collectAsState()
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -30,8 +27,8 @@ fun FindPwValidation(
             verticalArrangement = Arrangement.Top
         ) {
             //Error 1: 8자 이하 , Error2: 비밀번호 일치 x
-            val isError1 = pw.length < 8
-            val isError2 = pw != pwValidation
+            val isError1 = newPassword.length < 8
+            val isError2 = newPassword.isNotBlank() && newPasswordConfirm.isNotBlank() && newPassword != newPasswordConfirm
 
             //pwInput1
             Text(
@@ -42,10 +39,9 @@ fun FindPwValidation(
             Spacer(modifier = Modifier.height(4.dp))
             KusitmsInputField(
                 text = R.string.find_pw_placeholder2,
-                value = pw,
+                value = newPassword,
                 onValueChange = {
                     onPwChange(it)
-                    newPwLength = it.length
                 },
                 isError = isError1)
             Spacer(modifier = Modifier.height(4.dp))
@@ -78,7 +74,7 @@ fun FindPwValidation(
             //Error1
             if(isError1) {
                 Text(
-                    text = stringResource(id = R.string.find_pw_validation2),
+                    text = stringResource(id = R.string.find_pw_validation3),
                     style = KusitmsTypo.current.Text_Medium,
                     color = KusitmsColorPalette.current.Sub2
                 )
