@@ -19,17 +19,14 @@ import com.kusitms.presentation.ui.signIn.KusitmsInputField
 fun FindPwSetPwInput(viewModel:FindPwViewModel) {
     val newPassword by viewModel.newPw.collectAsState()
     val newPasswordConfirm by viewModel.newPwConfirm.collectAsState()
+    val passwordError by viewModel.passwordErrorState.collectAsState()
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(200.dp),
+                .height(220.dp),
             horizontalAlignment = Alignment.Start,
             verticalArrangement = Arrangement.Top
         ) {
-            //Error 1: 8자 이하 , Error2: 비밀번호 일치 x
-            val isError1 = newPassword.length < 8
-            val isError2 = newPassword.isNotBlank() && newPasswordConfirm.isNotBlank() && newPassword != newPasswordConfirm
-
             //pwInput1
             Text(
                 text = stringResource(id = R.string.find_pw_caption2),
@@ -40,13 +37,12 @@ fun FindPwSetPwInput(viewModel:FindPwViewModel) {
             KusitmsInputField(
                 text = R.string.find_pw_placeholder2,
                 value = newPassword,
-                onValueChange = {
-                    onPwChange(it)
-                },
-                isError = isError1)
+                onValueChange = viewModel::updateNewPassword,
+                isError = passwordError == FindPwViewModel.PasswordErrorState.ShortPassword
+            )
             Spacer(modifier = Modifier.height(4.dp))
             //Error1
-            if(isError1) {
+            if(passwordError == FindPwViewModel.PasswordErrorState.ShortPassword) {
                 Text(
                     text = stringResource(id = R.string.find_pw_validation2),
                     style = KusitmsTypo.current.Text_Medium,
@@ -64,15 +60,13 @@ fun FindPwSetPwInput(viewModel:FindPwViewModel) {
             Spacer(modifier = Modifier.height(4.dp))
             KusitmsInputField(
                 text = R.string.find_pw_placeholder3,
-                value = pwValidation,
-                onValueChange = {
-                                onValidationChange(it)
-                },
-                isError = isError2
+                value = newPasswordConfirm,
+                onValueChange = viewModel::updateNewPasswordConfirm,
+                isError = passwordError == FindPwViewModel.PasswordErrorState.PasswordsDoNotMatch
             )
             Spacer(modifier = Modifier.height(4.dp))
-            //Error1
-            if(isError1) {
+            //Error2
+            if(passwordError == FindPwViewModel.PasswordErrorState.PasswordsDoNotMatch) {
                 Text(
                     text = stringResource(id = R.string.find_pw_validation3),
                     style = KusitmsTypo.current.Text_Medium,
