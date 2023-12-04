@@ -24,6 +24,7 @@ import com.kusitms.presentation.ui.login.findPw.FindPwCodeValidation
 import com.kusitms.presentation.ui.login.findPw.FindPwSetNewPw
 import com.kusitms.presentation.ui.login.member.LoginMemberScreen
 import com.kusitms.presentation.ui.notice.NoticeScreen
+import com.kusitms.presentation.ui.notice.detail.NoticeDetailScreen
 import com.kusitms.presentation.ui.signIn.SignInProfileComplete
 import com.kusitms.presentation.ui.signIn.SignInRequestScreen
 import com.kusitms.presentation.ui.splash.SplashScreen
@@ -59,8 +60,14 @@ fun MainNavigation() {
 
         //HomeScreen
         kusitmsComposableWithAnimation(NavRoutes.HomeScreen.route) { HomeScreen(navController)}
-        kusitmsComposableWithAnimation(NavRoutes.Notice.route) { NoticeScreen() }
-
+        kusitmsComposableWithAnimation(NavRoutes.Notice.route) {
+            NoticeScreen(
+                onNoticeClick = {
+                    navController.navigate(NavRoutes.NoticeDetail(it.noticeId).route)
+                }
+            )
+        }
+        kusitmsComposableWithAnimation(NavRoutes.NoticeDetail().route) { NoticeDetailScreen() }
     }
 }
 
