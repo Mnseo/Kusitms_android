@@ -11,24 +11,30 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.kusitms.presentation.R
 import com.kusitms.presentation.common.theme.KusitmsScaffoldNonScroll
+import com.kusitms.presentation.common.ui.KusitmsMarginVerticalSpacer
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
+import com.kusitms.presentation.model.setting.SettingViewModel
 import com.kusitms.presentation.model.setting.getMemberSetting
 import com.kusitms.presentation.model.setting.getNonMemberSetting
 import com.kusitms.presentation.model.setting.openUriSetting
 
 @Composable
-fun SettingMember(navController: NavHostController) {
+fun SettingMember(
+    navController: NavHostController,
+    viewModel: SettingViewModel
+) {
     KusitmsScaffoldNonScroll(topbarText = stringResource(id = R.string.setting_topbar), navController = navController) {
-        SettingMemberColumn1(navController = navController)
+        SettingMemberColumn1(navController = navController, viewModel)
     }
 }
 
 @Composable
-fun SettingMemberColumn1(navController: NavHostController) {
+fun SettingMemberColumn1(navController: NavHostController, viewModel: SettingViewModel) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -36,7 +42,8 @@ fun SettingMemberColumn1(navController: NavHostController) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.Top)
     ) {
-        Spacer(modifier = Modifier.height(73.5.dp))
+        KusitmsMarginVerticalSpacer(size = 114)
+        SettingToggle(title = "푸시알림", viewModel =  viewModel)
         SettingMemberColumn2(navController = navController)
     }
 }
@@ -67,5 +74,6 @@ fun SettingMemberColumn2(navController: NavHostController) {
 @Preview
 @Composable
 fun PreviewSettingMember() {
-    SettingMember(rememberNavController())
+    val SettingViewModel:SettingViewModel = hiltViewModel()
+    SettingMember(rememberNavController(), SettingViewModel)
 }

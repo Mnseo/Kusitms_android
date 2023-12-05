@@ -20,16 +20,17 @@ import androidx.compose.ui.unit.dp
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
 import com.kusitms.presentation.model.setting.SettingUiModel
+import com.kusitms.presentation.model.setting.SettingViewModel
 
 
 @Composable
-fun SettingToggle(title:String) {
+fun SettingToggle(title:String, viewModel:SettingViewModel) {
+    val isToggle by viewModel.alarmState.collectAsState()
     Box(modifier = Modifier
         .fillMaxWidth()
         .background(color = KusitmsColorPalette.current.Grey700)
         .height(64.dp)
     ) {
-        var isToggle by remember {mutableStateOf(false)}
         Row(
             modifier = Modifier
                 .fillMaxSize()
@@ -39,7 +40,7 @@ fun SettingToggle(title:String) {
         ) {
             Text(text = title, style = KusitmsTypo.current.Text_Medium, color= KusitmsColorPalette.current.Grey200)
                 ToggleBtn(selected = isToggle) {
-                    isToggle = it
+                    viewModel.onToggleChange(it)
                 }
             }
         }
@@ -62,9 +63,9 @@ fun ToggleBtn(
             modifier = Modifier
                 .fillMaxSize()
                 .background(
-                if (selected) KusitmsColorPalette.current.Main500
-                else KusitmsColorPalette.current.Main300.copy(0.4f),
-            ), contentAlignment = if (selected) Alignment.CenterEnd else Alignment.CenterStart
+                    if (selected) KusitmsColorPalette.current.Main500
+                    else KusitmsColorPalette.current.Main300.copy(0.4f),
+                ), contentAlignment = if (selected) Alignment.CenterEnd else Alignment.CenterStart
         ) {
             CheckCircle(modifier = Modifier.padding(5.dp))
         }
@@ -82,10 +83,4 @@ fun CheckCircle(
             .clip(CircleShape)
             .background(Color.White)
     )
-}
-
-@Preview
-@Composable
-fun togglePreview() {
-    SettingToggle(title = "푸시알림 선택")
 }

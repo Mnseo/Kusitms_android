@@ -12,12 +12,14 @@ import com.kusitms.presentation.ui.signIn.SignInAdditionalProfile
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
+import androidx.compose.ui.text.font.FontVariation
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavDeepLink
 import androidx.navigation.NavGraphBuilder
 import com.kusitms.presentation.model.login.findPw.FindPwViewModel
+import com.kusitms.presentation.model.setting.SettingViewModel
 import com.kusitms.presentation.model.signIn.SignInRequestViewModel
 import com.kusitms.presentation.ui.home.HomeScreen
 import com.kusitms.presentation.ui.login.findPw.FindPwCheckEmail
@@ -26,6 +28,8 @@ import com.kusitms.presentation.ui.login.findPw.FindPwMemberCurrent
 import com.kusitms.presentation.ui.login.findPw.FindPwSetNewPw
 import com.kusitms.presentation.ui.login.member.LoginMemberScreen
 import com.kusitms.presentation.ui.notice.NoticeScreen
+import com.kusitms.presentation.ui.setting.SettingMember
+import com.kusitms.presentation.ui.setting.SettingNonMember
 import com.kusitms.presentation.ui.signIn.SignInProfileComplete
 import com.kusitms.presentation.ui.signIn.SignInRequestScreen
 import com.kusitms.presentation.ui.splash.SplashScreen
@@ -37,6 +41,7 @@ fun MainNavigation() {
     val currentRoute = currentBackStackEntry?.destination?.route
 
     val findPwViewModel: FindPwViewModel=  hiltViewModel()
+    val SettingViewModel : SettingViewModel = hiltViewModel()
 
     NavHost(
         navController = navController,
@@ -61,6 +66,10 @@ fun MainNavigation() {
         kusitmsComposableWithAnimation(NavRoutes.FindPwCodeValidation.route) { FindPwCodeValidation(navController, viewModel = findPwViewModel)}
         kusitmsComposableWithAnimation(NavRoutes.FindPwSetNewPw.route) { FindPwSetNewPw(navController, viewModel = findPwViewModel) }
         kusitmsComposableWithAnimation(NavRoutes.FindPwMemberCurrent.route) { FindPwMemberCurrent(navController)}
+
+        //SettingScreen
+        kusitmsComposableWithAnimation(NavRoutes.SettingMember.route) { SettingMember(navController, SettingViewModel)}
+        kusitmsComposableWithAnimation(NavRoutes.SettingNonMember.route) { SettingNonMember(navController)}
 
         //HomeScreen
         kusitmsComposableWithAnimation(NavRoutes.HomeScreen.route) { HomeScreen(navController)}

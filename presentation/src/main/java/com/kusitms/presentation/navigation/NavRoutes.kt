@@ -27,7 +27,8 @@ sealed class NavRoutes(val route: String)
 
 
     object HomeScreen: NavRoutes("Home")
-    object Setting: NavRoutes("Setting")
+    object SettingMember: NavRoutes("SettingMember")
+    object SettingNonMember: NavRoutes("SettingNonMember")
 
     object Notice : NavRoutes("Notice")
 
