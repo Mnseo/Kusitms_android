@@ -1,4 +1,4 @@
-package com.kusitms.domain.model
+package com.kusitms.data.model
 
 data class SignInCondition(
     val name: String,

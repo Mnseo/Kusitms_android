@@ -1,4 +1,4 @@
-package com.kusitms.domain.entity.member
+package com.kusitms.data.entity.member
 
 
 data class Member(

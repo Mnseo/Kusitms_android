@@ -1,6 +1,5 @@
 package com.kusitms.presentation.ui.login
 
-import LoginLogoIv
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -26,7 +25,8 @@ import com.kusitms.presentation.ui.login.nonMember.NonMemberPage
 fun NonMemberScreen(navController: NavController) {
     KusitmsScaffoldNonScroll(
         topbarText = stringResource(id = R.string.nonMember_topbar),
-        navController = rememberNavController()
+        navController = navController,
+        isSetting = true
     ) {
         NonMemberColumn()
     }

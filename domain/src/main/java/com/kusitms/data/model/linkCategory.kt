@@ -1,4 +1,4 @@
-package com.kusitms.domain.model
+package com.kusitms.data.model
 
 enum class linkCategory {
     LINK,

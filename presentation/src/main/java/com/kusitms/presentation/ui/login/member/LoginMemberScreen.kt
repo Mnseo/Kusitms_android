@@ -1,6 +1,5 @@
 package com.kusitms.presentation.ui.login.member
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -21,7 +20,6 @@ import com.kusitms.presentation.common.theme.KusitmsScaffoldNonScroll
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
 import com.kusitms.presentation.navigation.NavRoutes
-import com.kusitms.presentation.ui.signIn.KusitmsInputField
 
 
 @Composable

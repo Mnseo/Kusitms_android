@@ -147,5 +147,6 @@
     <string name="setting_nonmember_title1">개인정보 처리 방침</string>
     <string name="setting_nonmember_title2">서비스 이용약관</string>
     <string name="setting_nonmember_title3">로그인</string>
+    <string name="setting_member_title1">푸시알림</string>
 
 </resources>
