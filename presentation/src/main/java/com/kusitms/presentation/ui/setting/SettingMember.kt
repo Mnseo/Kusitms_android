@@ -20,7 +20,6 @@ import com.kusitms.presentation.common.ui.KusitmsMarginVerticalSpacer
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.model.setting.SettingViewModel
 import com.kusitms.presentation.model.setting.getMemberSetting
-import com.kusitms.presentation.model.setting.getNonMemberSetting
 import com.kusitms.presentation.model.setting.openUriSetting
 
 @Composable

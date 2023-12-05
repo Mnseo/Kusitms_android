@@ -1,24 +1,25 @@
 package com.kusitms.presentation.common.theme
 
 
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.navigation.NavHostController
+import androidx.navigation.NavController
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
+import com.kusitms.presentation.navigation.NavRoutes
 import com.kusitms.presentation.ui.ImageVector.LeftArrow
+import com.kusitms.presentation.ui.ImageVector.tralingIcon
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun KusitmsScaffoldNonScroll(
     topbarText: String,
-    navController:NavHostController? = null,
-    content: @Composable () -> Unit
+    navController: NavController? = null,
+    isSetting: Boolean = false,
+    content: @Composable () -> Unit,
 ) {
-    val scrollState = rememberScrollState()
     Scaffold(
         topBar = {
             TopAppBar(
@@ -44,6 +45,16 @@ fun KusitmsScaffoldNonScroll(
                             Icon(
                                 imageVector = LeftArrow.vector,
                                 contentDescription = "Localized description",
+                            )
+                        }
+                    }
+                },
+                actions = {
+                    if (isSetting == true && navController!=null) {
+                        IconButton(onClick = {navController.navigate(NavRoutes.SettingNonMember.route)}) {
+                            Icon(
+                                imageVector = tralingIcon.vector,
+                                contentDescription = "Localized description"
                             )
                         }
                     }

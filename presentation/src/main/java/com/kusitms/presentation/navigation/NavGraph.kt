@@ -21,6 +21,7 @@ import com.kusitms.presentation.model.login.findPw.FindPwViewModel
 import com.kusitms.presentation.model.setting.SettingViewModel
 import com.kusitms.presentation.model.signIn.SignInRequestViewModel
 import com.kusitms.presentation.ui.home.HomeScreen
+import com.kusitms.presentation.ui.login.NonMemberScreen
 import com.kusitms.presentation.ui.login.findPw.FindPwCheckEmail
 import com.kusitms.presentation.ui.login.findPw.FindPwCodeValidation
 import com.kusitms.presentation.ui.login.findPw.FindPwMemberCurrent
@@ -43,6 +44,7 @@ fun MainNavigation() {
     val findPwViewModel: FindPwViewModel=  hiltViewModel()
     val SettingViewModel : SettingViewModel = hiltViewModel()
 
+
     NavHost(
         navController = navController,
         startDestination = NavRoutes.SplashScreen.route
@@ -59,6 +61,7 @@ fun MainNavigation() {
 
         //LoginScreen
         kusitmsComposableWithAnimation(NavRoutes.LoginMemberScreen.route) { LoginMemberScreen(navController) }
+        kusitmsComposableWithAnimation(NavRoutes.LoginNonMember.route) { NonMemberScreen(navController) }
         kusitmsComposableWithAnimation(NavRoutes.LogInScreen.route) { LoginScreen(navController) }
 
         //FindPwScreen

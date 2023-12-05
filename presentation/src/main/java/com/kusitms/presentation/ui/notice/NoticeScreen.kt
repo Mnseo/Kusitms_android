@@ -43,7 +43,7 @@ fun NoticeScreen(
                     modifier = Modifier
                         .size(24.dp)
                         .clickable {
-
+                            /* SettingMember 연결 해주심 됩니당 아이콘은 imageVector > trailingicon에 있어용 */
                         }
                         .background(Color.White)
                 )
