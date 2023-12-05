@@ -42,9 +42,9 @@ data class ColorPalette(
 
     //Sub Color = Positive / Negative
     val Sub1: Color = Color(0xFF65E7DE),
-    val Sub2: Color = Color(0xFFFE6F7B)
+    val Sub2: Color = Color(0xFFFE6F7B),
 
-
+    val GreyBlack7 : Color = Color(0xFF959698)
 
 
     )

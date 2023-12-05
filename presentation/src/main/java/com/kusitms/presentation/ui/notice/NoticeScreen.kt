@@ -19,13 +19,16 @@ import com.kusitms.presentation.common.ui.KusitmsTabItem
 import com.kusitms.presentation.common.ui.KusitmsTabRow
 import com.kusitms.presentation.common.ui.KusitsmTopBarTextWithIcon
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
+import com.kusitms.presentation.model.notice.NoticeUiModel
 
 enum class NoticeTab(val title : String){
     NOTICE("공지사항"), CURRICULUM("커리큘럼")
 }
 
 @Composable
-fun NoticeScreen(){
+fun NoticeScreen(
+    onNoticeClick : (NoticeUiModel) -> Unit
+){
     var selectedTab by remember { mutableStateOf(NoticeTab.NOTICE) }
 
     Column(
@@ -59,10 +62,12 @@ fun NoticeScreen(){
         }
         when(selectedTab){
             NoticeTab.NOTICE-> {
-                NoticeList()
+                NoticeList(
+                    onNoticeClick = onNoticeClick
+                )
             }
             NoticeTab.CURRICULUM-> {
-
+                CurriculumList()
             }
         }
     }
@@ -72,5 +77,7 @@ fun NoticeScreen(){
 @Preview
 @Composable
 fun NoticeScreenPreview(){
-    NoticeScreen()
+    NoticeScreen(
+        onNoticeClick = {}
+    )
 }

@@ -12,7 +12,6 @@ import com.kusitms.presentation.ui.signIn.SignInAdditionalProfile
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
-import androidx.compose.ui.text.font.FontVariation
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavBackStackEntry
@@ -28,6 +27,7 @@ import com.kusitms.presentation.ui.login.findPw.FindPwMemberCurrent
 import com.kusitms.presentation.ui.login.findPw.FindPwSetNewPw
 import com.kusitms.presentation.ui.login.member.LoginMemberScreen
 import com.kusitms.presentation.ui.notice.NoticeScreen
+import com.kusitms.presentation.ui.notice.detail.NoticeDetailScreen
 import com.kusitms.presentation.ui.setting.SettingMember
 import com.kusitms.presentation.ui.setting.SettingNonMember
 import com.kusitms.presentation.ui.signIn.SignInProfileComplete
@@ -73,8 +73,14 @@ fun MainNavigation() {
 
         //HomeScreen
         kusitmsComposableWithAnimation(NavRoutes.HomeScreen.route) { HomeScreen(navController)}
-        kusitmsComposableWithAnimation(NavRoutes.Notice.route) { NoticeScreen() }
-
+        kusitmsComposableWithAnimation(NavRoutes.Notice.route) {
+            NoticeScreen(
+                onNoticeClick = {
+                    navController.navigate(NavRoutes.NoticeDetail(it.noticeId).route)
+                }
+            )
+        }
+        kusitmsComposableWithAnimation(NavRoutes.NoticeDetail().route) { NoticeDetailScreen() }
     }
 }
 
