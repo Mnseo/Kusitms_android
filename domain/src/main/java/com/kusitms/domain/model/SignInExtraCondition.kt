@@ -1,4 +1,4 @@
-package com.kusitms.data.model
+package com.kusitms.domain.model
 
 data class SignInExtraCondition(
     val imageUrl: String? = null,

@@ -131,7 +131,9 @@ fun TitleColumn(
         //파트 선택
         Text(text = stringResource(id = R.string.signin_member_caption1_3), style = KusitmsTypo.current.Caption1, color = KusitmsColorPalette.current.Grey400)
         Spacer(modifier = Modifier.height(5.dp))
-        KusitmsSnackField(text = R.string.signin_member_hint1_2, onSnackClick = {
+        KusitmsSnackField(
+            text = R.string.signin_member_hint1_2,
+            onSnackClick = {
 
         })
 
@@ -139,7 +141,10 @@ fun TitleColumn(
         Spacer(modifier = Modifier.height(24.dp))
         Text(text = stringResource(id = R.string.signin_member_caption1_4), style = KusitmsTypo.current.Caption1, color = KusitmsColorPalette.current.Grey400)
         Spacer(modifier = Modifier.height(5.dp))
-        KusitmsSnackField(text = R.string.signin_member_hint1_3, onSnackClick = {})
+        KusitmsSnackField(
+            text = R.string.signin_member_hint1_3,
+            onSnackClick = {}
+        )
 
 
         Spacer(modifier = Modifier.height(40.dp))
