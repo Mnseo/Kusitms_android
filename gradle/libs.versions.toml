@@ -91,7 +91,7 @@ dataStore = { group = "androidx.datastore", name = "datastore-preferences", vers
 hilt-compile = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
 hilt= { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 #navigation
-navigation-compose = {group = "androidx.navigation", name="navigation-compose", version.ref="compose"}
+navigation-compose = {group = "androidx.navigation", name="navigation-compose", version.ref="navigation-compose"}
 hilt-compose-navigation = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hilt-navigation" }
 # coil
 coil-compose = {group = "io.coil-kt", name="coil-compose", version.ref="coil"}
@@ -158,7 +158,8 @@ retrofitSerialization = [
     "retrofit-serialization"
 ]
 navigation = [
-    "hilt-compose-navigation"
+    "hilt-compose-navigation",
+    "navigation-compose"
 ]
 
 lottie = [

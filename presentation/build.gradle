@@ -44,6 +44,7 @@ dependencies {
 
     //default
     implementation(libs.bundles.default)
+    implementation 'androidx.compose.animation:animation-android:1.5.3'
     testImplementation(libs.junit)
     androidTestImplementation(libs.test.ext.junit)
     androidTestImplementation(libs.espresso.core)
