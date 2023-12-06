@@ -1,5 +1,10 @@
 package com.kusitms.domain.usecase
 
-class LoginUseCase {
-
-}
+//import com.kusitms.domain.repository.LogInRepository
+//import javax.inject.Inject
+//
+//class LoginUseCase @Inject constructor(
+//    private val LogInRepository: LogInRepository,
+//) {
+//
+//}

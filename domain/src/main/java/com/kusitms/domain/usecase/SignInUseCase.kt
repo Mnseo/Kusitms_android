@@ -1,4 +1,7 @@
 package com.kusitms.domain.usecase
 
-class SignInUseCase {
+import javax.inject.Inject
+
+class SignInUseCase @Inject constructor() {
+
 }

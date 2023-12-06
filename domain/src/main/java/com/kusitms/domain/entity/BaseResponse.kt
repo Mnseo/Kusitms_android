@@ -1,7 +1,7 @@
 package com.kusitms.domain.entity
 
 
-data class BaseResponse<T>(
+open class BaseResponse<T>(
     val result: Result,
     val payload: T
 )
