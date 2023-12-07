@@ -1,5 +1,6 @@
 package com.kusitms.data.remote.di
 
+import com.kusitms.data.BuildConfig
 import com.kusitms.data.remote.api.KusitmsApi
 import dagger.Module
 import dagger.Provides
@@ -16,6 +17,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 @Module
 @InstallIn(SingletonComponent::class)
 class NetworkModule {
+    val kusitmsServer: String = BuildConfig.KUSITMS_SERVER
+
     @Provides
     @Singleton
     fun provideKusitmsApi(): KusitmsApi {
@@ -24,7 +27,7 @@ class NetworkModule {
 
     private fun getRetrofit(): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("https://kusitmskoa.link/v1/")
+            .baseUrl(kusitmsServer)
             .client(getOkHttpClient())
             .addConverterFactory(GsonConverterFactory.create())
             .build()
