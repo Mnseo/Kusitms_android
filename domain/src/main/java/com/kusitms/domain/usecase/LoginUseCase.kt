@@ -1,10 +1,22 @@
 package com.kusitms.domain.usecase
 
-//import com.kusitms.domain.repository.LogInRepository
-//import javax.inject.Inject
-//
-//class LoginUseCase @Inject constructor(
-//    private val LogInRepository: LogInRepository,
-//) {
-//
-//}
+import com.kusitms.domain.entity.ApiResult
+import com.kusitms.domain.entity.request.LoginRequest
+import com.kusitms.domain.entity.response.LoginResponse
+import com.kusitms.domain.repository.LoginRepository
+import javax.inject.Inject
+
+class LoginUseCase @Inject constructor(
+    private val loginRepository: LoginRepository,
+) {
+    suspend operator fun invoke(
+        request:LoginRequest
+    ): ApiResult<LoginResponse> {
+        return try {
+            val response = loginRepository.LoginMember(request)
+            ApiResult.Success(response)
+        } catch (e: Throwable) {
+            ApiResult.Failure(e) as ApiResult<LoginResponse>
+        }
+    }
+}
