@@ -30,7 +30,6 @@ fun LikeCategoryItem(subCategoryName:String) {
     Box(
         modifier = Modifier
             .height(44.dp)
-            .padding(horizontal = 12.dp)
             .border(
                 width = 1.dp,
                 color = KusitmsColorPalette.current.Grey500,
@@ -62,7 +61,7 @@ fun LikeCategoryItems(subCategories: List<String>) {
             .fillMaxWidth()
             .padding(horizontal = 10.dp, vertical = 16.dp)
             .height(436.dp),
-        horizontalArrangement = Arrangement.spacedBy(6.dp),
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         items(subCategories) { subCategory ->
