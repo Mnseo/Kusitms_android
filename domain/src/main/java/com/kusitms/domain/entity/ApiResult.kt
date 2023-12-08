@@ -2,8 +2,8 @@ package com.kusitms.domain.entity
 
 sealed interface ApiResult<T> {
     data class Success<T>(val data:T): ApiResult<T>
-    data class Failure(val throwable: Throwable) : ApiResult<Nothing>
-    data class ApiError(val code: Int, val message: String) : ApiResult<Nothing>
+    data class Failure<T>(val throwable: Throwable) : ApiResult<T>
+    data class ApiError(val code: Int, val message: String) : ApiResult<Any?>
 
 
     fun <T> ApiResult<T>.onSuccess(action: (T) -> Unit): ApiResult<T> {

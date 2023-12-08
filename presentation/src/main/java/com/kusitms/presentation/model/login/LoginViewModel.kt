@@ -1,55 +1,64 @@
 package com.kusitms.presentation.model.login
 
+import com.kusitms.domain.usecase.LoginUseCase
+import android.util.Log
 import androidx.lifecycle.ViewModel
-import com.kusitms.presentation.model.signIn.InputState
+import androidx.lifecycle.viewModelScope
+import com.kusitms.domain.entity.ApiResult
+import com.kusitms.domain.entity.request.LoginRequest
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
+
+enum class LoginStatus { SUCCESS, ERROR, DEFAULT}
+
 @HiltViewModel
-class LoginViewModel @Inject constructor(): ViewModel() {
+class LoginViewModel @Inject constructor(
+    private val loginUseCase: LoginUseCase
+): ViewModel() {
     private val _email = MutableStateFlow("")
     val email: StateFlow<String> = _email
 
     private val _password = MutableStateFlow("")
     val password: StateFlow<String> = _password
 
-    private val _inputState = MutableStateFlow(InputState.DEFAULT)
-    val inputState: StateFlow<InputState> = _inputState
+    private val _loginStatus = MutableStateFlow(LoginStatus.DEFAULT)
+    val loginStatus: StateFlow<LoginStatus> = _loginStatus
 
     fun updateEmail(email: String) {
         _email.value = email
-        if (email.isNotBlank()) {
-            _inputState.value = InputState.ENTERED
-        } else {
-            _inputState.value = InputState.DEFAULT
-        }
     }
 
     fun updatePassword(password: String) {
         _password.value = password
-        if (password.isNotBlank()) {
-            _inputState.value = InputState.ENTERED
-        } else {
-            _inputState.value = InputState.DEFAULT
+    }
+
+    fun validateLogin() {
+        viewModelScope.launch {
+            val email = email.value
+            val password = password.value
+
+            when (val response = loginUseCase(email, password)) {
+                is ApiResult.Success -> {
+                    _loginStatus.value = LoginStatus.SUCCESS
+                    Timber.tag("LoginSuccess_result")
+                        .d("Code: " + response.data.result.code + " " + "\n" + " Message: " + response.data.result.message)
+                    Log.d(
+                        "LoginSuccess_payload",
+                        "atk: ${response.data.payload.accessToken} \n rfk: ${response.data.payload.refreshToken}"
+                    )
+                }
+                is ApiResult.Failure -> {
+                    _loginStatus.value = LoginStatus.ERROR
+                    Timber.e(response.throwable)
+                }
+                else -> { _loginStatus.value = LoginStatus.ERROR }
+            }
         }
     }
-
-    val isEmailValid:Boolean
-        get() = email.value == "kusitms1234@naver.com"
-
-    val isPasswordValid:Boolean
-        get() = email.value == "kusitms1234@naver.com"
-
-    fun validateEmail() {
-        _inputState.value = if(isEmailValid) InputState.VALID else InputState.INVALID
-    }
-
-    fun validatePassword() {
-        _inputState.value = if(isPasswordValid) InputState.VALID else InputState.INVALID
-    }
-
-
 
 }

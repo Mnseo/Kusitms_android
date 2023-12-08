@@ -10,13 +10,14 @@ class LoginUseCase @Inject constructor(
     private val loginRepository: LoginRepository,
 ) {
     suspend operator fun invoke(
-        request:LoginRequest
+        email: String,
+        password: String
     ): ApiResult<LoginResponse> {
         return try {
-            val response = loginRepository.LoginMember(request)
+            val response = loginRepository.LoginMember(email,password)
             ApiResult.Success(response)
         } catch (e: Throwable) {
-            ApiResult.Failure(e) as ApiResult<LoginResponse>
+            ApiResult.Failure(e)
         }
     }
 }
