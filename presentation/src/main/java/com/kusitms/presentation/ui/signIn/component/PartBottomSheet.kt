@@ -1,13 +1,11 @@
 package com.kusitms.presentation.ui.signIn
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Text
-import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -26,27 +24,46 @@ import com.kusitms.presentation.model.signIn.categories
 import com.kusitms.presentation.ui.ImageVector.xIcon
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun PartBottomSheet(viewModel: SignInViewModel) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(vertical = 0.dp)
-                .background(
-                    color = KusitmsColorPalette.current.Grey600,
-                    shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp)
-                ),
-            horizontalAlignment = Alignment.Start,
-            verticalArrangement = Arrangement.Top
-        ) {
-            Spacer(modifier = Modifier.height(24.dp))
-            partSnackTitle()
-            Spacer(modifier = Modifier.height(20.dp))
-            partSelectColumn(viewModel = viewModel)
-        }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@ExperimentalMaterialApi
+@Composable
+fun PartBottomSheet(
+    viewModel: SignInViewModel,
+    openBottomSheet : Boolean = false,
+    onChangeOpenBottomSheet : (Boolean) -> Unit = {}
+){
+    val bottomSheetState = rememberModalBottomSheetState(
+        skipPartiallyExpanded = true
+    )
+
+    if (openBottomSheet) {
+        ModalBottomSheet(
+            containerColor = KusitmsColorPalette.current.Grey600,
+            dragHandle = {Box(Modifier.height(0.dp))},
+            onDismissRequest = { onChangeOpenBottomSheet(false) },
+            sheetState = bottomSheetState,
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight()
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .systemBarsPadding()
+                    .statusBarsPadding(),
+                horizontalAlignment = Alignment.Start,
+                verticalArrangement = Arrangement.Top
+            ) {
+                partSnackTitle()
+                Spacer(modifier = Modifier.height(20.dp))
+                partSelectColumn(viewModel = viewModel)
+            }
+        }
+    }
 }
+
+
 
 @Composable
 fun partSelectColumn(viewModel: SignInViewModel) {
@@ -101,6 +118,7 @@ fun ShowPartSheet(
 
 
 
+@OptIn(ExperimentalMaterialApi::class)
 @Preview
 @Composable
 fun ExamplePartSnack() {
