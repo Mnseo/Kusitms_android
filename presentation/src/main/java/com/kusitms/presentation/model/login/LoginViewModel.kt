@@ -36,6 +36,10 @@ class LoginViewModel @Inject constructor(
         _password.value = password
     }
 
+    fun updateLoginStatus(loginStatus: LoginStatus) {
+        _loginStatus.value = loginStatus
+    }
+
     fun validateLogin() {
         viewModelScope.launch {
             val email = email.value
@@ -43,7 +47,7 @@ class LoginViewModel @Inject constructor(
 
             when (val response = loginUseCase(email, password)) {
                 is ApiResult.Success -> {
-                    _loginStatus.value = LoginStatus.SUCCESS
+                    updateLoginStatus(LoginStatus.SUCCESS)
                     Timber.tag("LoginSuccess_result")
                         .d("Code: " + response.data.result.code + " " + "\n" + " Message: " + response.data.result.message)
                     Log.d(
@@ -52,14 +56,14 @@ class LoginViewModel @Inject constructor(
                     )
                 }
                 is ApiResult.ApiError -> {
-                    _loginStatus.value = LoginStatus.ERROR
+                    updateLoginStatus(LoginStatus.ERROR)
                 }
 
                 is ApiResult.Failure -> {
-                    _loginStatus.value = LoginStatus.ERROR
+                    updateLoginStatus(LoginStatus.ERROR)
                     Timber.e(response.throwable)
                 }
-                else -> { _loginStatus.value = LoginStatus.ERROR }
+                else -> { updateLoginStatus(LoginStatus.ERROR) }
             }
         }
     }
