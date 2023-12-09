@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -28,7 +29,9 @@ import com.kusitms.presentation.model.signIn.SignInViewModel
 import com.kusitms.presentation.navigation.NavRoutes
 import com.kusitms.presentation.ui.ImageVector.StudyIcon
 import com.kusitms.presentation.ui.signIn.KusitmsInputField
+import com.kusitms.presentation.ui.signIn.PartBottomSheet
 import com.kusitms.presentation.ui.signIn.SignInFixedInput
+import com.kusitms.presentation.ui.signIn.component.LikeCatergoryBottomSheet
 import kotlinx.coroutines.launch
 
 
@@ -70,7 +73,7 @@ fun SignInMember1(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
 @Composable
 fun TitleColumn(
     major: String,
@@ -80,6 +83,27 @@ fun TitleColumn(
     val email by viewModel.email.collectAsState()
     val phoneNum by viewModel.phoneNum.collectAsState()
     val name by viewModel.name.collectAsState()
+
+    var isOpenPartBottomSheet by remember { mutableStateOf(false) }
+    var isOpenLikeCategoryBottomSheet by remember { mutableStateOf(false) }
+
+    if(isOpenPartBottomSheet){
+        PartBottomSheet(
+            viewModel = viewModel,
+            isOpenPartBottomSheet
+        ){
+            isOpenPartBottomSheet = it
+        }
+    }
+
+    if(isOpenLikeCategoryBottomSheet){
+        LikeCatergoryBottomSheet(
+            viewModel = viewModel,
+            isOpenLikeCategoryBottomSheet)
+        {
+            isOpenLikeCategoryBottomSheet = it
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -134,7 +158,7 @@ fun TitleColumn(
         KusitmsSnackField(
             text = R.string.signin_member_hint1_2,
             onSnackClick = {
-
+                isOpenPartBottomSheet = true
         })
 
         //관심 카테고리
@@ -143,7 +167,9 @@ fun TitleColumn(
         Spacer(modifier = Modifier.height(5.dp))
         KusitmsSnackField(
             text = R.string.signin_member_hint1_3,
-            onSnackClick = {}
+            onSnackClick = {
+                isOpenLikeCategoryBottomSheet = true
+            }
         )
 
 
