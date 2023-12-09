@@ -41,13 +41,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.kusitms.presentation.common.ui.KusitmsDialog
 import com.kusitms.presentation.common.ui.KusitmsMarginHorizontalSpacer
 import com.kusitms.presentation.common.ui.KusitmsMarginVerticalSpacer
 import com.kusitms.presentation.common.ui.KusitsmTopBarTextWithIcon
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
-import com.kusitms.presentation.model.notice.CommentUiModel
 import com.kusitms.presentation.model.notice.NoticeUiModel
 import com.kusitms.presentation.model.notice.dummyCommentList
 import com.kusitms.presentation.model.notice.noticeDummy
@@ -62,7 +63,7 @@ fun NoticeDetailScreen(
 
 ) {
     val dummyNotice = noticeDummy.firstOrNull() ?: return
-    var commentList by remember { mutableStateOf<List<CommentUiModel>>(dummyCommentList) }
+    var commentList by remember { mutableStateOf(dummyCommentList) }
     val listState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
 
@@ -70,6 +71,41 @@ fun NoticeDetailScreen(
     val bottomSheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true
     )
+    
+    var openDialogState by remember { mutableStateOf(false) }
+    
+    if(openDialogState){
+        KusitmsDialog(
+            title = "신고",
+            content = {
+                Text(
+                    text = "타 서비스, 앱, 사이트 등 게시판 외부로 회원을 \n" +
+                            "유도하거나 공동구매, 할인 쿠폰, 홍보성 이벤트 등 \n" +
+                            "허가되지 않은 광고/홍보 게시물",
+                    textAlign = TextAlign.Center,
+                    style = KusitmsTypo.current.Caption1,
+                    color =  KusitmsColorPalette.current.Grey400
+                )
+                KusitmsMarginVerticalSpacer(size = 24)
+                Text(
+                    text = "모든 신고는 24시간 이내에 확인 후 조치합니다. 신고 사유에 \n" +
+                            "맞지 않는 신고를 했을 경우, 해당 신고는 처리되지 않습니다.",
+                    textAlign = TextAlign.Center,
+                    style = KusitmsTypo.current.Caption2,
+                    color =  KusitmsColorPalette.current.Sub2
+                )
+            },
+            okColor = KusitmsColorPalette.current.Sub2,
+            okText = "신고하기",
+            onOk = {
+
+                   },
+            onCancel = {
+                openDialogState = false
+            }) {
+            openDialogState = false
+        }
+    }
 
     if(openBottomSheet != null){
         ModalBottomSheet(
@@ -86,7 +122,12 @@ fun NoticeDetailScreen(
                     NoticeMoreBottom()
                 }
                 NoticeDetailModalState.Report -> {
-                    NoticeCommentReportBottom {
+                    NoticeCommentReportBottom(
+                        onClick = {
+                            openDialogState = true
+                            openBottomSheet = null
+                        }
+                    ) {
                         openBottomSheet = null
                     }
                 }
@@ -367,6 +408,7 @@ fun NoticeMoreBottom(
 
 @Composable
 fun NoticeCommentReportBottom(
+    onClick: () -> Unit= {},
     onDismiss : () -> Unit
 ){
     Column(
@@ -402,32 +444,44 @@ fun NoticeCommentReportBottom(
         ModalTextBox(
             text = "상업적 광고 및 판매",
             boxPadding = PaddingValues(horizontal = 12.5.dp),
-            onClick = {}
+            onClick = {
+                onClick()
+            }
         )
         ModalTextBox(
             text = "욕설/비하",
             boxPadding = PaddingValues(horizontal = 12.5.dp),
-            onClick = {}
+            onClick = {
+                onClick()
+            }
         )
         ModalTextBox(
             text = "유출/사칭/사기",
             boxPadding = PaddingValues(horizontal = 12.5.dp),
-            onClick = {}
+            onClick = {
+                onClick()
+            }
         )
         ModalTextBox(
             text = "정당/정치인 비하 및 선거운동",
             boxPadding = PaddingValues(horizontal = 12.5.dp),
-            onClick = {}
+            onClick = {
+                onClick()
+            }
         )
         ModalTextBox(
             text = "낚시/놀람/도배",
             boxPadding = PaddingValues(horizontal = 12.5.dp),
-            onClick = {}
+            onClick = {
+                onClick()
+            }
         )
         ModalTextBox(
             text = "음란물/불건전한 만남 및 대화",
             boxPadding = PaddingValues(horizontal = 12.5.dp),
-            onClick = {}
+            onClick = {
+                onClick()
+            }
         )
         KusitmsMarginVerticalSpacer(size = 24)
     }
