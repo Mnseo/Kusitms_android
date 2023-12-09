@@ -5,7 +5,6 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kusitms.domain.entity.ApiResult
-import com.kusitms.domain.entity.request.LoginRequest
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -52,6 +51,10 @@ class LoginViewModel @Inject constructor(
                         "atk: ${response.data.payload.accessToken} \n rfk: ${response.data.payload.refreshToken}"
                     )
                 }
+                is ApiResult.ApiError -> {
+                    _loginStatus.value = LoginStatus.ERROR
+                }
+
                 is ApiResult.Failure -> {
                     _loginStatus.value = LoginStatus.ERROR
                     Timber.e(response.throwable)
