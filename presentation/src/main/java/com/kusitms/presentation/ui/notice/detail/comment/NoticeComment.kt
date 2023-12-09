@@ -40,6 +40,8 @@ import com.kusitms.presentation.model.notice.CommentUiModel
 fun NoticeComment(
     comment: CommentUiModel,
     isLast : Boolean = false,
+    onClickReport : () -> Unit = {},
+    onClickDelete : () -> Unit = {},
     isParentCommentAsReply : Boolean = false
 ){
     Box(
@@ -85,7 +87,11 @@ fun NoticeComment(
                     modifier = Modifier
                         .padding(horizontal = 15.dp)
                         .clickable {
-
+                            if(comment.isMine){
+                                onClickDelete()
+                            }else {
+                                onClickReport()
+                            }
                         },
                     text = if(comment.isMine) "삭제" else "신고",
                     style = KusitmsTypo.current.Caption1,
