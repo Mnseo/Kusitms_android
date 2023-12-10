@@ -43,15 +43,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.kusitms.domain.model.notice.NoticeModel
+import com.kusitms.domain.model.notice.noticeDummy
 import com.kusitms.presentation.common.ui.KusitmsDialog
 import com.kusitms.presentation.common.ui.KusitmsMarginHorizontalSpacer
 import com.kusitms.presentation.common.ui.KusitmsMarginVerticalSpacer
 import com.kusitms.presentation.common.ui.KusitsmTopBarTextWithIcon
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
-import com.kusitms.presentation.model.notice.NoticeUiModel
 import com.kusitms.presentation.model.notice.dummyCommentList
-import com.kusitms.presentation.model.notice.noticeDummy
 import com.kusitms.presentation.ui.notice.detail.comment.CommentInput
 import com.kusitms.presentation.ui.notice.detail.comment.NoticeComment
 import kotlinx.coroutines.delay
@@ -239,7 +239,7 @@ fun NoticeDetailScreen(
 
 @Composable
 fun NoticeDetailTitleCard(
-    notice: NoticeUiModel
+    notice: NoticeModel
 ) {
     Card(
         modifier = Modifier

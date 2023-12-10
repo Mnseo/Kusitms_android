@@ -15,11 +15,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.kusitms.domain.model.notice.NoticeModel
 import com.kusitms.presentation.common.ui.KusitmsTabItem
 import com.kusitms.presentation.common.ui.KusitmsTabRow
 import com.kusitms.presentation.common.ui.KusitsmTopBarTextWithIcon
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
-import com.kusitms.presentation.model.notice.NoticeUiModel
 
 enum class NoticeTab(val title : String){
     NOTICE("공지사항"), CURRICULUM("커리큘럼")
@@ -27,7 +27,7 @@ enum class NoticeTab(val title : String){
 
 @Composable
 fun NoticeScreen(
-    onNoticeClick : (NoticeUiModel) -> Unit
+    onNoticeClick : (NoticeModel) -> Unit
 ){
     var selectedTab by remember { mutableStateOf(NoticeTab.NOTICE) }
 
@@ -62,12 +62,12 @@ fun NoticeScreen(
         }
         when(selectedTab){
             NoticeTab.NOTICE-> {
-                NoticeList(
+                NoticeListScreen(
                     onNoticeClick = onNoticeClick
                 )
             }
             NoticeTab.CURRICULUM-> {
-                CurriculumList()
+                CurriculumListScreen()
             }
         }
     }

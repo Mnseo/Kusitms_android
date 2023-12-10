@@ -44,6 +44,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.kusitms.domain.model.notice.NoticeModel
 import com.kusitms.presentation.common.ui.KusitmsMarginHorizontalSpacer
 import com.kusitms.presentation.common.ui.KusitmsMarginVerticalSpacer
 import com.kusitms.presentation.common.ui.KusitsmScrollToTopButton
@@ -55,7 +56,7 @@ import com.kusitms.presentation.model.notice.curriculumDummy
 import kotlinx.coroutines.launch
 
 @Composable
-fun CurriculumList(
+fun CurriculumListScreen(
     curriculums : List<CurriculumUiModel> = curriculumDummy
 ){
 
@@ -197,7 +198,7 @@ fun KusitmsCurriculumItem(
 
 @Composable
 fun CurriculumNoticeDropdown(
-    curriculumNoticeList : List<NoticeUiModel> = emptyList(),
+    curriculumNoticeList : List<NoticeModel> = emptyList(),
     isExpanded : Boolean,
     onExpand : () -> Unit = {},
     scrollState: ScrollState = rememberScrollState()
@@ -272,7 +273,7 @@ fun CurriculumNoticeDropdown(
 
 @Composable
 fun CurriculumNoticeItem(
-    notice : NoticeUiModel
+    notice : NoticeModel
 ) {
     Column(
         modifier = Modifier.padding(vertical = 12.dp, horizontal = 8.dp)
@@ -315,7 +316,7 @@ fun CurriculumNoticeItem(
 }
 
 
-fun List<NoticeUiModel>.getCurriculumNoticeCardHeight() : Int {
+fun List<NoticeModel>.getCurriculumNoticeCardHeight() : Int {
     return when(size){
         0 -> 56
         1 -> 142

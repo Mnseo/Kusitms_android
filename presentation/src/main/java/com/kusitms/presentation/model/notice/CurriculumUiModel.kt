@@ -1,10 +1,13 @@
 package com.kusitms.presentation.model.notice
 
+import com.kusitms.domain.model.notice.NoticeModel
+import com.kusitms.domain.model.notice.noticeDummy
+
 data class CurriculumUiModel(
     val curriculumId : Int,
     val curriculumName : String = "",
     val title : String,
-    val curriculumNoticeList : List<NoticeUiModel> = noticeDummy
+    val curriculumNoticeList : List<NoticeModel> = noticeDummy
 )
 
 val curriculumDummy = listOf(
