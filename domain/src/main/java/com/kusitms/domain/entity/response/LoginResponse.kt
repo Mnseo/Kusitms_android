@@ -6,6 +6,7 @@ import com.kusitms.domain.entity.Result
 
 data class LoginResponsePayload(
     val accessToken: String,
+    val refreshToken: String,
     val response: LoginResponse
     )
 

@@ -38,11 +38,6 @@ class NetworkModule {
             .addInterceptor(HttpLoggingInterceptor().apply {
                 level = HttpLoggingInterceptor.Level.BODY
             })
-            .addInterceptor(
-                HttpLoggingInterceptor().apply {
-                    level = HttpLoggingInterceptor.Level.BODY
-                },
-            )
             .addInterceptor { chain ->
                 chain.request().newBuilder()
                     .build()
