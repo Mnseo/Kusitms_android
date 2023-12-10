@@ -74,6 +74,12 @@ fun LoginMemberColumn1(viewModel: LoginViewModel) {
 @Composable
 fun LoginMemberColumn2(viewModel: LoginViewModel, navController: NavHostController) {
     val loginStatus by viewModel.loginStatus.collectAsState()
+
+    LaunchedEffect(loginStatus) {
+        if (loginStatus == LoginStatus.SUCCESS) {
+            navController.navigate(NavRoutes.SignInDefault.route)
+        }
+    }
     Column(modifier = Modifier
         .fillMaxWidth()
         .height(128.dp),
@@ -92,10 +98,7 @@ fun LoginMemberColumn2(viewModel: LoginViewModel, navController: NavHostControll
             modifier = Modifier
                 .fillMaxWidth()
                 .height(56.dp),
-            onClick = { viewModel.validateLogin()
-                if(loginStatus == LoginStatus.SUCCESS)
-                    navController.navigate(NavRoutes.SignInDefault.route)
-            },
+            onClick = { viewModel.validateLogin() },
             colors = ButtonDefaults.buttonColors(containerColor = KusitmsColorPalette.current.Main500),
             shape = RoundedCornerShape(size = 16.dp)
         ) {
