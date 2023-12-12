@@ -76,14 +76,21 @@ fun MainNavigation() {
 
         //HomeScreen
         kusitmsComposableWithAnimation(NavRoutes.HomeScreen.route) { HomeScreen(navController)}
+
         kusitmsComposableWithAnimation(NavRoutes.Notice.route) {
             NoticeScreen(
                 onNoticeClick = {
-                    navController.navigate(NavRoutes.NoticeDetail(it.noticeId).route)
+                    navController.navigate(NavRoutes.NoticeDetail.createRoute(it.noticeId))
                 }
             )
         }
-        kusitmsComposableWithAnimation(NavRoutes.NoticeDetail().route) { NoticeDetailScreen() }
+
+        composable(
+            route = NavRoutes.NoticeDetail.route,
+            arguments = NavRoutes.NoticeDetail.navArguments
+        ) {
+            NoticeDetailScreen()
+        }
     }
 }
 
