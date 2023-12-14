@@ -44,20 +44,18 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.kusitms.domain.model.notice.CurriculumModel
 import com.kusitms.domain.model.notice.NoticeModel
 import com.kusitms.presentation.common.ui.KusitmsMarginHorizontalSpacer
 import com.kusitms.presentation.common.ui.KusitmsMarginVerticalSpacer
 import com.kusitms.presentation.common.ui.KusitsmScrollToTopButton
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
-import com.kusitms.presentation.model.notice.CurriculumUiModel
-import com.kusitms.presentation.model.notice.NoticeUiModel
-import com.kusitms.presentation.model.notice.curriculumDummy
 import kotlinx.coroutines.launch
 
 @Composable
 fun CurriculumListScreen(
-    curriculums : List<CurriculumUiModel> = curriculumDummy
+    curriculumList : List<CurriculumModel>
 ){
 
     val listState = rememberLazyListState()
@@ -76,7 +74,7 @@ fun CurriculumListScreen(
             item {
                 Column(
                     modifier = Modifier.let {
-                        if(curriculums.isEmpty()) it.fillParentMaxSize() else it
+                        if(curriculumList.isEmpty()) it.fillParentMaxSize() else it
                             .fillMaxWidth()
                             .wrapContentHeight()
                     }
@@ -102,7 +100,7 @@ fun CurriculumListScreen(
 
                     KusitmsMarginVerticalSpacer(size = 52)
 
-                    if(curriculums.isEmpty())
+                    if(curriculumList.isEmpty())
                         Box(
                             modifier = Modifier.fillMaxSize()
                         ){
@@ -116,8 +114,8 @@ fun CurriculumListScreen(
                 }
 
             }
-            if(curriculums.isNotEmpty()){
-                itemsIndexed(curriculums){ index, curriculum ->
+            if(curriculumList.isNotEmpty()){
+                itemsIndexed(curriculumList){ index, curriculum ->
                     KusitmsCurriculumItem(
                         curriculum = curriculum,
                         index = index
@@ -144,7 +142,7 @@ fun CurriculumListScreen(
 
 @Composable
 fun KusitmsCurriculumItem(
-    curriculum : CurriculumUiModel,
+    curriculum : CurriculumModel,
     index : Int, // 0번부터 시작하는 리스트의 진짜 인덱스 값
 ){
     var expanded by remember { mutableStateOf(false) }

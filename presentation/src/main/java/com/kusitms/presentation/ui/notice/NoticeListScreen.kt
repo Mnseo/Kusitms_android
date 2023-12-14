@@ -41,11 +41,11 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun NoticeListScreen(
-    noticeViewModel: NoticeViewModel = hiltViewModel(),
+    noticeList : List<NoticeModel>,
+    visibleOnlyUnreadNotice : Boolean,
+    onClickUnreadNoticeFilter : (Boolean) -> Unit,
     onNoticeClick : (NoticeModel) -> Unit
 ){
-    val noticeList by noticeViewModel.noticeList.collectAsStateWithLifecycle()
-    val visibleOnlyUnreadNotice by noticeViewModel.visibleOnlyUnreadNotice.collectAsStateWithLifecycle()
 
     val listState = rememberLazyListState()
     val isShownButton by remember { derivedStateOf { listState.firstVisibleItemScrollOffset > 0 } }
@@ -93,9 +93,7 @@ fun NoticeListScreen(
                         modifier = Modifier
                             .padding(vertical = 8.dp)
                             .clickable {
-                                noticeViewModel.updateVisibleOnlyUnreadNotice(
-                                    !visibleOnlyUnreadNotice
-                                )
+                                onClickUnreadNoticeFilter(!visibleOnlyUnreadNotice)
                             },
                         verticalAlignment = Alignment.CenterVertically
                     ){

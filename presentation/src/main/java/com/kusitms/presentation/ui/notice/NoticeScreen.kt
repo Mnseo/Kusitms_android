@@ -15,6 +15,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kusitms.domain.model.notice.NoticeModel
 import com.kusitms.presentation.common.ui.KusitmsTabItem
 import com.kusitms.presentation.common.ui.KusitmsTabRow
@@ -27,9 +29,14 @@ enum class NoticeTab(val title : String){
 
 @Composable
 fun NoticeScreen(
+    viewModel: NoticeViewModel = hiltViewModel(),
     onNoticeClick : (NoticeModel) -> Unit
 ){
     var selectedTab by remember { mutableStateOf(NoticeTab.NOTICE) }
+    val noticeList by viewModel.noticeList.collectAsStateWithLifecycle()
+    val visibleOnlyUnreadNotice by viewModel.visibleOnlyUnreadNotice.collectAsStateWithLifecycle()
+
+    val curriculumList by viewModel.curriculumList.collectAsStateWithLifecycle()
 
     Column(
         modifier = Modifier
@@ -63,11 +70,18 @@ fun NoticeScreen(
         when(selectedTab){
             NoticeTab.NOTICE-> {
                 NoticeListScreen(
+                    noticeList= noticeList,
+                    visibleOnlyUnreadNotice = visibleOnlyUnreadNotice,
+                    onClickUnreadNoticeFilter = {
+                        viewModel.updateVisibleOnlyUnreadNotice(it)
+                    },
                     onNoticeClick = onNoticeClick
                 )
             }
             NoticeTab.CURRICULUM-> {
-                CurriculumListScreen()
+                CurriculumListScreen(
+                    curriculumList = curriculumList
+                )
             }
         }
     }
