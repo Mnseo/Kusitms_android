@@ -89,7 +89,11 @@ fun MainNavigation() {
             route = NavRoutes.NoticeDetail.route,
             arguments = NavRoutes.NoticeDetail.navArguments
         ) {
-            NoticeDetailScreen()
+            NoticeDetailScreen(
+                onBack = {
+                    navController.navigateUp()
+                }
+            )
         }
     }
 }

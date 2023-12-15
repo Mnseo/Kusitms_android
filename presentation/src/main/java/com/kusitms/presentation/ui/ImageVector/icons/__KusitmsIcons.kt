@@ -15,6 +15,7 @@ import com.kusitms.presentation.ui.ImageVector.icons.kusitmsicons.Send
 import com.kusitms.presentation.ui.ImageVector.icons.kusitmsicons.Setting
 import com.kusitms.presentation.ui.ImageVector.icons.kusitmsicons.Unchecked
 import com.kusitms.presentation.ui.ImageVector.icons.kusitmsicons.User
+import com.kusitms.presentation.ui.ImageVector.icons.kusitmsicons.UserBackground
 import kotlin.collections.List as ____KtList
 
 public object KusitmsIcons
@@ -27,6 +28,6 @@ public val KusitmsIcons.Icons: ____KtList<ImageVector>
       return __Icons!!
     }
     __Icons= listOf(ArrowDown, Chat, Checked, Close, Download, Flag, MoreVertical,
-        Notice, NoticeDark, Search, Send, Setting, Unchecked, User)
+        Notice, NoticeDark, Search, Send, Setting, Unchecked, User, UserBackground)
     return __Icons!!
   }
