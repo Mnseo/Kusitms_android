@@ -35,7 +35,8 @@ enum class NoticeTab(val title : String){
 @Composable
 fun NoticeScreen(
     viewModel: NoticeViewModel = hiltViewModel(),
-    onNoticeClick : (NoticeModel) -> Unit
+    onNoticeClick : (NoticeModel) -> Unit,
+    onSettingClick : () -> Unit
 ){
     var selectedTab by remember { mutableStateOf(NoticeTab.NOTICE) }
     val noticeList by viewModel.noticeList.collectAsStateWithLifecycle()
@@ -66,7 +67,7 @@ fun NoticeScreen(
                     modifier = Modifier
                         .size(24.dp)
                         .clickable {
-
+                            onSettingClick()
                         },
                     imageVector = KusitmsIcons.Setting,
                     contentDescription = "설정"
@@ -110,6 +111,7 @@ fun NoticeScreen(
 @Composable
 fun NoticeScreenPreview(){
     NoticeScreen(
-        onNoticeClick = {}
+        onNoticeClick = {},
+        onSettingClick = {}
     )
 }

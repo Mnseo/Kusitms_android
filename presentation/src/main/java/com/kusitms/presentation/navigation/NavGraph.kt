@@ -81,6 +81,9 @@ fun MainNavigation() {
             NoticeScreen(
                 onNoticeClick = {
                     navController.navigate(NavRoutes.NoticeDetail.createRoute(it.noticeId))
+                },
+                onSettingClick = {
+                    navController.navigate(NavRoutes.SettingMember.route)
                 }
             )
         }
