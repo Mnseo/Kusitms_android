@@ -76,6 +76,7 @@ fun LoginMemberColumn2(viewModel: LoginViewModel, navController: NavHostControll
     val loginStatus by viewModel.loginStatus.collectAsState()
 
     LaunchedEffect(loginStatus) {
+        viewModel.updateLoginStatus(LoginStatus.DEFAULT)
         if (loginStatus == LoginStatus.SUCCESS) {
             navController.navigate(NavRoutes.SignInDefault.route)
         }
@@ -98,7 +99,10 @@ fun LoginMemberColumn2(viewModel: LoginViewModel, navController: NavHostControll
             modifier = Modifier
                 .fillMaxWidth()
                 .height(56.dp),
-            onClick = { viewModel.validateLogin() },
+            onClick = { viewModel.validateLogin()
+                        if (loginStatus == LoginStatus.SUCCESS) { navController.navigate(NavRoutes.SignInDefault.route) }
+                        else { navController.popBackStack() }
+                      },
             colors = ButtonDefaults.buttonColors(containerColor = KusitmsColorPalette.current.Main500),
             shape = RoundedCornerShape(size = 16.dp)
         ) {

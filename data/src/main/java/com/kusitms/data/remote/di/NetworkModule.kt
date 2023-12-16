@@ -30,6 +30,7 @@ class NetworkModule {
             .baseUrl(kusitmsServer)
             .client(getOkHttpClient())
             .addConverterFactory(GsonConverterFactory.create())
+                // null 처리 해도 erro
             .build()
     }
 
