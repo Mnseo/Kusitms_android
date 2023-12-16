@@ -13,6 +13,8 @@ class LoginRepositoryImpl @Inject constructor(
         email: String,
         password: String
     ): LoginResponse {
+        // 받고 API 성공/실패 처리 ApiResult<Unit> + Access Token Data store 저장
+        // try catch -> body
         return kusitmsApi.LoginMember(email, password)
     }
 }

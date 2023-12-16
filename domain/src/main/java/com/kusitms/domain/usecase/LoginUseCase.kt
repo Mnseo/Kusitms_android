@@ -11,7 +11,8 @@ class LoginUseCase @Inject constructor(
     suspend operator fun invoke(
         email: String,
         password: String
-    ): ApiResult<LoginResponse> {
+    ): ApiResult<LoginResponse> { // return ApiResult<Unit>
+        //200에서 error 처리를 할때는 run time exception
         return try {
             val response = loginRepository.LoginMember(email,password)
             if (response.payload == null) {

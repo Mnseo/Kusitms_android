@@ -1,6 +1,5 @@
-package com.kusitms.domain.entity
+package com.kusitms.data.remote.entity
 
-import com.sun.net.httpserver.Authenticator
 import retrofit2.Response
 
 
@@ -19,7 +18,7 @@ sealed interface ApiResult<T> {
     }
 
     fun <T> ApiResult<T>.onError(action: (Throwable) -> Unit): ApiResult<T> {
-        if (this is ApiResult.Failure) {
+        if (this is Failure) {
             action.invoke(this.throwable)
         }
         return this
@@ -31,7 +30,11 @@ sealed interface ApiResult<T> {
             if (response.isSuccessful) {
                 val body = response.body()
                 if(body != null) {
-                    Success(body.payload)
+                    if(body.payload != null) {
+                        Success(body.payload)
+                    } else {
+
+                    }
                 } else {
                     println("response is Successful but body is null")
                     ApiError(response.code(), "Empty Response")
