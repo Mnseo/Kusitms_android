@@ -21,41 +21,41 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.kusitms.domain.model.notice.NoticeModel
 import com.kusitms.presentation.common.ui.KusitmsMarginHorizontalSpacer
 import com.kusitms.presentation.common.ui.KusitmsMarginVerticalSpacer
 import com.kusitms.presentation.common.ui.KusitsmScrollToTopButton
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
-import com.kusitms.presentation.model.notice.NoticeUiModel
-import com.kusitms.presentation.model.notice.noticeDummy
 import kotlinx.coroutines.launch
 
 @Composable
-fun NoticeList(
-    notices : List<NoticeUiModel> = noticeDummy,
-    onNoticeClick : (NoticeUiModel) -> Unit
+fun NoticeListScreen(
+    noticeList : List<NoticeModel>,
+    visibleOnlyUnreadNotice : Boolean,
+    onClickUnreadNoticeFilter : (Boolean) -> Unit,
+    onNoticeClick : (NoticeModel) -> Unit
 ){
 
     val listState = rememberLazyListState()
     val isShownButton by remember { derivedStateOf { listState.firstVisibleItemScrollOffset > 0 } }
     val coroutineScope = rememberCoroutineScope()
 
-    //TODO viewModel로 옮기기..
-    var visibleOnlyUnreadNotice by remember { mutableStateOf(false) }
-
     Box {
         LazyColumn(
-            modifier = Modifier.fillMaxSize().background(KusitmsColorPalette.current.Grey900),
+            modifier = Modifier
+                .fillMaxSize()
+                .background(KusitmsColorPalette.current.Grey900),
             contentPadding = PaddingValues(horizontal = 20.dp, vertical = 8.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
             state = listState
@@ -63,7 +63,9 @@ fun NoticeList(
             item {
                 Column(
                     modifier = Modifier.let {
-                        if(notices.isEmpty()) it.fillParentMaxSize() else it.fillMaxWidth().wrapContentHeight()
+                        if(noticeList.isEmpty()) it.fillParentMaxSize() else it
+                            .fillMaxWidth()
+                            .wrapContentHeight()
                     }
                 ) {
                     KusitmsMarginVerticalSpacer(size = 16)
@@ -88,10 +90,11 @@ fun NoticeList(
                     KusitmsMarginVerticalSpacer(size = 40)
 
                     Row(
-                        modifier = Modifier.padding(vertical = 8.dp)
+                        modifier = Modifier
+                            .padding(vertical = 8.dp)
                             .clickable {
-                                 visibleOnlyUnreadNotice = !visibleOnlyUnreadNotice
-                        },
+                                onClickUnreadNoticeFilter(!visibleOnlyUnreadNotice)
+                            },
                         verticalAlignment = Alignment.CenterVertically
                     ){
                         Spacer(
@@ -107,7 +110,7 @@ fun NoticeList(
                         )
                     }
 
-                    if(notices.isEmpty())
+                    if(noticeList.isEmpty())
                         Box(
                             modifier = Modifier.fillMaxSize()
                         ){
@@ -121,8 +124,8 @@ fun NoticeList(
                 }
 
             }
-            if(notices.isNotEmpty()){
-                items(notices.filter {
+            if(noticeList.isNotEmpty()){
+                items(noticeList.filter {
                     if(visibleOnlyUnreadNotice) !it.isRead
                     else true
                 }){
@@ -154,8 +157,8 @@ fun NoticeList(
 
 @Composable
 fun KusitmsNoticeItem(
-    notice : NoticeUiModel,
-    onClick : (NoticeUiModel) -> Unit
+    notice : NoticeModel,
+    onClick : (NoticeModel) -> Unit
 ){
     Column(
         modifier = Modifier

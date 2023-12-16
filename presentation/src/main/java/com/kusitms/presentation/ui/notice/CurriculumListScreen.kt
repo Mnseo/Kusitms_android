@@ -44,19 +44,18 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.kusitms.domain.model.notice.CurriculumModel
+import com.kusitms.domain.model.notice.NoticeModel
 import com.kusitms.presentation.common.ui.KusitmsMarginHorizontalSpacer
 import com.kusitms.presentation.common.ui.KusitmsMarginVerticalSpacer
 import com.kusitms.presentation.common.ui.KusitsmScrollToTopButton
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
-import com.kusitms.presentation.model.notice.CurriculumUiModel
-import com.kusitms.presentation.model.notice.NoticeUiModel
-import com.kusitms.presentation.model.notice.curriculumDummy
 import kotlinx.coroutines.launch
 
 @Composable
-fun CurriculumList(
-    curriculums : List<CurriculumUiModel> = curriculumDummy
+fun CurriculumListScreen(
+    curriculumList : List<CurriculumModel>
 ){
 
     val listState = rememberLazyListState()
@@ -75,7 +74,7 @@ fun CurriculumList(
             item {
                 Column(
                     modifier = Modifier.let {
-                        if(curriculums.isEmpty()) it.fillParentMaxSize() else it
+                        if(curriculumList.isEmpty()) it.fillParentMaxSize() else it
                             .fillMaxWidth()
                             .wrapContentHeight()
                     }
@@ -101,7 +100,7 @@ fun CurriculumList(
 
                     KusitmsMarginVerticalSpacer(size = 52)
 
-                    if(curriculums.isEmpty())
+                    if(curriculumList.isEmpty())
                         Box(
                             modifier = Modifier.fillMaxSize()
                         ){
@@ -115,8 +114,8 @@ fun CurriculumList(
                 }
 
             }
-            if(curriculums.isNotEmpty()){
-                itemsIndexed(curriculums){ index, curriculum ->
+            if(curriculumList.isNotEmpty()){
+                itemsIndexed(curriculumList){ index, curriculum ->
                     KusitmsCurriculumItem(
                         curriculum = curriculum,
                         index = index
@@ -143,7 +142,7 @@ fun CurriculumList(
 
 @Composable
 fun KusitmsCurriculumItem(
-    curriculum : CurriculumUiModel,
+    curriculum : CurriculumModel,
     index : Int, // 0번부터 시작하는 리스트의 진짜 인덱스 값
 ){
     var expanded by remember { mutableStateOf(false) }
@@ -197,7 +196,7 @@ fun KusitmsCurriculumItem(
 
 @Composable
 fun CurriculumNoticeDropdown(
-    curriculumNoticeList : List<NoticeUiModel> = emptyList(),
+    curriculumNoticeList : List<NoticeModel> = emptyList(),
     isExpanded : Boolean,
     onExpand : () -> Unit = {},
     scrollState: ScrollState = rememberScrollState()
@@ -272,7 +271,7 @@ fun CurriculumNoticeDropdown(
 
 @Composable
 fun CurriculumNoticeItem(
-    notice : NoticeUiModel
+    notice : NoticeModel
 ) {
     Column(
         modifier = Modifier.padding(vertical = 12.dp, horizontal = 8.dp)
@@ -315,7 +314,7 @@ fun CurriculumNoticeItem(
 }
 
 
-fun List<NoticeUiModel>.getCurriculumNoticeCardHeight() : Int {
+fun List<NoticeModel>.getCurriculumNoticeCardHeight() : Int {
     return when(size){
         0 -> 56
         1 -> 142

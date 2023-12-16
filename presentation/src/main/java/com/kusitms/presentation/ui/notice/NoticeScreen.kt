@@ -15,11 +15,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.kusitms.domain.model.notice.NoticeModel
 import com.kusitms.presentation.common.ui.KusitmsTabItem
 import com.kusitms.presentation.common.ui.KusitmsTabRow
 import com.kusitms.presentation.common.ui.KusitsmTopBarTextWithIcon
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
-import com.kusitms.presentation.model.notice.NoticeUiModel
 
 enum class NoticeTab(val title : String){
     NOTICE("공지사항"), CURRICULUM("커리큘럼")
@@ -27,9 +29,14 @@ enum class NoticeTab(val title : String){
 
 @Composable
 fun NoticeScreen(
-    onNoticeClick : (NoticeUiModel) -> Unit
+    viewModel: NoticeViewModel = hiltViewModel(),
+    onNoticeClick : (NoticeModel) -> Unit
 ){
     var selectedTab by remember { mutableStateOf(NoticeTab.NOTICE) }
+    val noticeList by viewModel.noticeList.collectAsStateWithLifecycle()
+    val visibleOnlyUnreadNotice by viewModel.visibleOnlyUnreadNotice.collectAsStateWithLifecycle()
+
+    val curriculumList by viewModel.curriculumList.collectAsStateWithLifecycle()
 
     Column(
         modifier = Modifier
@@ -62,12 +69,19 @@ fun NoticeScreen(
         }
         when(selectedTab){
             NoticeTab.NOTICE-> {
-                NoticeList(
+                NoticeListScreen(
+                    noticeList= noticeList,
+                    visibleOnlyUnreadNotice = visibleOnlyUnreadNotice,
+                    onClickUnreadNoticeFilter = {
+                        viewModel.updateVisibleOnlyUnreadNotice(it)
+                    },
                     onNoticeClick = onNoticeClick
                 )
             }
             NoticeTab.CURRICULUM-> {
-                CurriculumList()
+                CurriculumListScreen(
+                    curriculumList = curriculumList
+                )
             }
         }
     }
