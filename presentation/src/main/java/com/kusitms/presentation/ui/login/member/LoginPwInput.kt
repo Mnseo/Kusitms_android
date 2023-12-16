@@ -65,12 +65,19 @@ fun LoginMemberPwInput(
             }
             else if(!isFocused) {
                 IconButton(onClick = { isPasswordVisible = !isPasswordVisible }) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_eye),
-                        contentDescription = "Clear Text",
-                        tint = Color.Unspecified
-                    )
-
+                    if(isPasswordVisible) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_eye),
+                            contentDescription = "Clear Text",
+                            tint = Color.Unspecified
+                        )
+                    } else {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_eye_close),
+                            contentDescription = "Clear Text",
+                            tint = Color.Unspecified
+                        )
+                    }
                 }
             }
         }

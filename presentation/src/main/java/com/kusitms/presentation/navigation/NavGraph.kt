@@ -13,10 +13,12 @@ import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.ViewModel
 import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavDeepLink
 import androidx.navigation.NavGraphBuilder
+import com.kusitms.presentation.model.login.LoginViewModel
 import com.kusitms.presentation.model.login.findPw.FindPwViewModel
 import com.kusitms.presentation.model.setting.SettingViewModel
 import com.kusitms.presentation.model.signIn.SignInRequestViewModel
@@ -45,6 +47,7 @@ fun MainNavigation() {
     val SettingViewModel : SettingViewModel = hiltViewModel()
 
 
+
     NavHost(
         navController = navController,
         startDestination = NavRoutes.SplashScreen.route
@@ -60,7 +63,10 @@ fun MainNavigation() {
         kusitmsComposableWithAnimation(NavRoutes.SignInRequest.route) { SignInRequestScreen(SignInRequestViewModel(), navController) }
 
         //LoginScreen
-        kusitmsComposableWithAnimation(NavRoutes.LoginMemberScreen.route) { LoginMemberScreen(navController) }
+        kusitmsComposableWithAnimation(NavRoutes.LoginMemberScreen.route) {
+            val loginViewModel: LoginViewModel = getViewModel()
+            LoginMemberScreen(viewModel = loginViewModel, navController = navController)
+        }
         kusitmsComposableWithAnimation(NavRoutes.LoginNonMember.route) { NonMemberScreen(navController) }
         kusitmsComposableWithAnimation(NavRoutes.LogInScreen.route) { LoginScreen(navController) }
 
@@ -101,7 +107,12 @@ fun MainNavigation() {
     }
 }
 
-//NavGraph Builder Function
+@Composable
+inline fun <reified T: ViewModel> getViewModel() : T {
+    return hiltViewModel()
+}
+
+
 fun NavGraphBuilder.kusitmsComposableWithAnimation(
     route: String,
     arguments: List<NamedNavArgument> = emptyList(),
