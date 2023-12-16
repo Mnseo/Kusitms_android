@@ -33,7 +33,6 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -45,6 +44,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kusitms.domain.model.notice.NoticeModel
 import com.kusitms.presentation.common.ui.KusitmsDialog
 import com.kusitms.presentation.common.ui.KusitmsMarginHorizontalSpacer
@@ -52,7 +52,6 @@ import com.kusitms.presentation.common.ui.KusitmsMarginVerticalSpacer
 import com.kusitms.presentation.common.ui.KusitsmTopBarTextWithIcon
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
-import com.kusitms.presentation.model.notice.dummyCommentList
 import com.kusitms.presentation.ui.notice.detail.comment.CommentInput
 import com.kusitms.presentation.ui.notice.detail.comment.NoticeComment
 import kotlinx.coroutines.delay
@@ -63,8 +62,8 @@ import kotlinx.coroutines.launch
 fun NoticeDetailScreen(
     viewModel: NoticeDetailViewModel = hiltViewModel()
 ) {
-    val notice by viewModel.notice.collectAsState()
-    var commentList by remember { mutableStateOf(dummyCommentList) }
+    val notice by viewModel.notice.collectAsStateWithLifecycle()
+    val commentList by viewModel.commentList.collectAsStateWithLifecycle()
     val listState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
 
@@ -221,12 +220,9 @@ fun NoticeDetailScreen(
         }
         CommentInput(
             onClickSend = {
-                // 테스트용
-                commentList = commentList + commentList.first().copy(
-                    content = it,
-                    writer = "이채연",
-                    commentCount = 0
-                )
+                 viewModel.addNoticeComment(
+                     it
+                 )
                 coroutineScope.launch {
                     delay(50)
                     listState.animateScrollToItem(commentList.lastIndex + 1)
