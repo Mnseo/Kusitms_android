@@ -1,5 +1,6 @@
 package com.kusitms.presentation.ui.notice.detail.comment
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.Card
@@ -34,6 +36,11 @@ import com.kusitms.presentation.common.ui.KusitmsMarginVerticalSpacer
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
 import com.kusitms.presentation.model.notice.CommentUiModel
+import com.kusitms.presentation.ui.ImageVector.icons.KusitmsIcons
+import com.kusitms.presentation.ui.ImageVector.icons.kusitmsicons.Chat
+import com.kusitms.presentation.ui.ImageVector.icons.kusitmsicons.Send
+import com.kusitms.presentation.ui.ImageVector.icons.kusitmsicons.Setting
+import com.kusitms.presentation.ui.ImageVector.icons.kusitmsicons.UserBackground
 
 
 @Composable
@@ -64,11 +71,19 @@ fun NoticeComment(
                     .fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ){
-                Spacer(
-                    modifier = Modifier
-                        .size(16.dp)
-                        .background(color = KusitmsColorPalette.current.Grey400)
-                )
+                if(comment.profileImageUrl.isEmpty())
+                    Image(
+                        modifier = Modifier
+                            .size(16.dp)
+                            .clickable {
+
+                            },
+                        imageVector = KusitmsIcons.UserBackground,
+                        contentDescription = "유저"
+                    )
+                else {
+
+                }
                 KusitmsMarginHorizontalSpacer(size = 8)
                 Text(
                     text = comment.writer,
@@ -109,13 +124,17 @@ fun NoticeComment(
             )
             KusitmsMarginVerticalSpacer(size = 12)
             Row(
-                modifier = Modifier.padding(horizontal = 32.dp),
+                modifier = Modifier.padding(horizontal = 32.dp).wrapContentWidth().clickable {
+
+                },
                 verticalAlignment = Alignment.CenterVertically
             ){
-                Spacer(
+                Image(
                     modifier = Modifier
                         .size(20.dp)
-                        .background(color = KusitmsColorPalette.current.Grey400)
+                        ,
+                    imageVector = KusitmsIcons.Chat,
+                    contentDescription = "답글"
                 )
                 KusitmsMarginHorizontalSpacer(size = 4)
                 Text(
@@ -141,7 +160,7 @@ fun CommentInput(
     onClickSend : (String) -> Unit
 ){
     var textFieldValue by remember { mutableStateOf(TextFieldValue()) }
-    var isAnonymous by remember { mutableStateOf(false) }
+    //var isAnonymous by remember { mutableStateOf(false) }
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -188,29 +207,29 @@ fun CommentInput(
                 )
                 KusitmsMarginHorizontalSpacer(size = 10)
 
-                Row(
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .clip(RoundedCornerShape(2.dp))
-                        .padding(vertical = 6.dp)
-                        .clickable {
-                            isAnonymous = !isAnonymous
-                        }
-                        .padding(horizontal = 12.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text ="익명",
-                        style = KusitmsTypo.current.Caption1,
-                        color =  if(isAnonymous) KusitmsColorPalette.current.Main500 else KusitmsColorPalette.current.Grey400
-                    )
-                    KusitmsMarginHorizontalSpacer(size = 4)
-                    Spacer(
-                        modifier = Modifier
-                            .size(20.dp)
-                            .background(color = if(isAnonymous) KusitmsColorPalette.current.Main500 else KusitmsColorPalette.current.Grey400)
-                    )
-                }
+//                Row(
+//                    modifier = Modifier
+//                        .fillMaxHeight()
+//                        .clip(RoundedCornerShape(2.dp))
+//                        .padding(vertical = 6.dp)
+//                        .clickable {
+//                            isAnonymous = !isAnonymous
+//                        }
+//                        .padding(horizontal = 12.dp),
+//                    verticalAlignment = Alignment.CenterVertically
+//                ) {
+//                    Text(
+//                        text ="익명",
+//                        style = KusitmsTypo.current.Caption1,
+//                        color =  if(isAnonymous) KusitmsColorPalette.current.Main500 else KusitmsColorPalette.current.Grey400
+//                    )
+//                    KusitmsMarginHorizontalSpacer(size = 4)
+//                    Spacer(
+//                        modifier = Modifier
+//                            .size(20.dp)
+//                            .background(color = if(isAnonymous) KusitmsColorPalette.current.Main500 else KusitmsColorPalette.current.Grey400)
+//                    )
+//                }
             }
         }
 
@@ -223,10 +242,11 @@ fun CommentInput(
                 }.padding(16.dp),
             contentAlignment = Alignment.Center
         ){
-            Spacer(
+            Image(
                 modifier = Modifier
-                    .size(24.dp)
-                    .background(color = KusitmsColorPalette.current.Grey100)
+                    .size(24.dp),
+                imageVector = KusitmsIcons.Send,
+                contentDescription = "전송"
             )
         }
 

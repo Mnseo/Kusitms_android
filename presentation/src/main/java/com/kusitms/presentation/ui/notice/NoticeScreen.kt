@@ -1,5 +1,6 @@
 package com.kusitms.presentation.ui.notice
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -18,10 +19,14 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kusitms.domain.model.notice.NoticeModel
+import com.kusitms.presentation.common.ui.KusitmsMarginHorizontalSpacer
 import com.kusitms.presentation.common.ui.KusitmsTabItem
 import com.kusitms.presentation.common.ui.KusitmsTabRow
 import com.kusitms.presentation.common.ui.KusitsmTopBarTextWithIcon
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
+import com.kusitms.presentation.ui.ImageVector.icons.KusitmsIcons
+import com.kusitms.presentation.ui.ImageVector.icons.kusitmsicons.Search
+import com.kusitms.presentation.ui.ImageVector.icons.kusitmsicons.Setting
 
 enum class NoticeTab(val title : String){
     NOTICE("공지사항"), CURRICULUM("커리큘럼")
@@ -30,7 +35,8 @@ enum class NoticeTab(val title : String){
 @Composable
 fun NoticeScreen(
     viewModel: NoticeViewModel = hiltViewModel(),
-    onNoticeClick : (NoticeModel) -> Unit
+    onNoticeClick : (NoticeModel) -> Unit,
+    onSettingClick : () -> Unit
 ){
     var selectedTab by remember { mutableStateOf(NoticeTab.NOTICE) }
     val noticeList by viewModel.noticeList.collectAsStateWithLifecycle()
@@ -46,14 +52,27 @@ fun NoticeScreen(
         KusitsmTopBarTextWithIcon(
             text = "공지",
             iconContent = {
-                Spacer(
+                Image(
                     modifier = Modifier
                         .size(24.dp)
                         .clickable {
-                            /* SettingMember 연결 해주심 됩니당 아이콘은 imageVector > trailingicon에 있어용 */
-                        }
-                        .background(Color.White)
+
+                        },
+                    imageVector = KusitmsIcons.Search,
+                    contentDescription = "검색")
+
+                KusitmsMarginHorizontalSpacer(size = 24)
+
+                Image(
+                    modifier = Modifier
+                        .size(24.dp)
+                        .clickable {
+                            onSettingClick()
+                        },
+                    imageVector = KusitmsIcons.Setting,
+                    contentDescription = "설정"
                 )
+
             }
         )
 
@@ -92,6 +111,7 @@ fun NoticeScreen(
 @Composable
 fun NoticeScreenPreview(){
     NoticeScreen(
-        onNoticeClick = {}
+        onNoticeClick = {},
+        onSettingClick = {}
     )
 }

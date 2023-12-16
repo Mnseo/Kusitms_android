@@ -1,6 +1,7 @@
 package com.kusitms.presentation.ui.notice
 
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -51,6 +52,11 @@ import com.kusitms.presentation.common.ui.KusitmsMarginVerticalSpacer
 import com.kusitms.presentation.common.ui.KusitsmScrollToTopButton
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
+import com.kusitms.presentation.ui.ImageVector.icons.KusitmsIcons
+import com.kusitms.presentation.ui.ImageVector.icons.kusitmsicons.ArrowDown
+import com.kusitms.presentation.ui.ImageVector.icons.kusitmsicons.Flag
+import com.kusitms.presentation.ui.ImageVector.icons.kusitmsicons.NoticeDark
+import com.kusitms.presentation.ui.ImageVector.icons.kusitmsicons.Setting
 import kotlinx.coroutines.launch
 
 @Composable
@@ -85,10 +91,11 @@ fun CurriculumListScreen(
                         modifier = Modifier.padding(vertical = 8.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ){
-                        Spacer(
+                        Image(
                             modifier = Modifier
-                                .size(24.dp)
-                                .background(Color.Red)
+                                .size(24.dp),
+                            imageVector = KusitmsIcons.Flag,
+                            contentDescription = "커리큘럼"
                         )
                         KusitmsMarginHorizontalSpacer(size = 10)
                         Text(
@@ -224,11 +231,15 @@ fun CurriculumNoticeDropdown(
                 .padding(horizontal = 12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Spacer(
+            Image(
                 modifier = Modifier
                     .padding(4.dp)
                     .size(20.dp)
-                    .background(Color.White)
+                    .clickable {
+
+                    },
+                imageVector = KusitmsIcons.NoticeDark,
+                contentDescription = "커리큘럼"
             )
             KusitmsMarginHorizontalSpacer(size = 4)
             Text(
@@ -241,12 +252,13 @@ fun CurriculumNoticeDropdown(
             Icon(
                 modifier = Modifier
                     .padding(horizontal = 8.dp, vertical = 4.dp)
-                    .rotate(if (isExpanded) 0f else 180f)
+                    .rotate(if (isExpanded) 180f else 0f)
                     .size(24.dp)
                     .clickable {
                         onExpand()
                     },
-                imageVector = Icons.Default.KeyboardArrowUp, contentDescription = null)
+                imageVector = KusitmsIcons.ArrowDown,
+                contentDescription = null)
         }
 
         Box(modifier = Modifier

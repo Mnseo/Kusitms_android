@@ -1,5 +1,6 @@
 package com.kusitms.presentation.ui.notice
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -37,6 +38,10 @@ import com.kusitms.presentation.common.ui.KusitmsMarginVerticalSpacer
 import com.kusitms.presentation.common.ui.KusitsmScrollToTopButton
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
+import com.kusitms.presentation.ui.ImageVector.icons.KusitmsIcons
+import com.kusitms.presentation.ui.ImageVector.icons.kusitmsicons.Checked
+import com.kusitms.presentation.ui.ImageVector.icons.kusitmsicons.Notice
+import com.kusitms.presentation.ui.ImageVector.icons.kusitmsicons.Unchecked
 import kotlinx.coroutines.launch
 
 @Composable
@@ -74,10 +79,11 @@ fun NoticeListScreen(
                         modifier = Modifier.padding(vertical = 8.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ){
-                        Spacer(
+                        Image(
                             modifier = Modifier
-                                .size(24.dp)
-                                .background(Color.Red)
+                                .size(24.dp),
+                            imageVector = KusitmsIcons.Notice,
+                            contentDescription = "공지사항"
                         )
                         KusitmsMarginHorizontalSpacer(size = 10)
                         Text(
@@ -97,11 +103,19 @@ fun NoticeListScreen(
                             },
                         verticalAlignment = Alignment.CenterVertically
                     ){
-                        Spacer(
-                            modifier = Modifier
-                                .size(20.dp)
-                                .background(Color.White)
-                        )
+                        if(visibleOnlyUnreadNotice){
+                            Image(
+                                modifier = Modifier
+                                    .size(20.dp),
+                                imageVector = KusitmsIcons.Checked,
+                                contentDescription = "안 읽은 공지")
+                        }else {
+                            Image(
+                                modifier = Modifier
+                                    .size(20.dp),
+                                imageVector = KusitmsIcons.Unchecked,
+                                contentDescription = "전체 공지")
+                        }
                         KusitmsMarginHorizontalSpacer(size = 10)
                         Text(
                             text = "안 읽은 공지만 보기",

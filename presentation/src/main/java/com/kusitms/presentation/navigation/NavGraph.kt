@@ -87,6 +87,9 @@ fun MainNavigation() {
             NoticeScreen(
                 onNoticeClick = {
                     navController.navigate(NavRoutes.NoticeDetail.createRoute(it.noticeId))
+                },
+                onSettingClick = {
+                    navController.navigate(NavRoutes.SettingMember.route)
                 }
             )
         }
@@ -95,7 +98,11 @@ fun MainNavigation() {
             route = NavRoutes.NoticeDetail.route,
             arguments = NavRoutes.NoticeDetail.navArguments
         ) {
-            NoticeDetailScreen()
+            NoticeDetailScreen(
+                onBack = {
+                    navController.navigateUp()
+                }
+            )
         }
     }
 }
