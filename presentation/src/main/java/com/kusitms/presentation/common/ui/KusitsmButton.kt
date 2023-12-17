@@ -13,8 +13,11 @@ import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.unit.dp
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
+import com.kusitms.presentation.ui.ImageVector.icons.KusitmsIcons
+import com.kusitms.presentation.ui.ImageVector.icons.kusitmsicons.ArrowDown
 
 @Composable
 fun BoxScope.KusitsmScrollToTopButton(
@@ -34,8 +37,10 @@ fun BoxScope.KusitsmScrollToTopButton(
             elevation = FloatingActionButtonDefaults.elevation(0.dp),
             onClick = onClick
         ) {
-            //TODO 이미지 리소스 적용 필요
-            Icon(imageVector = Icons.Default.KeyboardArrowUp, contentDescription = null)
+            Icon(
+                modifier = Modifier.rotate(180f),
+                imageVector = KusitmsIcons.ArrowDown,
+                contentDescription = null)
         }
     }
 }

@@ -1,6 +1,7 @@
 package com.kusitms.presentation.ui.notice.detail
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -49,9 +50,16 @@ import com.kusitms.domain.model.notice.NoticeModel
 import com.kusitms.presentation.common.ui.KusitmsDialog
 import com.kusitms.presentation.common.ui.KusitmsMarginHorizontalSpacer
 import com.kusitms.presentation.common.ui.KusitmsMarginVerticalSpacer
+import com.kusitms.presentation.common.ui.KusitsmTopBarBackTextWithIcon
 import com.kusitms.presentation.common.ui.KusitsmTopBarTextWithIcon
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
+import com.kusitms.presentation.model.notice.dummyCommentList
+import com.kusitms.presentation.ui.ImageVector.icons.KusitmsIcons
+import com.kusitms.presentation.ui.ImageVector.icons.kusitmsicons.Close
+import com.kusitms.presentation.ui.ImageVector.icons.kusitmsicons.MoreVertical
+import com.kusitms.presentation.ui.ImageVector.icons.kusitmsicons.Setting
+import com.kusitms.presentation.ui.ImageVector.icons.kusitmsicons.UserBackground
 import com.kusitms.presentation.ui.notice.detail.comment.CommentInput
 import com.kusitms.presentation.ui.notice.detail.comment.NoticeComment
 import kotlinx.coroutines.delay
@@ -60,7 +68,8 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NoticeDetailScreen(
-    viewModel: NoticeDetailViewModel = hiltViewModel()
+    viewModel: NoticeDetailViewModel = hiltViewModel(),
+    onBack : () -> Unit
 ) {
     val notice by viewModel.notice.collectAsStateWithLifecycle()
     val commentList by viewModel.commentList.collectAsStateWithLifecycle()
@@ -141,16 +150,20 @@ fun NoticeDetailScreen(
             .fillMaxSize()
             .background(KusitmsColorPalette.current.Grey800)
     ) {
-        KusitsmTopBarTextWithIcon(
-            text = notice.title
+        KusitsmTopBarBackTextWithIcon(
+            text = notice.title,
+            onBackClick = {
+                onBack()
+            }
         ) {
-            Spacer(
+            Image(
                 modifier = Modifier
-                    .size(20.dp)
-                    .background(Color.White)
+                    .size(16.dp)
                     .clickable {
                         openBottomSheet = NoticeDetailModalState.More
-                    }
+                    },
+                imageVector = KusitmsIcons.MoreVertical,
+                contentDescription = "더보기"
             )
         }
 
@@ -289,11 +302,16 @@ fun NoticeDetailTitleCard(
                     .fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ){
-                Spacer(
-                    modifier = Modifier
-                        .size(16.dp)
-                        .background(color = KusitmsColorPalette.current.Grey400)
-                )
+                if(notice.profileImage.isEmpty())
+                    Image(
+                        modifier = Modifier
+                            .size(16.dp),
+                        imageVector = KusitmsIcons.UserBackground,
+                        contentDescription = "유저"
+                    )
+                else {
+
+                }
                 KusitmsMarginHorizontalSpacer(size = 4)
                 Text(
                     modifier = Modifier.weight(1f),
@@ -434,13 +452,14 @@ fun NoticeCommentReportBottom(
             Spacer(modifier = Modifier
                 .height(0.dp)
                 .weight(1f))
-            Spacer(
+            Image(
                 modifier = Modifier
                     .size(24.dp)
-                    .background(Color.White)
                     .clickable {
                         onDismiss()
-                    }
+                    },
+                imageVector = KusitmsIcons.Close,
+                contentDescription = "닫기"
             )
         }
         KusitmsMarginVerticalSpacer(size = 20)

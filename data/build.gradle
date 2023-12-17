@@ -45,9 +45,11 @@ dependencies {
     androidTestImplementation(libs.test.ext.junit)
     androidTestImplementation(libs.espresso.core)
 
+    implementation(libs.bundles.timber)
     //hilt
     implementation(libs.hilt)
     kapt(libs.hilt.compile)
+
 
     implementation(libs.javax.inject)
 

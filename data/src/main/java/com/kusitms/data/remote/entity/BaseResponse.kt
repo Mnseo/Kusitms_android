@@ -1,4 +1,4 @@
-package com.kusitms.domain.entity
+package com.kusitms.data.remote.entity
 
 
 open class BaseResponse<T>(

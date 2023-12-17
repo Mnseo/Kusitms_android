@@ -1,13 +1,14 @@
 package com.kusitms.domain.entity.response
 
-import com.kusitms.domain.entity.BaseResponse
-import com.kusitms.domain.entity.Result
+
+import com.kusitms.data.remote.entity.BaseResponse
+import com.kusitms.data.remote.entity.Result
 
 
 data class LoginResponsePayload(
     val accessToken: String,
-    val response: LoginResponse
-    )
+    val refreshToken: String,
+)
 
 class LoginResponse(
     result: Result,
