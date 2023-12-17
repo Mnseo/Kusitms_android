@@ -98,7 +98,7 @@ fun NoticeDetailScreen(
             okColor = KusitmsColorPalette.current.Sub2,
             okText = "신고하기",
             onOk = {
-
+                //viewModel.reportNoticeComment()
                    },
             onCancel = {
                 openDialogState = false
@@ -212,7 +212,13 @@ fun NoticeDetailScreen(
                 NoticeComment(comment = comment,
                     onClickReport = {
                         openBottomSheet = NoticeDetailModalState.Report
-                    }, isLast = index == commentList.lastIndex)
+                    },
+                    onClickDelete = {
+                        viewModel.deleteNoticeComment(
+                            comment.commentId
+                        )
+                    },
+                    isLast = index == commentList.lastIndex)
                 if(index == commentList.lastIndex && index != 0){
                     KusitmsMarginVerticalSpacer(size = 20)
                 }
