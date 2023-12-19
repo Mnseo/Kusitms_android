@@ -30,7 +30,6 @@ class NetworkModule {
             .baseUrl(kusitmsServer)
             .client(getOkHttpClient())
             .addConverterFactory(GsonConverterFactory.create())
-                // null 처리 해도 erro
             .build()
     }
 
@@ -39,11 +38,7 @@ class NetworkModule {
             .addInterceptor(HttpLoggingInterceptor().apply {
                 level = HttpLoggingInterceptor.Level.BODY
             })
-            .addInterceptor { chain ->
-                chain.request().newBuilder()
-                    .build()
-                    .let(chain::proceed)
-            }
+            .addInterceptor(AuthTokenInterceptor())
             .build()
     }
 }
