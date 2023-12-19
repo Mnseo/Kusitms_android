@@ -38,7 +38,7 @@ class NetworkModule {
             .addInterceptor(HttpLoggingInterceptor().apply {
                 level = HttpLoggingInterceptor.Level.BODY
             })
-            .addInterceptor(AuthTokenInterceptor())
+            //.addInterceptor(AuthTokenInterceptor())
             .build()
     }
 }
