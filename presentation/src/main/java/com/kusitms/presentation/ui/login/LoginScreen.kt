@@ -67,12 +67,6 @@ fun LoginLogo() {
                 ),
             contentAlignment = Alignment.Center
         ){
-            Image(
-                modifier = Modifier.fillMaxWidth(),
-                painter = painterResource(id = R.drawable.logo_background),
-                contentScale = ContentScale.FillWidth,
-                contentDescription = null
-            )
 
             Column(
                 modifier = Modifier.fillMaxSize(),
@@ -95,7 +89,7 @@ fun ButtonColumn(navController: NavHostController) {
             .fillMaxWidth()
             .padding(horizontal = 20.dp)
             .height(255.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
+        horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.Top
     ) {
         Button(
@@ -124,6 +118,7 @@ fun ButtonColumn(navController: NavHostController) {
             Text(text = stringResource(id = R.string.login_btn2), style = KusitmsTypo.current.SubTitle2_Semibold, color = KusitmsColorPalette.current.Grey600)
         }
         Spacer(modifier = Modifier.height(20.dp))
+        LoginTalkBall.DrawLoginTalk(modifier = Modifier.padding(horizontal = 10.dp))
         loginBottomColumn(navController)
     }
 }
@@ -132,16 +127,16 @@ fun ButtonColumn(navController: NavHostController) {
 fun loginBottomColumn(navController: NavController) {
     Column(
         modifier = Modifier
-            .width(253.dp)
+            .fillMaxWidth()
             .padding(horizontal = 0.dp)
             .height(90.dp),
-        horizontalAlignment = Alignment.Start,
+        horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
-        LoginTalkBall.DrawLoginTalk()
         loginBottomRow(navController)
     }
 }
+
 
 
 @Composable
