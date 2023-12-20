@@ -1,6 +1,8 @@
 package com.kusitms.data.remote.di
 
+import android.util.Log
 import com.kusitms.data.BuildConfig
+import com.kusitms.data.local.AuthDataStore
 import com.kusitms.data.remote.api.KusitmsApi
 import dagger.Module
 import dagger.Provides
@@ -22,23 +24,28 @@ class NetworkModule {
     @Provides
     @Singleton
     fun provideKusitmsApi(): KusitmsApi {
-        return getRetrofit().create()
-    }
-
-    private fun getRetrofit(): Retrofit {
         return Retrofit.Builder()
             .baseUrl(kusitmsServer)
-            .client(getOkHttpClient())
+            .client(provideOkHttpClient(AuthTokenInterceptor()))
             .addConverterFactory(GsonConverterFactory.create())
             .build()
+            .create(KusitmsApi::class.java)
     }
 
-    private fun getOkHttpClient(): OkHttpClient {
+    @Provides
+    @Singleton
+    fun provideAuthTokenInterceptor(authDataStore: AuthDataStore): AuthTokenInterceptor {
+        return AuthTokenInterceptor(authDataStore)
+    }
+
+    @Provides
+    @Singleton
+    fun provideOkHttpClient(authTokenInterceptor: AuthTokenInterceptor): OkHttpClient {
         return OkHttpClient.Builder()
             .addInterceptor(HttpLoggingInterceptor().apply {
                 level = HttpLoggingInterceptor.Level.BODY
             })
-            //.addInterceptor(AuthTokenInterceptor())
+            .addInterceptor(authTokenInterceptor)
             .build()
     }
 }

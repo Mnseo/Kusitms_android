@@ -1,6 +1,7 @@
 package com.kusitms.domain.usecase
 
 
+import com.kusitms.domain.model.login.LoginMemberProfile
 import com.kusitms.domain.repository.LoginRepository
 import javax.inject.Inject
 
@@ -10,7 +11,11 @@ class LoginUseCase @Inject constructor(
     suspend operator fun invoke(
         email: String,
         password: String
-    ): Result<Unit> { // 단순히 성공/실패 여부만 반환
+    ): Result<Unit> {
         return loginRepository.LoginMember(email,password)
+    }
+
+    suspend fun fetchLoginMemberProfile(): Result<LoginMemberProfile> {
+        return loginRepository.fetchLoginMemberProfile()
     }
 }

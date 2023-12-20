@@ -1,8 +1,10 @@
 package com.kusitms.presentation.model.login
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kusitms.domain.usecase.LoginUseCase
+import com.kusitms.presentation.model.signIn.SignInViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,7 +17,7 @@ enum class LoginStatus { SUCCESS, ERROR, DEFAULT}
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val loginUseCase: LoginUseCase
+    private val loginUseCase: LoginUseCase,
 ): ViewModel() {
     private val _email = MutableStateFlow("")
     val email: StateFlow<String> = _email
@@ -42,32 +44,27 @@ class LoginViewModel @Inject constructor(
         viewModelScope.launch {
             val email = email.value
             val password = password.value
+            Log.d("login_status", loginStatus.toString())
             loginUseCase(email,password)
                 .onSuccess {
                     updateLoginStatus(LoginStatus.SUCCESS)
+                    fetchAndSetUserProfile()
                 }.onFailure {
                     Timber.e(it)
                     updateLoginStatus(LoginStatus.ERROR)
                 }
-//            when (val response = loginUseCase(email, password)) {
-//                is ApiResult.Success -> {
-//                    updateLoginStatus(LoginStatus.SUCCESS)
-//                    Timber.tag("LoginSuccess_result")
-//                        .d("Code: " + response.data.result.code + " " + "\n" + " Message: " + response.data.result.message)
-//                    Log.d(
-//                        "LoginSuccess_payload",
-//                        "atk: ${response.data.payload.accessToken} \n rfk: ${response.data.payload.refreshToken}"
-//                    )
-//                }
-//                is ApiResult.ApiError -> {
-//                    updateLoginStatus(LoginStatus.ERROR)
-//                }
-//
-//                is ApiResult.Failure -> {
-//                    updateLoginStatus(LoginStatus.ERROR)
-//                    Timber.e(response.throwable)
-//                }
-//                else -> { updateLoginStatus(LoginStatus.ERROR) }
+        }
+    }
+    private fun fetchAndSetUserProfile() {
+        viewModelScope.launch {
+            val profileResult = loginUseCase.fetchLoginMemberProfile()
+            Log.d("fetch", profileResult.toString())
+//            if (profileResult is Result.Success) {
+//                val profile = profileResult.data
+//                signInViewModel.updateName(profile.name)
+//                signInViewModel.updatePhoneNum(profile.phoneNumber)
+//                signInViewModel.updateEmail(profile.email)
+//            } else if (profileResult is Result.Failure) {
 //            }
         }
     }

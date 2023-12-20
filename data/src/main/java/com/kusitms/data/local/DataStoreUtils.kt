@@ -1,6 +1,7 @@
 package com.kusitms.data.local
 
 import android.content.Context
+import android.util.Log
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.*
 import androidx.datastore.preferences.preferencesDataStore
@@ -139,6 +140,7 @@ object DataStoreUtils {
                 true
             }
         }
+        Log.d("DataStoreUtils", "Read data: key=$key, value=$value")
         return value
     }
 

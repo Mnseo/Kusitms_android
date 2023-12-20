@@ -13,3 +13,4 @@ class LoginResponse(
     result: Result,
     payload: LoginResponsePayload
 ): BaseResponse<LoginResponsePayload>(result = result, payload = payload)
+
