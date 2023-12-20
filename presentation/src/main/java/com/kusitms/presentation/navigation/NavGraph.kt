@@ -45,6 +45,7 @@ fun MainNavigation() {
 
     val findPwViewModel: FindPwViewModel=  hiltViewModel()
     val SettingViewModel : SettingViewModel = hiltViewModel()
+    val signInViewModel: SignInViewModel = hiltViewModel()
 
 
 
@@ -57,7 +58,7 @@ fun MainNavigation() {
         }
 
         //SignInScreen
-        kusitmsComposableWithAnimation(NavRoutes.SignInDefault.route) { SignInDefaultProfile(SignInViewModel(), navController) }
+        kusitmsComposableWithAnimation(NavRoutes.SignInDefault.route) { SignInDefaultProfile(signInViewModel, navController) }
         kusitmsComposableWithAnimation(NavRoutes.SignInAdditionalProfile.route) { SignInAdditionalProfile(navController) }
         kusitmsComposableWithAnimation(NavRoutes.SignInProfileComplete.route) { SignInProfileComplete(navController)}
         kusitmsComposableWithAnimation(NavRoutes.SignInRequest.route) { SignInRequestScreen(SignInRequestViewModel(), navController) }
