@@ -54,7 +54,6 @@ import com.kusitms.presentation.common.ui.KusitsmTopBarBackTextWithIcon
 import com.kusitms.presentation.common.ui.KusitsmTopBarTextWithIcon
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
-import com.kusitms.presentation.model.notice.dummyCommentList
 import com.kusitms.presentation.ui.ImageVector.icons.KusitmsIcons
 import com.kusitms.presentation.ui.ImageVector.icons.kusitmsicons.Close
 import com.kusitms.presentation.ui.ImageVector.icons.kusitmsicons.MoreVertical
