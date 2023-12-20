@@ -27,7 +27,7 @@ fun LoginMemberInputColumn(
 
     Column(modifier = Modifier
         .fillMaxWidth()
-        .height(200.dp),
+        .height(250.dp),
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.Top
     ) {

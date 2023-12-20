@@ -1,8 +1,10 @@
 package com.kusitms.domain.repository
 
+import com.kusitms.domain.model.login.LoginMemberProfile
 
-import com.kusitms.domain.entity.response.LoginResponse
 
 interface LoginRepository {
-    suspend fun LoginMember(email: String, password: String): LoginResponse // ApiResult<Unit>
+    suspend fun LoginMember(email: String, password: String): Result<Unit>
+
+    suspend fun fetchLoginMemberProfile(): Result<LoginMemberProfile>
 }

@@ -37,9 +37,7 @@ android {
 }
 
 dependencies {
-
     implementation(project(":domain"))
-
     implementation(libs.bundles.default)
     testImplementation(libs.junit)
     androidTestImplementation(libs.test.ext.junit)
@@ -52,7 +50,6 @@ dependencies {
 
 
     implementation(libs.javax.inject)
-
     implementation(libs.bundles.network)
     implementation(libs.bundles.dataStore)
     implementation(libs.bundles.retrofitSerialization)
