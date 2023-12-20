@@ -1,5 +1,4 @@
-package com.kusitms.domain.entity.response
-
+package com.kusitms.data.remote.entity.response
 
 import com.kusitms.data.remote.entity.BaseResponse
 import com.kusitms.data.remote.entity.Result
@@ -14,3 +13,4 @@ class LoginResponse(
     result: Result,
     payload: LoginResponsePayload
 ): BaseResponse<LoginResponsePayload>(result = result, payload = payload)
+

@@ -3,10 +3,14 @@ package com.kusitms.presentation.model.signIn
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.kusitms.domain.model.login.LoginMemberProfile
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import javax.inject.Inject
 
-class SignInViewModel:ViewModel() {
+@HiltViewModel
+class SignInViewModel@Inject constructor(): ViewModel() {
     private val _major = MutableStateFlow("")
     val major: StateFlow<String> = _major
 
@@ -30,7 +34,6 @@ class SignInViewModel:ViewModel() {
 
     private val _email = MutableStateFlow("kusitms@gmail.com")
     val email: StateFlow<String> = _email
-
 
 
     fun updateMajor(newMajor: String) {

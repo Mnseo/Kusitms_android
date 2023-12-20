@@ -9,11 +9,9 @@ java {
 }
 
 dependencies {
-
     implementation(libs.javax.inject)
     implementation(libs.coroutine)
     testImplementation(libs.junit)
-
     implementation(libs.bundles.network)
 
 }

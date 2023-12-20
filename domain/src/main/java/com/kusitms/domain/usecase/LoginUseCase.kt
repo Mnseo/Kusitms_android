@@ -1,7 +1,7 @@
 package com.kusitms.domain.usecase
 
-import com.kusitms.domain.entity.ApiResult
-import com.kusitms.domain.entity.response.LoginResponse
+
+import com.kusitms.domain.model.login.LoginMemberProfile
 import com.kusitms.domain.repository.LoginRepository
 import javax.inject.Inject
 
@@ -11,17 +11,11 @@ class LoginUseCase @Inject constructor(
     suspend operator fun invoke(
         email: String,
         password: String
-    ): ApiResult<LoginResponse> { // return ApiResult<Unit>
-        //200에서 error 처리를 할때는 run time exception
-        return try {
-            val response = loginRepository.LoginMember(email,password)
-            if (response.payload == null) {
-                ApiResult.ApiError<LoginResponse>(500, "올바른 데이터를 받지 못했습니다.")
-            } else {
-                ApiResult.Success(response)
-            }
-        } catch(e: Throwable) {
-            ApiResult.Failure<LoginResponse>(e)
-        }
+    ): Result<Unit> {
+        return loginRepository.LoginMember(email,password)
+    }
+
+    suspend fun fetchLoginMemberProfile(): Result<LoginMemberProfile> {
+        return loginRepository.fetchLoginMemberProfile()
     }
 }
