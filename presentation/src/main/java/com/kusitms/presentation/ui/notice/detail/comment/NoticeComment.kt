@@ -31,6 +31,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.kusitms.domain.model.notice.CommentModel
 import com.kusitms.presentation.common.ui.KusitmsMarginHorizontalSpacer
 import com.kusitms.presentation.common.ui.KusitmsMarginVerticalSpacer
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
@@ -45,7 +46,7 @@ import com.kusitms.presentation.ui.ImageVector.icons.kusitmsicons.UserBackground
 
 @Composable
 fun NoticeComment(
-    comment: CommentUiModel,
+    comment: CommentModel,
     isLast : Boolean = false,
     onClickReport : () -> Unit = {},
     onClickDelete : () -> Unit = {},

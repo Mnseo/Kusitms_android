@@ -34,7 +34,6 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -46,6 +45,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kusitms.domain.model.notice.NoticeModel
 import com.kusitms.presentation.common.ui.KusitmsDialog
 import com.kusitms.presentation.common.ui.KusitmsMarginHorizontalSpacer
@@ -71,8 +71,8 @@ fun NoticeDetailScreen(
     viewModel: NoticeDetailViewModel = hiltViewModel(),
     onBack : () -> Unit
 ) {
-    val notice by viewModel.notice.collectAsState()
-    var commentList by remember { mutableStateOf(dummyCommentList) }
+    val notice by viewModel.notice.collectAsStateWithLifecycle()
+    val commentList by viewModel.commentList.collectAsStateWithLifecycle()
     val listState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
 
@@ -107,7 +107,7 @@ fun NoticeDetailScreen(
             okColor = KusitmsColorPalette.current.Sub2,
             okText = "신고하기",
             onOk = {
-
+                //viewModel.reportNoticeComment()
                    },
             onCancel = {
                 openDialogState = false
@@ -225,7 +225,13 @@ fun NoticeDetailScreen(
                 NoticeComment(comment = comment,
                     onClickReport = {
                         openBottomSheet = NoticeDetailModalState.Report
-                    }, isLast = index == commentList.lastIndex)
+                    },
+                    onClickDelete = {
+                        viewModel.deleteNoticeComment(
+                            comment.commentId
+                        )
+                    },
+                    isLast = index == commentList.lastIndex)
                 if(index == commentList.lastIndex && index != 0){
                     KusitmsMarginVerticalSpacer(size = 20)
                 }
@@ -233,12 +239,9 @@ fun NoticeDetailScreen(
         }
         CommentInput(
             onClickSend = {
-                // 테스트용
-                commentList = commentList + commentList.first().copy(
-                    content = it,
-                    writer = "이채연",
-                    commentCount = 0
-                )
+                 viewModel.addNoticeComment(
+                     it
+                 )
                 coroutineScope.launch {
                     delay(50)
                     listState.animateScrollToItem(commentList.lastIndex + 1)
