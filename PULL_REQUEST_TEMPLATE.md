@@ -1,12 +1,12 @@
-### 🥕 Issue number and Link
+### Issue number and Link
 이슈 번호 : #번호
 
 
-### 🍠 Summary
+### Summary
 한 줄 요약
 
 
-### 🌽 PR Type
+### PR Type
 - [ ] Feature
 - [ ] Bugfix
 - [ ] Code Style Update
@@ -15,4 +15,4 @@
 - [ ] Other
 
 
-### 🫛 Other Information
+### Other Information
