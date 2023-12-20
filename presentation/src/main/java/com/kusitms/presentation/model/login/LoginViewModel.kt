@@ -3,8 +3,8 @@ package com.kusitms.presentation.model.login
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.kusitms.domain.usecase.LoginUseCase
-import com.kusitms.presentation.model.signIn.SignInViewModel
+import com.kusitms.domain.usecase.GetLoginMemberProfileUseCase
+import com.kusitms.domain.usecase.LoginMemberUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -17,7 +17,8 @@ enum class LoginStatus { SUCCESS, ERROR, DEFAULT}
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val loginUseCase: LoginUseCase,
+    private val loginMemberUseCase: LoginMemberUseCase,
+    private val getLoginMemberUseCase: GetLoginMemberProfileUseCase
 ): ViewModel() {
     private val _email = MutableStateFlow("")
     val email: StateFlow<String> = _email
@@ -45,7 +46,7 @@ class LoginViewModel @Inject constructor(
             val email = email.value
             val password = password.value
             Log.d("login_status", loginStatus.toString())
-            loginUseCase(email,password)
+            loginMemberUseCase(email,password)
                 .onSuccess {
                     updateLoginStatus(LoginStatus.SUCCESS)
                     fetchAndSetUserProfile()
@@ -57,9 +58,9 @@ class LoginViewModel @Inject constructor(
     }
     private fun fetchAndSetUserProfile() {
         viewModelScope.launch {
-            val profileResult = loginUseCase.fetchLoginMemberProfile()
+            val profileResult = getLoginMemberUseCase.fetchLoginMemberProfile()
             Log.d("fetch", profileResult.toString())
-//            if (profileResult is Result.Success) {
+//            if (profileResult) {
 //                val profile = profileResult.data
 //                signInViewModel.updateName(profile.name)
 //                signInViewModel.updatePhoneNum(profile.phoneNumber)

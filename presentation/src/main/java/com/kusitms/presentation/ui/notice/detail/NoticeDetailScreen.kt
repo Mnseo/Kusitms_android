@@ -51,14 +51,11 @@ import com.kusitms.presentation.common.ui.KusitmsDialog
 import com.kusitms.presentation.common.ui.KusitmsMarginHorizontalSpacer
 import com.kusitms.presentation.common.ui.KusitmsMarginVerticalSpacer
 import com.kusitms.presentation.common.ui.KusitsmTopBarBackTextWithIcon
-import com.kusitms.presentation.common.ui.KusitsmTopBarTextWithIcon
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
-import com.kusitms.presentation.model.notice.dummyCommentList
 import com.kusitms.presentation.ui.ImageVector.icons.KusitmsIcons
 import com.kusitms.presentation.ui.ImageVector.icons.kusitmsicons.Close
 import com.kusitms.presentation.ui.ImageVector.icons.kusitmsicons.MoreVertical
-import com.kusitms.presentation.ui.ImageVector.icons.kusitmsicons.Setting
 import com.kusitms.presentation.ui.ImageVector.icons.kusitmsicons.UserBackground
 import com.kusitms.presentation.ui.notice.detail.comment.CommentInput
 import com.kusitms.presentation.ui.notice.detail.comment.NoticeComment

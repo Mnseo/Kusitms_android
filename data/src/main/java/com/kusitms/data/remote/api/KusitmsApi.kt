@@ -7,13 +7,14 @@ import retrofit2.http.Query
 
 
 interface KusitmsApi {
+
     @GET("auth/login/MEMBER")
     suspend fun LoginMember(
         @Query("email") email:String,
         @Query("password") password: String
     ): LoginResponse
 
-    @GET("member/info/detail")
+    @GET("member/info")
     suspend fun LoginMemberProfile(): LoginMemberProfileResponse
 
 }
