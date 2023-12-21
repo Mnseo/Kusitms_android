@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
 
-@Preview
+@Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun ProfileListScreen() {
     LazyVerticalGrid(
@@ -40,7 +40,7 @@ fun ProfileItem(modifier: Modifier = Modifier) {
     Column(
         modifier = Modifier
             .then(modifier)
-            .padding(vertical = 32.dp, horizontal = 8.dp)
+            .padding(vertical = 32.dp, horizontal = 16.dp)
             .fillMaxWidth(),
     ) {
         Card(
