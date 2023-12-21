@@ -75,12 +75,7 @@ class NoticeDetailViewModel @Inject constructor(
                 //TODO
             }.collectLatest {
                 // TODO 수정
-                _commentList.emit(
-                    commentList.value + listOf(commentList.value.firstOrNull()?.copy(
-                        content = content,
-                        commentId = System.currentTimeMillis().toInt()
-                    ) ?: return@collectLatest))
-                //fetchCommentList()
+               fetchCommentList()
             }
         }
     }
@@ -94,12 +89,7 @@ class NoticeDetailViewModel @Inject constructor(
             ).catch {
                 //TODO
             }.collectLatest {
-                _commentList.emit(
-                    commentList.value.filter {
-                        it.commentId != commentId
-                    }
-                )
-                //fetchCommentList()
+                fetchCommentList()
             }
         }
     }
