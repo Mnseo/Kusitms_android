@@ -41,11 +41,16 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.kusitms.domain.model.notice.NoticeModel
 import com.kusitms.presentation.common.ui.KusitmsDialog
 import com.kusitms.presentation.common.ui.KusitmsMarginHorizontalSpacer
@@ -190,23 +195,28 @@ fun NoticeDetailScreen(
 
             item {
                 KusitmsMarginVerticalSpacer(size = 32)
-                LazyRow(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .wrapContentHeight(),
-                    contentPadding = PaddingValues(start = 20.dp),
-                    horizontalArrangement = Arrangement.spacedBy(4.dp)
-                ){
-                    item { NoticeDetailImageCard() }
+                if(notice.imageUrl.isNotBlank()){
+                    LazyRow(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .wrapContentHeight(),
+                        contentPadding = PaddingValues(start = 20.dp),
+                        horizontalArrangement = Arrangement.spacedBy(4.dp)
+                    ){
+                        item { NoticeDetailImageCard(
+                            notice.imageUrl
+                        ) }
+                    }
+                    KusitmsMarginVerticalSpacer(size = 8)
+                    Text(
+                        modifier = Modifier.padding(start = 28.dp),
+                        text = "1/1",
+                        style = KusitmsTypo.current.Caption2,
+                        color =  KusitmsColorPalette.current.Grey500
+                    )
+                    KusitmsMarginVerticalSpacer(size = 24)
                 }
-                KusitmsMarginVerticalSpacer(size = 8)
-                Text(
-                    modifier = Modifier.padding(start = 28.dp),
-                    text = "1/10",
-                    style = KusitmsTypo.current.Caption2,
-                    color =  KusitmsColorPalette.current.Grey500
-                )
-                KusitmsMarginVerticalSpacer(size = 24)
+
                 Divider(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -330,7 +340,9 @@ fun NoticeDetailTitleCard(
 }
 
 @Composable
-fun NoticeDetailImageCard() {
+fun NoticeDetailImageCard(
+    imageUrl : String
+) {
     Card(
         modifier = Modifier
             .size(100.dp),
@@ -340,7 +352,15 @@ fun NoticeDetailImageCard() {
             contentColor = KusitmsColorPalette.current.Grey300
         )
     ) {
-        Spacer(modifier = Modifier.fillMaxSize())
+        AsyncImage(
+            model = ImageRequest.Builder(LocalContext.current)
+                .data(imageUrl)
+                .crossfade(true)
+                .build(),
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.clip(RoundedCornerShape(16.dp))
+        )
     }
 }
 
