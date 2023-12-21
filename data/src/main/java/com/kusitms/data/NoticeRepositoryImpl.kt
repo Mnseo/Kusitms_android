@@ -2,6 +2,7 @@ package com.kusitms.data
 
 import com.kusitms.data.remote.api.KusitmsApi
 import com.kusitms.data.remote.entity.response.notice.toModel
+import com.kusitms.domain.model.notice.CommentModel
 import com.kusitms.domain.model.notice.CurriculumModel
 import com.kusitms.domain.model.notice.NoticeModel
 import com.kusitms.domain.repository.NoticeRepository
@@ -43,6 +44,32 @@ class NoticeRepositoryImpl @Inject constructor(
                 Result.success(response.payload.map { it.toModel() })
             } else {
                 Result.failure(RuntimeException("커리큘럼 조회 실패: ${response.result.message}"))
+            }
+        } catch (e: Exception){
+            Result.failure(e)
+        }
+    }
+
+    override suspend fun getCurriculumNoticeList(curriculumId : Int): Result<List<NoticeModel>> {
+        return try {
+            val response = kusitmsApi.getGetCurriculumNoticeList(curriculumId)
+            if (response.result.code == 200 && response.payload != null) {
+                Result.success(response.payload.map { it.toModel() })
+            } else {
+                Result.failure(RuntimeException("커리큘럼 공지 조회 실패: ${response.result.message}"))
+            }
+        } catch (e: Exception){
+            Result.failure(e)
+        }
+    }
+
+    override suspend fun getNoticeCommentList(noticeId: Int): Result<List<CommentModel>> {
+        return try {
+            val response = kusitmsApi.getNoticeCommentList(noticeId)
+            if (response.result.code == 200 && response.payload != null) {
+                Result.success(response.payload.map { it.toModel() })
+            } else {
+                Result.failure(RuntimeException("공지사항 댓글 조회 실패: ${response.result.message}"))
             }
         } catch (e: Exception){
             Result.failure(e)

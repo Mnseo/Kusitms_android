@@ -3,6 +3,7 @@ package com.kusitms.data.remote.api
 import com.kusitms.data.remote.entity.BaseResponse
 import com.kusitms.data.remote.entity.response.LoginMemberProfileResponse
 import com.kusitms.data.remote.entity.response.LoginResponse
+import com.kusitms.data.remote.entity.response.notice.CommentPayload
 import com.kusitms.data.remote.entity.response.notice.CurriculumPayload
 import com.kusitms.data.remote.entity.response.notice.NoticePayload
 import retrofit2.http.GET
@@ -31,5 +32,15 @@ interface KusitmsApi {
 
     @GET("notice/curriculum")
     suspend fun getCurriculumList(): BaseResponse<List<CurriculumPayload>>
+
+    @GET("notice/curriculum/list")
+    suspend fun getGetCurriculumNoticeList(
+        @Query("curriculumId") curriculumId : Int
+    ) : BaseResponse<List<NoticePayload>>
+
+    @GET("comment/{noticeId}")
+    suspend fun getNoticeCommentList(
+        @Path("noticeId") noticeId : Int
+    ) : BaseResponse<List<CommentPayload>>
 
 }
