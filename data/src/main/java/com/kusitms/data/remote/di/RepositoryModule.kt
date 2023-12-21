@@ -1,7 +1,10 @@
 package com.kusitms.data.remote.di
 
 import com.kusitms.data.LoginRepositoryImpl
+import com.kusitms.data.NoticeRepositoryImpl
 import com.kusitms.domain.repository.LoginRepository
+import com.kusitms.domain.repository.NoticeRepository
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -9,8 +12,15 @@ import dagger.hilt.components.SingletonComponent
 
 @Module
 @InstallIn(SingletonComponent::class)
-object RepositoryModule {
-    @Provides
-    fun bindLoginRepository(loginRepositoryImpl: LoginRepositoryImpl):
-            LoginRepository = loginRepositoryImpl
+abstract class RepositoryModule {
+    @Binds
+    abstract fun bindLoginRepository(
+        loginRepository: LoginRepositoryImpl
+    ): LoginRepository
+
+
+    @Binds
+    abstract fun bindNoticeRepository(
+        noticeRepository: NoticeRepositoryImpl
+    ): NoticeRepository
 }
