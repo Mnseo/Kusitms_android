@@ -6,6 +6,7 @@ import com.kusitms.data.remote.entity.response.LoginResponse
 import com.kusitms.data.remote.entity.response.notice.CurriculumPayload
 import com.kusitms.data.remote.entity.response.notice.NoticePayload
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 
@@ -22,6 +23,11 @@ interface KusitmsApi {
     // 공지사항 -> 차후에 분리하는 것도 좋을 듯 싶습니다.
     @GET("notice")
     suspend fun getNoticeList(): BaseResponse<List<NoticePayload>>
+
+    @GET("notice/{noticeId}/detail")
+    suspend fun getNoticeDetail(
+        @Path("noticeId") noticeId : Int
+    ) : BaseResponse<NoticePayload>
 
     @GET("notice/curriculum")
     suspend fun getCurriculumList(): BaseResponse<List<CurriculumPayload>>
