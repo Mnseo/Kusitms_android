@@ -29,7 +29,7 @@ import com.kusitms.presentation.common.ui.theme.KusitmsTypo
 fun ProfileListScreen() {
     LazyVerticalGrid(
         columns = GridCells.Adaptive(minSize = 152.dp),
-        modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp),
+        modifier = Modifier.fillMaxSize().padding(horizontal = 0.dp),
     ) {
         items(5) { index -> ProfileItem() }
     }
