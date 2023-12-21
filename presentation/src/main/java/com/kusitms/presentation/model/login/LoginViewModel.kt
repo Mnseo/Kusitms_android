@@ -3,8 +3,8 @@ package com.kusitms.presentation.model.login
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.kusitms.domain.usecase.GetLoginMemberProfileUseCase
-import com.kusitms.domain.usecase.LoginMemberUseCase
+import com.kusitms.domain.usecase.signin.GetLoginMemberProfileUseCase
+import com.kusitms.domain.usecase.signin.LoginMemberUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

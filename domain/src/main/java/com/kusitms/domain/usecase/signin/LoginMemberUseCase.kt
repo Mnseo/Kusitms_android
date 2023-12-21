@@ -1,4 +1,4 @@
-package com.kusitms.domain.usecase
+package com.kusitms.domain.usecase.signin
 
 
 import com.kusitms.domain.repository.LoginRepository

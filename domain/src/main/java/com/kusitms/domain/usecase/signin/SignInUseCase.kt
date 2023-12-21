@@ -1,4 +1,4 @@
-package com.kusitms.domain.usecase
+package com.kusitms.domain.usecase.signin
 
 import javax.inject.Inject
 

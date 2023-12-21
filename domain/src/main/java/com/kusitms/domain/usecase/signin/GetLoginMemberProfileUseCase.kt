@@ -1,4 +1,4 @@
-package com.kusitms.domain.usecase
+package com.kusitms.domain.usecase.signin
 
 import com.kusitms.domain.model.login.LoginMemberProfile
 import com.kusitms.domain.repository.SignInRepository
@@ -8,6 +8,6 @@ class GetLoginMemberProfileUseCase @Inject constructor(
     private val signInRepository: SignInRepository
 ) {
     suspend fun fetchLoginMemberProfile(): Result<LoginMemberProfile> {
-        return signInRepository.fetchLoginMemberProfile()
+        return signInRepository.getLoginMemberProfile()
     }
 }

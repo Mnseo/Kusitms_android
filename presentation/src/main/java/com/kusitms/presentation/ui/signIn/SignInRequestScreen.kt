@@ -57,7 +57,7 @@ fun SignInRequestSubColumn1(viewModel: SignInRequestViewModel, navController: Na
         KusitmsMarginVerticalSpacer(size = 72)
         SignInRequestSubColumn2(viewModel = viewModel)
         Spacer(modifier = Modifier.weight(1f))
-        SignInRequestBtn(viewModel = viewModel, onNextClick = { viewModel.validateEmail()
+        SignInRequestBtn(viewModel = viewModel, onNextClick = { viewModel.signInRequest()
                 if(viewModel.inputState.value == InputState.VALID) { navController.navigate(NavRoutes.LogInScreen.route)}
             }
         )
@@ -69,9 +69,17 @@ fun SignInRequestSubColumn1(viewModel: SignInRequestViewModel, navController: Na
 fun SignInRequestSubColumn2(viewModel: SignInRequestViewModel) {
     val email = viewModel.email.collectAsState()
     val password = viewModel.password.collectAsState()
+    val signInResult = viewModel.signInResult.collectAsState()
+
+    val message = when (signInResult.value) {
+        "REGISTERED" -> stringResource(id = R.string.signin_request_warning2)
+        "NO_ACCOUNT" -> stringResource(id = R.string.signin_request_warning1)
+        else -> ""
+    }
+
     Column(modifier = Modifier
         .fillMaxWidth()
-        .height(250.dp),
+        .height(280.dp),
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.Top
     ) {
@@ -98,13 +106,13 @@ fun SignInRequestSubColumn2(viewModel: SignInRequestViewModel) {
             value = password.value,
             onValueChange = {viewModel.updatePassword(it)})
         KusitmsMarginVerticalSpacer(size = 24)
-        androidx.compose.material3.Text(
-            text = stringResource(id = R.string.signin_request_warning1),
-            style = KusitmsTypo.current.Text_Medium,
-            color = if(viewModel.inputState.value == InputState.INVALID) {
-                KusitmsColorPalette.current.Sub2
-            } else Color.Transparent
-        )
+        if (message.isNotEmpty()) {
+            androidx.compose.material3.Text(
+                text = message,
+                style = KusitmsTypo.current.Text_Medium,
+                color = KusitmsColorPalette.current.Sub2
+            )
+        }
     }
 }
 

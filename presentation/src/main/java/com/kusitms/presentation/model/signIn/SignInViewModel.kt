@@ -1,10 +1,6 @@
 package com.kusitms.presentation.model.signIn
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.kusitms.domain.model.login.LoginMemberProfile
-import com.kusitms.domain.usecase.GetLoginMemberProfileUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
