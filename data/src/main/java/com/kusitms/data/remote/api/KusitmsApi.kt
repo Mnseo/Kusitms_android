@@ -1,12 +1,15 @@
 package com.kusitms.data.remote.api
 
 import com.kusitms.data.remote.entity.BaseResponse
+import com.kusitms.data.remote.entity.request.CommentContentRequestBody
 import com.kusitms.data.remote.entity.response.LoginMemberProfileResponse
 import com.kusitms.data.remote.entity.response.LoginResponse
 import com.kusitms.data.remote.entity.response.notice.CommentPayload
 import com.kusitms.data.remote.entity.response.notice.CurriculumPayload
 import com.kusitms.data.remote.entity.response.notice.NoticePayload
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -43,4 +46,9 @@ interface KusitmsApi {
         @Path("noticeId") noticeId : Int
     ) : BaseResponse<List<CommentPayload>>
 
+    @POST("comment/{noticeId}")
+    suspend fun addNoticeComment(
+        @Path("noticeId") noticeId : Int,
+        @Body commentContentRequestBody: CommentContentRequestBody
+    ) : BaseResponse<CommentPayload>
 }

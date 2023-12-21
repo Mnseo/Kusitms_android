@@ -1,7 +1,10 @@
 package com.kusitms.data
 
 import com.kusitms.data.remote.api.KusitmsApi
+import com.kusitms.data.remote.entity.request.CommentContentRequestBody
+import com.kusitms.data.remote.entity.request.toBody
 import com.kusitms.data.remote.entity.response.notice.toModel
+import com.kusitms.domain.model.notice.CommentContentModel
 import com.kusitms.domain.model.notice.CommentModel
 import com.kusitms.domain.model.notice.CurriculumModel
 import com.kusitms.domain.model.notice.NoticeModel
@@ -70,6 +73,25 @@ class NoticeRepositoryImpl @Inject constructor(
                 Result.success(response.payload.map { it.toModel() })
             } else {
                 Result.failure(RuntimeException("공지사항 댓글 조회 실패: ${response.result.message}"))
+            }
+        } catch (e: Exception){
+            Result.failure(e)
+        }
+    }
+
+    override suspend fun addNoticeComment(
+        noticeId: Int,
+        commentContentModel: CommentContentModel
+    ): Result<CommentModel> {
+        return try {
+            val response = kusitmsApi.addNoticeComment(
+                noticeId = noticeId,
+                commentContentRequestBody = commentContentModel.toBody()
+            )
+            if (response.result.code == 200 && response.payload != null) {
+                Result.success(response.payload.toModel())
+            } else {
+                Result.failure(RuntimeException("댓글 등록 실패: ${response.result.message}"))
             }
         } catch (e: Exception){
             Result.failure(e)
