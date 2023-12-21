@@ -45,6 +45,7 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kusitms.domain.model.notice.CurriculumModel
 import com.kusitms.domain.model.notice.NoticeModel
@@ -58,6 +59,7 @@ import com.kusitms.presentation.ui.ImageVector.icons.kusitmsicons.ArrowDown
 import com.kusitms.presentation.ui.ImageVector.icons.kusitmsicons.Flag
 import com.kusitms.presentation.ui.ImageVector.icons.kusitmsicons.NoticeDark
 import com.kusitms.presentation.ui.ImageVector.icons.kusitmsicons.Setting
+import com.kusitms.presentation.ui.profile.ProfileScreen
 import kotlinx.coroutines.launch
 
 @Composable
