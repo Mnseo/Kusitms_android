@@ -83,7 +83,7 @@ fun ProfileScreen() {
     }
 }
 
-@Preview
+@Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun ProfileScreenPreview() {
     ProfileScreen()
