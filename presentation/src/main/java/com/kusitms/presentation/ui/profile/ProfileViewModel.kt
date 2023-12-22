@@ -11,4 +11,8 @@ import javax.inject.Inject
 class ProfileViewModel @Inject constructor() : ViewModel() {
     private val _visiblePartList = MutableStateFlow(false)
     val visiblePartList : StateFlow<Boolean> = _visiblePartList.asStateFlow()
+
+    fun setPartListVisibilty(expanded: Boolean) {
+        _visiblePartList.value = expanded
+    }
 }
