@@ -43,6 +43,14 @@ interface KusitmsApi {
         @Field("email") email: String
     ): FindPwCheckEmailResponse
 
+    @FormUrlEncoded
+    @POST("member/verify")
+    suspend fun SendCode(
+        @Field("email") email: String
+    ): BaseResponse<Unit>
+
+
+
     @PUT("v1/member/password/unauthenticated")
     suspend fun updatePassword(
         @Query("email") email: String,

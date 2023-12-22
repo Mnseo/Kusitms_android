@@ -118,7 +118,7 @@ fun ButtonColumn(navController: NavHostController) {
             Text(text = stringResource(id = R.string.login_btn2), style = KusitmsTypo.current.SubTitle2_Semibold, color = KusitmsColorPalette.current.Grey600)
         }
         Spacer(modifier = Modifier.height(20.dp))
-        LoginTalkBall.DrawLoginTalk(modifier = Modifier.padding(horizontal = 10.dp))
+        LoginTalkBall.DrawLoginTalk(modifier = Modifier.padding(horizontal = 20.dp))
         loginBottomColumn(navController)
     }
 }
