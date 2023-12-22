@@ -22,6 +22,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.kusitms.presentation.R
 import com.kusitms.presentation.common.theme.KusitmsScaffoldNonScroll
+import com.kusitms.presentation.common.ui.KusitmsMarginVerticalSpacer
 import com.kusitms.presentation.common.ui.KusitmsSnackField
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
@@ -110,11 +111,12 @@ fun TitleColumn(
             .fillMaxWidth()
             .padding(20.dp)
             .background(KusitmsColorPalette.current.Grey900)
-            .height(840.dp),
+            .height(910.dp),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.Start
 
     ) {
+        KusitmsMarginVerticalSpacer(size = 70)
         Row(
             horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.Start),
             verticalAlignment = Alignment.Top,

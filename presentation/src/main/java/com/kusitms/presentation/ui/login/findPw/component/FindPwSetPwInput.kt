@@ -6,7 +6,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kusitms.presentation.R
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
@@ -39,7 +38,7 @@ fun FindPwSetPwInput(viewModel:FindPwViewModel) {
                 value = newPassword,
                 onValueChange = {
                     viewModel.updateNewPassword(it)
-                    viewModel.validatePassword()
+                    viewModel.validateNewPassword()
                 },
                 isError = passwordError == FindPwViewModel.PasswordErrorState.ShortPassword
             )
@@ -66,7 +65,7 @@ fun FindPwSetPwInput(viewModel:FindPwViewModel) {
                 value = newPasswordConfirm,
                 onValueChange = {
                     viewModel.updateNewPasswordConfirm(it)
-                    viewModel.validatePassword()
+                    viewModel.validateNewPassword()
                 },
                 isError = passwordError == FindPwViewModel.PasswordErrorState.PasswordsDoNotMatch
             )

@@ -10,7 +10,6 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -26,6 +25,11 @@ import com.kusitms.presentation.navigation.NavRoutes
 
 @Composable
 fun SignInRequestScreen(viewModel: SignInRequestViewModel, navController: NavHostController) {
+    DisposableEffect(key1 = Unit) {
+        onDispose {
+            viewModel.resetState()
+        }
+    }
     KusitmsScaffoldNonScroll(topbarText = stringResource(id = R.string.signin_request_topbar), navController = navController) {
         SignInRequestColumn(viewModel = viewModel, navController = navController)
     }
@@ -47,6 +51,13 @@ fun SignInRequestColumn(viewModel: SignInRequestViewModel, navController: NavHos
 
 @Composable
 fun SignInRequestSubColumn1(viewModel: SignInRequestViewModel, navController: NavHostController) {
+    val canNavigateToNextScreen by viewModel.canNavigateToNextScreen.collectAsState()
+    LaunchedEffect(canNavigateToNextScreen) {
+        if (canNavigateToNextScreen) {
+            navController.navigate(NavRoutes.LogInScreen.route)
+        }
+    }
+
     Column(modifier = Modifier
         .fillMaxSize()
         .padding(horizontal = 20.dp),
@@ -57,9 +68,7 @@ fun SignInRequestSubColumn1(viewModel: SignInRequestViewModel, navController: Na
         KusitmsMarginVerticalSpacer(size = 72)
         SignInRequestSubColumn2(viewModel = viewModel)
         Spacer(modifier = Modifier.weight(1f))
-        SignInRequestBtn(viewModel = viewModel, onNextClick = { viewModel.validateEmail()
-                if(viewModel.inputState.value == InputState.VALID) { navController.navigate(NavRoutes.LogInScreen.route)}
-            }
+        SignInRequestBtn(viewModel = viewModel, onNextClick = { viewModel.signInRequestCheck() }
         )
         KusitmsMarginVerticalSpacer(size = 24)
     }
@@ -69,9 +78,17 @@ fun SignInRequestSubColumn1(viewModel: SignInRequestViewModel, navController: Na
 fun SignInRequestSubColumn2(viewModel: SignInRequestViewModel) {
     val email = viewModel.email.collectAsState()
     val password = viewModel.password.collectAsState()
+    val signInResult = viewModel.signInResult.collectAsState()
+
+    val message = when (signInResult.value) {
+        "REGISTERED" -> stringResource(id = R.string.signin_request_warning2)
+        "NO_ACCOUNT" -> stringResource(id = R.string.signin_request_warning1)
+        else -> ""
+    }
+
     Column(modifier = Modifier
         .fillMaxWidth()
-        .height(250.dp),
+        .height(280.dp),
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.Top
     ) {
@@ -98,13 +115,13 @@ fun SignInRequestSubColumn2(viewModel: SignInRequestViewModel) {
             value = password.value,
             onValueChange = {viewModel.updatePassword(it)})
         KusitmsMarginVerticalSpacer(size = 24)
-        androidx.compose.material3.Text(
-            text = stringResource(id = R.string.signin_request_warning1),
-            style = KusitmsTypo.current.Text_Medium,
-            color = if(viewModel.inputState.value == InputState.INVALID) {
-                KusitmsColorPalette.current.Sub2
-            } else Color.Transparent
-        )
+        if (message.isNotEmpty()) {
+            androidx.compose.material3.Text(
+                text = message,
+                style = KusitmsTypo.current.Text_Medium,
+                color = KusitmsColorPalette.current.Sub2
+            )
+        }
     }
 }
 

@@ -1,6 +1,6 @@
 package com.kusitms.data.remote.di
 
-import android.util.Log
+
 import com.kusitms.data.BuildConfig
 import com.kusitms.data.local.AuthDataStore
 import com.kusitms.data.remote.api.KusitmsApi
@@ -12,7 +12,6 @@ import retrofit2.Retrofit
 import javax.inject.Singleton
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.create
 import retrofit2.converter.gson.GsonConverterFactory
 
 
@@ -26,7 +25,7 @@ class NetworkModule {
     fun provideKusitmsApi(): KusitmsApi {
         return Retrofit.Builder()
             .baseUrl(kusitmsServer)
-            .client(provideOkHttpClient(AuthTokenInterceptor()))
+            .client(provideOkHttpClient(provideAuthTokenInterceptor()))
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(KusitmsApi::class.java)
@@ -34,8 +33,8 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    fun provideAuthTokenInterceptor(authDataStore: AuthDataStore): AuthTokenInterceptor {
-        return AuthTokenInterceptor(authDataStore)
+    fun provideAuthTokenInterceptor(): AuthTokenInterceptor {
+        return AuthTokenInterceptor(AuthDataStore)
     }
 
     @Provides
