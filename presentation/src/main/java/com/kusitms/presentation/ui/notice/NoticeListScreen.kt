@@ -27,11 +27,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kusitms.domain.model.notice.NoticeModel
 import com.kusitms.presentation.common.ui.KusitmsMarginHorizontalSpacer
 import com.kusitms.presentation.common.ui.KusitmsMarginVerticalSpacer
@@ -124,23 +121,13 @@ fun NoticeListScreen(
                         )
                     }
 
-                    if(noticeList.isEmpty())
-                        Box(
-                            modifier = Modifier.fillMaxSize()
-                        ){
-                            Text(
-                                modifier = Modifier.align(Alignment.Center),
-                                text = "아직 공지사항이 없어요",
-                                color = KusitmsColorPalette.current.Grey400,
-                                style = KusitmsTypo.current.Caption1
-                            )
-                        }
+
                 }
 
             }
             if(noticeList.isNotEmpty()){
                 items(noticeList.filter {
-                    if(visibleOnlyUnreadNotice) !it.isRead
+                    if(visibleOnlyUnreadNotice) !it.viewYn
                     else true
                 }){
                     KusitmsNoticeItem(
@@ -152,6 +139,29 @@ fun NoticeListScreen(
                 }
             }
 
+        }
+        if(noticeList.isEmpty())
+            Box(
+                modifier = Modifier.fillMaxSize()
+            ){
+                Text(
+                    modifier = Modifier.align(Alignment.Center),
+                    text = "아직 공지사항이 없어요",
+                    color = KusitmsColorPalette.current.Grey400,
+                    style = KusitmsTypo.current.Caption1
+                )
+            }
+        else if(visibleOnlyUnreadNotice && noticeList.all { it.viewYn }) {
+            Box(
+                modifier = Modifier.fillMaxSize()
+            ){
+                Text(
+                    modifier = Modifier.align(Alignment.Center),
+                    text = "안 읽은 공지사항이 없어요",
+                    color = KusitmsColorPalette.current.Grey400,
+                    style = KusitmsTypo.current.Caption1
+                )
+            }
         }
 
         KusitsmScrollToTopButton(
@@ -181,7 +191,7 @@ fun KusitmsNoticeItem(
             }
             .padding(vertical = 16.dp)
             .alpha(
-                if (notice.isRead) 0.5f else 1f
+                if (notice.viewYn) 0.5f else 1f
             )
     ) {
         Row(
