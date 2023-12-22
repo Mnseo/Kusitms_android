@@ -67,9 +67,6 @@ class SignInRequestViewModel @Inject constructor(
         _inputState.value = if (isEmailValid) InputState.VALID else InputState.INVALID
     }
 
-
-
-
     fun signInRequestCheck() {
         viewModelScope.launch {
             val email = email.value
@@ -78,8 +75,7 @@ class SignInRequestViewModel @Inject constructor(
                 .onSuccess {
                     updateSignInResult(it.checkRegistered)
                     _canNavigateToNextScreen.value = isEmailValid
-                    Log.d("요청 보내기",signInResult.value)
-                    if(signInResult.equals("CAN_REGISTER")) {
+                    if(signInResult.value.equals("CAN_REGISTER")) {
                         signInRequestUseCase(email,password)
                     }
                 }
@@ -88,8 +84,6 @@ class SignInRequestViewModel @Inject constructor(
                 }
         }
     }
-
-
 
 }
 

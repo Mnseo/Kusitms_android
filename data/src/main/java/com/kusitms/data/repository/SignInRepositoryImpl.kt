@@ -55,7 +55,6 @@ class SignInRepositoryImpl @Inject constructor(
     ): Result<Unit> {
         return try {
             val response = kusitmsApi.SignInRequest(email, password)
-            Log.d("요청보내기2", "signInRequest")
             if(response.result == null) {
                 Result.failure(RuntimeException("올바른 데이터를 받지 못했습니다."))
             } else {

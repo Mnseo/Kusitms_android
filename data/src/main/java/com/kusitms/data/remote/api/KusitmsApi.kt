@@ -1,5 +1,6 @@
 package com.kusitms.data.remote.api
 
+import com.kusitms.data.remote.entity.BaseResponse
 import com.kusitms.data.remote.entity.response.LoginMemberProfileResponse
 import com.kusitms.data.remote.entity.response.LoginResponse
 import com.kusitms.data.remote.entity.response.SignInRequestResponse
@@ -32,6 +33,19 @@ interface KusitmsApi {
     suspend fun SignInRequest(
         @Field("email") email: String,
         @Field("password") password: String
+    ): BaseResponse<Unit>
+
+    @FormUrlEncoded
+    @POST("member/verify")
+    suspend fun VerifyEmail(
+        @Field("email") email: String
+    ): SignInRequestResponse
+
+    @FormUrlEncoded
+    @POST("member/verify/code")
+    suspend fun VerifyCode(
+        @Field("email") email: String,
+        @Field("code") code:String
     ): SignInRequestResponse
 
 }
