@@ -62,7 +62,8 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun CurriculumListScreen(
-    curriculumList : List<CurriculumModel>
+    curriculumList : List<CurriculumModel>,
+    onNoticeClick : (NoticeModel) -> Unit
 ){
 
     val listState = rememberLazyListState()
@@ -126,7 +127,8 @@ fun CurriculumListScreen(
                 itemsIndexed(curriculumList){ index, curriculum ->
                     KusitmsCurriculumItem(
                         curriculum = curriculum,
-                        index = index
+                        index = index,
+                        onNoticeClick = onNoticeClick
                     )
                 }
             }
@@ -151,7 +153,8 @@ fun CurriculumListScreen(
 @Composable
 fun KusitmsCurriculumItem(
     curriculum : CurriculumModel,
-    index : Int, // 0번부터 시작하는 리스트의 진짜 인덱스 값
+    index : Int, // 0번부터 시작하는 리스트의 진짜 인덱스 값,
+    onNoticeClick : (NoticeModel) -> Unit
 ){
     var expanded by remember { mutableStateOf(false) }
     Column(
@@ -196,7 +199,8 @@ fun KusitmsCurriculumItem(
                 isExpanded = expanded,
                 onExpand = {
                     expanded = !expanded
-                }
+                },
+                onNoticeClick = onNoticeClick
             )
         }
 
@@ -209,7 +213,8 @@ fun CurriculumNoticeDropdown(
     curriculumNoticeList : List<NoticeModel> = emptyList(),
     isExpanded : Boolean,
     onExpand : () -> Unit = {},
-    scrollState: ScrollState = rememberScrollState()
+    scrollState: ScrollState = rememberScrollState(),
+    onNoticeClick : (NoticeModel) -> Unit
 ) {
     val animatedHeight by animateDpAsState(
         targetValue = if(isExpanded) curriculumNoticeList.getCurriculumNoticeCardHeight().dp else 56.dp
@@ -274,7 +279,10 @@ fun CurriculumNoticeDropdown(
                     .verticalScroll(scrollState)
             ) {
                 curriculumNoticeList.forEachIndexed { index, noticeUiModel ->
-                    CurriculumNoticeItem(notice = noticeUiModel)
+                    CurriculumNoticeItem(
+                        notice = noticeUiModel,
+                        onNoticeClick = onNoticeClick
+                    )
                     if(index != curriculumNoticeList.lastIndex)
                         KusitmsMarginVerticalSpacer(size = 4)
                 }
@@ -286,10 +294,13 @@ fun CurriculumNoticeDropdown(
 
 @Composable
 fun CurriculumNoticeItem(
-    notice : NoticeModel
+    notice : NoticeModel,
+    onNoticeClick : (NoticeModel) -> Unit
 ) {
     Column(
-        modifier = Modifier.padding(vertical = 12.dp, horizontal = 8.dp)
+        modifier = Modifier.clickable {
+            onNoticeClick(notice)
+        }.padding(vertical = 12.dp, horizontal = 8.dp)
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically

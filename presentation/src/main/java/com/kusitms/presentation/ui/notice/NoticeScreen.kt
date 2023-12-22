@@ -99,7 +99,8 @@ fun NoticeScreen(
             }
             NoticeTab.CURRICULUM-> {
                 CurriculumListScreen(
-                    curriculumList = curriculumList
+                    curriculumList = curriculumList,
+                    onNoticeClick = onNoticeClick
                 )
             }
         }
