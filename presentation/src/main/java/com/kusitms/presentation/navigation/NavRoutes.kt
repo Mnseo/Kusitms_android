@@ -50,6 +50,8 @@ sealed class NavRoutes(
 
     object Profile : NavRoutes("Profile")
 
+    object ProfileSearch : NavRoutes("ProfileSearch")
+
     object ProfileDetail : NavRoutes(
         route = "ProfileDetail/{profileId}",
         navArguments = listOf(

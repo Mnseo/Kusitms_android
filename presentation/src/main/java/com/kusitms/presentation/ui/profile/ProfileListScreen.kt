@@ -57,7 +57,7 @@ fun ProfileItem(modifier: Modifier = Modifier) {
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(145.dp)
+                        .height(152.dp)
                         .background(KusitmsColorPalette.current.Grey100)
                 )
             }

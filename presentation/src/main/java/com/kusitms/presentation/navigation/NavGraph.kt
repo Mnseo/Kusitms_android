@@ -32,6 +32,7 @@ import com.kusitms.presentation.ui.login.member.LoginMemberScreen
 import com.kusitms.presentation.ui.notice.NoticeScreen
 import com.kusitms.presentation.ui.notice.detail.NoticeDetailScreen
 import com.kusitms.presentation.ui.profile.ProfileScreen
+import com.kusitms.presentation.ui.profile.search.ProfileSearchScreen
 import com.kusitms.presentation.ui.setting.SettingMember
 import com.kusitms.presentation.ui.setting.SettingNonMember
 import com.kusitms.presentation.ui.signIn.SignInProfileComplete
@@ -110,7 +111,11 @@ fun MainNavigation() {
         }
 
         kusitmsComposableWithAnimation(NavRoutes.Profile.route) {
-            ProfileScreen()
+            ProfileScreen(navController = navController)
+        }
+
+        kusitmsComposableWithAnimation(NavRoutes.ProfileSearch.route) {
+            ProfileSearchScreen()
         }
     }
 }

@@ -27,6 +27,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.kusitms.presentation.R
 import com.kusitms.presentation.common.ui.KusitmsMarginVerticalSpacer
 import com.kusitms.presentation.common.ui.KusitsmTopBarTextWithIcon
@@ -35,14 +37,17 @@ import com.kusitms.presentation.common.ui.theme.KusitmsTypo
 import com.kusitms.presentation.model.profile.PartList
 import com.kusitms.presentation.model.profile.ProfileViewModel
 import com.kusitms.presentation.model.profile.categories
+import com.kusitms.presentation.navigation.NavRoutes
 import com.kusitms.presentation.ui.ImageVector.icons.KusitmsIcons
 import com.kusitms.presentation.ui.ImageVector.icons.kusitmsicons.ArrowDown
 import com.kusitms.presentation.ui.ImageVector.icons.kusitmsicons.Search
+import com.kusitms.presentation.ui.login.LoginScreen
 
 
 @Composable
 fun ProfileScreen(
     viewModel: ProfileViewModel = hiltViewModel(),
+    navController: NavHostController
 ) {
     val expanded by viewModel.expended.collectAsState()
 
@@ -57,11 +62,15 @@ fun ProfileScreen(
                 Image(
                     modifier = Modifier
                         .size(24.dp)
-                        .clickable { },
+                        .clickable {
+                            navController.navigate(NavRoutes.ProfileSearch.route)
+                        },
                     imageVector = KusitmsIcons.Search,
                     contentDescription = "검색"
                 )
-            })
+            },
+
+        )
         KusitmsMarginVerticalSpacer(size = 32)
         Card(
             modifier = Modifier
@@ -158,5 +167,5 @@ fun AllPartList(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun ProfileScreenPreview() {
-    ProfileScreen()
+    ProfileScreen(navController = rememberNavController())
 }
