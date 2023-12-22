@@ -1,6 +1,8 @@
 package com.kusitms.data.remote.api
 
 import com.kusitms.data.remote.entity.BaseResponse
+import com.kusitms.data.remote.entity.request.UpdatePasswordRequest
+import com.kusitms.data.remote.entity.response.FindPwCheckEmailResponse
 import com.kusitms.data.remote.entity.response.LoginMemberProfileResponse
 import com.kusitms.data.remote.entity.response.LoginResponse
 import com.kusitms.data.remote.entity.response.SignInRequestResponse
@@ -36,10 +38,16 @@ interface KusitmsApi {
     ): BaseResponse<Unit>
 
     @FormUrlEncoded
-    @POST("member/verify")
-    suspend fun VerifyEmail(
+    @POST("member/email")
+    suspend fun VerifyEmailCheck(
         @Field("email") email: String
-    ): SignInRequestResponse
+    ): FindPwCheckEmailResponse
+
+    @PUT("v1/member/password/unauthenticated")
+    suspend fun updatePassword(
+        @Query("email") email: String,
+        @Body passwordRequest: UpdatePasswordRequest
+    ): BaseResponse<Unit>
 
     @FormUrlEncoded
     @POST("member/verify/code")
@@ -47,5 +55,6 @@ interface KusitmsApi {
         @Field("email") email: String,
         @Field("code") code:String
     ): SignInRequestResponse
+
 
 }

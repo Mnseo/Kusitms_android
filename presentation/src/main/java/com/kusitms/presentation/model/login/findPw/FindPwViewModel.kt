@@ -3,6 +3,7 @@ package com.kusitms.presentation.model.login.findPw
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kusitms.domain.usecase.findpw.FindPwEmailVerifyUseCase
 import com.kusitms.presentation.model.signIn.InputState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -12,7 +13,9 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class FindPwViewModel @Inject constructor(): ViewModel() {
+class FindPwViewModel @Inject constructor(
+    private val findPwEmailVerifyUseCase: FindPwEmailVerifyUseCase
+): ViewModel() {
     private val _email = MutableStateFlow("")
     val email: StateFlow<String> = _email
 
@@ -51,15 +54,22 @@ class FindPwViewModel @Inject constructor(): ViewModel() {
             _inputState.value = InputState.DEFAULT
         }
     }
+    fun updatePassword(Pw: String) {
+        _password.value = Pw
+    }
 
     fun updateNewPassword(newPw: String) {
         _newPw.value = newPw
-        validatePassword()
+        validateNewPassword()
+    }
+
+    fun updatePasswordState(responseState: Boolean) {
+        _passwordErrorState.value = if(responseState) PasswordErrorState.Pass else PasswordErrorState.NotCurrentPw
     }
 
     fun updateNewPasswordConfirm(pw: String) {
         _newPwConfirm.value = pw
-        validatePassword()
+        validateNewPassword()
     }
 
     fun updateCode(newCode: String) {
@@ -88,7 +98,7 @@ class FindPwViewModel @Inject constructor(): ViewModel() {
     }
 
 
-    fun validatePassword() {
+    fun validateNewPassword() {
         when {
             _newPw.value.length < 8 -> _passwordErrorState.value = PasswordErrorState.ShortPassword
             _newPw.value != _newPwConfirm.value -> _passwordErrorState.value = PasswordErrorState.PasswordsDoNotMatch
@@ -99,7 +109,9 @@ class FindPwViewModel @Inject constructor(): ViewModel() {
     enum class PasswordErrorState {
         None,
         ShortPassword,
-        PasswordsDoNotMatch
+        PasswordsDoNotMatch,
+        NotCurrentPw,
+        Pass
     }
 
 
