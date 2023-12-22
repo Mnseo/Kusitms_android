@@ -16,8 +16,8 @@ class LoginRepositoryImpl @Inject constructor(
         return try {
             val response = kusitmsApi.LoginMember(email, password)
             if (response.result.code == 200 && response.payload != null) {
-                AuthDataStore.authToken = response.payload.accessToken
-                AuthDataStore.refreshToken = response.payload.refreshToken
+                AuthDataStore().authToken = response.payload.accessToken
+                AuthDataStore().refreshToken = response.payload.refreshToken
                 Result.success(Unit)
             } else {
                 Result.failure(RuntimeException("로그인 실패: ${response.result.message}"))
@@ -32,8 +32,8 @@ class LoginRepositoryImpl @Inject constructor(
         return try {
             val response = kusitmsApi.RefreshAccessToken()
             if(response.result.code == 200 && response.payload != null) {
-                AuthDataStore.authToken = response.payload.accessToken
-                AuthDataStore.refreshToken = response.payload.refreshToken
+                AuthDataStore().authToken = response.payload.accessToken
+                AuthDataStore().refreshToken = response.payload.refreshToken
                 Result.success(Unit)
             } else {
                 Result.failure(RuntimeException("토큰을 받아오는데 실패했습니다"))
