@@ -1,6 +1,5 @@
 package com.kusitms.presentation.ui.profile
 
-import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -17,14 +16,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
@@ -38,17 +33,19 @@ import com.kusitms.presentation.common.ui.KusitsmTopBarTextWithIcon
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
 import com.kusitms.presentation.model.profile.PartList
+import com.kusitms.presentation.model.profile.ProfileViewModel
 import com.kusitms.presentation.model.profile.categories
 import com.kusitms.presentation.ui.ImageVector.icons.KusitmsIcons
 import com.kusitms.presentation.ui.ImageVector.icons.kusitmsicons.ArrowDown
 import com.kusitms.presentation.ui.ImageVector.icons.kusitmsicons.Search
-import kotlin.math.exp
 
 
 @Composable
 fun ProfileScreen(
     viewModel: ProfileViewModel = hiltViewModel(),
 ) {
+    val expanded by viewModel.expended.collectAsState()
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -70,42 +67,25 @@ fun ProfileScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)
-                .clickable { },
+                .clickable {
+                    viewModel.toggleExpanded()
+                },
             shape = RoundedCornerShape(16.dp),
             colors = CardDefaults.cardColors(
                 containerColor = KusitmsColorPalette.current.Grey700,
                 contentColor = KusitmsColorPalette.current.Grey100
             )
         ) {
-            var expanded by remember {
-                mutableStateOf(false)
-            }
+            PartListButton(
+                expanded = expanded,
+                viewModel
+            )
 
-            val visiblePartList by viewModel.visiblePartList.collectAsState()
-
-            Row(
-                modifier = Modifier
-                    .height(48.dp)
-                    .fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text(
-                    text =
-//                    if (visiblePartList) stringResource(id = R.string.profile_list_visible) else
-                        stringResource(id = R.string.profile_part_toggle),
-                            style = KusitmsTypo . current . Text_Medium,
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                    color = KusitmsColorPalette.current.Grey100,
-                )
-
-                PartListButton(expanded = expanded, onClick = {
-                    expanded = !expanded
-                    viewModel.setPartListVisibilty(expanded)
-                })
-            }
             if (expanded) {
-                AllPartList(partNameList = categories)
+                AllPartList(
+                    partNameList = categories,
+                    viewModel = viewModel
+                )
             }
         }
         ProfileListScreen()
@@ -115,35 +95,59 @@ fun ProfileScreen(
 @Composable
 private fun PartListButton(
     expanded: Boolean,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    viewModel: ProfileViewModel,
 ) {
-    IconButton(onClick = onClick, modifier = modifier.padding(horizontal = 8.dp)) {
+    val uiState by viewModel.uiState.collectAsState()
+
+    Row(
+        modifier = Modifier
+            .height(48.dp)
+            .fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Text(
+            text = uiState.currentSelectedPart.takeIf { it.isNotEmpty() }
+                ?: stringResource(id = R.string.profile_part_toggle),
+            style = KusitmsTypo.current.Text_Medium,
+            modifier = Modifier.padding(horizontal = 16.dp),
+            color = KusitmsColorPalette.current.Grey100,
+        )
         Icon(
             imageVector = KusitmsIcons.ArrowDown,
             contentDescription = stringResource(id = R.string.profile_part_toggle),
             tint = KusitmsColorPalette.current.Grey400,
-            modifier = Modifier.rotate(if (expanded) 180f else 0f)
+            modifier = Modifier
+                .rotate(if (expanded) 180f else 0f)
+                .padding(horizontal = 16.dp)
         )
+
     }
+
 }
 
 @Composable
 fun AllPartList(
     partNameList: List<PartList>,
-    modifier: Modifier = Modifier
+    viewModel: ProfileViewModel,
+    modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier) {
         partNameList.forEach { part ->
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 16.dp),
+                    .padding(horizontal = 16.dp, vertical = 16.dp)
+                    .clickable {
+                        viewModel.changeSelectPart(part.name)
+
+                    },
+                contentAlignment = Alignment.CenterStart
             ) {
                 Text(
                     text = part.name,
                     style = KusitmsTypo.current.Text_Medium,
-                    color = KusitmsColorPalette.current.Grey400
+                    color = KusitmsColorPalette.current.Grey400,
                 )
             }
         }

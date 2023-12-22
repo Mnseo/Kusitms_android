@@ -1,34 +1,27 @@
 package com.kusitms.presentation.model.profile
 
 import android.util.Log
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModel
-import com.kusitms.presentation.model.profile.ProfileContract.ProfileViewState
-import com.kusitms.presentation.model.profile.ProfileContract.ProfileEvent
-import com.kusitms.presentation.model.profile.ProfileContract.ProfileSideEffect
-import com.kusitms.presentation.common.base.BaseViewModel
-import com.kusitms.presentation.common.base.LoadState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 
 @HiltViewModel
-class ProfileViewModel @Inject constructor(): BaseViewModel<ProfileViewState, ProfileSideEffect, ProfileEvent>(
-    ProfileViewState()
-) {
-    override fun handleEvents(event: ProfileEvent) {
-        when (event) {
-            is ProfileEvent.OnPartToggleClicked -> {
-                openToggle()
-                sendEffect({ ProfileSideEffect.OpenPartToggle })
-            }
-        }
+class ProfileViewModel @Inject constructor() : ViewModel() {
+    private val _uiState = MutableStateFlow(ProfileUiState())
+    val uiState: StateFlow<ProfileUiState> = _uiState.asStateFlow()
+
+    private val _expanded = MutableStateFlow(false)
+    val expended: StateFlow<Boolean> = _expanded.asStateFlow()
+
+    fun changeSelectPart(part: String) {
+        _uiState.value = _uiState.value.copy(currentSelectedPart = part)
+        _expanded.value = false
     }
 
-    private fun openToggle() {
-        Log.d("프로필", "토글 클릭")
+    fun toggleExpanded() {
+        _expanded.value = !_expanded.value
     }
 }
