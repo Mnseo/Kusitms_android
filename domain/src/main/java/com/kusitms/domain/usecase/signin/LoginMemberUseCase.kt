@@ -1,11 +1,10 @@
-package com.kusitms.domain.usecase
+package com.kusitms.domain.usecase.signin
 
 
-import com.kusitms.domain.model.login.LoginMemberProfile
 import com.kusitms.domain.repository.LoginRepository
 import javax.inject.Inject
 
-class LoginUseCase @Inject constructor(
+class LoginMemberUseCase @Inject constructor(
     private val loginRepository: LoginRepository,
 ) {
     suspend operator fun invoke(
@@ -15,7 +14,4 @@ class LoginUseCase @Inject constructor(
         return loginRepository.LoginMember(email,password)
     }
 
-    suspend fun fetchLoginMemberProfile(): Result<LoginMemberProfile> {
-        return loginRepository.fetchLoginMemberProfile()
-    }
 }

@@ -29,7 +29,9 @@ fun FindPwCheckEmail(
     navController:NavHostController,
     viewModel: FindPwViewModel
 ) {
-//    val viewModel: FindPwViewModel = viewModel(LocalContext.current as ComponentActivity)
+    LaunchedEffect(Unit) {
+        viewModel.resetState()
+    }
     KusitmsScaffoldNonScroll(
         topbarText = stringResource(id = R.string.find_pw_topbar),
         navController = navController

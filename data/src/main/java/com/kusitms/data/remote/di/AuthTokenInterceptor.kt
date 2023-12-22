@@ -5,20 +5,22 @@ import com.kusitms.data.local.AuthDataStore
 import okhttp3.Interceptor
 import okhttp3.Response
 
-class AuthTokenInterceptor(
-private val authDataStore: AuthDataStore = AuthDataStore
-): Interceptor {
+class AuthTokenInterceptor(private val authDataStore: AuthDataStore) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
-        val authToken = authDataStore.authToken
-        val tokenRequest = if (authToken.isNotEmpty()) {
-            chain.request().newBuilder()
-                .addHeader("Authorization", "$authToken")
-                .build()
-        } else {
-            chain.request().newBuilder()
-                .build()
-        }
-        Log.d("token send", authToken.toString())
-        return chain.proceed(tokenRequest)
+        val originalRequest = chain.request()
+        val isTokenRefreshRequest = originalRequest.url.encodedPath.endsWith("auth/reissue")
+        val isRegister = originalRequest.url.encodedPath.endsWith("member/check/register")
+
+        val modifiedRequest = originalRequest.newBuilder()
+            .apply {
+                if (isTokenRefreshRequest) {
+                    addHeader("Refresh-Token", authDataStore.refreshToken)
+                } else if (!isRegister) {
+                    // 일반 요청의 경우 Authorization 헤더 추가
+                    addHeader("Authorization", "Bearer ${authDataStore.authToken}")
+                }
+            }
+            .build()
+        return chain.proceed(modifiedRequest)
     }
 }

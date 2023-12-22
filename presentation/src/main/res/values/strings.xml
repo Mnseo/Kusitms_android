@@ -14,7 +14,7 @@
 
     <!-- SignInRequest -->
     <string name="signin_request_topbar">회원가입</string>
-    <string name="signin_request_title">KUSTIMS+에 오신걸 환영합니다</string>
+    <string name="signin_request_title">큐시즘에 오신걸 환영합니다</string>
     <string name="signin_request_caption1">이메일</string>
     <string name="signin_request_caption2">비밀번호</string>
     <string name="signin_request_btn">회원가입하기</string>
@@ -81,6 +81,7 @@
     <string name="find_pw_btn1">인증코드 전송</string>
     <string name="find_pw_btn2">인증하기</string>
     <string name="find_pw_btn3">비밀번호 변경하기</string>
+    <string name="find_pw_btn4">비밀번호 확인</string>
 
 
     <!-- Title -->
