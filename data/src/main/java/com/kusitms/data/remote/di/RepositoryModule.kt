@@ -13,7 +13,7 @@ import dagger.hilt.components.SingletonComponent
 
 @Module
 @InstallIn(SingletonComponent::class)
-object RepositoryModule {
+abstract class RepositoryModule {
     @Provides
     fun bindLoginRepository(loginRepositoryImpl: LoginRepositoryImpl):
             LoginRepository = loginRepositoryImpl
