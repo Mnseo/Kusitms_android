@@ -1,9 +1,16 @@
 package com.kusitms.data.remote.api
 
+import com.kusitms.data.remote.entity.BaseResponse
+import com.kusitms.data.remote.entity.request.CommentContentRequestBody
+import com.kusitms.data.remote.entity.request.UpdatePasswordRequest
+import com.kusitms.data.remote.entity.response.FindPwCheckEmailResponse
 import com.kusitms.data.remote.entity.response.LoginMemberProfileResponse
 import com.kusitms.data.remote.entity.response.LoginResponse
-import retrofit2.http.GET
-import retrofit2.http.Query
+import com.kusitms.data.remote.entity.response.SignInRequestResponse
+import com.kusitms.data.remote.entity.response.notice.CommentPayload
+import com.kusitms.data.remote.entity.response.notice.CurriculumPayload
+import com.kusitms.data.remote.entity.response.notice.NoticePayload
+import retrofit2.http.*
 
 
 interface KusitmsApi {
@@ -76,7 +83,6 @@ interface KusitmsApi {
     suspend fun SendCode(
         @Field("email") email: String
     ): BaseResponse<Unit>
-
 
 
     @PUT("v1/member/password/unauthenticated")
