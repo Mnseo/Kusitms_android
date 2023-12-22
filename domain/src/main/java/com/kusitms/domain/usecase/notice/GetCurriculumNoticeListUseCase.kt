@@ -6,16 +6,13 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-class GetNoticeDetailUseCase @Inject constructor(
+//사용할 지 말지 판단하기
+class GetCurriculumNoticeListUseCase  @Inject constructor(
     private val noticeRepository: NoticeRepository
 ) {
-    operator fun invoke(noticeId : Int): Flow<NoticeModel> = flow {
-        noticeRepository.getNoticeDetail(
-            noticeId
-        ).onSuccess {
-            emit(it)
-        }.onFailure {
-            throw it
-        }
+    operator fun invoke(
+        curriculumId : Int
+    ): Flow<List<NoticeModel>> = flow {
+
     }
 }

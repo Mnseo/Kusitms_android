@@ -41,11 +41,19 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import coil.compose.AsyncImage
+import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
 import com.kusitms.domain.model.notice.NoticeModel
 import com.kusitms.presentation.common.ui.KusitmsDialog
 import com.kusitms.presentation.common.ui.KusitmsMarginHorizontalSpacer
@@ -61,6 +69,11 @@ import com.kusitms.presentation.ui.notice.detail.comment.CommentInput
 import com.kusitms.presentation.ui.notice.detail.comment.NoticeComment
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+
+sealed class NoticeDetailDialogState(val commentId : Int){
+    data class Report(val id : Int) : NoticeDetailDialogState(id)
+    data class CommentDelete(val id : Int) : NoticeDetailDialogState(id)
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -78,39 +91,72 @@ fun NoticeDetailScreen(
         skipPartiallyExpanded = true
     )
     
-    var openDialogState by remember { mutableStateOf(false) }
+    var openDialogState by remember { mutableStateOf<NoticeDetailDialogState?>(null) }
     
-    if(openDialogState){
-        KusitmsDialog(
-            title = "신고",
-            content = {
-                Text(
-                    text = "타 서비스, 앱, 사이트 등 게시판 외부로 회원을 \n" +
-                            "유도하거나 공동구매, 할인 쿠폰, 홍보성 이벤트 등 \n" +
-                            "허가되지 않은 광고/홍보 게시물",
-                    textAlign = TextAlign.Center,
-                    style = KusitmsTypo.current.Caption1,
-                    color =  KusitmsColorPalette.current.Grey400
-                )
-                KusitmsMarginVerticalSpacer(size = 24)
-                Text(
-                    text = "모든 신고는 24시간 이내에 확인 후 조치합니다. 신고 사유에 \n" +
-                            "맞지 않는 신고를 했을 경우, 해당 신고는 처리되지 않습니다.",
-                    textAlign = TextAlign.Center,
-                    style = KusitmsTypo.current.Caption2,
-                    color =  KusitmsColorPalette.current.Sub2
-                )
-            },
-            okColor = KusitmsColorPalette.current.Sub2,
-            okText = "신고하기",
-            onOk = {
-                //viewModel.reportNoticeComment()
-                   },
-            onCancel = {
-                openDialogState = false
-            }) {
-            openDialogState = false
+    if(openDialogState != null){
+        when(openDialogState){
+            is NoticeDetailDialogState.Report -> {
+                KusitmsDialog(
+                    title = "신고",
+                    content = {
+                        Text(
+                            text = "타 서비스, 앱, 사이트 등 게시판 외부로 회원을 \n" +
+                                    "유도하거나 공동구매, 할인 쿠폰, 홍보성 이벤트 등 \n" +
+                                    "허가되지 않은 광고/홍보 게시물",
+                            textAlign = TextAlign.Center,
+                            style = KusitmsTypo.current.Caption1,
+                            color =  KusitmsColorPalette.current.Grey400
+                        )
+                        KusitmsMarginVerticalSpacer(size = 24)
+                        Text(
+                            text = "모든 신고는 24시간 이내에 확인 후 조치합니다. 신고 사유에 \n" +
+                                    "맞지 않는 신고를 했을 경우, 해당 신고는 처리되지 않습니다.",
+                            textAlign = TextAlign.Center,
+                            style = KusitmsTypo.current.Caption2,
+                            color =  KusitmsColorPalette.current.Sub2
+                        )
+                    },
+                    okColor = KusitmsColorPalette.current.Sub2,
+                    okText = "신고하기",
+                    onOk = {
+                        //viewModel.reportNoticeComment()
+                    },
+                    onCancel = {
+                        openDialogState = null
+                    }) {
+                    openDialogState = null
+                }
+            }
+            is NoticeDetailDialogState.CommentDelete -> {
+                KusitmsDialog(
+                    title = "댓글 삭제",
+                    content = {
+                        Text(
+                            text = "해당 댓글의 답글도 모두 삭제됩니다",
+                            textAlign = TextAlign.Center,
+                            style = KusitmsTypo.current.Caption1,
+                            color =  KusitmsColorPalette.current.Grey300
+                        )
+                    },
+                    okColor = KusitmsColorPalette.current.Grey200,
+                    okText = "삭제하기",
+                    onOk = {
+                        openDialogState?.commentId?.let {
+                            viewModel.deleteNoticeComment(
+                                it
+                            )
+                        }
+                        openDialogState = null
+                    },
+                    onCancel = {
+                        openDialogState = null
+                    }) {
+                    openDialogState = null
+                }
+            }
+            else -> {}
         }
+
     }
 
     if(openBottomSheet != null){
@@ -130,7 +176,7 @@ fun NoticeDetailScreen(
                 NoticeDetailModalState.Report -> {
                     NoticeCommentReportBottom(
                         onClick = {
-                            openDialogState = true
+                            openDialogState = NoticeDetailDialogState.Report(0)
                             openBottomSheet = null
                         }
                     ) {
@@ -153,15 +199,15 @@ fun NoticeDetailScreen(
                 onBack()
             }
         ) {
-            Image(
-                modifier = Modifier
-                    .size(16.dp)
-                    .clickable {
-                        openBottomSheet = NoticeDetailModalState.More
-                    },
-                imageVector = KusitmsIcons.MoreVertical,
-                contentDescription = "더보기"
-            )
+//            Image(
+//                modifier = Modifier
+//                    .size(16.dp)
+//                    .clickable {
+//                        openBottomSheet = NoticeDetailModalState.More
+//                    },
+//                imageVector = KusitmsIcons.MoreVertical,
+//                contentDescription = "더보기"
+//            )
         }
 
         LazyColumn(
@@ -188,23 +234,28 @@ fun NoticeDetailScreen(
 
             item {
                 KusitmsMarginVerticalSpacer(size = 32)
-                LazyRow(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .wrapContentHeight(),
-                    contentPadding = PaddingValues(start = 20.dp),
-                    horizontalArrangement = Arrangement.spacedBy(4.dp)
-                ){
-                    item { NoticeDetailImageCard() }
+                if(notice.imageUrl.isNotBlank()){
+                    LazyRow(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .wrapContentHeight(),
+                        contentPadding = PaddingValues(start = 20.dp),
+                        horizontalArrangement = Arrangement.spacedBy(4.dp)
+                    ){
+                        item { NoticeDetailImageCard(
+                            notice.imageUrl
+                        ) }
+                    }
+                    KusitmsMarginVerticalSpacer(size = 8)
+                    Text(
+                        modifier = Modifier.padding(start = 28.dp),
+                        text = "1/1",
+                        style = KusitmsTypo.current.Caption2,
+                        color =  KusitmsColorPalette.current.Grey500
+                    )
+                    KusitmsMarginVerticalSpacer(size = 24)
                 }
-                KusitmsMarginVerticalSpacer(size = 8)
-                Text(
-                    modifier = Modifier.padding(start = 28.dp),
-                    text = "1/10",
-                    style = KusitmsTypo.current.Caption2,
-                    color =  KusitmsColorPalette.current.Grey500
-                )
-                KusitmsMarginVerticalSpacer(size = 24)
+
                 Divider(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -224,9 +275,7 @@ fun NoticeDetailScreen(
                         openBottomSheet = NoticeDetailModalState.Report
                     },
                     onClickDelete = {
-                        viewModel.deleteNoticeComment(
-                            comment.commentId
-                        )
+                        openDialogState = NoticeDetailDialogState.CommentDelete(comment.commentId)
                     },
                     isLast = index == commentList.lastIndex)
                 if(index == commentList.lastIndex && index != 0){
@@ -299,16 +348,16 @@ fun NoticeDetailTitleCard(
                     .fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ){
-                if(notice.profileImage.isEmpty())
-                    Image(
-                        modifier = Modifier
-                            .size(16.dp),
-                        imageVector = KusitmsIcons.UserBackground,
-                        contentDescription = "유저"
-                    )
-                else {
-
-                }
+                AsyncImage(
+                    model = ImageRequest.Builder(LocalContext.current)
+                        .data(notice.profileImage)
+                        .crossfade(true)
+                        .build(),
+                    error = rememberVectorPainter(image = KusitmsIcons.UserBackground),
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier.size(16.dp).clip(RoundedCornerShape(4.dp))
+                )
                 KusitmsMarginHorizontalSpacer(size = 4)
                 Text(
                     modifier = Modifier.weight(1f),
@@ -328,7 +377,9 @@ fun NoticeDetailTitleCard(
 }
 
 @Composable
-fun NoticeDetailImageCard() {
+fun NoticeDetailImageCard(
+    imageUrl : String
+) {
     Card(
         modifier = Modifier
             .size(100.dp),
@@ -338,7 +389,15 @@ fun NoticeDetailImageCard() {
             contentColor = KusitmsColorPalette.current.Grey300
         )
     ) {
-        Spacer(modifier = Modifier.fillMaxSize())
+        AsyncImage(
+            model = ImageRequest.Builder(LocalContext.current)
+                .data(imageUrl)
+                .crossfade(true)
+                .build(),
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.clip(RoundedCornerShape(16.dp))
+        )
     }
 }
 
