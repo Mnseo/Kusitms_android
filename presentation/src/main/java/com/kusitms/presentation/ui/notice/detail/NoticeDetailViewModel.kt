@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.kusitms.domain.model.notice.CommentContentModel
 import com.kusitms.domain.model.notice.CommentModel
 import com.kusitms.domain.model.notice.NoticeModel
+import com.kusitms.domain.model.notice.ReportCommentContentModel
 import com.kusitms.domain.model.report.ReportContentModel
 import com.kusitms.domain.usecase.notice.AddNoticeCommentUseCase
 import com.kusitms.domain.usecase.notice.DeleteCommentUseCase
@@ -101,7 +102,7 @@ class NoticeDetailViewModel @Inject constructor(
     ){
         viewModelScope.launch {
             reportUseCase(
-                ReportContentModel(
+                ReportCommentContentModel(
                     memberId,
                     commentId,
                     content
