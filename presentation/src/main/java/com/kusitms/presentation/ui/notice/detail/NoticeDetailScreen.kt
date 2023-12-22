@@ -201,15 +201,15 @@ fun NoticeDetailScreen(
                 onBack()
             }
         ) {
-            Image(
-                modifier = Modifier
-                    .size(16.dp)
-                    .clickable {
-                        openBottomSheet = NoticeDetailModalState.More
-                    },
-                imageVector = KusitmsIcons.MoreVertical,
-                contentDescription = "더보기"
-            )
+//            Image(
+//                modifier = Modifier
+//                    .size(16.dp)
+//                    .clickable {
+//                        openBottomSheet = NoticeDetailModalState.More
+//                    },
+//                imageVector = KusitmsIcons.MoreVertical,
+//                contentDescription = "더보기"
+//            )
         }
 
         LazyColumn(

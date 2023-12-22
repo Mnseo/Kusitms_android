@@ -52,16 +52,16 @@ fun NoticeScreen(
         KusitsmTopBarTextWithIcon(
             text = "공지",
             iconContent = {
-                Image(
-                    modifier = Modifier
-                        .size(24.dp)
-                        .clickable {
-
-                        },
-                    imageVector = KusitmsIcons.Search,
-                    contentDescription = "검색")
-
-                KusitmsMarginHorizontalSpacer(size = 24)
+//                Image(
+//                    modifier = Modifier
+//                        .size(24.dp)
+//                        .clickable {
+//
+//                        },
+//                    imageVector = KusitmsIcons.Search,
+//                    contentDescription = "검색")
+//
+//                KusitmsMarginHorizontalSpacer(size = 24)
 
                 Image(
                     modifier = Modifier
