@@ -1,15 +1,24 @@
 package com.kusitms.domain.usecase.report
 
+import com.kusitms.domain.model.notice.ReportCommentContentModel
 import com.kusitms.domain.model.report.ReportContentModel
+import com.kusitms.domain.repository.NoticeRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-class ReportUseCase @Inject constructor() {
+class ReportUseCase @Inject constructor(
+    private val noticeRepository: NoticeRepository
+) {
     operator fun invoke(
-        content : ReportContentModel
+        reportCommentContentModel : ReportCommentContentModel
     ): Flow<Unit> = flow {
-        //TODO data층과 연동 필요
-        emit(Unit)
+        noticeRepository.reportComment(
+            reportCommentContentModel
+        ).onSuccess {
+            emit(it)
+        }.onFailure {
+            throw it
+        }
     }
 }

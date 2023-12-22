@@ -2,6 +2,7 @@ package com.kusitms.data.remote.api
 
 import com.kusitms.data.remote.entity.BaseResponse
 import com.kusitms.data.remote.entity.request.CommentContentRequestBody
+import com.kusitms.data.remote.entity.request.ReportCommentRequestBody
 import com.kusitms.data.remote.entity.response.LoginMemberProfileResponse
 import com.kusitms.data.remote.entity.response.LoginResponse
 import com.kusitms.data.remote.entity.response.notice.CommentPayload
@@ -56,5 +57,10 @@ interface KusitmsApi {
     @DELETE("comment/{commentId}")
     suspend fun deleteNoticeComment(
         @Path("commentId") commentId : Int
+    ) : BaseResponse<Unit>
+
+    @POST("report")
+    suspend fun reportComment(
+        @Body reportCommentRequestBody: ReportCommentRequestBody
     ) : BaseResponse<Unit>
 }

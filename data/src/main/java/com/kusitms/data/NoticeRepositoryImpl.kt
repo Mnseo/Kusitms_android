@@ -8,6 +8,7 @@ import com.kusitms.domain.model.notice.CommentContentModel
 import com.kusitms.domain.model.notice.CommentModel
 import com.kusitms.domain.model.notice.CurriculumModel
 import com.kusitms.domain.model.notice.NoticeModel
+import com.kusitms.domain.model.notice.ReportCommentContentModel
 import com.kusitms.domain.repository.NoticeRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -118,6 +119,21 @@ class NoticeRepositoryImpl @Inject constructor(
         return try {
             val response = kusitmsApi.deleteNoticeComment(
                 commentId = commentId
+            )
+            if (response.result.code == 200 && response.payload != null) {
+                Result.success(Unit)
+            } else {
+                Result.failure(RuntimeException("댓글 등록 실패: ${response.result.message}"))
+            }
+        } catch (e: Exception){
+            Result.failure(e)
+        }
+    }
+
+    override suspend fun reportComment(reportCommentContentModel: ReportCommentContentModel): Result<Unit> {
+        return try {
+            val response = kusitmsApi.reportComment(
+                reportCommentContentModel.toBody()
             )
             if (response.result.code == 200 && response.payload != null) {
                 Result.success(Unit)
