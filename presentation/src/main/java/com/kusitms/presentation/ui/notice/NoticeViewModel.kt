@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -19,13 +20,17 @@ class NoticeViewModel @Inject constructor(
     getCurriculumListUseCase: GetCurriculumListUseCase
 ) : ViewModel() {
 
-    val noticeList = getNoticeListUseCase().stateIn(
+    val noticeList = getNoticeListUseCase().catch {
+
+    }.stateIn(
         viewModelScope,
         started = SharingStarted.Eagerly,
         initialValue = emptyList()
     )
 
-    val curriculumList = getCurriculumListUseCase().stateIn(
+    val curriculumList = getCurriculumListUseCase().catch {
+
+    }.stateIn(
         viewModelScope,
         started = SharingStarted.Eagerly,
         initialValue = emptyList()
