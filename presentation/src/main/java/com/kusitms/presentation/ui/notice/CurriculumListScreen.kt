@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -182,7 +183,7 @@ fun KusitmsCurriculumItem(
             }
             KusitmsMarginHorizontalSpacer(size = 12)
             Text(
-                text = curriculum.title,
+                text = curriculum.curriculumName,
                 style = KusitmsTypo.current.SubTitle2_Semibold,
                 color =  KusitmsColorPalette.current.White
             )
@@ -190,6 +191,7 @@ fun KusitmsCurriculumItem(
         if(curriculum.curriculumNoticeList.isNotEmpty()){
             KusitmsMarginVerticalSpacer(size = 8)
             CurriculumNoticeDropdown(
+                title = curriculum.title,
                 curriculum.curriculumNoticeList,
                 isExpanded = expanded,
                 onExpand = {
@@ -203,6 +205,7 @@ fun KusitmsCurriculumItem(
 
 @Composable
 fun CurriculumNoticeDropdown(
+    title : String,
     curriculumNoticeList : List<NoticeModel> = emptyList(),
     isExpanded : Boolean,
     onExpand : () -> Unit = {},
@@ -215,10 +218,7 @@ fun CurriculumNoticeDropdown(
     Card(
         modifier = Modifier
             .height(animatedHeight)
-            .fillMaxWidth()
-            .clickable {
-                onExpand()
-            },
+            .fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
             containerColor = KusitmsColorPalette.current.Grey600,
@@ -228,6 +228,9 @@ fun CurriculumNoticeDropdown(
         Row(
             modifier = Modifier
                 .height(56.dp)
+                .clickable {
+                    onExpand()
+                }
                 .padding(horizontal = 12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -244,7 +247,7 @@ fun CurriculumNoticeDropdown(
             KusitmsMarginHorizontalSpacer(size = 4)
             Text(
                 modifier = Modifier.weight(1f),
-                text = "여기에서 사용할 데이터가 없는 것 같음",
+                text = title,
                 style = KusitmsTypo.current.Text_Medium,
                 color =  KusitmsColorPalette.current.Grey300
             )
@@ -303,7 +306,7 @@ fun CurriculumNoticeItem(
             Box(
                 modifier = Modifier
                     .height(34.dp)
-                    .width(42.dp),
+                    .wrapContentWidth(),
             ) {
                 Text(
                     modifier = Modifier
