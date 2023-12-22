@@ -97,4 +97,19 @@ class NoticeRepositoryImpl @Inject constructor(
             Result.failure(e)
         }
     }
+
+    override suspend fun deleteNoticeComment(commentId: Int): Result<Unit> {
+        return try {
+            val response = kusitmsApi.deleteNoticeComment(
+                commentId = commentId
+            )
+            if (response.result.code == 200 && response.payload != null) {
+                Result.success(Unit)
+            } else {
+                Result.failure(RuntimeException("댓글 등록 실패: ${response.result.message}"))
+            }
+        } catch (e: Exception){
+            Result.failure(e)
+        }
+    }
 }

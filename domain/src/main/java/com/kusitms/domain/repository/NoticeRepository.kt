@@ -27,4 +27,8 @@ interface NoticeRepository {
         noticeId: Int,
         commentContentModel: CommentContentModel
     ) : Result<CommentModel>
+
+    suspend fun deleteNoticeComment(
+        commentId: Int
+    ) : Result<Unit>
 }

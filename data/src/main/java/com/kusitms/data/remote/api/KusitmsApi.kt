@@ -8,6 +8,7 @@ import com.kusitms.data.remote.entity.response.notice.CommentPayload
 import com.kusitms.data.remote.entity.response.notice.CurriculumPayload
 import com.kusitms.data.remote.entity.response.notice.NoticePayload
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
@@ -51,4 +52,9 @@ interface KusitmsApi {
         @Path("noticeId") noticeId : Int,
         @Body commentContentRequestBody: CommentContentRequestBody
     ) : BaseResponse<CommentPayload>
+
+    @DELETE("comment/{commentId}")
+    suspend fun deleteNoticeComment(
+        @Path("commentId") commentId : Int
+    ) : BaseResponse<Unit>
 }

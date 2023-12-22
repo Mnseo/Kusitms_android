@@ -69,6 +69,11 @@ import com.kusitms.presentation.ui.notice.detail.comment.NoticeComment
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+sealed class NoticeDetailDialogState(val commentId : Int){
+    data class Report(val id : Int) : NoticeDetailDialogState(id)
+    data class CommentDelete(val id : Int) : NoticeDetailDialogState(id)
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NoticeDetailScreen(
@@ -85,39 +90,72 @@ fun NoticeDetailScreen(
         skipPartiallyExpanded = true
     )
     
-    var openDialogState by remember { mutableStateOf(false) }
+    var openDialogState by remember { mutableStateOf<NoticeDetailDialogState?>(null) }
     
-    if(openDialogState){
-        KusitmsDialog(
-            title = "신고",
-            content = {
-                Text(
-                    text = "타 서비스, 앱, 사이트 등 게시판 외부로 회원을 \n" +
-                            "유도하거나 공동구매, 할인 쿠폰, 홍보성 이벤트 등 \n" +
-                            "허가되지 않은 광고/홍보 게시물",
-                    textAlign = TextAlign.Center,
-                    style = KusitmsTypo.current.Caption1,
-                    color =  KusitmsColorPalette.current.Grey400
-                )
-                KusitmsMarginVerticalSpacer(size = 24)
-                Text(
-                    text = "모든 신고는 24시간 이내에 확인 후 조치합니다. 신고 사유에 \n" +
-                            "맞지 않는 신고를 했을 경우, 해당 신고는 처리되지 않습니다.",
-                    textAlign = TextAlign.Center,
-                    style = KusitmsTypo.current.Caption2,
-                    color =  KusitmsColorPalette.current.Sub2
-                )
-            },
-            okColor = KusitmsColorPalette.current.Sub2,
-            okText = "신고하기",
-            onOk = {
-                //viewModel.reportNoticeComment()
-                   },
-            onCancel = {
-                openDialogState = false
-            }) {
-            openDialogState = false
+    if(openDialogState != null){
+        when(openDialogState){
+            is NoticeDetailDialogState.Report -> {
+                KusitmsDialog(
+                    title = "신고",
+                    content = {
+                        Text(
+                            text = "타 서비스, 앱, 사이트 등 게시판 외부로 회원을 \n" +
+                                    "유도하거나 공동구매, 할인 쿠폰, 홍보성 이벤트 등 \n" +
+                                    "허가되지 않은 광고/홍보 게시물",
+                            textAlign = TextAlign.Center,
+                            style = KusitmsTypo.current.Caption1,
+                            color =  KusitmsColorPalette.current.Grey400
+                        )
+                        KusitmsMarginVerticalSpacer(size = 24)
+                        Text(
+                            text = "모든 신고는 24시간 이내에 확인 후 조치합니다. 신고 사유에 \n" +
+                                    "맞지 않는 신고를 했을 경우, 해당 신고는 처리되지 않습니다.",
+                            textAlign = TextAlign.Center,
+                            style = KusitmsTypo.current.Caption2,
+                            color =  KusitmsColorPalette.current.Sub2
+                        )
+                    },
+                    okColor = KusitmsColorPalette.current.Sub2,
+                    okText = "신고하기",
+                    onOk = {
+                        //viewModel.reportNoticeComment()
+                    },
+                    onCancel = {
+                        openDialogState = null
+                    }) {
+                    openDialogState = null
+                }
+            }
+            is NoticeDetailDialogState.CommentDelete -> {
+                KusitmsDialog(
+                    title = "댓글 삭제",
+                    content = {
+                        Text(
+                            text = "해당 댓글의 답글도 모두 삭제됩니다",
+                            textAlign = TextAlign.Center,
+                            style = KusitmsTypo.current.Caption1,
+                            color =  KusitmsColorPalette.current.Grey300
+                        )
+                    },
+                    okColor = KusitmsColorPalette.current.Grey200,
+                    okText = "삭제하기",
+                    onOk = {
+                        openDialogState?.commentId?.let {
+                            viewModel.deleteNoticeComment(
+                                it
+                            )
+                        }
+                        openDialogState = null
+                    },
+                    onCancel = {
+                        openDialogState = null
+                    }) {
+                    openDialogState = null
+                }
+            }
+            else -> {}
         }
+
     }
 
     if(openBottomSheet != null){
@@ -137,7 +175,7 @@ fun NoticeDetailScreen(
                 NoticeDetailModalState.Report -> {
                     NoticeCommentReportBottom(
                         onClick = {
-                            openDialogState = true
+                            openDialogState = NoticeDetailDialogState.Report(0)
                             openBottomSheet = null
                         }
                     ) {
@@ -236,9 +274,7 @@ fun NoticeDetailScreen(
                         openBottomSheet = NoticeDetailModalState.Report
                     },
                     onClickDelete = {
-                        viewModel.deleteNoticeComment(
-                            comment.commentId
-                        )
+                        openDialogState = NoticeDetailDialogState.CommentDelete(comment.commentId)
                     },
                     isLast = index == commentList.lastIndex)
                 if(index == commentList.lastIndex && index != 0){
