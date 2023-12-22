@@ -13,11 +13,6 @@ class GetCurriculumNoticeListUseCase  @Inject constructor(
     operator fun invoke(
         curriculumId : Int
     ): Flow<List<NoticeModel>> = flow {
-        noticeRepository.getCurriculumNoticeList(curriculumId)
-            .onSuccess {
-                emit(it)
-            }.onFailure {
-                throw it
-            }
+
     }
 }

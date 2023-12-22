@@ -1,6 +1,5 @@
 package com.kusitms.data.remote.entity.response.notice
 
-import com.kusitms.domain.model.notice.CurriculumModel
 import com.kusitms.domain.model.notice.NoticeModel
 
 data class NoticePayload(
@@ -11,7 +10,7 @@ data class NoticePayload(
     val content : String? = "",
     val date : String? = "",
     val imageUrl : String? = "",
-    val isRead : Boolean? = false,
+    val viewYn : Boolean? = false,
     val name : String? = "",
     val profileImage : String? = ""
 )
@@ -25,7 +24,7 @@ fun NoticePayload.toModel() =
         content = content ?: "",
         date = date ?: "",
         imageUrl = imageUrl ?: "",
-        isRead = isRead ?: false,
+        viewYn = viewYn ?: false,
         name = name ?: "",
         profileImage = profileImage ?: ""
     )

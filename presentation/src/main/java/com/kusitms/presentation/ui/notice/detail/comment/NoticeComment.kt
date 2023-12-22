@@ -189,7 +189,8 @@ fun CommentInput(
                     modifier = Modifier.weight(1f).padding(vertical = 12.dp),
                     value = textFieldValue,
                     onValueChange = {
-                        textFieldValue = it
+                        if(it.text.length <= 300)
+                            textFieldValue = it
                     },
                     textStyle = KusitmsTypo.current.Body1.copy(
                         color = KusitmsColorPalette.current.Grey100

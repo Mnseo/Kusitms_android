@@ -8,7 +8,7 @@ data class NoticeModel(
     val content : String = "",
     val date : String = "",
     val imageUrl : String = "",
-    val isRead : Boolean = false,
+    val viewYn : Boolean = false,
     val name : String = "",
     val profileImage : String = ""
 )

@@ -17,7 +17,7 @@ interface NoticeRepository {
 
     suspend fun getCurriculumNoticeList(
         curriculumId : Int
-    ) : Result<List<NoticeModel>>
+    ) : List<NoticeModel>
 
     suspend fun getNoticeCommentList(
         noticeId: Int
@@ -27,4 +27,8 @@ interface NoticeRepository {
         noticeId: Int,
         commentContentModel: CommentContentModel
     ) : Result<CommentModel>
+
+    suspend fun deleteNoticeComment(
+        commentId: Int
+    ) : Result<Unit>
 }
