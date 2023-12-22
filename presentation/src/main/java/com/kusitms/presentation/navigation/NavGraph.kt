@@ -46,6 +46,8 @@ fun MainNavigation() {
 
     val findPwViewModel: FindPwViewModel=  hiltViewModel()
     val SettingViewModel : SettingViewModel = hiltViewModel()
+    val signInViewModel: SignInViewModel = hiltViewModel()
+    val signInReqeustViewModel: SignInRequestViewModel = hiltViewModel()
 
 
 
@@ -58,10 +60,10 @@ fun MainNavigation() {
         }
 
         //SignInScreen
-        kusitmsComposableWithAnimation(NavRoutes.SignInDefault.route) { SignInDefaultProfile(SignInViewModel(), navController) }
+        kusitmsComposableWithAnimation(NavRoutes.SignInDefault.route) { SignInDefaultProfile(signInViewModel, navController) }
         kusitmsComposableWithAnimation(NavRoutes.SignInAdditionalProfile.route) { SignInAdditionalProfile(navController) }
         kusitmsComposableWithAnimation(NavRoutes.SignInProfileComplete.route) { SignInProfileComplete(navController)}
-        kusitmsComposableWithAnimation(NavRoutes.SignInRequest.route) { SignInRequestScreen(SignInRequestViewModel(), navController) }
+        kusitmsComposableWithAnimation(NavRoutes.SignInRequest.route) { SignInRequestScreen(signInReqeustViewModel, navController) }
 
         //LoginScreen
         kusitmsComposableWithAnimation(NavRoutes.LoginMemberScreen.route) {
@@ -75,7 +77,7 @@ fun MainNavigation() {
         kusitmsComposableWithAnimation(NavRoutes.FindPwCheckEmail.route) { FindPwCheckEmail(navController, viewModel = findPwViewModel)}
         kusitmsComposableWithAnimation(NavRoutes.FindPwCodeValidation.route) { FindPwCodeValidation(navController, viewModel = findPwViewModel)}
         kusitmsComposableWithAnimation(NavRoutes.FindPwSetNewPw.route) { FindPwSetNewPw(navController, viewModel = findPwViewModel) }
-        kusitmsComposableWithAnimation(NavRoutes.FindPwMemberCurrent.route) { FindPwMemberCurrent(navController)}
+        kusitmsComposableWithAnimation(NavRoutes.FindPwMemberCurrent.route) { FindPwMemberCurrent(findPwViewModel,navController)}
 
         //SettingScreen
         kusitmsComposableWithAnimation(NavRoutes.SettingMember.route) { SettingMember(navController, SettingViewModel)}

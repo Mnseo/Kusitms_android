@@ -1,18 +1,25 @@
 package com.kusitms.presentation.model.login.findPw
 
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kusitms.domain.usecase.findpw.FindPwEmailVerifyUseCase
+import com.kusitms.domain.usecase.findpw.FindPwSendCodeUseCase
 import com.kusitms.presentation.model.signIn.InputState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
-class FindPwViewModel @Inject constructor(): ViewModel() {
+class FindPwViewModel @Inject constructor(
+    private val findPwEmailVerifyUseCase: FindPwEmailVerifyUseCase,
+    private val findPwSendCodeUseCase: FindPwSendCodeUseCase
+): ViewModel() {
     private val _email = MutableStateFlow("")
     val email: StateFlow<String> = _email
 
@@ -37,11 +44,21 @@ class FindPwViewModel @Inject constructor(): ViewModel() {
     private val _timeLeft = MutableStateFlow(300)
     val timeLeft:StateFlow<Int> = _timeLeft
 
+    private val _emailState = MutableStateFlow(EmailState.NonPASS)
+    val emailState: StateFlow<EmailState> = _emailState
+
     val isCodeValid:Boolean
         get() = code.value == "123456"
 
     val isEmailValid:Boolean
         get() = email.value == "kusitms1234@naver.com"
+
+
+    fun resetState() {
+        _inputState.value = InputState.DEFAULT
+        _email.value = ""
+        _password.value = ""
+    }
 
     fun updateEmail(email: String) {
         _email.value = email
@@ -51,15 +68,22 @@ class FindPwViewModel @Inject constructor(): ViewModel() {
             _inputState.value = InputState.DEFAULT
         }
     }
+    fun updatePassword(Pw: String) {
+        _password.value = Pw
+    }
 
     fun updateNewPassword(newPw: String) {
         _newPw.value = newPw
-        validatePassword()
+        validateNewPassword()
+    }
+
+    fun updatePasswordState(responseState: Boolean) {
+        _passwordErrorState.value = if(responseState) PasswordErrorState.Pass else PasswordErrorState.NotCurrentPw
     }
 
     fun updateNewPasswordConfirm(pw: String) {
         _newPwConfirm.value = pw
-        validatePassword()
+        validateNewPassword()
     }
 
     fun updateCode(newCode: String) {
@@ -80,7 +104,24 @@ class FindPwViewModel @Inject constructor(): ViewModel() {
         }
     }
     fun validateEmail() {
-        _inputState.value = if(isEmailValid) InputState.VALID else InputState.INVALID
+        viewModelScope.launch {
+            val email = email.value
+            findPwEmailVerifyUseCase(email)
+                .onSuccess { result ->
+                    _emailState.value = if(result.isEmailExist) EmailState.PASS else EmailState.NonPASS
+                    _inputState.value = if(result.isEmailExist) InputState.VALID else InputState.INVALID
+                    Log.d("EmailState", emailState.value.toString())
+                    Log.d("inputState", inputState.value.toString())
+                    if(emailState.value == EmailState.PASS) {
+                        findPwSendCodeUseCase(email)
+                    }
+                }
+                .onFailure {
+                    Timber.e(it)
+                    _emailState.value = EmailState.NonPASS
+                    _inputState.value = InputState.INVALID
+                }
+        }
     }
 
     fun validateCode() {
@@ -88,7 +129,7 @@ class FindPwViewModel @Inject constructor(): ViewModel() {
     }
 
 
-    fun validatePassword() {
+    fun validateNewPassword() {
         when {
             _newPw.value.length < 8 -> _passwordErrorState.value = PasswordErrorState.ShortPassword
             _newPw.value != _newPwConfirm.value -> _passwordErrorState.value = PasswordErrorState.PasswordsDoNotMatch
@@ -96,10 +137,17 @@ class FindPwViewModel @Inject constructor(): ViewModel() {
         }
     }
 
+    enum class EmailState {
+        PASS,
+        NonPASS
+    }
+
     enum class PasswordErrorState {
         None,
         ShortPassword,
-        PasswordsDoNotMatch
+        PasswordsDoNotMatch,
+        NotCurrentPw,
+        Pass
     }
 
 
