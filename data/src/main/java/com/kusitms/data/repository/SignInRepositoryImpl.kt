@@ -1,10 +1,11 @@
 package com.kusitms.data.repository
 
+import android.util.Log
 import com.kusitms.data.local.AuthDataStore
 import com.kusitms.data.remote.api.KusitmsApi
 import com.kusitms.data.remote.entity.response.toModel
 import com.kusitms.domain.model.login.LoginMemberProfile
-import com.kusitms.domain.model.signin.SignInRequestModel
+import com.kusitms.domain.model.signin.SignInRequestCheckModel
 import com.kusitms.domain.repository.SignInRepository
 import javax.inject.Inject
 
@@ -32,16 +33,33 @@ class SignInRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun signInRequest(
+    override suspend fun signInRequestCheck(
         email: String,
         password: String
-    ): Result<SignInRequestModel> {
+    ): Result<SignInRequestCheckModel> {
         return try {
-            val response = kusitmsApi.SignInRequest(email, password)
+            val response = kusitmsApi.SignInRequestCheck(email, password)
             if(response.payload == null) {
                 Result.failure(RuntimeException("올바른 데이터를 받지 못했습니다."))
             } else {
                 Result.success(response.payload.toModel())
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    override suspend fun signInRequest(
+        email: String,
+        password: String
+    ): Result<Unit> {
+        return try {
+            val response = kusitmsApi.SignInRequest(email, password)
+            Log.d("요청보내기2", "signInRequest")
+            if(response.result == null) {
+                Result.failure(RuntimeException("올바른 데이터를 받지 못했습니다."))
+            } else {
+                Result.success(Unit)
             }
         } catch (e: Exception) {
             Result.failure(e)

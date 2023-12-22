@@ -3,7 +3,6 @@ package com.kusitms.data.remote.api
 import com.kusitms.data.remote.entity.response.LoginMemberProfileResponse
 import com.kusitms.data.remote.entity.response.LoginResponse
 import com.kusitms.data.remote.entity.response.SignInRequestResponse
-import com.kusitms.domain.usecase.signin.SignInRequestUseCase
 import retrofit2.http.*
 
 
@@ -23,10 +22,16 @@ interface KusitmsApi {
 
     @FormUrlEncoded
     @POST("member/check/register")
-    suspend fun SignInRequest(
+    suspend fun SignInRequestCheck(
         @Field("email") email: String,
         @Field("password") password: String
     ): SignInRequestResponse
 
+    @FormUrlEncoded
+    @POST("member/register")
+    suspend fun SignInRequest(
+        @Field("email") email: String,
+        @Field("password") password: String
+    ): SignInRequestResponse
 
 }

@@ -10,7 +10,6 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -26,6 +25,11 @@ import com.kusitms.presentation.navigation.NavRoutes
 
 @Composable
 fun SignInRequestScreen(viewModel: SignInRequestViewModel, navController: NavHostController) {
+    DisposableEffect(key1 = Unit) {
+        onDispose {
+            viewModel.resetState()
+        }
+    }
     KusitmsScaffoldNonScroll(topbarText = stringResource(id = R.string.signin_request_topbar), navController = navController) {
         SignInRequestColumn(viewModel = viewModel, navController = navController)
     }
@@ -47,6 +51,13 @@ fun SignInRequestColumn(viewModel: SignInRequestViewModel, navController: NavHos
 
 @Composable
 fun SignInRequestSubColumn1(viewModel: SignInRequestViewModel, navController: NavHostController) {
+    val canNavigateToNextScreen by viewModel.canNavigateToNextScreen.collectAsState()
+    LaunchedEffect(canNavigateToNextScreen) {
+        if (canNavigateToNextScreen) {
+            navController.navigate(NavRoutes.LogInScreen.route)
+        }
+    }
+
     Column(modifier = Modifier
         .fillMaxSize()
         .padding(horizontal = 20.dp),
@@ -57,9 +68,7 @@ fun SignInRequestSubColumn1(viewModel: SignInRequestViewModel, navController: Na
         KusitmsMarginVerticalSpacer(size = 72)
         SignInRequestSubColumn2(viewModel = viewModel)
         Spacer(modifier = Modifier.weight(1f))
-        SignInRequestBtn(viewModel = viewModel, onNextClick = { viewModel.signInRequest()
-                if(viewModel.inputState.value == InputState.VALID) { navController.navigate(NavRoutes.LogInScreen.route)}
-            }
+        SignInRequestBtn(viewModel = viewModel, onNextClick = { viewModel.signInRequestCheck() }
         )
         KusitmsMarginVerticalSpacer(size = 24)
     }

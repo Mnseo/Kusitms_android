@@ -2,19 +2,19 @@ package com.kusitms.data.remote.entity.response
 
 import com.kusitms.data.remote.entity.BaseResponse
 import com.kusitms.data.remote.entity.Result
-import com.kusitms.domain.model.signin.SignInRequestModel
+import com.kusitms.domain.model.signin.SignInRequestCheckModel
 
 
-data class SignInRequestPayload(
+data class SignInRequestCheckPayload(
     val checkRegistered: String
 )
 
-fun SignInRequestPayload.toModel() =
-    SignInRequestModel(
+fun SignInRequestCheckPayload.toModel() =
+    SignInRequestCheckModel(
         checkRegistered = checkRegistered
     )
 
 class SignInRequestResponse(
     result: Result,
-    payload: SignInRequestPayload
-): BaseResponse<SignInRequestPayload>(result, payload)
+    payload: SignInRequestCheckPayload
+): BaseResponse<SignInRequestCheckPayload>(result, payload)

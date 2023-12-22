@@ -1,12 +1,11 @@
 package com.kusitms.presentation.model.signIn
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.kusitms.domain.model.signin.SignInRequestModel
+import com.kusitms.domain.usecase.signin.SignInRequestCheckUseCase
 import com.kusitms.domain.usecase.signin.SignInRequestUseCase
-import com.kusitms.presentation.model.login.LoginStatus
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -19,6 +18,7 @@ enum class InputState {
 
 @HiltViewModel
 class SignInRequestViewModel @Inject constructor(
+    private val signInRequestCheckUseCase: SignInRequestCheckUseCase,
     private val signInRequestUseCase: SignInRequestUseCase
 ): ViewModel() {
 
@@ -35,7 +35,19 @@ class SignInRequestViewModel @Inject constructor(
     val password: StateFlow<String> = _password
 
     val isEmailValid: Boolean
-        get() = signInResult.value == "CAN_REGISTERED"
+        get() = signInResult.value == "CAN_REGISTER"
+
+    private val _canNavigateToNextScreen = MutableStateFlow(false)
+    val canNavigateToNextScreen: StateFlow<Boolean> = _canNavigateToNextScreen
+
+
+    fun resetState() {
+        _signInResult.value = ""
+        _inputState.value = InputState.DEFAULT
+        _email.value = ""
+        _password.value = ""
+        _canNavigateToNextScreen.value = false
+    }
 
 
     fun updateSignInResult(signInResult: String) {
@@ -58,19 +70,26 @@ class SignInRequestViewModel @Inject constructor(
 
 
 
-    fun signInRequest() {
+    fun signInRequestCheck() {
         viewModelScope.launch {
             val email = email.value
             val password = password.value
-            signInRequestUseCase(email, password)
+            signInRequestCheckUseCase(email, password)
                 .onSuccess {
                     updateSignInResult(it.checkRegistered)
+                    _canNavigateToNextScreen.value = isEmailValid
+                    Log.d("요청 보내기",signInResult.value)
+                    if(signInResult.equals("CAN_REGISTER")) {
+                        signInRequestUseCase(email,password)
+                    }
                 }
                 .onFailure {
                     Timber.e(it)
                 }
         }
     }
+
+
 
 }
 
