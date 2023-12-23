@@ -49,6 +49,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
@@ -60,17 +61,21 @@ import com.kusitms.presentation.common.ui.KusitmsMarginVerticalSpacer
 import com.kusitms.presentation.common.ui.KusitsmTopBarBackTextWithIcon
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
+import com.kusitms.presentation.navigation.getViewModel
 import com.kusitms.presentation.ui.ImageVector.icons.KusitmsIcons
 import com.kusitms.presentation.ui.ImageVector.icons.kusitmsicons.Close
 import com.kusitms.presentation.ui.ImageVector.icons.kusitmsicons.MoreVertical
 import com.kusitms.presentation.ui.ImageVector.icons.kusitmsicons.UserBackground
 import com.kusitms.presentation.ui.notice.detail.comment.CommentInput
 import com.kusitms.presentation.ui.notice.detail.comment.NoticeComment
+import com.kusitms.presentation.ui.viewer.ImageViewerViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 sealed class NoticeDetailDialogState(val commentId: Int) {
-    data class Report(val id: Int, val report: ReportCategory, val memberId : Int) : NoticeDetailDialogState(id)
+    data class Report(val id: Int, val report: ReportCategory, val memberId: Int) :
+        NoticeDetailDialogState(id)
+
     data class CommentDelete(val id: Int) : NoticeDetailDialogState(id)
 }
 
@@ -80,7 +85,7 @@ sealed class NoticeDetailModalState(val commentId: Int) {
 
 }
 
-enum class ReportCategory(val titleId: Int, val contentId : Int) {
+enum class ReportCategory(val titleId: Int, val contentId: Int) {
     COMMERCIAL(
         R.string.notice_report_title_commercial,
         R.string.notice_report_content_commercial
@@ -111,7 +116,9 @@ enum class ReportCategory(val titleId: Int, val contentId : Int) {
 @Composable
 fun NoticeDetailScreen(
     viewModel: NoticeDetailViewModel = hiltViewModel(),
-    onBack: () -> Unit
+    imageViewerViewModel: ImageViewerViewModel,
+    onBack: () -> Unit,
+    onClickImage: () -> Unit
 ) {
     val notice by viewModel.notice.collectAsStateWithLifecycle()
     val commentList by viewModel.commentList.collectAsStateWithLifecycle()
@@ -220,7 +227,7 @@ fun NoticeDetailScreen(
                         onClick = {
                             (openBottomSheet as NoticeDetailModalState.Report).let { reportState ->
                                 openDialogState = NoticeDetailDialogState.Report(
-                                    id = reportState.commentId ,
+                                    id = reportState.commentId,
                                     report = it,
                                     memberId = reportState.memberId
                                 )
@@ -262,7 +269,8 @@ fun NoticeDetailScreen(
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
-                .weight(1f),
+                .weight(1f)
+            ,
             contentPadding = PaddingValues(top = 20.dp),
             state = listState
         ) {
@@ -293,7 +301,11 @@ fun NoticeDetailScreen(
                     ) {
                         item {
                             NoticeDetailImageCard(
-                                notice.imageUrl
+                                notice.imageUrl,
+                                onClickImage = {
+                                    imageViewerViewModel.updateImageList(listOf(notice.imageUrl))
+                                    onClickImage()
+                                }
                             )
                         }
                     }
@@ -324,7 +336,8 @@ fun NoticeDetailScreen(
                 NoticeComment(
                     comment = comment,
                     onClickReport = {
-                        openBottomSheet = NoticeDetailModalState.Report(comment.commentId,comment.writerId)
+                        openBottomSheet =
+                            NoticeDetailModalState.Report(comment.commentId, comment.writerId)
                     },
                     onClickDelete = {
                         openDialogState = NoticeDetailDialogState.CommentDelete(comment.commentId)
@@ -433,11 +446,15 @@ fun NoticeDetailTitleCard(
 
 @Composable
 fun NoticeDetailImageCard(
-    imageUrl: String
+    imageUrl: String,
+    onClickImage: () -> Unit
 ) {
     Card(
         modifier = Modifier
-            .size(100.dp),
+            .size(100.dp)
+            .clickable {
+                onClickImage()
+            },
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
             containerColor = KusitmsColorPalette.current.Grey600,

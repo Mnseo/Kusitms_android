@@ -38,6 +38,8 @@ import com.kusitms.presentation.ui.setting.SettingNonMember
 import com.kusitms.presentation.ui.signIn.SignInProfileComplete
 import com.kusitms.presentation.ui.signIn.SignInRequestScreen
 import com.kusitms.presentation.ui.splash.SplashScreen
+import com.kusitms.presentation.ui.viewer.ImageViewerScreen
+import com.kusitms.presentation.ui.viewer.ImageViewerViewModel
 
 @Composable
 fun MainNavigation() {
@@ -49,7 +51,7 @@ fun MainNavigation() {
     val SettingViewModel : SettingViewModel = hiltViewModel()
     val signInViewModel: SignInViewModel = hiltViewModel()
     val signInReqeustViewModel: SignInRequestViewModel = hiltViewModel()
-
+    val imageViewerViewModel : ImageViewerViewModel = hiltViewModel()
 
 
     NavHost(
@@ -106,6 +108,10 @@ fun MainNavigation() {
             NoticeDetailScreen(
                 onBack = {
                     navController.navigateUp()
+                },
+                imageViewerViewModel =imageViewerViewModel,
+                onClickImage = {
+                    navController.navigate(NavRoutes.ImageViewer.route)
                 }
             )
         }
@@ -116,6 +122,16 @@ fun MainNavigation() {
 
         kusitmsComposableWithAnimation(NavRoutes.ProfileSearch.route) {
             ProfileSearchScreen()
+        }
+
+        kusitmsComposableWithAnimation(NavRoutes.ImageViewer.route){
+
+            ImageViewerScreen(
+                viewModel = imageViewerViewModel,
+                onBack = {
+                    navController.popBackStack()
+                }
+            )
         }
     }
 }
