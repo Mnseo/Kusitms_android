@@ -176,7 +176,9 @@
 
     <!-- ProfileDetail -->
     <string name="profile_detail_topbar">이채연의 프로필</string>
-
+    <string name="profile_detail_name">이채연</string>
+    <string name="profile_detail_part">27기 디자이너</string>
+    <string name="profile_detail_comment">코멘트</string>
 
 
 
