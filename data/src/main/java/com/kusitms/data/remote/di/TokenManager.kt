@@ -1,10 +1,10 @@
 package com.kusitms.data.remote.di
 
 import com.kusitms.data.local.AuthDataStore
-import com.kusitms.data.remote.api.KusitmsApi
+import com.kusitms.data.remote.api.KusitmsTokenApi
 
 class TokenManager(
-    private val kusitmsApi: KusitmsApi,
+    private val kusitmsApi: KusitmsTokenApi,
     private val authDataStore: AuthDataStore
 ) {
     suspend fun refreshAccessToken(): Boolean {

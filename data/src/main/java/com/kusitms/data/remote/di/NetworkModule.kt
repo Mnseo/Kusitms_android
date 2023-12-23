@@ -4,6 +4,7 @@ package com.kusitms.data.remote.di
 import com.kusitms.data.BuildConfig
 import com.kusitms.data.local.AuthDataStore
 import com.kusitms.data.remote.api.KusitmsApi
+import com.kusitms.data.remote.api.KusitmsTokenApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -14,6 +15,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Provider
+import javax.inject.Qualifier
 
 
 @Module
@@ -21,15 +23,34 @@ import javax.inject.Provider
 class NetworkModule {
     val kusitmsServer: String = BuildConfig.KUSITMS_SERVER
 
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class TokenInterceptorOkHttpClient
+
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class InterceptorOkHttpClient
+
     @Provides
     @Singleton
-    fun provideKusitmsApi(okHttpClient: OkHttpClient): KusitmsApi {
+    fun provideKusitmsApi(@TokenInterceptorOkHttpClient  okHttpClient: OkHttpClient): KusitmsApi {
         return Retrofit.Builder()
             .baseUrl(kusitmsServer)
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(KusitmsApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideKusitmsTokenApi(@InterceptorOkHttpClient okHttpClient: OkHttpClient): KusitmsTokenApi {
+        return Retrofit.Builder()
+            .baseUrl(kusitmsServer)
+            .client(okHttpClient)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(KusitmsTokenApi::class.java)
     }
 
     @Provides
@@ -41,10 +62,10 @@ class NetworkModule {
     @Provides
     @Singleton
     fun provideTokenManager(
-        kusitmsApi: KusitmsApi,
+        kusitmsTokenApi: KusitmsTokenApi,
         authDataStore: AuthDataStore
     ): TokenManager {
-        return TokenManager(kusitmsApi, authDataStore)
+        return TokenManager(kusitmsTokenApi, authDataStore)
     }
 
 
@@ -59,9 +80,21 @@ class NetworkModule {
 
 
 
+    @InterceptorOkHttpClient
     @Provides
     @Singleton
-    fun provideOkHttpClient(
+    fun provideOkHttpClient(): OkHttpClient {
+        return OkHttpClient.Builder()
+            .addInterceptor(HttpLoggingInterceptor().apply {
+                level = HttpLoggingInterceptor.Level.BODY
+            })
+            .build()
+    }
+
+    @TokenInterceptorOkHttpClient
+    @Provides
+    @Singleton
+    fun provideTokenOkHttpClient(
         authTokenInterceptor: AuthTokenInterceptor
     ): OkHttpClient {
         return OkHttpClient.Builder()
