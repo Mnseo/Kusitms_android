@@ -150,4 +150,11 @@
     <string name="setting_nonmember_title3">로그인</string>
     <string name="setting_member_title1">푸시알림</string>
 
+
+
+    <!-- Profile -->
+    <string name="profile_topbar">프로필</string>
+    <string name="profile_part_toggle">파트 선택</string>
+
+
 </resources>
