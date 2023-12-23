@@ -4,6 +4,7 @@ import com.kusitms.data.remote.entity.BaseResponse
 import com.kusitms.data.remote.entity.request.CommentContentRequestBody
 import com.kusitms.data.remote.entity.request.UpdatePasswordRequest
 import com.kusitms.data.remote.entity.response.FindPwCheckEmailResponse
+import com.kusitms.data.remote.entity.request.ReportCommentRequestBody
 import com.kusitms.data.remote.entity.response.LoginMemberProfileResponse
 import com.kusitms.data.remote.entity.response.LoginResponse
 import com.kusitms.data.remote.entity.response.SignInRequestResponse
@@ -56,6 +57,12 @@ interface KusitmsApi {
     suspend fun deleteNoticeComment(
         @Path("commentId") commentId : Int
     ) : BaseResponse<Unit>
+
+    @POST("report")
+    suspend fun reportComment(
+        @Body reportCommentRequestBody: ReportCommentRequestBody
+    ) : BaseResponse<Unit>
+
     @FormUrlEncoded
     @POST("member/check/register")
     suspend fun SignInRequestCheck(

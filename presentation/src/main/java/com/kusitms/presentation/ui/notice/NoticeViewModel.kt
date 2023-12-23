@@ -20,13 +20,17 @@ class NoticeViewModel @Inject constructor(
     getCurriculumListUseCase: GetCurriculumListUseCase
 ) : ViewModel() {
 
-    val noticeList = getNoticeListUseCase().catch {  }.stateIn(
+    val noticeList = getNoticeListUseCase().catch {
+
+    }.stateIn(
         viewModelScope,
         started = SharingStarted.Eagerly,
         initialValue = emptyList()
     )
 
-    val curriculumList = getCurriculumListUseCase().catch {  }.stateIn(
+    val curriculumList = getCurriculumListUseCase().catch {
+
+    }.stateIn(
         viewModelScope,
         started = SharingStarted.Eagerly,
         initialValue = emptyList()
