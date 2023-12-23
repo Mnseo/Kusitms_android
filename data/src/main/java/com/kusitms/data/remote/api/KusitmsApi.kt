@@ -103,4 +103,8 @@ interface KusitmsApi {
         @Query("password") password: String
     ) : BaseResponse<CheckPasswordPayload>
 
+    @PUT("member/password")
+    suspend fun updatePasswordAsLoggedIn(
+        @Body passwordRequest: UpdatePasswordRequest
+    ) : BaseResponse<Unit>
 }
