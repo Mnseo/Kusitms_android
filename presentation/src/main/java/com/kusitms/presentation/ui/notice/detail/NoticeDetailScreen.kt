@@ -34,6 +34,7 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -71,6 +72,7 @@ import com.kusitms.presentation.ui.notice.detail.comment.NoticeComment
 import com.kusitms.presentation.ui.viewer.ImageViewerViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import com.kusitms.presentation.ui.notice.detail.NoticeDetailViewModel.Companion.NoticeDetailSnackbarEvent as NoticeDetailSnackbarEvent
 
 sealed class NoticeDetailDialogState(val commentId: Int) {
     data class Report(val id: Int, val report: ReportCategory, val memberId: Int) :
@@ -117,6 +119,7 @@ enum class ReportCategory(val titleId: Int, val contentId: Int) {
 fun NoticeDetailScreen(
     viewModel: NoticeDetailViewModel = hiltViewModel(),
     imageViewerViewModel: ImageViewerViewModel,
+    onShowSnackbar : suspend (String) -> Unit,
     onBack: () -> Unit,
     onClickImage: () -> Unit
 ) {
@@ -131,6 +134,20 @@ fun NoticeDetailScreen(
     )
 
     var openDialogState by remember { mutableStateOf<NoticeDetailDialogState?>(null) }
+
+    LaunchedEffect(key1 = Unit){
+        viewModel.snackbarEvent.collect {
+            onShowSnackbar(
+                when(it){
+                    NoticeDetailSnackbarEvent.ADDED_COMMENT -> "댓글이 추가되었습니다."
+                    NoticeDetailSnackbarEvent.DELETED_COMMENT -> "댓글이 삭제되었습니다."
+                    NoticeDetailSnackbarEvent.REPORTED_COMMENT -> "댓글 신고가 완료되었습니다."
+                    NoticeDetailSnackbarEvent.NETWORK_ERROR -> "네트워크 에러가 발생하였습니다."
+                }
+            )
+
+        }
+    }
 
     if (openDialogState != null) {
         when (openDialogState) {

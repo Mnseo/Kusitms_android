@@ -14,9 +14,12 @@ import com.kusitms.domain.usecase.notice.GetNoticeCommentListUseCase
 import com.kusitms.domain.usecase.notice.GetNoticeDetailUseCase
 import com.kusitms.domain.usecase.report.ReportUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
@@ -40,12 +43,15 @@ class NoticeDetailViewModel @Inject constructor(
     private val _commentList = MutableStateFlow<List<CommentModel>>(emptyList())
     val commentList : StateFlow<List<CommentModel>> = _commentList.asStateFlow()
 
+    private val _snackbarEvent = MutableSharedFlow<NoticeDetailSnackbarEvent>()
+    val snackbarEvent : SharedFlow<NoticeDetailSnackbarEvent> = _snackbarEvent.asSharedFlow()
+
     init {
         fetchCommentList()
     }
 
     val notice = getNoticeDetailUseCase(noticeId).catch {
-        //TODO 에러처리
+        _snackbarEvent.emit(NoticeDetailSnackbarEvent.NETWORK_ERROR)
     }.stateIn(
         viewModelScope,
         started = SharingStarted.Eagerly,
@@ -57,7 +63,7 @@ class NoticeDetailViewModel @Inject constructor(
             getNoticeCommentListUseCase(
                 noticeId
             ).catch {
-                //TODO
+                _snackbarEvent.emit(NoticeDetailSnackbarEvent.NETWORK_ERROR)
             }.collectLatest {
                 _commentList.emit(it)
             }
@@ -73,10 +79,10 @@ class NoticeDetailViewModel @Inject constructor(
                 noticeId = noticeId,
                 content = CommentContentModel(content)
             ).catch {
-                //TODO
+                _snackbarEvent.emit(NoticeDetailSnackbarEvent.NETWORK_ERROR)
             }.collectLatest {
-                // TODO 수정
                fetchCommentList()
+                _snackbarEvent.emit(NoticeDetailSnackbarEvent.ADDED_COMMENT)
             }
         }
     }
@@ -88,9 +94,10 @@ class NoticeDetailViewModel @Inject constructor(
             deleteCommentUseCase(
                 commentId = commentId
             ).catch {
-                //TODO
+                _snackbarEvent.emit(NoticeDetailSnackbarEvent.NETWORK_ERROR)
             }.collectLatest {
                 fetchCommentList()
+                _snackbarEvent.emit(NoticeDetailSnackbarEvent.DELETED_COMMENT)
             }
         }
     }
@@ -108,14 +115,19 @@ class NoticeDetailViewModel @Inject constructor(
                     content
                 )
             ).catch {
-                //TODO
+                _snackbarEvent.emit(NoticeDetailSnackbarEvent.NETWORK_ERROR)
             }.collectLatest {
                 fetchCommentList()
+                _snackbarEvent.emit(NoticeDetailSnackbarEvent.REPORTED_COMMENT)
             }
         }
     }
 
     companion object {
         private const val NOTICE_ID_SAVED_STATE_KEY = "noticeId"
+
+        enum class NoticeDetailSnackbarEvent {
+            ADDED_COMMENT, DELETED_COMMENT, REPORTED_COMMENT, NETWORK_ERROR
+        }
     }
 }
