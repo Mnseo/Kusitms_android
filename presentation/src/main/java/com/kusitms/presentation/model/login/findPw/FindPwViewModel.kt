@@ -50,10 +50,6 @@ class FindPwViewModel @Inject constructor(
     val isCodeValid:Boolean
         get() = code.value == "123456"
 
-    val isEmailValid:Boolean
-        get() = email.value == "kusitms1234@naver.com"
-
-
     fun resetState() {
         _inputState.value = InputState.DEFAULT
         _email.value = ""
@@ -149,6 +145,5 @@ class FindPwViewModel @Inject constructor(
         NotCurrentPw,
         Pass
     }
-
 
 }

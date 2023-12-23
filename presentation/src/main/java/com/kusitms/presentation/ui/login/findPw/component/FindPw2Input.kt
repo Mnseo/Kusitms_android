@@ -51,7 +51,7 @@ fun FindPwEmailComval(
         ) {
             Text(
                 text= email,
-                color= KusitmsColorPalette.current.Grey400,
+                color= KusitmsColorPalette.current.White,
                 style = KusitmsTypo.current.Text_Medium,
                 modifier = Modifier.padding(horizontal = 20.dp, vertical = 16.dp)
             )
