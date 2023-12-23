@@ -10,7 +10,6 @@ import com.kusitms.domain.repository.NoticeRepository
 import com.kusitms.domain.repository.SignInRepository
 import dagger.Binds
 import dagger.Module
-import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 

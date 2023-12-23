@@ -21,8 +21,6 @@ interface KusitmsApi {
         @Query("password") password: String
     ): LoginResponse
 
-    @GET("auth/reissue")
-    suspend fun RefreshAccessToken() : LoginResponse
 
     @GET("member/info")
     suspend fun LoginMemberProfile(): LoginMemberProfileResponse

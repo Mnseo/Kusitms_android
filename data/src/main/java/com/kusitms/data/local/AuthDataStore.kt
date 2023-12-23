@@ -3,12 +3,14 @@ package com.kusitms.data.local
 import android.util.Log
 import com.google.gson.Gson
 import com.kusitms.domain.model.login.LoginMemberProfile
+import javax.inject.Inject
+import javax.inject.Singleton
 
-object AuthDataStore {
-    private const val KEY_AUTH_TOKEN = "KEY_AUTH_TOKEN"
-    private const val KEY_REFRESH_TOKEN = "KEY_REFRESH_TOKEN"
-    private const val KEY_USER_INFO = "KEY_USER_INFO"
-    private const val KEY_LOGIN_MEMBER_PROFILE = "KEY_LOGIN_MEMBER_PROFILE"
+@Singleton
+class AuthDataStore {
+    private val KEY_AUTH_TOKEN = "KEY_AUTH_TOKEN"
+    private val KEY_REFRESH_TOKEN = "KEY_REFRESH_TOKEN"
+    private val KEY_LOGIN_MEMBER_PROFILE = "KEY_LOGIN_MEMBER_PROFILE"
 
 
     var authToken: String

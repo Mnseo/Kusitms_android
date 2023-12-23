@@ -25,7 +25,7 @@ class SignInRepositoryImpl @Inject constructor(
                     phoneNumber = response.payload.phoneNumber,
                     memberDetailExist = response.payload.memberDetailExist
                 )
-                AuthDataStore.loginMemberProfile = profile
+                AuthDataStore().loginMemberProfile = profile
                 Result.success(profile)
             }
         } catch (e: Exception) {
