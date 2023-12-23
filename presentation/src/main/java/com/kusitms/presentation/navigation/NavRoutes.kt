@@ -48,6 +48,19 @@ sealed class NavRoutes(
         fun createRoute(noticeId: Int) = "NoticeDetail/${noticeId}"
     }
 
+    object Profile : NavRoutes("Profile")
+
+    object ProfileSearch : NavRoutes("ProfileSearch")
+
+    object ProfileDetail : NavRoutes(
+        route = "ProfileDetail/{profileId}",
+        navArguments = listOf(
+            navArgument("profileId"){
+                type = NavType.IntType
+            }
+        )
+    )
+
 }
 
 
