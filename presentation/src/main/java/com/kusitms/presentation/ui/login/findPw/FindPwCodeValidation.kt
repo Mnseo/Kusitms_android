@@ -71,7 +71,7 @@ fun FindPw2Column(viewModel: FindPwViewModel, navController: NavHostController) 
             viewModel = viewModel,
             onNextClick = { viewModel.validateCode()
                 if (Error == InputState.VALID) {
-                    navController.navigate(NavRoutes.FindPwSetNewPw.route)
+                    navController.navigate(NavRoutes.FindPwSetNewPw.createRoute(false))
                 }
             }
         )

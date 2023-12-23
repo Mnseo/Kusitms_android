@@ -1,5 +1,6 @@
 package com.kusitms.presentation.ui.login.findPw
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
@@ -11,11 +12,12 @@ import com.kusitms.presentation.R
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
 import com.kusitms.presentation.model.login.findPw.FindPwViewModel
+import com.kusitms.presentation.model.login.findPw.UpdatePwViewModel
 import com.kusitms.presentation.ui.signIn.KusitmsInputField
 
 
 @Composable
-fun FindPwSetPwInput(viewModel:FindPwViewModel) {
+fun FindPwSetPwInput(viewModel: UpdatePwViewModel) {
     val newPassword by viewModel.newPw.collectAsState()
     val newPasswordConfirm by viewModel.newPwConfirm.collectAsState()
     val passwordError by viewModel.passwordErrorState.collectAsState(initial = FindPwViewModel.PasswordErrorState.None)

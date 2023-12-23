@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kusitms.domain.usecase.changepw.CheckPasswordUseCase
+import com.kusitms.domain.usecase.changepw.UpdatePasswordAsLoggedInUseCase
 import com.kusitms.domain.usecase.findpw.FindPwEmailVerifyUseCase
 import com.kusitms.domain.usecase.findpw.FindPwSendCodeUseCase
 import com.kusitms.presentation.model.signIn.InputState
@@ -23,19 +24,14 @@ import javax.inject.Inject
 class FindPwViewModel @Inject constructor(
     private val findPwEmailVerifyUseCase: FindPwEmailVerifyUseCase,
     private val findPwSendCodeUseCase: FindPwSendCodeUseCase,
-    private val checkPasswordUseCase: CheckPasswordUseCase
+    private val checkPasswordUseCase: CheckPasswordUseCase,
+    private val updatePasswordAsLoggedInUseCase: UpdatePasswordAsLoggedInUseCase
 ): ViewModel() {
     private val _email = MutableStateFlow("")
     val email: StateFlow<String> = _email
 
     private val _password = MutableStateFlow("")
     val password: StateFlow<String> = _password
-
-    private val _newPw = MutableStateFlow("")
-    val newPw: StateFlow<String> = _newPw
-
-    private val _newPwConfirm = MutableStateFlow("")
-    val newPwConfirm: StateFlow<String> = _newPwConfirm
 
     private val _passwordErrorState = MutableSharedFlow<PasswordErrorState>()
     val passwordErrorState: SharedFlow<PasswordErrorState> = _passwordErrorState
@@ -73,21 +69,13 @@ class FindPwViewModel @Inject constructor(
         _password.value = Pw
     }
 
-    fun updateNewPassword(newPw: String) {
-        _newPw.value = newPw
-        validateNewPassword()
-    }
+
 
     fun updatePasswordState(responseState: Boolean) {
         viewModelScope.launch {
             _passwordErrorState.emit(if(responseState) PasswordErrorState.Pass else PasswordErrorState.NotCurrentPw)
         }
 
-    }
-
-    fun updateNewPasswordConfirm(pw: String) {
-        _newPwConfirm.value = pw
-        validateNewPassword()
     }
 
     fun updateCode(newCode: String) {
@@ -133,22 +121,11 @@ class FindPwViewModel @Inject constructor(
     }
 
 
-    fun validateNewPassword() {
-        viewModelScope.launch {
-            when {
-                _newPw.value.length < 8 -> _passwordErrorState.emit(PasswordErrorState.ShortPassword)
-                _newPw.value != _newPwConfirm.value -> _passwordErrorState.emit(PasswordErrorState.PasswordsDoNotMatch)
-                else -> _passwordErrorState.emit(PasswordErrorState.None)
-            }
-        }
-
-    }
-
     fun validatePassword(password : String){
         viewModelScope.launch {
             checkPasswordUseCase(password)
                 .catch {
-
+                    //TODO
                 }.collect{
                     if(it){
                         _passwordErrorState.emit(PasswordErrorState.Pass)
@@ -158,7 +135,6 @@ class FindPwViewModel @Inject constructor(
                 }
         }
     }
-
 
     enum class EmailState {
         PASS,
