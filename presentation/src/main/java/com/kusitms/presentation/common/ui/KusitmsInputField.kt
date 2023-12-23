@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
@@ -25,6 +26,7 @@ fun KusitmsInputField(
     value:String = "",
     onValueChange: (String) -> Unit = {},
     isError:Boolean = false,
+    visualTransformation: VisualTransformation = VisualTransformation.None,
     modifier: Modifier = Modifier
 ) {
     val interactionSource = remember { MutableInteractionSource() }
@@ -51,6 +53,7 @@ fun KusitmsInputField(
                 backgroundColor = KusitmsColorPalette.current.Grey700
             ),
             shape = RoundedCornerShape(16.dp),
+            visualTransformation = visualTransformation,
             maxLines = 1,
             trailingIcon = {
                 if(isFocused && value.isNotEmpty()) {

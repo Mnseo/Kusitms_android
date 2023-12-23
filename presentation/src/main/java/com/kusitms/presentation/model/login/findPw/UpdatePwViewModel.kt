@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
+import java.util.regex.Pattern
 import javax.inject.Inject
 
 @HiltViewModel
@@ -28,31 +29,41 @@ class UpdatePwViewModel @Inject constructor(
     private val _newPwConfirm = MutableStateFlow("")
     val newPwConfirm: StateFlow<String> = _newPwConfirm
 
-    private val _passwordErrorState = MutableSharedFlow<FindPwViewModel.PasswordErrorState>()
-    val passwordErrorState: SharedFlow<FindPwViewModel.PasswordErrorState> = _passwordErrorState
+    private val _passwordErrorState = MutableSharedFlow<UpdatePwViewModel.PasswordErrorState>()
+    val passwordErrorState: SharedFlow<UpdatePwViewModel.PasswordErrorState> = _passwordErrorState
 
     fun updateNewPassword(newPw: String) {
-        _newPw.value = newPw
+        _newPw.value = newPw.trim()
         validateNewPassword()
     }
 
 
     fun updateNewPasswordConfirm(pw: String) {
-        _newPwConfirm.value = pw
+        _newPwConfirm.value = pw.trim()
         validateNewPassword()
     }
 
     fun validateNewPassword() {
         viewModelScope.launch {
             when {
-                _newPw.value.length < 5 -> _passwordErrorState.emit(FindPwViewModel.PasswordErrorState.ShortPassword)
-                _newPw.value != _newPwConfirm.value -> _passwordErrorState.emit(FindPwViewModel.PasswordErrorState.PasswordsDoNotMatch)
-                else -> _passwordErrorState.emit(FindPwViewModel.PasswordErrorState.None)
+                _newPw.value.length <= 7 -> _passwordErrorState.emit(PasswordErrorState.ShortPassword)
+                validatePassword( _newPw.value) -> _passwordErrorState.emit(PasswordErrorState.NotMatchRegex)
+                _newPw.value != _newPwConfirm.value -> _passwordErrorState.emit(PasswordErrorState.PasswordsDoNotMatch)
+                else -> _passwordErrorState.emit(PasswordErrorState.None)
             }
         }
 
     }
 
+
+    fun validatePassword(password : String) : Boolean {
+        val ps: Pattern =
+            Pattern.compile("^[a-zA-Z0-9\\u318D\\u119E\\u11A2\\u2022\\u2025a\\u00B7\\uFE55]+$")
+        if (ps.matcher(password).matches()) {
+            return true
+        }
+        return false
+    }
 
     fun changePassword() {
         viewModelScope.launch {
@@ -61,7 +72,7 @@ class UpdatePwViewModel @Inject constructor(
                     .catch {
                         //TODO
                     }.collect {
-                        _passwordErrorState.emit(FindPwViewModel.PasswordErrorState.Pass)
+                        _passwordErrorState.emit(PasswordErrorState.Pass)
                     }
             } else {
                 //비로그인 비밀번호 변경
@@ -75,6 +86,7 @@ class UpdatePwViewModel @Inject constructor(
     enum class PasswordErrorState {
         None,
         ShortPassword,
+        NotMatchRegex,
         PasswordsDoNotMatch,
         Pass
     }

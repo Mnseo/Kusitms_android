@@ -14,7 +14,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.navOptions
 import com.kusitms.presentation.R
@@ -27,13 +30,19 @@ import com.kusitms.presentation.navigation.NavRoutes
 import com.kusitms.presentation.ui.signIn.KusitmsInputField
 
 @Composable
-fun FindPwMemberCurrent(viewModel: FindPwViewModel, navController: NavHostController) {
+fun FindPwMemberCurrent( navController: NavHostController,viewModel: FindPwViewModel= hiltViewModel()) {
 
     LaunchedEffect(key1 = Unit) {
         viewModel.passwordErrorState.collect {
             if (it == FindPwViewModel.PasswordErrorState.Pass) {
-                navController.popBackStack()
-                navController.navigate(NavRoutes.FindPwSetNewPw.createRoute(true))
+                navController.navigate(
+                    NavRoutes.FindPwSetNewPw.createRoute(true),
+                    navOptions {
+                        popUpTo(
+                            NavRoutes.SettingMember.route
+                        )
+                    }
+                )
             }
         }
     }
@@ -82,6 +91,7 @@ fun FindPwMemberCurrentInput(viewModel: FindPwViewModel) {
         onValueChange = {
             viewModel.updatePassword(it)
         },
+        visualTransformation = PasswordVisualTransformation(),
         isError = passwordError == FindPwViewModel.PasswordErrorState.NotCurrentPw
     )
     Spacer(modifier = Modifier.height(4.dp))

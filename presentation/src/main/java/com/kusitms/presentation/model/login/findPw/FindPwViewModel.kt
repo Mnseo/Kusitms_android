@@ -24,8 +24,7 @@ import javax.inject.Inject
 class FindPwViewModel @Inject constructor(
     private val findPwEmailVerifyUseCase: FindPwEmailVerifyUseCase,
     private val findPwSendCodeUseCase: FindPwSendCodeUseCase,
-    private val checkPasswordUseCase: CheckPasswordUseCase,
-    private val updatePasswordAsLoggedInUseCase: UpdatePasswordAsLoggedInUseCase
+    private val checkPasswordUseCase: CheckPasswordUseCase
 ): ViewModel() {
     private val _email = MutableStateFlow("")
     val email: StateFlow<String> = _email

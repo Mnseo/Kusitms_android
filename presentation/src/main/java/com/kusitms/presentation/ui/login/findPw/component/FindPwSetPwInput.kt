@@ -1,17 +1,22 @@
-package com.kusitms.presentation.ui.login.findPw
+package com.kusitms.presentation.ui.login.findPw.component
 
-import android.annotation.SuppressLint
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import com.kusitms.presentation.R
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
-import com.kusitms.presentation.model.login.findPw.FindPwViewModel
 import com.kusitms.presentation.model.login.findPw.UpdatePwViewModel
 import com.kusitms.presentation.ui.signIn.KusitmsInputField
 
@@ -20,7 +25,7 @@ import com.kusitms.presentation.ui.signIn.KusitmsInputField
 fun FindPwSetPwInput(viewModel: UpdatePwViewModel) {
     val newPassword by viewModel.newPw.collectAsState()
     val newPasswordConfirm by viewModel.newPwConfirm.collectAsState()
-    val passwordError by viewModel.passwordErrorState.collectAsState(initial = FindPwViewModel.PasswordErrorState.None)
+    val passwordError by viewModel.passwordErrorState.collectAsState(initial = UpdatePwViewModel.PasswordErrorState.None)
 
         Column(
             modifier = Modifier
@@ -43,11 +48,12 @@ fun FindPwSetPwInput(viewModel: UpdatePwViewModel) {
                     viewModel.updateNewPassword(it)
                     viewModel.validateNewPassword()
                 },
-                isError = passwordError == FindPwViewModel.PasswordErrorState.ShortPassword
+                visualTransformation = PasswordVisualTransformation(),
+                isError = passwordError == UpdatePwViewModel.PasswordErrorState.ShortPassword || passwordError == UpdatePwViewModel.PasswordErrorState.NotMatchRegex
             )
             Spacer(modifier = Modifier.height(4.dp))
             //Error1
-            if(passwordError == FindPwViewModel.PasswordErrorState.ShortPassword) {
+            if(passwordError == UpdatePwViewModel.PasswordErrorState.ShortPassword || passwordError == UpdatePwViewModel.PasswordErrorState.NotMatchRegex) {
                 Text(
                     text = stringResource(id = R.string.find_pw_validation2),
                     style = KusitmsTypo.current.Text_Medium,
@@ -70,11 +76,12 @@ fun FindPwSetPwInput(viewModel: UpdatePwViewModel) {
                     viewModel.updateNewPasswordConfirm(it)
                     viewModel.validateNewPassword()
                 },
-                isError = passwordError == FindPwViewModel.PasswordErrorState.PasswordsDoNotMatch
+                visualTransformation = PasswordVisualTransformation(),
+                isError = passwordError == UpdatePwViewModel.PasswordErrorState.PasswordsDoNotMatch
             )
             Spacer(modifier = Modifier.height(4.dp))
             //Error2
-            if(passwordError == FindPwViewModel.PasswordErrorState.PasswordsDoNotMatch) {
+            if(passwordError == UpdatePwViewModel.PasswordErrorState.PasswordsDoNotMatch) {
                 Text(
                     text = stringResource(id = R.string.find_pw_validation3),
                     style = KusitmsTypo.current.Text_Medium,

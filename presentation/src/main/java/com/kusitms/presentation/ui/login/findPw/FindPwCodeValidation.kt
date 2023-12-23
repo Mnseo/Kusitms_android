@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.kusitms.presentation.R
 import com.kusitms.presentation.common.theme.KusitmsScaffoldNonScroll
@@ -32,7 +33,7 @@ import com.kusitms.presentation.ui.signIn.KusitmsInputField
 @Composable
 fun FindPwCodeValidation(
     navController: NavHostController,
-    viewModel: FindPwViewModel
+    viewModel: FindPwViewModel = hiltViewModel()
 ) {
     KusitmsScaffoldNonScroll(
         topbarText = stringResource(id = R.string.find_pw_topbar),

@@ -15,15 +15,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.navOptions
 import com.kusitms.presentation.R
 import com.kusitms.presentation.common.theme.KusitmsScaffoldNonScroll
 import com.kusitms.presentation.common.ui.KusitmsMarginVerticalSpacer
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
-import com.kusitms.presentation.model.login.findPw.FindPwViewModel
 import com.kusitms.presentation.model.login.findPw.UpdatePwViewModel
 import com.kusitms.presentation.navigation.NavRoutes
+import com.kusitms.presentation.ui.login.findPw.component.FindPwSetPwInput
 
 @Composable
 fun FindPwSetNewPw(
@@ -32,7 +31,7 @@ fun FindPwSetNewPw(
 ) {
     LaunchedEffect(key1 = Unit){
         viewModel.passwordErrorState.collect {
-            if (it == FindPwViewModel.PasswordErrorState.Pass) {
+            if (it == UpdatePwViewModel.PasswordErrorState.Pass) {
                 if(viewModel.isAsLoggedIn)
                     navController.popBackStack(
                         NavRoutes.SettingMember.route,
@@ -77,12 +76,12 @@ fun SetNewPwButton(viewModel: UpdatePwViewModel, navController: NavHostControlle
 
     val buttonColor = when {
      //   isInitialState -> KusitmsColorPalette.current.Grey500
-        passwordErrorState.value == FindPwViewModel.PasswordErrorState.None -> KusitmsColorPalette.current.Main500
+        passwordErrorState.value == UpdatePwViewModel.PasswordErrorState.None -> KusitmsColorPalette.current.Main500
         else -> KusitmsColorPalette.current.Grey500
     }
     val textColor = when {
   //      isInitialState -> KusitmsColorPalette.current.Grey400
-        passwordErrorState.value == FindPwViewModel.PasswordErrorState.None -> KusitmsColorPalette.current.White
+        passwordErrorState.value == UpdatePwViewModel.PasswordErrorState.None -> KusitmsColorPalette.current.White
         else -> KusitmsColorPalette.current.Grey400
     }
 
