@@ -16,7 +16,7 @@ class AuthTokenInterceptor @Inject constructor(
 
     override fun intercept(chain: Interceptor.Chain): Response {
         var request = chain.request().newBuilder()
-            .addHeader("Authorization", "Bearer ${authDataStore.authToken}")
+            .addHeader("Authorization", "${authDataStore.authToken}")
             .build()
 
         val response = chain.proceed(request)
@@ -30,7 +30,7 @@ class AuthTokenInterceptor @Inject constructor(
             }
             // 갱신된 토큰으로 요청 재시도
             request = chain.request().newBuilder()
-                .addHeader("Authorization", "Bearer ${authDataStore.authToken}")
+                .addHeader("Authorization", "${authDataStore.authToken}")
                 .build()
             response.close() // 이전 응답 닫기
            return chain.proceed(request)
