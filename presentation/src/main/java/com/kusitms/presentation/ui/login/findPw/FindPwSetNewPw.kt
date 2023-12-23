@@ -53,16 +53,16 @@ fun SetNewPwColumn(viewModel: FindPwViewModel, navController: NavHostController)
 
 @Composable
 fun SetNewPwButton(viewModel: FindPwViewModel, navController: NavHostController) {
-    val passwordErrorState = viewModel.passwordErrorState.collectAsState()
-    val isInitialState = viewModel.newPw.value.isEmpty() && viewModel.newPwConfirm.value.isEmpty()
+    val passwordErrorState = viewModel.passwordErrorState.collectAsState(initial = FindPwViewModel.PasswordErrorState.None)
+   // val isInitialState = viewModel.newPw.value.isEmpty() && viewModel.newPwConfirm.value.isEmpty()
 
     val buttonColor = when {
-        isInitialState -> KusitmsColorPalette.current.Grey500
+     //   isInitialState -> KusitmsColorPalette.current.Grey500
         passwordErrorState.value == FindPwViewModel.PasswordErrorState.None -> KusitmsColorPalette.current.Main500
         else -> KusitmsColorPalette.current.Grey500
     }
     val textColor = when {
-        isInitialState -> KusitmsColorPalette.current.Grey400
+  //      isInitialState -> KusitmsColorPalette.current.Grey400
         passwordErrorState.value == FindPwViewModel.PasswordErrorState.None -> KusitmsColorPalette.current.White
         else -> KusitmsColorPalette.current.Grey400
     }

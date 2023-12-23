@@ -18,7 +18,8 @@ import com.kusitms.presentation.ui.signIn.KusitmsInputField
 fun FindPwSetPwInput(viewModel:FindPwViewModel) {
     val newPassword by viewModel.newPw.collectAsState()
     val newPasswordConfirm by viewModel.newPwConfirm.collectAsState()
-    val passwordError by viewModel.passwordErrorState.collectAsState()
+    val passwordError by viewModel.passwordErrorState.collectAsState(initial = FindPwViewModel.PasswordErrorState.None)
+
         Column(
             modifier = Modifier
                 .fillMaxWidth()

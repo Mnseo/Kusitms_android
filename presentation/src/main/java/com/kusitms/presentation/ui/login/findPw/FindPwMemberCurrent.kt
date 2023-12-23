@@ -8,6 +8,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -26,6 +27,16 @@ import com.kusitms.presentation.ui.signIn.KusitmsInputField
 
 @Composable
 fun FindPwMemberCurrent(viewModel: FindPwViewModel, navController: NavHostController) {
+
+    LaunchedEffect(key1 = Unit){
+        viewModel.passwordErrorState.collect {
+            if (it == FindPwViewModel.PasswordErrorState.Pass) {
+                navController.navigate(NavRoutes.FindPwSetNewPw.route)
+            }
+        }
+    }
+
+
     KusitmsScaffoldNonScroll(
         topbarText = stringResource(id = R.string.find_pw_topbar),
         navController = navController
@@ -55,7 +66,7 @@ fun FindPwMemberColumn(viewModel: FindPwViewModel, navController: NavHostControl
 @Composable
 fun FindPwMemberCurrentInput(viewModel: FindPwViewModel) {
     val currentPassword by viewModel.password.collectAsState()
-    val passwordError by viewModel.passwordErrorState.collectAsState()
+    val passwordError by viewModel.passwordErrorState.collectAsState(initial = FindPwViewModel.PasswordErrorState.None)
     Text(
         text = stringResource(id = R.string.find_pw_caption1),
         style = KusitmsTypo.current.Caption1,
@@ -83,16 +94,16 @@ fun FindPwMemberCurrentInput(viewModel: FindPwViewModel) {
 
 @Composable
 fun MemberCurrentButton(viewModel: FindPwViewModel, navController: NavHostController) {
-    val passwordErrorState = viewModel.passwordErrorState.collectAsState()
-    val isInitialState = viewModel.newPw.value.isEmpty() && viewModel.newPwConfirm.value.isEmpty()
+    val passwordErrorState = viewModel.passwordErrorState.collectAsState(initial = FindPwViewModel.PasswordErrorState.None)
+   // val isInitialState = viewModel.newPw.value.isEmpty() && viewModel.newPwConfirm.value.isEmpty()
 
     val buttonColor = when {
-        isInitialState -> KusitmsColorPalette.current.Grey500
+       // isInitialState -> KusitmsColorPalette.current.Grey500
         passwordErrorState.value == FindPwViewModel.PasswordErrorState.None -> KusitmsColorPalette.current.Main500
         else -> KusitmsColorPalette.current.Grey500
     }
     val textColor = when {
-        isInitialState -> KusitmsColorPalette.current.Grey400
+      //  isInitialState -> KusitmsColorPalette.current.Grey400
         passwordErrorState.value == FindPwViewModel.PasswordErrorState.None -> KusitmsColorPalette.current.White
         else -> KusitmsColorPalette.current.Grey400
     }
@@ -102,9 +113,7 @@ fun MemberCurrentButton(viewModel: FindPwViewModel, navController: NavHostContro
             .fillMaxWidth()
             .height(56.dp),
         onClick = {
-            if (passwordErrorState.value == FindPwViewModel.PasswordErrorState.Pass) {
-                navController.navigate(NavRoutes.FindPwSetNewPw.route)
-            }
+            viewModel.validatePassword(viewModel.password.value)
         },
         colors = ButtonDefaults.buttonColors(containerColor = buttonColor),
         shape = RoundedCornerShape(16.dp)
