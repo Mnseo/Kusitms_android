@@ -3,6 +3,7 @@ package com.kusitms.data.remote.api
 import com.kusitms.data.remote.entity.BaseResponse
 import com.kusitms.data.remote.entity.request.CommentContentRequestBody
 import com.kusitms.data.remote.entity.request.UpdatePasswordRequest
+import com.kusitms.data.remote.entity.response.CheckPasswordPayload
 import com.kusitms.data.remote.entity.response.FindPwCheckEmailResponse
 import com.kusitms.data.remote.entity.response.LoginMemberProfileResponse
 import com.kusitms.data.remote.entity.response.LoginResponse
@@ -96,5 +97,10 @@ interface KusitmsApi {
         @Field("code") code:String
     ): SignInRequestResponse
 
+
+    @POST("member/password")
+    suspend fun checkPassword(
+        @Query("password") password: String
+    ) : BaseResponse<CheckPasswordPayload>
 
 }
