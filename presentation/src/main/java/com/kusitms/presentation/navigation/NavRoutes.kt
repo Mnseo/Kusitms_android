@@ -4,11 +4,16 @@ import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.runtime.Composable
+import androidx.navigation.NamedNavArgument
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
 
 
 //Main Route
-sealed class NavRoutes(val route: String)
-{
+sealed class NavRoutes(
+    val route: String,
+    val navArguments: List<NamedNavArgument> = emptyList()
+) {
     object SplashScreen: NavRoutes("splash")
     object LogInScreen: NavRoutes("login")
 
@@ -32,7 +37,29 @@ sealed class NavRoutes(val route: String)
 
     object Notice : NavRoutes("Notice")
 
-    class NoticeDetail(val id : Int = 0) : NavRoutes("NoticeDetail")
+    object NoticeDetail : NavRoutes(
+        route = "NoticeDetail/{noticeId}",
+        navArguments = listOf(
+            navArgument("noticeId"){
+                type = NavType.IntType
+            }
+        )
+    ){
+        fun createRoute(noticeId: Int) = "NoticeDetail/${noticeId}"
+    }
+
+    object Profile : NavRoutes("Profile")
+
+    object ProfileSearch : NavRoutes("ProfileSearch")
+
+    object ProfileDetail : NavRoutes(
+        route = "ProfileDetail/{profileId}",
+        navArguments = listOf(
+            navArgument("profileId"){
+                type = NavType.IntType
+            }
+        )
+    )
 
 }
 

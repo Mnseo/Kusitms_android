@@ -10,7 +10,7 @@ properties.load(project.rootProject.file('local.properties').newDataInputStream(
 
 android {
     namespace 'com.kusitms.data'
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         minSdk 24
@@ -37,20 +37,19 @@ android {
 }
 
 dependencies {
-
     implementation(project(":domain"))
-
     implementation(libs.bundles.default)
     testImplementation(libs.junit)
     androidTestImplementation(libs.test.ext.junit)
     androidTestImplementation(libs.espresso.core)
 
+    implementation(libs.bundles.timber)
     //hilt
     implementation(libs.hilt)
     kapt(libs.hilt.compile)
 
-    implementation(libs.javax.inject)
 
+    implementation(libs.javax.inject)
     implementation(libs.bundles.network)
     implementation(libs.bundles.dataStore)
     implementation(libs.bundles.retrofitSerialization)

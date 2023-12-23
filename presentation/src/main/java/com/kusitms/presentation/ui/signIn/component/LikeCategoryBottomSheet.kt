@@ -1,19 +1,14 @@
 package com.kusitms.presentation.ui.signIn.component
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kusitms.presentation.R
@@ -23,44 +18,43 @@ import com.kusitms.presentation.common.ui.KusitmsTabItem
 import com.kusitms.presentation.common.ui.KusitmsTabRow
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
-import com.kusitms.presentation.model.signIn.InputState
 import com.kusitms.presentation.model.signIn.PartCategory
 import com.kusitms.presentation.model.signIn.SignInViewModel
 import com.kusitms.presentation.model.signIn.categories
-import com.kusitms.presentation.navigation.NavRoutes
-import com.kusitms.presentation.ui.ImageVector.xIcon
-import kotlinx.coroutines.launch
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @ExperimentalMaterialApi
 @Composable
-fun SheetLayout(viewModel: SignInViewModel){
-    var openBottomSheet by rememberSaveable { mutableStateOf(false) }
-    var skipPartiallyExpanded by remember { mutableStateOf(false) }
-    val scope = rememberCoroutineScope()
+fun LikeCatergoryBottomSheet(
+    viewModel: SignInViewModel,
+    openBottomSheet : Boolean = false,
+    onChangeOpenBottomSheet : (Boolean) -> Unit = {}
+){
     val bottomSheetState = rememberModalBottomSheetState(
-        skipPartiallyExpanded = skipPartiallyExpanded
+        skipPartiallyExpanded = true
     )
-    Button(onClick = {
-        scope.launch {
-            openBottomSheet = !openBottomSheet
-        }
-    }) {
-        Text(text = "Show Bottom Sheet")
-    }
 
     if (openBottomSheet) {
         ModalBottomSheet(
             containerColor = KusitmsColorPalette.current.Grey600,
             dragHandle = {Box(Modifier.height(0.dp))},
-            onDismissRequest = { openBottomSheet = false },
+            onDismissRequest = { onChangeOpenBottomSheet(false) },
             sheetState = bottomSheetState,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(653.dp)
+                .height(704.dp)
         ) {
-            LikeBottomSheetContent(viewModel = viewModel)
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight()
+                    .systemBarsPadding()
+                    .statusBarsPadding()
+            ) {
+                LikeBottomSheetContent(viewModel = viewModel)
+            }
+
         }
     }
 }
@@ -178,6 +172,6 @@ fun CategoryBottomSheetTitle(viewModel: SignInViewModel) {
 @Preview
 @Composable
 fun BottomSheetPre1() {
-    SheetLayout(viewModel = SignInViewModel())
+    LikeCatergoryBottomSheet(viewModel = SignInViewModel())
 }
 

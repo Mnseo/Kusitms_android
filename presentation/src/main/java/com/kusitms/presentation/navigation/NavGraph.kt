@@ -13,10 +13,12 @@ import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.ViewModel
 import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavDeepLink
 import androidx.navigation.NavGraphBuilder
+import com.kusitms.presentation.model.login.LoginViewModel
 import com.kusitms.presentation.model.login.findPw.FindPwViewModel
 import com.kusitms.presentation.model.setting.SettingViewModel
 import com.kusitms.presentation.model.signIn.SignInRequestViewModel
@@ -29,6 +31,8 @@ import com.kusitms.presentation.ui.login.findPw.FindPwSetNewPw
 import com.kusitms.presentation.ui.login.member.LoginMemberScreen
 import com.kusitms.presentation.ui.notice.NoticeScreen
 import com.kusitms.presentation.ui.notice.detail.NoticeDetailScreen
+import com.kusitms.presentation.ui.profile.ProfileScreen
+import com.kusitms.presentation.ui.profile.search.ProfileSearchScreen
 import com.kusitms.presentation.ui.setting.SettingMember
 import com.kusitms.presentation.ui.setting.SettingNonMember
 import com.kusitms.presentation.ui.signIn.SignInProfileComplete
@@ -43,6 +47,9 @@ fun MainNavigation() {
 
     val findPwViewModel: FindPwViewModel=  hiltViewModel()
     val SettingViewModel : SettingViewModel = hiltViewModel()
+    val signInViewModel: SignInViewModel = hiltViewModel()
+    val signInReqeustViewModel: SignInRequestViewModel = hiltViewModel()
+
 
 
     NavHost(
@@ -54,13 +61,16 @@ fun MainNavigation() {
         }
 
         //SignInScreen
-        kusitmsComposableWithAnimation(NavRoutes.SignInDefault.route) { SignInDefaultProfile(SignInViewModel(), navController) }
+        kusitmsComposableWithAnimation(NavRoutes.SignInDefault.route) { SignInDefaultProfile(signInViewModel, navController) }
         kusitmsComposableWithAnimation(NavRoutes.SignInAdditionalProfile.route) { SignInAdditionalProfile(navController) }
         kusitmsComposableWithAnimation(NavRoutes.SignInProfileComplete.route) { SignInProfileComplete(navController)}
-        kusitmsComposableWithAnimation(NavRoutes.SignInRequest.route) { SignInRequestScreen(SignInRequestViewModel(), navController) }
+        kusitmsComposableWithAnimation(NavRoutes.SignInRequest.route) { SignInRequestScreen(signInReqeustViewModel, navController) }
 
         //LoginScreen
-        kusitmsComposableWithAnimation(NavRoutes.LoginMemberScreen.route) { LoginMemberScreen(navController) }
+        kusitmsComposableWithAnimation(NavRoutes.LoginMemberScreen.route) {
+            val loginViewModel: LoginViewModel = getViewModel()
+            LoginMemberScreen(viewModel = loginViewModel, navController = navController)
+        }
         kusitmsComposableWithAnimation(NavRoutes.LoginNonMember.route) { NonMemberScreen(navController) }
         kusitmsComposableWithAnimation(NavRoutes.LogInScreen.route) { LoginScreen(navController) }
 
@@ -68,7 +78,7 @@ fun MainNavigation() {
         kusitmsComposableWithAnimation(NavRoutes.FindPwCheckEmail.route) { FindPwCheckEmail(navController, viewModel = findPwViewModel)}
         kusitmsComposableWithAnimation(NavRoutes.FindPwCodeValidation.route) { FindPwCodeValidation(navController, viewModel = findPwViewModel)}
         kusitmsComposableWithAnimation(NavRoutes.FindPwSetNewPw.route) { FindPwSetNewPw(navController, viewModel = findPwViewModel) }
-        kusitmsComposableWithAnimation(NavRoutes.FindPwMemberCurrent.route) { FindPwMemberCurrent(navController)}
+        kusitmsComposableWithAnimation(NavRoutes.FindPwMemberCurrent.route) { FindPwMemberCurrent(findPwViewModel,navController)}
 
         //SettingScreen
         kusitmsComposableWithAnimation(NavRoutes.SettingMember.route) { SettingMember(navController, SettingViewModel)}
@@ -76,18 +86,46 @@ fun MainNavigation() {
 
         //HomeScreen
         kusitmsComposableWithAnimation(NavRoutes.HomeScreen.route) { HomeScreen(navController)}
+
+        // NoticeScreen
         kusitmsComposableWithAnimation(NavRoutes.Notice.route) {
             NoticeScreen(
                 onNoticeClick = {
-                    navController.navigate(NavRoutes.NoticeDetail(it.noticeId).route)
+                    navController.navigate(NavRoutes.NoticeDetail.createRoute(it.noticeId))
+                },
+                onSettingClick = {
+                    navController.navigate(NavRoutes.SettingMember.route)
                 }
             )
         }
-        kusitmsComposableWithAnimation(NavRoutes.NoticeDetail().route) { NoticeDetailScreen() }
+
+        composable(
+            route = NavRoutes.NoticeDetail.route,
+            arguments = NavRoutes.NoticeDetail.navArguments
+        ) {
+            NoticeDetailScreen(
+                onBack = {
+                    navController.navigateUp()
+                }
+            )
+        }
+
+        kusitmsComposableWithAnimation(NavRoutes.Profile.route) {
+            ProfileScreen(navController = navController)
+        }
+
+        kusitmsComposableWithAnimation(NavRoutes.ProfileSearch.route) {
+            ProfileSearchScreen()
+        }
     }
 }
 
-//NavGraph Builder Function
+@Composable
+inline fun <reified T: ViewModel> getViewModel() : T {
+    return hiltViewModel()
+}
+
+
 fun NavGraphBuilder.kusitmsComposableWithAnimation(
     route: String,
     arguments: List<NamedNavArgument> = emptyList(),
