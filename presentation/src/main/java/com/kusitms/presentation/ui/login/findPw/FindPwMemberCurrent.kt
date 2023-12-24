@@ -8,6 +8,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -26,6 +27,9 @@ import com.kusitms.presentation.ui.signIn.KusitmsInputField
 
 @Composable
 fun FindPwMemberCurrent(viewModel: FindPwViewModel, navController: NavHostController) {
+    LaunchedEffect(Unit) {
+        viewModel.resetState()
+    }
     KusitmsScaffoldNonScroll(
         topbarText = stringResource(id = R.string.find_pw_topbar),
         navController = navController

@@ -31,6 +31,7 @@ fun FindPwCheckEmail(
 ) {
     LaunchedEffect(Unit) {
         viewModel.resetState()
+        viewModel.resetInput()
     }
     KusitmsScaffoldNonScroll(
         topbarText = stringResource(id = R.string.find_pw_topbar),
@@ -72,10 +73,8 @@ fun FindPwBtn(@StringRes text:Int, viewModel:FindPwViewModel, navController: Nav
             .height(56.dp),
         onClick = {
             viewModel.validateEmail()
-            Log.d("inputState", viewModel.inputState.value.toString())
             if (viewModel.inputState.value == InputState.VALID) {
                 navController.navigate(NavRoutes.FindPwCodeValidation.route)
-                Log.d("email1", viewModel.email.value)
             }
         },
         colors = ButtonDefaults.buttonColors(containerColor = buttonColor)

@@ -7,6 +7,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,6 +20,7 @@ import com.kusitms.presentation.common.ui.KusitmsMarginVerticalSpacer
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
 import com.kusitms.presentation.model.login.findPw.FindPwViewModel
+import com.kusitms.presentation.model.signIn.InputState
 import com.kusitms.presentation.navigation.NavRoutes
 
 @Composable
@@ -26,6 +28,9 @@ fun FindPwSetNewPw(
     navController: NavHostController,
     viewModel: FindPwViewModel
 ) {
+    LaunchedEffect(Unit) {
+        viewModel.resetState()
+    }
     KusitmsScaffoldNonScroll(
         topbarText = stringResource(id = R.string.find_pw_topbar),
         navController = navController
@@ -54,6 +59,7 @@ fun SetNewPwColumn(viewModel: FindPwViewModel, navController: NavHostController)
 @Composable
 fun SetNewPwButton(viewModel: FindPwViewModel, navController: NavHostController) {
     val passwordErrorState = viewModel.passwordErrorState.collectAsState()
+    val inputState = viewModel.inputState.collectAsState()
     val isInitialState = viewModel.newPw.value.isEmpty() && viewModel.newPwConfirm.value.isEmpty()
 
     val buttonColor = when {
@@ -72,7 +78,7 @@ fun SetNewPwButton(viewModel: FindPwViewModel, navController: NavHostController)
             .fillMaxWidth()
             .height(56.dp),
         onClick = {
-            if (passwordErrorState.value == FindPwViewModel.PasswordErrorState.None) {
+            if (passwordErrorState.value == FindPwViewModel.PasswordErrorState.None && inputState.value == InputState.VALID) {
                 navController.navigate(NavRoutes.LogInScreen.route)
             }
         },

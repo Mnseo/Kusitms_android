@@ -1,6 +1,5 @@
 package com.kusitms.data.repository
 
-import android.util.Log
 import com.kusitms.data.local.AuthDataStore
 import com.kusitms.data.remote.api.KusitmsApi
 import com.kusitms.data.remote.entity.response.toModel
@@ -14,7 +13,7 @@ class SignInRepositoryImpl @Inject constructor(
 ): SignInRepository {
     override suspend fun getLoginMemberProfile(): Result<LoginMemberProfile> {
         return try {
-            val response = kusitmsApi.LoginMemberProfile()
+            val response = kusitmsApi.loginMemberProfile()
             if (response.payload == null) {
                 Result.failure(RuntimeException("올바른 데이터를 받지 못했습니다."))
             } else {
@@ -38,7 +37,7 @@ class SignInRepositoryImpl @Inject constructor(
         password: String
     ): Result<SignInRequestCheckModel> {
         return try {
-            val response = kusitmsApi.SignInRequestCheck(email, password)
+            val response = kusitmsApi.signInRequestCheck(email, password)
             if(response.payload == null) {
                 Result.failure(RuntimeException("올바른 데이터를 받지 못했습니다."))
             } else {
@@ -54,7 +53,7 @@ class SignInRepositoryImpl @Inject constructor(
         password: String
     ): Result<Unit> {
         return try {
-            val response = kusitmsApi.SignInRequest(email, password)
+            val response = kusitmsApi.signInRequest(email, password)
             if(response.result == null) {
                 Result.failure(RuntimeException("올바른 데이터를 받지 못했습니다."))
             } else {

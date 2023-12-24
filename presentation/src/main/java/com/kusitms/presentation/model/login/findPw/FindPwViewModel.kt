@@ -2,10 +2,13 @@ package com.kusitms.presentation.model.login.findPw
 
 
 import android.util.Log
+import androidx.compose.ui.modifier.modifierLocalMapOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kusitms.domain.usecase.findpw.FindPwCodeVerifyUseCase
 import com.kusitms.domain.usecase.findpw.FindPwEmailVerifyUseCase
 import com.kusitms.domain.usecase.findpw.FindPwSendCodeUseCase
+import com.kusitms.domain.usecase.findpw.FindPwUpdatePasswordUseCase
 import com.kusitms.presentation.model.signIn.InputState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -18,7 +21,9 @@ import javax.inject.Inject
 @HiltViewModel
 class FindPwViewModel @Inject constructor(
     private val findPwEmailVerifyUseCase: FindPwEmailVerifyUseCase,
-    private val findPwSendCodeUseCase: FindPwSendCodeUseCase
+    private val findPwSendCodeUseCase: FindPwSendCodeUseCase,
+    private val findPwCodeVerifyUseCase: FindPwCodeVerifyUseCase,
+    private val findPwUpdatePasswordUseCase: FindPwUpdatePasswordUseCase
 ): ViewModel() {
     private val _email = MutableStateFlow("")
     val email: StateFlow<String> = _email
@@ -47,13 +52,18 @@ class FindPwViewModel @Inject constructor(
     private val _emailState = MutableStateFlow(EmailState.NonPASS)
     val emailState: StateFlow<EmailState> = _emailState
 
-    val isCodeValid:Boolean
-        get() = code.value == "123456"
+    private val _isTimerFinished = MutableStateFlow(false)
+    val isTimerFinished: StateFlow<Boolean> = _isTimerFinished
 
     fun resetState() {
         _inputState.value = InputState.DEFAULT
+    }
+
+    fun resetInput() {
         _email.value = ""
         _password.value = ""
+        _code.value = ""
+        _newPw.value = ""
     }
 
     fun updateEmail(email: String) {
@@ -97,6 +107,8 @@ class FindPwViewModel @Inject constructor(
                 _timeLeft.value = i
                 delay(1000)
             }
+            _isTimerFinished.value = true
+            _inputState.value = InputState.INVALID
         }
     }
     fun validateEmail() {
@@ -121,7 +133,18 @@ class FindPwViewModel @Inject constructor(
     }
 
     fun validateCode() {
-        _inputState.value = if(isCodeValid) InputState.VALID else InputState.INVALID
+        viewModelScope.launch {
+            val email = email.value
+            val code = code.value
+            findPwCodeVerifyUseCase(email, code)
+                .onSuccess { result ->
+                    _inputState.value = if(result.isVerified) InputState.VALID else InputState.INVALID
+                }
+                .onFailure {
+                    Timber.e(it)
+                    _inputState.value = InputState.INVALID
+                }
+        }
     }
 
 
@@ -130,6 +153,20 @@ class FindPwViewModel @Inject constructor(
             _newPw.value.length < 8 -> _passwordErrorState.value = PasswordErrorState.ShortPassword
             _newPw.value != _newPwConfirm.value -> _passwordErrorState.value = PasswordErrorState.PasswordsDoNotMatch
             else -> _passwordErrorState.value = PasswordErrorState.None
+        }
+        if(passwordErrorState.value == PasswordErrorState.None) {
+            viewModelScope.launch {
+                val email = email.value
+                val newPw = newPw.value
+                findPwUpdatePasswordUseCase(email, newPw)
+                    .onSuccess { result ->
+                        _inputState.value = InputState.VALID
+                    }
+                    .onFailure {
+                        Timber.e(it)
+                        _inputState.value = InputState.INVALID
+                    }
+            }
         }
     }
 
