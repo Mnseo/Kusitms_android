@@ -46,8 +46,7 @@ fun ProfileDetailImage() {
         Column(
             modifier = Modifier
                 .align(Alignment.Center)
-                .fillMaxSize()
-                .padding(16.dp),
+                .fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
