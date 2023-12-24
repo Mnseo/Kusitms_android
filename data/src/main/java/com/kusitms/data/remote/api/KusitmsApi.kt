@@ -11,6 +11,7 @@ import com.kusitms.data.remote.entity.response.SignInRequestResponse
 import com.kusitms.data.remote.entity.response.notice.CommentPayload
 import com.kusitms.data.remote.entity.response.notice.CurriculumPayload
 import com.kusitms.data.remote.entity.response.notice.NoticePayload
+import retrofit2.Response
 import retrofit2.http.*
 
 
@@ -61,7 +62,7 @@ interface KusitmsApi {
     @POST("report")
     suspend fun reportComment(
         @Body reportCommentRequestBody: ReportCommentRequestBody
-    ) : BaseResponse<Unit>
+    ) : Response<BaseResponse<Unit>>
 
     @FormUrlEncoded
     @POST("member/check/register")

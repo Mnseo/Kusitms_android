@@ -57,6 +57,7 @@ import coil.request.ImageRequest
 import com.kusitms.domain.model.notice.NoticeModel
 import com.kusitms.presentation.R
 import com.kusitms.presentation.common.ui.KusitmsDialog
+import com.kusitms.presentation.common.ui.KusitmsDialogSingleButton
 import com.kusitms.presentation.common.ui.KusitmsMarginHorizontalSpacer
 import com.kusitms.presentation.common.ui.KusitmsMarginVerticalSpacer
 import com.kusitms.presentation.common.ui.KusitsmTopBarBackTextWithIcon
@@ -73,10 +74,13 @@ import com.kusitms.presentation.ui.viewer.ImageViewerViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import com.kusitms.presentation.ui.notice.detail.NoticeDetailViewModel.Companion.NoticeDetailSnackbarEvent as NoticeDetailSnackbarEvent
+import com.kusitms.presentation.ui.notice.detail.NoticeDetailViewModel.Companion.NoticeDetailDialogEvent as NoticeDetailDialogEvent
 
-sealed class NoticeDetailDialogState(val commentId: Int) {
+sealed class NoticeDetailDialogState(val commentId: Int = 0) {
     data class Report(val id: Int, val report: ReportCategory, val memberId: Int) :
         NoticeDetailDialogState(id)
+
+    object AlreadyReport : NoticeDetailDialogState()
 
     data class CommentDelete(val id: Int) : NoticeDetailDialogState(id)
 }
@@ -145,7 +149,16 @@ fun NoticeDetailScreen(
                     NoticeDetailSnackbarEvent.NETWORK_ERROR -> "네트워크 에러가 발생하였습니다."
                 }
             )
+        }
+    }
 
+    LaunchedEffect(key1 = Unit){
+        viewModel.dialogEvent.collect {
+            when(it){
+                NoticeDetailDialogEvent.ALREADY_REPORTED_COMMENT ->{
+                    openDialogState = NoticeDetailDialogState.AlreadyReport
+                }
+            }
         }
     }
 
@@ -218,7 +231,25 @@ fun NoticeDetailScreen(
                     openDialogState = null
                 }
             }
-
+            is NoticeDetailDialogState.AlreadyReport -> {
+                KusitmsDialogSingleButton(
+                    title = "이미 신고한 댓글입니다.",
+                    content = {
+                        Text(
+                            text = "하나의 댓글에 두번 이상 신고는 불가능합니다",
+                            textAlign = TextAlign.Center,
+                            style = KusitmsTypo.current.Caption1,
+                            color = KusitmsColorPalette.current.Grey300
+                        )
+                    },
+                    buttonColor = KusitmsColorPalette.current.Grey200,
+                    buttonText = "확인",
+                    onClickButton = {
+                        openDialogState = null
+                    }) {
+                    openDialogState = null
+                }
+            }
             else -> {}
         }
 

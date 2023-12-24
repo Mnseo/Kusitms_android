@@ -7,7 +7,7 @@ import com.kusitms.domain.model.notice.CommentContentModel
 import com.kusitms.domain.model.notice.CommentModel
 import com.kusitms.domain.model.notice.NoticeModel
 import com.kusitms.domain.model.notice.ReportCommentContentModel
-import com.kusitms.domain.model.report.ReportContentModel
+import com.kusitms.domain.model.report.ReportResult
 import com.kusitms.domain.usecase.notice.AddNoticeCommentUseCase
 import com.kusitms.domain.usecase.notice.DeleteCommentUseCase
 import com.kusitms.domain.usecase.notice.GetNoticeCommentListUseCase
@@ -25,7 +25,6 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -45,6 +44,9 @@ class NoticeDetailViewModel @Inject constructor(
 
     private val _snackbarEvent = MutableSharedFlow<NoticeDetailSnackbarEvent>()
     val snackbarEvent : SharedFlow<NoticeDetailSnackbarEvent> = _snackbarEvent.asSharedFlow()
+
+    private val _dialogEvent = MutableSharedFlow<NoticeDetailDialogEvent>()
+    val dialogEvent : SharedFlow<NoticeDetailDialogEvent> = _dialogEvent.asSharedFlow()
 
     init {
         fetchCommentList()
@@ -118,7 +120,10 @@ class NoticeDetailViewModel @Inject constructor(
                 _snackbarEvent.emit(NoticeDetailSnackbarEvent.NETWORK_ERROR)
             }.collectLatest {
                 fetchCommentList()
-                _snackbarEvent.emit(NoticeDetailSnackbarEvent.REPORTED_COMMENT)
+                when(it){
+                    ReportResult.ALREADY_REPORTED -> _dialogEvent.emit(NoticeDetailDialogEvent.ALREADY_REPORTED_COMMENT)
+                    ReportResult.SUCCESS -> _snackbarEvent.emit(NoticeDetailSnackbarEvent.REPORTED_COMMENT)
+                }
             }
         }
     }
@@ -128,6 +133,10 @@ class NoticeDetailViewModel @Inject constructor(
 
         enum class NoticeDetailSnackbarEvent {
             ADDED_COMMENT, DELETED_COMMENT, REPORTED_COMMENT, NETWORK_ERROR
+        }
+
+        enum class NoticeDetailDialogEvent {
+            ALREADY_REPORTED_COMMENT
         }
     }
 }

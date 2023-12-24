@@ -1,5 +1,6 @@
 package com.kusitms.data
 
+import android.util.Log
 import com.kusitms.data.remote.api.KusitmsApi
 import com.kusitms.data.remote.entity.request.CommentContentRequestBody
 import com.kusitms.data.remote.entity.request.toBody
@@ -9,6 +10,7 @@ import com.kusitms.domain.model.notice.CommentModel
 import com.kusitms.domain.model.notice.CurriculumModel
 import com.kusitms.domain.model.notice.NoticeModel
 import com.kusitms.domain.model.notice.ReportCommentContentModel
+import com.kusitms.domain.model.report.ReportResult
 import com.kusitms.domain.repository.NoticeRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -122,7 +124,7 @@ class NoticeRepositoryImpl @Inject constructor(
             )
             if (response.result.code == 200 && response.payload != null) {
                 Result.success(Unit)
-            } else {
+            }else {
                 Result.failure(RuntimeException("댓글 등록 실패: ${response.result.message}"))
             }
         } catch (e: Exception){
@@ -130,15 +132,17 @@ class NoticeRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun reportComment(reportCommentContentModel: ReportCommentContentModel): Result<Unit> {
+    override suspend fun reportComment(reportCommentContentModel: ReportCommentContentModel): Result<ReportResult> {
         return try {
             val response = kusitmsApi.reportComment(
                 reportCommentContentModel.toBody()
             )
-            if (response.result.code == 200 && response.payload != null) {
-                Result.success(Unit)
-            } else {
-                Result.failure(RuntimeException("댓글 등록 실패: ${response.result.message}"))
+            if (response.code() == 200) {
+                Result.success(ReportResult.SUCCESS)
+            }else if(response.code() == 201){
+                Result.success(ReportResult.ALREADY_REPORTED)
+            }else {
+                Result.failure(RuntimeException("댓글 신고 실패: ${response.message()}"))
             }
         } catch (e: Exception){
             Result.failure(e)

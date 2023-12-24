@@ -13,12 +13,18 @@ import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NamedNavArgument
@@ -65,14 +71,20 @@ fun MainNavigation() {
 
 
     Scaffold(
-        modifier = Modifier.background(color = KusitmsColorPalette.current.Grey900),
         snackbarHost = {
-            SnackbarHost(hostState = snackbarHostState)
+            Box(
+                modifier = Modifier.fillMaxSize().padding(bottom = 66.dp),
+                contentAlignment = Alignment.BottomCenter
+            ){
+                SnackbarHost(hostState = snackbarHostState)
+            }
+
         }
     ) { paddingValues ->
         NavHost(
             navController = navController,
-            startDestination = NavRoutes.SplashScreen.route
+            startDestination = NavRoutes.SplashScreen.route,
+            modifier = Modifier.background(color = KusitmsColorPalette.current.Grey900),
         ) {
             kusitmsComposableWithAnimation(NavRoutes.SplashScreen.route) {
                 SplashScreen(navController)
