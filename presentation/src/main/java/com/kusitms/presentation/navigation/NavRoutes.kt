@@ -27,7 +27,16 @@ sealed class NavRoutes(
 
     object FindPwCheckEmail : NavRoutes("findPwCheckEmail")
     object FindPwCodeValidation : NavRoutes("findPwCodeValidation")
-    object FindPwSetNewPw : NavRoutes("findPwSetNewPW")
+    object FindPwSetNewPw : NavRoutes(
+        route = "findPwSetNewPW/isAsLoggedIn={isAsLoggedIn}",
+        navArguments = listOf(
+            navArgument("isAsLoggedIn"){
+                type = NavType.BoolType
+            }
+        )
+    ){
+        fun createRoute(isAsLoggedIn: Boolean) = "findPwSetNewPW/isAsLoggedIn=${isAsLoggedIn}"
+    }
     object FindPwMemberCurrent :NavRoutes("findPwMemberCurrent")
 
 
