@@ -50,6 +50,14 @@ fun FindPwCodeValidation(
 @Composable
 fun FindPw2Column(viewModel: FindPwViewModel, navController: NavHostController) {
     val Error by viewModel.inputState.collectAsState()
+
+    // 이메일 상태가 VALID로 변경되었을 때의 동작 정의
+    LaunchedEffect(key1 = Error) {
+        if (Error == InputState.VALID) {
+            navController.navigate(NavRoutes.FindPwSetNewPw.createRoute(false))
+        }
+    }
+
     Column(modifier = Modifier
         .fillMaxSize()
         .background(color = KusitmsColorPalette.current.Grey800)
@@ -74,11 +82,7 @@ fun FindPw2Column(viewModel: FindPwViewModel, navController: NavHostController) 
         Spacer(modifier = Modifier.weight(1f))
         FindPwCodeBtn(
             viewModel = viewModel,
-            onNextClick = { viewModel.validateCode()
-                if (Error == InputState.VALID) {
-                    navController.navigate(NavRoutes.FindPwSetNewPw.createRoute(false))
-                }
-            }
+            onNextClick = { viewModel.validateCode() }
         )
         KusitmsMarginVerticalSpacer(size = 24)
     }

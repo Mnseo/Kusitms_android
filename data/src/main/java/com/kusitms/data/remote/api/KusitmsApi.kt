@@ -101,7 +101,7 @@ interface KusitmsApi {
         @Field("code") code:String
     ): FindPwCodeVerifyResponse
 
-    @PUT("v1/member/password/unauthenticated")
+    @PUT("member/password/unauthenticated")
     suspend fun updatePassword(
         @Query("email") email: String,
         @Body passwordRequest: UpdatePasswordRequest

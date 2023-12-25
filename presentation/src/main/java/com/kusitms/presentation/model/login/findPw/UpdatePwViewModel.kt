@@ -1,9 +1,12 @@
 package com.kusitms.presentation.model.login.findPw
 
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kusitms.domain.usecase.changepw.UpdatePasswordAsLoggedInUseCase
+import com.kusitms.domain.usecase.findpw.FindPwUpdatePasswordUseCase
+import com.kusitms.presentation.model.signIn.InputState
 import com.kusitms.presentation.ui.notice.detail.NoticeDetailViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -12,16 +15,20 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.util.regex.Pattern
 import javax.inject.Inject
 
 @HiltViewModel
 class UpdatePwViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val updatePasswordAsLoggedInUseCase: UpdatePasswordAsLoggedInUseCase
+    private val updatePasswordAsLoggedInUseCase: UpdatePasswordAsLoggedInUseCase,
+    private val updatePasswordUseCase: FindPwUpdatePasswordUseCase
 ): ViewModel() {
 
     val isAsLoggedIn: Boolean = savedStateHandle.get<Boolean>(UpdatePwViewModel.IS_AS_LOGGED_IN_SAVED_STATE_KEY)!!
+
+    val verifiedEmail: String? = savedStateHandle.get("verifiedEmail")
 
     private val _newPw = MutableStateFlow("")
     val newPw: StateFlow<String> = _newPw
@@ -75,7 +82,18 @@ class UpdatePwViewModel @Inject constructor(
                         _passwordErrorState.emit(PasswordErrorState.Pass)
                     }
             } else {
-                //비로그인 비밀번호 변경
+                // 비회원일때 비밀번호 변경
+                verifiedEmail?.let { email ->
+                    Log.d("verifiedEmail", verifiedEmail.toString())
+                    updatePasswordUseCase(email, newPw.value)
+                        .onSuccess {
+                            Log.d("비회원 로그인", "성공")
+                            _passwordErrorState.emit(PasswordErrorState.Pass)
+                        }
+                        .onFailure {
+                            Timber.e(it)
+                        }
+                }
             }
         }
 

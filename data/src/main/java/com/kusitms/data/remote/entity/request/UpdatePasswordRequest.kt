@@ -2,11 +2,11 @@ package com.kusitms.data.remote.entity.request
 
 import com.kusitms.domain.model.findpw.FindPwNewPasswordModel
 
-data class UpdateNewPasswordRequestBody(
+data class UpdatePasswordRequest(
     val password:String
 )
 
 fun FindPwNewPasswordModel.toModel() =
-    UpdateNewPasswordRequestBody(
+    UpdatePasswordRequest(
         password = password
     )

@@ -2,6 +2,7 @@ package com.kusitms.presentation.model.login.findPw
 
 
 import android.util.Log
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kusitms.domain.usecase.changepw.CheckPasswordUseCase
@@ -23,11 +24,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class FindPwViewModel @Inject constructor(
+    private val savedStateHandle: SavedStateHandle,
     private val findPwEmailVerifyUseCase: FindPwEmailVerifyUseCase,
     private val findPwSendCodeUseCase: FindPwSendCodeUseCase,
     private val checkPasswordUseCase: CheckPasswordUseCase,
     private val findPwCodeVerifyUseCase: FindPwCodeVerifyUseCase,
-    private val findPwUpdatePasswordUseCase: FindPwUpdatePasswordUseCase
 ): ViewModel() {
     private val _email = MutableStateFlow("")
     val email: StateFlow<String> = _email
@@ -74,6 +75,10 @@ class FindPwViewModel @Inject constructor(
     }
     fun updatePassword(Pw: String) {
         _password.value = Pw
+    }
+
+    fun onEmailVerificationSuccess(email: String) {
+        savedStateHandle.set("verifiedEmail", email)
     }
 
 
@@ -132,6 +137,7 @@ class FindPwViewModel @Inject constructor(
             findPwCodeVerifyUseCase(email, code)
                 .onSuccess { result ->
                     _inputState.value = if(result.isVerified) InputState.VALID else InputState.INVALID
+                    onEmailVerificationSuccess(email)
                 }
                 .onFailure {
                     Timber.e(it)

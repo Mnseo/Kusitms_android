@@ -1,15 +1,8 @@
 package com.kusitms.data.remote.di
 
 import com.kusitms.data.NoticeRepositoryImpl
-import com.kusitms.data.repository.ChangePwRepositoryImpl
-import com.kusitms.data.repository.FindPwRepositoryImpl
-import com.kusitms.data.repository.LoginRepositoryImpl
-import com.kusitms.data.repository.SignInRepositoryImpl
-import com.kusitms.domain.repository.ChangePwRepository
-import com.kusitms.domain.repository.FindPwRepository
-import com.kusitms.domain.repository.LoginRepository
-import com.kusitms.domain.repository.NoticeRepository
-import com.kusitms.domain.repository.SignInRepository
+import com.kusitms.data.repository.*
+import com.kusitms.domain.repository.*
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -44,4 +37,9 @@ abstract class RepositoryModule {
     abstract fun bindChangePwRepository(
         changePwRepository: ChangePwRepositoryImpl
     ): ChangePwRepository
+
+    @Binds
+    abstract fun bindAuthRepository(
+        authRepository: AuthRepositoryImpl
+    ): AuthRepository
 }

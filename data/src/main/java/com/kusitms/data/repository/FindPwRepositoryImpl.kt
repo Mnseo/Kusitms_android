@@ -1,7 +1,7 @@
 package com.kusitms.data.repository
 
 import com.kusitms.data.remote.api.KusitmsApi
-import com.kusitms.data.remote.entity.request.UpdateNewPasswordRequestBody
+import com.kusitms.data.remote.entity.request.UpdatePasswordRequest
 import com.kusitms.data.remote.entity.response.notice.toModel
 import com.kusitms.data.remote.entity.response.toModel
 import com.kusitms.domain.model.findpw.FindPwCheckEmailModel
@@ -61,7 +61,7 @@ class FindPwRepositoryImpl@Inject constructor(
         return try {
             val response = kusitmsApi.updatePassword(
                 email,
-                UpdateNewPasswordRequestBody(password)
+                UpdatePasswordRequest(password)
             )
             if (response.result.code == 200) {
                 Result.success(Unit)

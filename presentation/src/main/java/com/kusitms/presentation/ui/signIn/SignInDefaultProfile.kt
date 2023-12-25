@@ -84,6 +84,7 @@ fun TitleColumn(
     val email by viewModel.email.collectAsState()
     val phoneNum by viewModel.phoneNum.collectAsState()
     val name by viewModel.name.collectAsState()
+    val selectedPart by viewModel.selectedPart.collectAsState()
 
     var isOpenPartBottomSheet by remember { mutableStateOf(false) }
     var isOpenLikeCategoryBottomSheet by remember { mutableStateOf(false) }
@@ -94,6 +95,10 @@ fun TitleColumn(
             isOpenPartBottomSheet
         ){
             isOpenPartBottomSheet = it
+            if(selectedPart != null) {
+                //Part Item 클릭시 닫기
+                isOpenPartBottomSheet = false
+            }
         }
     }
 
@@ -155,20 +160,28 @@ fun TitleColumn(
         Spacer(modifier = Modifier.height(24.dp))
 
         //파트 선택
-        Text(text = stringResource(id = R.string.signin_member_caption1_3), style = KusitmsTypo.current.Caption1, color = KusitmsColorPalette.current.Grey400)
+
+        Text(text = stringResource(id = R.string.signin_member_caption1_3) , style = KusitmsTypo.current.Caption1, color = KusitmsColorPalette.current.Grey400)
         Spacer(modifier = Modifier.height(5.dp))
-        KusitmsSnackField(
-            text = R.string.signin_member_hint1_2,
-            onSnackClick = {
-                isOpenPartBottomSheet = true
-        })
+        (if (!selectedPart.isNullOrEmpty()) {
+            selectedPart
+        } else {
+            stringResource(R.string.signin_member_hint1_2)
+        })?.let {
+            KusitmsSnackField(
+                text = it,
+                onSnackClick = {
+                    isOpenPartBottomSheet = true
+                }
+            )
+        }
 
         //관심 카테고리
         Spacer(modifier = Modifier.height(24.dp))
         Text(text = stringResource(id = R.string.signin_member_caption1_4), style = KusitmsTypo.current.Caption1, color = KusitmsColorPalette.current.Grey400)
         Spacer(modifier = Modifier.height(5.dp))
         KusitmsSnackField(
-            text = R.string.signin_member_hint1_3,
+            text = stringResource(id =R.string.signin_member_hint1_3),
             onSnackClick = {
                 isOpenLikeCategoryBottomSheet = true
             }
@@ -262,8 +275,3 @@ fun ShowPartSnack(scaffoldState: ScaffoldState) {
     }
 }
 
-@Preview
-@Composable
-fun SignIn1Preview() {
-    SignInDefaultProfile(navController = rememberNavController(), viewModel = SignInViewModel())
-}
