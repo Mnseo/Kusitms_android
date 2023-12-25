@@ -34,6 +34,7 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -49,28 +50,38 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.kusitms.domain.model.notice.NoticeModel
 import com.kusitms.presentation.R
 import com.kusitms.presentation.common.ui.KusitmsDialog
+import com.kusitms.presentation.common.ui.KusitmsDialogSingleButton
 import com.kusitms.presentation.common.ui.KusitmsMarginHorizontalSpacer
 import com.kusitms.presentation.common.ui.KusitmsMarginVerticalSpacer
 import com.kusitms.presentation.common.ui.KusitsmTopBarBackTextWithIcon
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
+import com.kusitms.presentation.navigation.getViewModel
 import com.kusitms.presentation.ui.ImageVector.icons.KusitmsIcons
 import com.kusitms.presentation.ui.ImageVector.icons.kusitmsicons.Close
 import com.kusitms.presentation.ui.ImageVector.icons.kusitmsicons.MoreVertical
 import com.kusitms.presentation.ui.ImageVector.icons.kusitmsicons.UserBackground
 import com.kusitms.presentation.ui.notice.detail.comment.CommentInput
 import com.kusitms.presentation.ui.notice.detail.comment.NoticeComment
+import com.kusitms.presentation.ui.viewer.ImageViewerViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import com.kusitms.presentation.ui.notice.detail.NoticeDetailViewModel.Companion.NoticeDetailSnackbarEvent as NoticeDetailSnackbarEvent
+import com.kusitms.presentation.ui.notice.detail.NoticeDetailViewModel.Companion.NoticeDetailDialogEvent as NoticeDetailDialogEvent
 
-sealed class NoticeDetailDialogState(val commentId: Int) {
-    data class Report(val id: Int, val report: ReportCategory, val memberId : Int) : NoticeDetailDialogState(id)
+sealed class NoticeDetailDialogState(val commentId: Int = 0) {
+    data class Report(val id: Int, val report: ReportCategory, val memberId: Int) :
+        NoticeDetailDialogState(id)
+
+    object AlreadyReport : NoticeDetailDialogState()
+
     data class CommentDelete(val id: Int) : NoticeDetailDialogState(id)
 }
 
@@ -80,7 +91,7 @@ sealed class NoticeDetailModalState(val commentId: Int) {
 
 }
 
-enum class ReportCategory(val titleId: Int, val contentId : Int) {
+enum class ReportCategory(val titleId: Int, val contentId: Int) {
     COMMERCIAL(
         R.string.notice_report_title_commercial,
         R.string.notice_report_content_commercial
@@ -111,7 +122,10 @@ enum class ReportCategory(val titleId: Int, val contentId : Int) {
 @Composable
 fun NoticeDetailScreen(
     viewModel: NoticeDetailViewModel = hiltViewModel(),
-    onBack: () -> Unit
+    imageViewerViewModel: ImageViewerViewModel,
+    onShowSnackbar : suspend (String) -> Unit,
+    onBack: () -> Unit,
+    onClickImage: () -> Unit
 ) {
     val notice by viewModel.notice.collectAsStateWithLifecycle()
     val commentList by viewModel.commentList.collectAsStateWithLifecycle()
@@ -124,6 +138,29 @@ fun NoticeDetailScreen(
     )
 
     var openDialogState by remember { mutableStateOf<NoticeDetailDialogState?>(null) }
+
+    LaunchedEffect(key1 = Unit){
+        viewModel.snackbarEvent.collect {
+            onShowSnackbar(
+                when(it){
+                    NoticeDetailSnackbarEvent.ADDED_COMMENT -> "댓글이 추가되었습니다."
+                    NoticeDetailSnackbarEvent.DELETED_COMMENT -> "댓글이 삭제되었습니다."
+                    NoticeDetailSnackbarEvent.REPORTED_COMMENT -> "댓글 신고가 완료되었습니다."
+                    NoticeDetailSnackbarEvent.NETWORK_ERROR -> "네트워크 에러가 발생하였습니다."
+                }
+            )
+        }
+    }
+
+    LaunchedEffect(key1 = Unit){
+        viewModel.dialogEvent.collect {
+            when(it){
+                NoticeDetailDialogEvent.ALREADY_REPORTED_COMMENT ->{
+                    openDialogState = NoticeDetailDialogState.AlreadyReport
+                }
+            }
+        }
+    }
 
     if (openDialogState != null) {
         when (openDialogState) {
@@ -194,7 +231,25 @@ fun NoticeDetailScreen(
                     openDialogState = null
                 }
             }
-
+            is NoticeDetailDialogState.AlreadyReport -> {
+                KusitmsDialogSingleButton(
+                    title = "이미 신고한 댓글입니다.",
+                    content = {
+                        Text(
+                            text = "하나의 댓글에 두번 이상 신고는 불가능합니다",
+                            textAlign = TextAlign.Center,
+                            style = KusitmsTypo.current.Caption1,
+                            color = KusitmsColorPalette.current.Grey300
+                        )
+                    },
+                    buttonColor = KusitmsColorPalette.current.Grey200,
+                    buttonText = "확인",
+                    onClickButton = {
+                        openDialogState = null
+                    }) {
+                    openDialogState = null
+                }
+            }
             else -> {}
         }
 
@@ -220,7 +275,7 @@ fun NoticeDetailScreen(
                         onClick = {
                             (openBottomSheet as NoticeDetailModalState.Report).let { reportState ->
                                 openDialogState = NoticeDetailDialogState.Report(
-                                    id = reportState.commentId ,
+                                    id = reportState.commentId,
                                     report = it,
                                     memberId = reportState.memberId
                                 )
@@ -262,7 +317,8 @@ fun NoticeDetailScreen(
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
-                .weight(1f),
+                .weight(1f)
+            ,
             contentPadding = PaddingValues(top = 20.dp),
             state = listState
         ) {
@@ -293,7 +349,11 @@ fun NoticeDetailScreen(
                     ) {
                         item {
                             NoticeDetailImageCard(
-                                notice.imageUrl
+                                notice.imageUrl,
+                                onClickImage = {
+                                    imageViewerViewModel.updateImageList(listOf(notice.imageUrl))
+                                    onClickImage()
+                                }
                             )
                         }
                     }
@@ -324,7 +384,8 @@ fun NoticeDetailScreen(
                 NoticeComment(
                     comment = comment,
                     onClickReport = {
-                        openBottomSheet = NoticeDetailModalState.Report(comment.commentId,comment.writerId)
+                        openBottomSheet =
+                            NoticeDetailModalState.Report(comment.commentId, comment.writerId)
                     },
                     onClickDelete = {
                         openDialogState = NoticeDetailDialogState.CommentDelete(comment.commentId)
@@ -433,11 +494,15 @@ fun NoticeDetailTitleCard(
 
 @Composable
 fun NoticeDetailImageCard(
-    imageUrl: String
+    imageUrl: String,
+    onClickImage: () -> Unit
 ) {
     Card(
         modifier = Modifier
-            .size(100.dp),
+            .size(100.dp)
+            .clickable {
+                onClickImage()
+            },
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
             containerColor = KusitmsColorPalette.current.Grey600,

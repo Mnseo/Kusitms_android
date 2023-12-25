@@ -5,6 +5,7 @@ import com.kusitms.domain.model.notice.CommentModel
 import com.kusitms.domain.model.notice.CurriculumModel
 import com.kusitms.domain.model.notice.NoticeModel
 import com.kusitms.domain.model.notice.ReportCommentContentModel
+import com.kusitms.domain.model.report.ReportResult
 
 interface NoticeRepository {
 
@@ -35,5 +36,5 @@ interface NoticeRepository {
 
     suspend fun reportComment(
         reportCommentContentModel: ReportCommentContentModel
-    ) : Result<Unit>
+    ) : Result<ReportResult>
 }

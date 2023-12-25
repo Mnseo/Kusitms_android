@@ -3,6 +3,7 @@ package com.kusitms.data.remote.api
 import com.kusitms.data.remote.entity.BaseResponse
 import com.kusitms.data.remote.entity.request.CommentContentRequestBody
 import com.kusitms.data.remote.entity.request.UpdatePasswordRequest
+import com.kusitms.data.remote.entity.response.CheckPasswordPayload
 import com.kusitms.data.remote.entity.response.FindPwCheckEmailResponse
 import com.kusitms.data.remote.entity.request.ReportCommentRequestBody
 import com.kusitms.data.remote.entity.response.LoginMemberProfileResponse
@@ -12,6 +13,7 @@ import com.kusitms.data.remote.entity.response.notice.CommentPayload
 import com.kusitms.data.remote.entity.response.notice.CurriculumPayload
 import com.kusitms.data.remote.entity.response.notice.FindPwCodeVerifyResponse
 import com.kusitms.data.remote.entity.response.notice.NoticePayload
+import retrofit2.Response
 import retrofit2.http.*
 
 
@@ -62,7 +64,7 @@ interface KusitmsApi {
     @POST("report")
     suspend fun reportComment(
         @Body reportCommentRequestBody: ReportCommentRequestBody
-    ) : BaseResponse<Unit>
+    ) : Response<BaseResponse<Unit>>
 
     // SignInNonMember
     @FormUrlEncoded
@@ -106,4 +108,13 @@ interface KusitmsApi {
     ): BaseResponse<Unit>
 
 
+    @POST("member/password")
+    suspend fun checkPassword(
+        @Query("password") password: String
+    ) : BaseResponse<CheckPasswordPayload>
+
+    @PUT("member/password")
+    suspend fun updatePasswordAsLoggedIn(
+        @Body passwordRequest: UpdatePasswordRequest
+    ) : BaseResponse<Unit>
 }

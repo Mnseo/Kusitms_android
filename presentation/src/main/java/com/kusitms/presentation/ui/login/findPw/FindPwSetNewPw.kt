@@ -13,24 +13,37 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.kusitms.presentation.R
 import com.kusitms.presentation.common.theme.KusitmsScaffoldNonScroll
 import com.kusitms.presentation.common.ui.KusitmsMarginVerticalSpacer
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
-import com.kusitms.presentation.model.login.findPw.FindPwViewModel
-import com.kusitms.presentation.model.signIn.InputState
+import com.kusitms.presentation.model.login.findPw.UpdatePwViewModel
 import com.kusitms.presentation.navigation.NavRoutes
+import com.kusitms.presentation.ui.login.findPw.component.FindPwSetPwInput
 
 @Composable
 fun FindPwSetNewPw(
     navController: NavHostController,
-    viewModel: FindPwViewModel
+    viewModel: UpdatePwViewModel = hiltViewModel()
 ) {
-    LaunchedEffect(Unit) {
-        viewModel.resetState()
+    LaunchedEffect(key1 = Unit){
+        viewModel.passwordErrorState.collect {
+            if (it == UpdatePwViewModel.PasswordErrorState.Pass) {
+                if(viewModel.isAsLoggedIn)
+                    navController.popBackStack(
+                        NavRoutes.SettingMember.route,
+                        false
+                    )
+                else{
+
+                }
+            }
+        }
     }
+    
     KusitmsScaffoldNonScroll(
         topbarText = stringResource(id = R.string.find_pw_topbar),
         navController = navController
@@ -40,7 +53,7 @@ fun FindPwSetNewPw(
 }
 
 @Composable
-fun SetNewPwColumn(viewModel: FindPwViewModel, navController: NavHostController) {
+fun SetNewPwColumn(viewModel: UpdatePwViewModel, navController: NavHostController) {
     Column(modifier = Modifier
         .fillMaxSize()
         .background(color = KusitmsColorPalette.current.Grey800)
@@ -57,19 +70,18 @@ fun SetNewPwColumn(viewModel: FindPwViewModel, navController: NavHostController)
 }
 
 @Composable
-fun SetNewPwButton(viewModel: FindPwViewModel, navController: NavHostController) {
-    val passwordErrorState = viewModel.passwordErrorState.collectAsState()
-    val inputState = viewModel.inputState.collectAsState()
-    val isInitialState = viewModel.newPw.value.isEmpty() && viewModel.newPwConfirm.value.isEmpty()
+fun SetNewPwButton(viewModel: UpdatePwViewModel, navController: NavHostController) {
+    val passwordErrorState = viewModel.passwordErrorState.collectAsState(initial = UpdatePwViewModel.PasswordErrorState.None)
+   // val isInitialState = viewModel.newPw.value.isEmpty() && viewModel.newPwConfirm.value.isEmpty()
 
     val buttonColor = when {
-        isInitialState -> KusitmsColorPalette.current.Grey500
-        passwordErrorState.value == FindPwViewModel.PasswordErrorState.None -> KusitmsColorPalette.current.Main500
+     //   isInitialState -> KusitmsColorPalette.current.Grey500
+        passwordErrorState.value == UpdatePwViewModel.PasswordErrorState.None -> KusitmsColorPalette.current.Main500
         else -> KusitmsColorPalette.current.Grey500
     }
     val textColor = when {
-        isInitialState -> KusitmsColorPalette.current.Grey400
-        passwordErrorState.value == FindPwViewModel.PasswordErrorState.None -> KusitmsColorPalette.current.White
+  //      isInitialState -> KusitmsColorPalette.current.Grey400
+        passwordErrorState.value == UpdatePwViewModel.PasswordErrorState.None -> KusitmsColorPalette.current.White
         else -> KusitmsColorPalette.current.Grey400
     }
 
@@ -78,9 +90,7 @@ fun SetNewPwButton(viewModel: FindPwViewModel, navController: NavHostController)
             .fillMaxWidth()
             .height(56.dp),
         onClick = {
-            if (passwordErrorState.value == FindPwViewModel.PasswordErrorState.None && inputState.value == InputState.VALID) {
-                navController.navigate(NavRoutes.LogInScreen.route)
-            }
+            viewModel.changePassword()
         },
         colors = ButtonDefaults.buttonColors(containerColor = buttonColor),
         shape = RoundedCornerShape(16.dp)
