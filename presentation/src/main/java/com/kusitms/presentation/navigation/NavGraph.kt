@@ -104,11 +104,13 @@ fun MainNavigation() {
             kusitmsComposableWithAnimation(NavRoutes.LoginNonMember.route) { NonMemberScreen(navController) }
             kusitmsComposableWithAnimation(NavRoutes.LogInScreen.route) { LoginScreen(navController) }
 
-            //FindPwScreen
-            kusitmsComposableWithAnimation(NavRoutes.FindPwCheckEmail.route) { FindPwCheckEmail(navController, viewModel = findPwViewModel)}
-            kusitmsComposableWithAnimation(NavRoutes.FindPwCodeValidation.route) { FindPwCodeValidation(navController, viewModel = findPwViewModel)}
-            kusitmsComposableWithAnimation(NavRoutes.FindPwSetNewPw.route) { FindPwSetNewPw(navController, viewModel = findPwViewModel) }
-            kusitmsComposableWithAnimation(NavRoutes.FindPwMemberCurrent.route) { FindPwMemberCurrent(findPwViewModel,navController)}
+        //FindPwScreen
+        kusitmsComposableWithAnimation(NavRoutes.FindPwCheckEmail.route) { FindPwCheckEmail(navController, viewModel = findPwViewModel)}
+        kusitmsComposableWithAnimation(NavRoutes.FindPwCodeValidation.route) { FindPwCodeValidation(navController, viewModel = findPwViewModel)}
+        kusitmsComposableWithAnimation(
+            NavRoutes.FindPwSetNewPw.route,
+            arguments = NavRoutes.FindPwSetNewPw.navArguments) { FindPwSetNewPw(navController) }
+        kusitmsComposableWithAnimation(NavRoutes.FindPwMemberCurrent.route) { FindPwMemberCurrent(navController)}
 
             //SettingScreen
             kusitmsComposableWithAnimation(NavRoutes.SettingMember.route) { SettingMember(navController, SettingViewModel)}
