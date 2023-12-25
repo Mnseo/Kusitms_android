@@ -96,3 +96,63 @@ fun KusitmsDialog(
         }
     }
 }
+
+@Composable
+fun KusitmsDialogSingleButton(
+    title : String,
+    content: @Composable () -> Unit,
+    buttonText : String = "확인",
+    buttonColor : Color = KusitmsColorPalette.current.Grey200,
+    onClickButton : () -> Unit,
+    onDismiss : () -> Unit
+) {
+    Dialog(
+        onDismissRequest = onDismiss
+    ) {
+        Card(
+            modifier = Modifier
+                .wrapContentHeight()
+                .fillMaxWidth(),
+            shape = RoundedCornerShape(24.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = KusitmsColorPalette.current.Grey600,
+                contentColor = KusitmsColorPalette.current.Grey300
+            )
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight()
+                    .padding(horizontal = 20.dp, vertical = 24.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = title,
+                    style = KusitmsTypo.current.SubTitle2_Semibold,
+                    color =  KusitmsColorPalette.current.White
+                )
+                KusitmsMarginVerticalSpacer(size = 8)
+                content()
+                KusitmsMarginVerticalSpacer(size = 24)
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(7.dp)
+                ){
+
+                    OutlinedButton(
+                        modifier = Modifier
+                            .weight(1f)
+                            .height(56.dp),
+                        onClick = onClickButton,
+                        colors = ButtonDefaults.buttonColors(containerColor = KusitmsColorPalette.current.Grey600),
+                        border = BorderStroke(1.dp, buttonColor),
+                        shape = RoundedCornerShape(size = 12.dp)
+                    ) {
+                        Text(text = buttonText, style = KusitmsTypo.current.Text_Semibold, color = buttonColor)
+                    }
+                }
+            }
+        }
+    }
+}

@@ -70,6 +70,7 @@ sealed class NavRoutes(
         )
     )
 
+    object ImageViewer : NavRoutes("ImageViewer")
 }
 
 
