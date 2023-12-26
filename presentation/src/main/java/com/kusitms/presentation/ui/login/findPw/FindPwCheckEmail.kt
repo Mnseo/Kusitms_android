@@ -20,6 +20,7 @@ import com.kusitms.presentation.R
 import com.kusitms.presentation.common.theme.KusitmsScaffoldNonScroll
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
+import com.kusitms.presentation.model.login.LoginStatus
 import com.kusitms.presentation.model.login.findPw.FindPwViewModel
 import com.kusitms.presentation.model.signIn.InputState
 import com.kusitms.presentation.navigation.NavRoutes
@@ -63,29 +64,39 @@ fun FindPw1Column(viewModel: FindPwViewModel, navController: NavHostController) 
 
 
 @Composable
-fun FindPwBtn(@StringRes text:Int, viewModel:FindPwViewModel, navController: NavHostController) {
+fun FindPwBtn(@StringRes text: Int, viewModel: FindPwViewModel, navController: NavHostController) {
     val emailInputState = viewModel.inputState.collectAsState()
+
+    // 버튼 색상 및 텍스트 색상 결정
     val buttonColor = getButtonColor(inputState = emailInputState.value)
     val textColor = getTextColor(inputState = emailInputState.value)
+
+    // 이메일 상태가 VALID로 변경되었을 때의 동작 정의
+    LaunchedEffect(key1 = emailInputState.value) {
+        if (emailInputState.value == InputState.VALID) {
+            navController.navigate(NavRoutes.FindPwCodeValidation.route)
+        }
+    }
+
     Button(
         modifier = Modifier
             .fillMaxWidth()
             .height(56.dp),
         onClick = {
             viewModel.validateEmail()
-            Log.d("inputState", viewModel.inputState.value.toString())
-            if (viewModel.inputState.value == InputState.VALID) {
-                navController.navigate(NavRoutes.FindPwCodeValidation.route)
-                Log.d("email1", viewModel.email.value)
-            }
         },
-        colors = ButtonDefaults.buttonColors(containerColor = buttonColor)
-        ,
+        colors = ButtonDefaults.buttonColors(containerColor = buttonColor),
         shape = RoundedCornerShape(size = 16.dp)
     ) {
-        Text(text = stringResource(id = text), style = KusitmsTypo.current.SubTitle2_Semibold, color = textColor, modifier =  Modifier.padding(start = 12.dp))
+        Text(
+            text = stringResource(id = text),
+            style = KusitmsTypo.current.SubTitle2_Semibold,
+            color = textColor,
+            modifier = Modifier.padding(start = 12.dp)
+        )
     }
 }
+
 
 @Composable
 fun getButtonColor(inputState: InputState): Color {

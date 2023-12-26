@@ -2,7 +2,6 @@ package com.kusitms.data.repository
 
 import com.kusitms.data.remote.api.KusitmsApi
 import com.kusitms.data.remote.entity.request.UpdatePasswordRequest
-import com.kusitms.data.remote.entity.response.toModel
 import com.kusitms.domain.repository.ChangePwRepository
 import javax.inject.Inject
 
