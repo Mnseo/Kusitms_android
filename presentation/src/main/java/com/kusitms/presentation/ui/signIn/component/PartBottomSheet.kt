@@ -1,6 +1,7 @@
 package com.kusitms.presentation.ui.signIn
 
 import android.util.Log
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -15,7 +16,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kusitms.presentation.R
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
@@ -56,7 +56,7 @@ fun PartBottomSheet(
                 horizontalAlignment = Alignment.Start,
                 verticalArrangement = Arrangement.Top
             ) {
-                partSnackTitle()
+                partSnackTitle( onClick = { onChangeOpenBottomSheet(false) } )
                 Spacer(modifier = Modifier.height(20.dp))
                 partSelectColumn(viewModel = viewModel)
             }
@@ -85,7 +85,7 @@ fun partSelectColumn(viewModel: SignInViewModel) {
 }
 
 @Composable
-fun partSnackTitle() {
+fun partSnackTitle(onClick: () -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -95,7 +95,7 @@ fun partSnackTitle() {
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(text = stringResource(id = R.string.part_snack_title), style = KusitmsTypo.current.SubTitle2_Semibold, color = KusitmsColorPalette.current.Grey300)
-        xIcon.drawxIcon()
+        xIcon.drawxIcon(modifier = Modifier.clickable { onClick() })
 
     }
 }

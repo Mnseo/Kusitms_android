@@ -89,9 +89,16 @@ fun TitleColumn(
     val phoneNum by viewModel.phoneNum.collectAsState()
     val name by viewModel.name.collectAsState()
     val selectedPart by viewModel.selectedPart.collectAsState()
+    val selectedCategories by viewModel.favoriteCategory.collectAsState()
+    val likeCategoryText = if (selectedCategories?.isNotEmpty() == true) {
+        selectedCategories!!.joinToString(", ")
+    } else {
+        stringResource(id = R.string.signin_member_hint1_3)
+    }
 
     var isOpenPartBottomSheet by remember { mutableStateOf(false) }
     var isOpenLikeCategoryBottomSheet by remember { mutableStateOf(false) }
+
 
     if(isOpenPartBottomSheet){
         PartBottomSheet(
@@ -100,7 +107,6 @@ fun TitleColumn(
         ){
             isOpenPartBottomSheet = it
             if(selectedPart != null) {
-                //Part Item 클릭시 닫기
                 isOpenPartBottomSheet = false
             }
         }
@@ -185,7 +191,7 @@ fun TitleColumn(
         Text(text = stringResource(id = R.string.signin_member_caption1_4), style = KusitmsTypo.current.Caption1, color = KusitmsColorPalette.current.Grey400)
         Spacer(modifier = Modifier.height(5.dp))
         KusitmsSnackField(
-            text = stringResource(id =R.string.signin_member_hint1_3),
+            text = likeCategoryText,
             onSnackClick = {
                 isOpenLikeCategoryBottomSheet = true
             }
