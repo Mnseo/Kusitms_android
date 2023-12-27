@@ -1,7 +1,11 @@
 package com.kusitms.presentation.ui.profile.detail
 
+import android.content.Intent
+import android.net.Uri
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,6 +20,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -129,47 +134,38 @@ fun ProfileDetailInfo() {
                     modifier = Modifier
                         .padding(end = 36.dp)
                 )
-                Box(
-                    modifier = Modifier
-                        .width(49.dp)
-                        .height(41.dp)
-                        .background(
-                            color = KusitmsColorPalette.current.Grey500,
-                            shape = RoundedCornerShape(8.dp)
-                        )
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_notion),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .padding(12.dp)
-                            .fillMaxSize(),
-                        alignment = Alignment.Center
-                    )
-                }
+                ProfileLink(imageResId = R.drawable.ic_notion, uri = "https://www.notion.so/ko-kr")
                 Box(modifier = Modifier.width(4.dp))
-                Box(
-                    modifier = Modifier
-                        .width(49.dp)
-                        .height(41.dp)
-                        .background(
-                            color = KusitmsColorPalette.current.Grey500,
-                            shape = RoundedCornerShape(8.dp)
-                        )
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_notion),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .padding(12.dp)
-                            .fillMaxSize(),
-                        alignment = Alignment.Center
-                    )
-                }
+                ProfileLink(imageResId = R.drawable.ic_notion, uri = "https://www.notion.so/ko-kr")
             }
         }
     }
 }
+
+@Composable
+fun ProfileLink(@DrawableRes imageResId: Int, uri: String) {
+    val uriHandler = LocalUriHandler.current
+    Box(
+        modifier = Modifier
+            .width(49.dp)
+            .height(41.dp)
+            .background(
+                color = KusitmsColorPalette.current.Grey500,
+                shape = RoundedCornerShape(8.dp)
+            )
+            .clickable { uriHandler.openUri(uri) }
+    ) {
+        Image(
+            painterResource(id = imageResId),
+            contentDescription = null,
+            modifier = Modifier
+                .padding(12.dp)
+                .fillMaxSize(),
+            alignment = Alignment.Center
+        )
+    }
+}
+
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
