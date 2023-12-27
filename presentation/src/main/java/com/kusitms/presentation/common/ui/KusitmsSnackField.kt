@@ -21,7 +21,7 @@ import com.kusitms.presentation.ui.ImageVector.underArrow
 
 @Composable
 fun KusitmsSnackField(
-    @StringRes text:Int,
+    text:String,
     onSnackClick: () -> Unit
 ) {
     Box(modifier = Modifier
@@ -42,7 +42,7 @@ fun KusitmsSnackField(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                text = stringResource(id = text),
+                text = text,
                 style = KusitmsTypo.current.Text_Medium,
                 color = KusitmsColorPalette.current.Grey400
             )

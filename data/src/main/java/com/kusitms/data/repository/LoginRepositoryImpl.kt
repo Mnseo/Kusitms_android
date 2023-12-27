@@ -14,7 +14,7 @@ class LoginRepositoryImpl @Inject constructor(
         password: String
     ): Result<Unit> {
         return try {
-            val response = kusitmsApi.LoginMember(email, password)
+            val response = kusitmsApi.loginMember(email, password)
             if (response.result.code == 200 && response.payload != null) {
                 AuthDataStore().authToken = response.payload.accessToken
                 AuthDataStore().refreshToken = response.payload.refreshToken

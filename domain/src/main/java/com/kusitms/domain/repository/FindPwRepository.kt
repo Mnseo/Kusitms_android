@@ -1,6 +1,7 @@
 package com.kusitms.domain.repository
 
 import com.kusitms.domain.model.findpw.FindPwCheckEmailModel
+import com.kusitms.domain.model.findpw.FindPwCodeVerifyModel
 
 
 interface FindPwRepository {
@@ -8,5 +9,7 @@ interface FindPwRepository {
 
     suspend fun SendCode(email: String): Result<Unit>
 
-    suspend fun FindPwVerifyCode(email: String, code:String) : Result<Unit>
+    suspend fun VerifyCode(email: String, code:String) : Result<FindPwCodeVerifyModel>
+
+    suspend fun UpdatePassword(email:String, password:String) : Result<Unit>
 }

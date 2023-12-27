@@ -18,7 +18,6 @@ import com.kusitms.presentation.common.ui.KusitmsTabItem
 import com.kusitms.presentation.common.ui.KusitmsTabRow
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
-import com.kusitms.presentation.model.signIn.PartCategory
 import com.kusitms.presentation.model.signIn.SignInViewModel
 import com.kusitms.presentation.model.signIn.categories
 
@@ -53,6 +52,24 @@ fun LikeCatergoryBottomSheet(
                     .statusBarsPadding()
             ) {
                 LikeBottomSheetContent(viewModel = viewModel)
+                Button(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 20.dp)
+                        .height(56.dp),
+                    onClick = {
+                        onChangeOpenBottomSheet(false) // 바텀 시트 닫기
+                    },
+                    colors = ButtonDefaults.buttonColors(containerColor = KusitmsColorPalette.current.Grey500),
+                    shape = RoundedCornerShape(size = 16.dp)
+                ) {
+                    Text(
+                        text = "관심 카테고리를 선택해주세요",
+                        style = KusitmsTypo.current.SubTitle2_Semibold,
+                        color = KusitmsColorPalette.current.Grey400
+                    )
+                }
+                KusitmsMarginVerticalSpacer(size = 24)
             }
 
         }
@@ -61,16 +78,20 @@ fun LikeCatergoryBottomSheet(
 
 
 @Composable
-fun LikeCategoryTab(selectedCategory: PartCategory, onCategorySelected: (PartCategory) -> Unit) {
+fun LikeCategoryTab(
+    selectedCategories: List<String>,
+    onCategorySelected: (String) -> Unit
+) {
     KusitmsTabRow(
         tabItemList = categories,
         tabContent =  { category -> KusitmsTabItem(
             text = category.name,
-            isSelected = category == selectedCategory,
-            onSelect =  {onCategorySelected(category) }
+            isSelected = selectedCategories.contains(category.name),
+            onSelect = { onCategorySelected(category.name) }
         ) }
     )
-        when(selectedCategory.name) {
+    val currentCategory = categories.find { it.name in selectedCategories } ?: return
+    when (currentCategory.name) {
             "기획" -> LikeCategoryItems(categories[0].subCategories)
             "개발" -> LikeCategoryItems(categories[1].subCategories)
             "디자인" -> LikeCategoryItems(categories[2].subCategories)
@@ -83,7 +104,7 @@ fun LikeCategoryTab(selectedCategory: PartCategory, onCategorySelected: (PartCat
 
 @Composable
 fun LikeBottomSheetContent(viewModel: SignInViewModel) {
-    var selectedCategory by remember { mutableStateOf(categories.first()) }
+    val selectedCategories by viewModel.favoriteCategory.collectAsState()
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -97,29 +118,12 @@ fun LikeBottomSheetContent(viewModel: SignInViewModel) {
         KusitmsMarginVerticalSpacer(size = 24)
         CategoryBottomSheetTitle(viewModel = viewModel)
         KusitmsMarginVerticalSpacer(size = 16)
-        LikeCategoryTab(selectedCategory = selectedCategory, onCategorySelected = { category->
-            selectedCategory = category
-        })
-        Spacer(modifier = Modifier.weight(1f))
-        Button(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 20.dp)
-                .height(56.dp),
-            onClick = {
-                      /* bottom sheet 닫힘 */
-            },
-            colors = ButtonDefaults.buttonColors(containerColor = KusitmsColorPalette.current.Grey500)
-            ,
-            shape = RoundedCornerShape(size = 16.dp)
-        ) {
-            androidx.compose.material.Text(
-                text = "관심 카테고리를 선택해주세요",
-                style = KusitmsTypo.current.SubTitle2_Semibold,
-                color = KusitmsColorPalette.current.Grey400
-            )
-        }
-        KusitmsMarginVerticalSpacer(size = 24)
+        LikeCategoryTab(
+            selectedCategories = selectedCategories.orEmpty(),
+            onCategorySelected = { category ->
+                viewModel.updateFavoriteCategory(category)
+            }
+        )
     }
 
 }
@@ -153,7 +157,11 @@ fun CategoryBottomSheetTitle(viewModel: SignInViewModel) {
                 color = KusitmsColorPalette.current.Main400)
         }
         KusitmsMarginHorizontalSpacer(size = 2)
-        Text(text = "개 선택", style = KusitmsTypo.current.Caption1, color = KusitmsColorPalette.current.Grey400)
+        Text(
+            text = "개 선택",
+            style = KusitmsTypo.current.Caption1,
+            color = KusitmsColorPalette.current.Grey400
+        )
         Spacer(modifier = Modifier.weight(1f))
         IconButton(onClick = {
         }) {
@@ -167,11 +175,4 @@ fun CategoryBottomSheetTitle(viewModel: SignInViewModel) {
     }
 }
 
-
-@OptIn(ExperimentalMaterialApi::class)
-@Preview
-@Composable
-fun BottomSheetPre1() {
-    LikeCatergoryBottomSheet(viewModel = SignInViewModel())
-}
 

@@ -1,5 +1,6 @@
 package com.kusitms.presentation.ui.signIn
 
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -75,7 +76,9 @@ fun partSelectColumn(viewModel: SignInViewModel) {
         items(filteredCategories) { category ->
             partSelectItem(category = category,
                 onClick = { selectedCategory ->
-                viewModel.updateSelectedPart(selectedCategory.name) },
+                viewModel.updateSelectedPart(selectedCategory.name)
+                    Log.d("Part", viewModel.selectedPart.value.toString())
+                          },
                 viewModel = viewModel)
         }
     }
@@ -117,10 +120,3 @@ fun ShowPartSheet(
 }
 
 
-
-@OptIn(ExperimentalMaterialApi::class)
-@Preview
-@Composable
-fun ExamplePartSnack() {
-    PartBottomSheet(viewModel = SignInViewModel())
-}

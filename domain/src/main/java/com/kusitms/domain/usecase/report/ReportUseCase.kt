@@ -2,6 +2,7 @@ package com.kusitms.domain.usecase.report
 
 import com.kusitms.domain.model.notice.ReportCommentContentModel
 import com.kusitms.domain.model.report.ReportContentModel
+import com.kusitms.domain.model.report.ReportResult
 import com.kusitms.domain.repository.NoticeRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -12,7 +13,7 @@ class ReportUseCase @Inject constructor(
 ) {
     operator fun invoke(
         reportCommentContentModel : ReportCommentContentModel
-    ): Flow<Unit> = flow {
+    ): Flow<ReportResult> = flow {
         noticeRepository.reportComment(
             reportCommentContentModel
         ).onSuccess {

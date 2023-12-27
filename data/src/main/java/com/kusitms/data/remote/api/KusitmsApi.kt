@@ -3,6 +3,7 @@ package com.kusitms.data.remote.api
 import com.kusitms.data.remote.entity.BaseResponse
 import com.kusitms.data.remote.entity.request.CommentContentRequestBody
 import com.kusitms.data.remote.entity.request.UpdatePasswordRequest
+import com.kusitms.data.remote.entity.response.CheckPasswordPayload
 import com.kusitms.data.remote.entity.response.FindPwCheckEmailResponse
 import com.kusitms.data.remote.entity.request.ReportCommentRequestBody
 import com.kusitms.data.remote.entity.response.LoginMemberProfileResponse
@@ -10,20 +11,22 @@ import com.kusitms.data.remote.entity.response.LoginResponse
 import com.kusitms.data.remote.entity.response.SignInRequestResponse
 import com.kusitms.data.remote.entity.response.notice.CommentPayload
 import com.kusitms.data.remote.entity.response.notice.CurriculumPayload
+import com.kusitms.data.remote.entity.response.notice.FindPwCodeVerifyResponse
 import com.kusitms.data.remote.entity.response.notice.NoticePayload
+import retrofit2.Response
 import retrofit2.http.*
 
 
 interface KusitmsApi {
     @GET("auth/login/MEMBER")
-    suspend fun LoginMember(
+    suspend fun loginMember(
         @Query("email") email: String,
         @Query("password") password: String
     ): LoginResponse
 
 
     @GET("member/info")
-    suspend fun LoginMemberProfile(): LoginMemberProfileResponse
+    suspend fun loginMemberProfile(): LoginMemberProfileResponse
 
     // 공지사항 -> 차후에 분리하는 것도 좋을 듯 싶습니다.
     @GET("notice")
@@ -61,47 +64,57 @@ interface KusitmsApi {
     @POST("report")
     suspend fun reportComment(
         @Body reportCommentRequestBody: ReportCommentRequestBody
-    ) : BaseResponse<Unit>
+    ) : Response<BaseResponse<Unit>>
 
+    // SignInNonMember
     @FormUrlEncoded
     @POST("member/check/register")
-    suspend fun SignInRequestCheck(
+    suspend fun signInRequestCheck(
         @Field("email") email: String,
         @Field("password") password: String
     ): SignInRequestResponse
 
     @FormUrlEncoded
     @POST("member/register")
-    suspend fun SignInRequest(
+    suspend fun signInRequest(
         @Field("email") email: String,
         @Field("password") password: String
     ): BaseResponse<Unit>
 
+    // FindPw
     @FormUrlEncoded
     @POST("member/email")
-    suspend fun VerifyEmailCheck(
+    suspend fun verifyEmailCheck(
         @Field("email") email: String
     ): FindPwCheckEmailResponse
 
     @FormUrlEncoded
     @POST("member/verify")
-    suspend fun SendCode(
+    suspend fun sendCode(
         @Field("email") email: String
     ): BaseResponse<Unit>
 
+    @FormUrlEncoded
+    @POST("member/verify/code")
+    suspend fun verifyCode(
+        @Field("email") email: String,
+        @Field("code") code:String
+    ): FindPwCodeVerifyResponse
 
-    @PUT("v1/member/password/unauthenticated")
+    @PUT("member/password/unauthenticated")
     suspend fun updatePassword(
         @Query("email") email: String,
         @Body passwordRequest: UpdatePasswordRequest
     ): BaseResponse<Unit>
 
-    @FormUrlEncoded
-    @POST("member/verify/code")
-    suspend fun VerifyCode(
-        @Field("email") email: String,
-        @Field("code") code:String
-    ): SignInRequestResponse
 
+    @POST("member/password")
+    suspend fun checkPassword(
+        @Query("password") password: String
+    ) : BaseResponse<CheckPasswordPayload>
 
+    @PUT("member/password")
+    suspend fun updatePasswordAsLoggedIn(
+        @Body passwordRequest: UpdatePasswordRequest
+    ) : BaseResponse<Unit>
 }

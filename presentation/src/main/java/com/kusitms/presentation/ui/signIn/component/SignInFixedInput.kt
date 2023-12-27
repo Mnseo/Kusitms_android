@@ -37,8 +37,3 @@ fun SignInFixedInput(
     }
 }
 
-@Preview
-@Composable
-fun SignInFixedInputPreview() {
-    SignInFixedInput(modelValue = SignInViewModel().name.toString())
-}

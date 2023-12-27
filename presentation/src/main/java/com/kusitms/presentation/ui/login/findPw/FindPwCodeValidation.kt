@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.kusitms.presentation.R
 import com.kusitms.presentation.common.theme.KusitmsScaffoldNonScroll
@@ -32,8 +33,12 @@ import com.kusitms.presentation.ui.signIn.KusitmsInputField
 @Composable
 fun FindPwCodeValidation(
     navController: NavHostController,
-    viewModel: FindPwViewModel
+    viewModel: FindPwViewModel = hiltViewModel()
 ) {
+    LaunchedEffect(Unit) {
+        viewModel.resetState()
+        viewModel.startCountDown(5*60)
+    }
     KusitmsScaffoldNonScroll(
         topbarText = stringResource(id = R.string.find_pw_topbar),
         navController = navController
@@ -45,6 +50,14 @@ fun FindPwCodeValidation(
 @Composable
 fun FindPw2Column(viewModel: FindPwViewModel, navController: NavHostController) {
     val Error by viewModel.inputState.collectAsState()
+
+    // 이메일 상태가 VALID로 변경되었을 때의 동작 정의
+    LaunchedEffect(key1 = Error) {
+        if (Error == InputState.VALID) {
+            navController.navigate(NavRoutes.FindPwSetNewPw.createRoute(false))
+        }
+    }
+
     Column(modifier = Modifier
         .fillMaxSize()
         .background(color = KusitmsColorPalette.current.Grey800)
@@ -69,11 +82,7 @@ fun FindPw2Column(viewModel: FindPwViewModel, navController: NavHostController) 
         Spacer(modifier = Modifier.weight(1f))
         FindPwCodeBtn(
             viewModel = viewModel,
-            onNextClick = { viewModel.validateCode()
-                if (Error == InputState.VALID) {
-                    navController.navigate(NavRoutes.FindPwSetNewPw.route)
-                }
-            }
+            onNextClick = { viewModel.validateCode() }
         )
         KusitmsMarginVerticalSpacer(size = 24)
     }
@@ -85,11 +94,6 @@ fun FindPw2GetCode(viewModel: FindPwViewModel) {
     val code by viewModel.code.collectAsState()
     val timeLeft by viewModel.timeLeft.collectAsState()
     val Error by viewModel.inputState.collectAsState()
-    LaunchedEffect(viewModel) {
-        Log.d("email2", viewModel.email.value)
-        Log.d("InputState", viewModel.inputState.value.toString())
-        viewModel.startCountDown(5*60)
-    }
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -118,21 +122,35 @@ fun FindPw2GetCode(viewModel: FindPwViewModel) {
 @Composable
 fun FindPwCodeBtn(viewModel: FindPwViewModel, onNextClick: () -> Unit) {
     val codeInputState = viewModel.inputState.collectAsState()
-    val buttonColor = when (codeInputState.value) {
-        InputState.DEFAULT -> KusitmsColorPalette.current.Grey500
-        InputState.ENTERED -> KusitmsColorPalette.current.Grey100
-        InputState.INVALID -> KusitmsColorPalette.current.Grey500
-        InputState.VALID -> KusitmsColorPalette.current.Main500
+    val isTimerFinished = viewModel.isTimerFinished.collectAsState()
+
+    val buttonColor = if (!isTimerFinished.value) {
+        when (codeInputState.value) {
+            InputState.DEFAULT -> KusitmsColorPalette.current.Grey500
+            InputState.ENTERED -> KusitmsColorPalette.current.Grey100
+            InputState.INVALID -> KusitmsColorPalette.current.Grey500
+            InputState.VALID -> KusitmsColorPalette.current.Main500
+        }
+    } else {
+        KusitmsColorPalette.current.Grey500
     }
-    val textColor = when(codeInputState.value) {
-        InputState.DEFAULT -> KusitmsColorPalette.current.Grey400
-        InputState.ENTERED -> KusitmsColorPalette.current.Grey600
-        InputState.INVALID -> KusitmsColorPalette.current.Grey400
-        InputState.VALID -> KusitmsColorPalette.current.White
+
+    val textColor = if (!isTimerFinished.value) {
+        when (codeInputState.value) {
+            InputState.DEFAULT -> KusitmsColorPalette.current.Grey400
+            InputState.ENTERED -> KusitmsColorPalette.current.Grey600
+            InputState.INVALID -> KusitmsColorPalette.current.Grey400
+            InputState.VALID -> KusitmsColorPalette.current.White
+        }
+    } else {
+        KusitmsColorPalette.current.Grey400
     }
-    Button(modifier = Modifier
+
+    Button(
+        modifier = Modifier
         .fillMaxWidth()
         .height(56.dp),
+        enabled = !isTimerFinished.value,
         onClick = { onNextClick() },
         colors = ButtonDefaults.buttonColors(containerColor = buttonColor),
         shape = RoundedCornerShape(16.dp)

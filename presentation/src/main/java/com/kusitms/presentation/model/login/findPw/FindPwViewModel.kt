@@ -2,23 +2,33 @@ package com.kusitms.presentation.model.login.findPw
 
 
 import android.util.Log
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kusitms.domain.usecase.changepw.CheckPasswordUseCase
+import com.kusitms.domain.usecase.findpw.FindPwCodeVerifyUseCase
 import com.kusitms.domain.usecase.findpw.FindPwEmailVerifyUseCase
 import com.kusitms.domain.usecase.findpw.FindPwSendCodeUseCase
+import com.kusitms.domain.usecase.findpw.FindPwUpdatePasswordUseCase
 import com.kusitms.presentation.model.signIn.InputState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class FindPwViewModel @Inject constructor(
+    private val savedStateHandle: SavedStateHandle,
     private val findPwEmailVerifyUseCase: FindPwEmailVerifyUseCase,
-    private val findPwSendCodeUseCase: FindPwSendCodeUseCase
+    private val findPwSendCodeUseCase: FindPwSendCodeUseCase,
+    private val checkPasswordUseCase: CheckPasswordUseCase,
+    private val findPwCodeVerifyUseCase: FindPwCodeVerifyUseCase,
 ): ViewModel() {
     private val _email = MutableStateFlow("")
     val email: StateFlow<String> = _email
@@ -26,14 +36,8 @@ class FindPwViewModel @Inject constructor(
     private val _password = MutableStateFlow("")
     val password: StateFlow<String> = _password
 
-    private val _newPw = MutableStateFlow("")
-    val newPw: StateFlow<String> = _newPw
-
-    private val _newPwConfirm = MutableStateFlow("")
-    val newPwConfirm: StateFlow<String> = _newPwConfirm
-
-    private val _passwordErrorState = MutableStateFlow<PasswordErrorState>(PasswordErrorState.None)
-    val passwordErrorState: StateFlow<PasswordErrorState> = _passwordErrorState
+    private val _passwordErrorState = MutableSharedFlow<PasswordErrorState>()
+    val passwordErrorState: SharedFlow<PasswordErrorState> = _passwordErrorState
 
     private val _code = MutableStateFlow("")
     val code: StateFlow<String> = _code
@@ -47,13 +51,18 @@ class FindPwViewModel @Inject constructor(
     private val _emailState = MutableStateFlow(EmailState.NonPASS)
     val emailState: StateFlow<EmailState> = _emailState
 
-    val isCodeValid:Boolean
-        get() = code.value == "123456"
+    private val _isTimerFinished = MutableStateFlow(false)
+    val isTimerFinished: StateFlow<Boolean> = _isTimerFinished
 
     fun resetState() {
         _inputState.value = InputState.DEFAULT
+    }
+
+    fun resetInput() {
         _email.value = ""
         _password.value = ""
+        _code.value = ""
+
     }
 
     fun updateEmail(email: String) {
@@ -68,18 +77,17 @@ class FindPwViewModel @Inject constructor(
         _password.value = Pw
     }
 
-    fun updateNewPassword(newPw: String) {
-        _newPw.value = newPw
-        validateNewPassword()
+    fun onEmailVerificationSuccess(email: String) {
+        savedStateHandle.set("verifiedEmail", email)
     }
+
+
 
     fun updatePasswordState(responseState: Boolean) {
-        _passwordErrorState.value = if(responseState) PasswordErrorState.Pass else PasswordErrorState.NotCurrentPw
-    }
+        viewModelScope.launch {
+            _passwordErrorState.emit(if(responseState) PasswordErrorState.Pass else PasswordErrorState.NotCurrentPw)
+        }
 
-    fun updateNewPasswordConfirm(pw: String) {
-        _newPwConfirm.value = pw
-        validateNewPassword()
     }
 
     fun updateCode(newCode: String) {
@@ -97,6 +105,8 @@ class FindPwViewModel @Inject constructor(
                 _timeLeft.value = i
                 delay(1000)
             }
+            _isTimerFinished.value = true
+            _inputState.value = InputState.INVALID
         }
     }
     fun validateEmail() {
@@ -121,15 +131,34 @@ class FindPwViewModel @Inject constructor(
     }
 
     fun validateCode() {
-        _inputState.value = if(isCodeValid) InputState.VALID else InputState.INVALID
+        viewModelScope.launch {
+            val email = email.value
+            val code = code.value
+            findPwCodeVerifyUseCase(email, code)
+                .onSuccess { result ->
+                    _inputState.value = if(result.isVerified) InputState.VALID else InputState.INVALID
+                    onEmailVerificationSuccess(email)
+                }
+                .onFailure {
+                    Timber.e(it)
+                    _inputState.value = InputState.INVALID
+                }
+        }
     }
 
 
-    fun validateNewPassword() {
-        when {
-            _newPw.value.length < 8 -> _passwordErrorState.value = PasswordErrorState.ShortPassword
-            _newPw.value != _newPwConfirm.value -> _passwordErrorState.value = PasswordErrorState.PasswordsDoNotMatch
-            else -> _passwordErrorState.value = PasswordErrorState.None
+    fun validatePassword(password : String){
+        viewModelScope.launch {
+            checkPasswordUseCase(password)
+                .catch {
+                    //TODO
+                }.collect{
+                    if(it){
+                        _passwordErrorState.emit(PasswordErrorState.Pass)
+                    }else {
+                        _passwordErrorState.emit(PasswordErrorState.NotCurrentPw)
+                    }
+                }
         }
     }
 
