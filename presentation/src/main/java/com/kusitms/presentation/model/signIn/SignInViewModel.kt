@@ -1,5 +1,6 @@
 package com.kusitms.presentation.model.signIn
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kusitms.domain.model.login.LoginMemberProfile
@@ -37,15 +38,15 @@ class SignInViewModel @Inject constructor(
     private val _email = MutableStateFlow("")
     val email: StateFlow<String> = _email
 
-    init {
-        loadLoginMemberProfile()
-    }
 
-    private fun loadLoginMemberProfile() {
+    fun loadLoginMemberProfile() {
         viewModelScope.launch {
             val result = authMemberProfileUseCase()
             result.onSuccess { profile ->
+                Log.d("ViewModel 프로필 확인", profile?.email ?: "프로필이 null임")
+                Log.d("가져오기 성공", "성공")
                 profile?.let {
+                    Log.d("프로필 확인", it.email)
                     _name.value = it.name
                     _email.value = it.email
                     _phoneNum.value = it.phoneNumber
@@ -65,13 +66,8 @@ class SignInViewModel @Inject constructor(
         _selectedPart.value = part
     }
 
-    fun updateFavoriteCategory(selectedCategory: String) {
-        val currentCategories = _favoriteCategory.value.orEmpty()
-        if (currentCategories.contains(selectedCategory)) {
-            _favoriteCategory.value = currentCategories - selectedCategory
-        } else {
-            _favoriteCategory.value = currentCategories + selectedCategory
-        }
+    fun updateFavoriteCategory(selectedCategories: List<String>) {
+        _favoriteCategory.value = selectedCategories
     }
 
     fun updateName(newName: String) {

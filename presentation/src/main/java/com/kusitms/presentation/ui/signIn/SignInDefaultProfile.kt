@@ -39,6 +39,10 @@ import kotlinx.coroutines.launch
 @Composable
 fun SignInDefaultProfile(viewModel: SignInViewModel, navController: NavHostController) {
     val major by viewModel.major.collectAsState()
+    LaunchedEffect(Unit) {
+        viewModel.loadLoginMemberProfile()
+    }
+
     KusitmsScaffoldNonScroll(topbarText = "프로필 설정", navController = navController) {
         SignInMember1(
             navController = navController,

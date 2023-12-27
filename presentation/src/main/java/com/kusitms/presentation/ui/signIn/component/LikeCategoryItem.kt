@@ -25,8 +25,7 @@ import com.kusitms.presentation.model.signIn.categories
 import com.kusitms.presentation.model.signIn.getAllSubCategories
 
 @Composable
-fun LikeCategoryItem(subCategoryName:String) {
-    var isSelected by remember { mutableStateOf(false) }
+fun LikeCategoryItem(subCategoryName:String, isSelected: Boolean, onSelect: () -> Unit) {
     Box(
         modifier = Modifier
             .height(44.dp)
@@ -35,9 +34,7 @@ fun LikeCategoryItem(subCategoryName:String) {
                 color = KusitmsColorPalette.current.Grey500,
                 shape = RoundedCornerShape(12.dp)
             )
-            .clickable {
-                isSelected = !isSelected // Toggle the selection state
-            }
+            .clickable(onClick = onSelect)
             .background(
                 color = if (isSelected) KusitmsColorPalette.current.Grey500 else KusitmsColorPalette.current.Grey600,
                 shape = RoundedCornerShape(12.dp)
@@ -54,7 +51,9 @@ fun LikeCategoryItem(subCategoryName:String) {
 }
 
 @Composable
-fun LikeCategoryItems(subCategories: List<String>) {
+fun LikeCategoryItems(subCategories: List<String>, viewModel: SignInViewModel) {
+    val selectedCategories = viewModel.favoriteCategory.collectAsState().value.orEmpty().toMutableSet()
+
     LazyVerticalGrid(
         columns = GridCells.Fixed(2), // 2개의 컬럼을 가진 그리드
         modifier = Modifier
@@ -65,7 +64,18 @@ fun LikeCategoryItems(subCategories: List<String>) {
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         items(subCategories) { subCategory ->
-            LikeCategoryItem(subCategoryName = subCategory)
+            LikeCategoryItem(
+                subCategoryName = subCategory,
+                isSelected = subCategory in selectedCategories,
+                onSelect = {
+                    if (subCategory in selectedCategories) {
+                        selectedCategories.remove(subCategory)
+                    } else {
+                        selectedCategories.add(subCategory)
+                    }
+                    viewModel.updateFavoriteCategory(selectedCategories.toList())
+                }
+            )
         }
     }
 }

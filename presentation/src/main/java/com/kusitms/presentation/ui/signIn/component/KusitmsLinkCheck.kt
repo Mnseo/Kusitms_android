@@ -67,8 +67,8 @@ fun LinkTextField() {
                 .width(129.dp)
                 .height(48.dp)
                 .background(KusitmsColorPalette.current.Grey700)
+                .padding(start = 12.dp, top = 12.dp, end = 12.dp, bottom = 12.dp),
         ) {
-            KusitmsMarginHorizontalSpacer(size = 0)
             TextField(
                 value = textState.value,
                 onValueChange = {
