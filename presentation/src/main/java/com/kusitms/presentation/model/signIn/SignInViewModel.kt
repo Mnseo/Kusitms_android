@@ -9,6 +9,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -37,6 +38,9 @@ class SignInViewModel @Inject constructor(
 
     private val _email = MutableStateFlow("")
     val email: StateFlow<String> = _email
+
+    private val _selectedImage = MutableStateFlow<String?>(null)
+    val selectedImage: StateFlow<String?> = _selectedImage.asStateFlow()
 
 
     fun loadLoginMemberProfile() {
@@ -70,16 +74,8 @@ class SignInViewModel @Inject constructor(
         _favoriteCategory.value = selectedCategories
     }
 
-    fun updateName(newName: String) {
-        _name.value = newName
-    }
-
-    fun updatePhoneNum(newPhoneNum: String) {
-        _phoneNum.value = newPhoneNum
-    }
-
-    fun updateEmail(newEmail: String) {
-        _email.value = newEmail
+    fun updateSelectedImage(imageString: String) {
+        _selectedImage.value = imageString
     }
 
 

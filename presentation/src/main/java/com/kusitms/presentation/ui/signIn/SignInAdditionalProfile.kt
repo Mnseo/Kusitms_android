@@ -1,5 +1,10 @@
 package com.kusitms.presentation.ui.signIn
 
+import android.content.Context
+import android.net.Uri
+import android.util.Base64
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -11,6 +16,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
@@ -25,20 +31,22 @@ import com.kusitms.presentation.common.ui.ButtonRow
 import com.kusitms.presentation.common.ui.KusitmsMarginVerticalSpacer
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
+import com.kusitms.presentation.model.signIn.SignInViewModel
 import com.kusitms.presentation.navigation.NavRoutes
 import com.kusitms.presentation.ui.ImageVector.*
+import java.io.ByteArrayOutputStream
 
 
 @Composable
-fun SignInAdditionalProfile(navController: NavHostController) {
+fun SignInAdditionalProfile(viewModel: SignInViewModel,navController: NavHostController) {
     KusitmsScaffoldNonScroll(topbarText = "프로필 설정", navController = navController) {
-        SignIn2Member(navController = navController)
+        SignIn2Member(viewModel = viewModel, navController = navController)
     }
 }
 
 
 @Composable
-fun SignIn2Member(navController: NavController) {
+fun SignIn2Member(viewModel: SignInViewModel,navController: NavController) {
     val scrollState = rememberScrollState()
     Column(
         modifier = Modifier
@@ -49,7 +57,7 @@ fun SignIn2Member(navController: NavController) {
         verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.Top)
     ) {
         Title2Column()
-        PhotoColumn()
+        PhotoColumn(viewModel)
         KusitmsMarginVerticalSpacer(size = 10)
         introColumn()
         KusitmsMarginVerticalSpacer(size = 4)
@@ -62,12 +70,24 @@ fun SignIn2Member(navController: NavController) {
 }
 
 @Composable
-fun PhotoColumn() {
+fun PhotoColumn(viewModel: SignInViewModel) {
+    val context = LocalContext.current
+    val imagePickerLauncher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+        // 이미지 처리 및 ViewModel 업데이트 로직
+        uri?.let {
+            val imageString = convertUriToString(uri, context)
+            viewModel.updateSelectedImage(imageString)
+        }
+    }
+
     Box(
         modifier = Modifier
             .width(96.dp)
             .height(96.dp)
             .background(color = Color(0xFF20232D), shape = RoundedCornerShape(size = 12.dp))
+            .clickable {
+                imagePickerLauncher.launch("image/*")
+            }
     ) {
         Column(
             modifier = Modifier
@@ -259,9 +279,17 @@ fun LinkRow2() {
     }
 }
 
+fun convertUriToString(uri: Uri, context: Context): String {
+    val inputStream = context.contentResolver.openInputStream(uri)
+    val byteArrayOutputStream = ByteArrayOutputStream()
 
-@Preview
-@Composable
-fun example2() {
-    SignInAdditionalProfile(navController = rememberNavController())
+    val buffer = ByteArray(1024)
+    var bytesRead: Int
+    while (inputStream?.read(buffer).also { bytesRead = it ?: -1 } != -1) {
+        byteArrayOutputStream.write(buffer, 0, bytesRead)
+    }
+
+    val imageBytes = byteArrayOutputStream.toByteArray()
+
+    return Base64.encodeToString(imageBytes, Base64.DEFAULT)
 }
