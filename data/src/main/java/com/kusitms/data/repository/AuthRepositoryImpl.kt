@@ -1,6 +1,7 @@
 package com.kusitms.data.repository
 
 import com.kusitms.data.local.AuthDataStore
+import com.kusitms.data.remote.api.KusitmsApi
 import com.kusitms.domain.model.login.LoginMemberProfile
 import com.kusitms.domain.repository.AuthRepository
 import kotlinx.coroutines.flow.Flow
@@ -9,11 +10,38 @@ import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class AuthRepositoryImpl @Inject constructor(
-    private val authDataStore: AuthDataStore
+    private val authDataStore: AuthDataStore,
+    private val kusitmsApi: KusitmsApi
 ): AuthRepository {
     override suspend fun getLoginMemberProfile(): Result<LoginMemberProfile?> {
         return try {
             Result.success(authDataStore.loginMemberProfile)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    override suspend fun logOutMember(): Result<Unit> {
+        return try {
+            val response = kusitmsApi.logOutMember()
+            if (response.result.code == 200) {
+                Result.success(Unit)
+            } else {
+                Result.failure(RuntimeException("올바른 데이터를 받지 못했습니다."))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    override suspend fun signOutMember(): Result<Unit> {
+        return try {
+            val response = kusitmsApi.logOutMember()
+            if (response.result.code == 200) {
+                Result.success(Unit)
+            } else {
+                Result.failure(RuntimeException("올바른 데이터를 받지 못했습니다."))
+            }
         } catch (e: Exception) {
             Result.failure(e)
         }

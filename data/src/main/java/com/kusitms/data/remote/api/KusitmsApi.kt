@@ -117,4 +117,14 @@ interface KusitmsApi {
     suspend fun updatePasswordAsLoggedIn(
         @Body passwordRequest: UpdatePasswordRequest
     ) : BaseResponse<Unit>
+
+    //로그아웃 및 탈퇴
+    @DELETE("auth/logout")
+    suspend fun logOutMember(): BaseResponse<Unit>
+
+    @DELETE("member")
+    suspend fun signOutMember(): BaseResponse<Unit>
+
+
+
 }
