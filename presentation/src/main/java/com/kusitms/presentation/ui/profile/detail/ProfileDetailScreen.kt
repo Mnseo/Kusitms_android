@@ -11,11 +11,14 @@ import com.kusitms.presentation.R
 import com.kusitms.presentation.common.ui.KusitsmTopBarBackTextWithIcon
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
+import com.kusitms.presentation.model.profile.Profile
 import com.kusitms.presentation.ui.profile.detail.ProfileDetailImage
 import com.kusitms.presentation.ui.profile.detail.ProfileDetailInfo
 
 @Composable
-fun ProfileDetailScreen() {
+fun ProfileDetailScreen(
+    onProfileClick: (Profile) -> Unit,
+) {
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
@@ -48,5 +51,7 @@ fun ProfileDetailScreen() {
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun ProfileDetailScreenPreview() {
-    ProfileDetailScreen()
+    ProfileDetailScreen(
+        onProfileClick = {}
+    )
 }

@@ -31,13 +31,13 @@ import com.kusitms.presentation.model.profile.Profile
 @Composable
 fun ProfileListScreen(navController: NavController) {
     val profiles = listOf(
-        Profile("이채연", "디자이너", "디자이너 한 줄 소개"),
-        Profile("국준호", "기획자", "기획자 한 줄 소개"),
-        Profile("장세은", "개발자", "개발자 한 줄 소개"),
-        Profile("이안진", "개발자", "개발자 한 줄 소개"),
-        Profile("신민서", "개발자", "개발자 한 줄 소개"),
-        Profile("김서연", "기획자", "기획자 한 줄 소개"),
-        Profile("안정후", "개발자", "개발자 한 줄 소개"),
+        Profile(0, "이채연", "디자이너", "디자이너 한 줄 소개"),
+        Profile(1, "국준호", "기획자", "기획자 한 줄 소개"),
+        Profile(2, "장세은", "개발자", "개발자 한 줄 소개"),
+        Profile(3, "이안진", "개발자", "개발자 한 줄 소개"),
+        Profile(4, "신민서", "개발자", "개발자 한 줄 소개"),
+        Profile(5, "김서연", "기획자", "기획자 한 줄 소개"),
+        Profile(6, "안정후", "개발자", "개발자 한 줄 소개"),
         )
     LazyVerticalGrid(
         columns = GridCells.Adaptive(minSize = 152.dp),
@@ -111,7 +111,7 @@ fun ProfileItem(profile: Profile, modifier: Modifier = Modifier, onClick: () -> 
 fun ProfileItemPreview() {
     KusitmsTheme {
         ProfileItem(
-            profile = Profile("이채연", "디자이너", "디자이너 한 줄 소개"),
+            profile = Profile(0, "이채연", "디자이너", "디자이너 한 줄 소개"),
             onClick = {}
         )
     }

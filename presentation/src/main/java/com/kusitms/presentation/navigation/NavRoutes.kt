@@ -68,7 +68,9 @@ sealed class NavRoutes(
                 type = NavType.IntType
             }
         )
-    )
+    ) {
+        fun createRoute(profileId: Int) = "ProfileDetail/${profileId}"
+    }
 
     object ImageViewer : NavRoutes("ImageViewer")
 }
