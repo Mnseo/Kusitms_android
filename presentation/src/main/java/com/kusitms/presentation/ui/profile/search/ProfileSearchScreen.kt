@@ -14,21 +14,26 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
+import com.kusitms.presentation.model.profile.search.ProfileSearchViewModel
 import com.kusitms.presentation.ui.ImageVector.LeftArrow
 
 @Composable
 fun ProfileSearchScreen(
+    viewModel: ProfileSearchViewModel = hiltViewModel(),
     onBackClick: () -> Unit,
 ) {
+    val uiState = viewModel.uiState.collectAsState()
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -50,7 +55,12 @@ fun ProfileSearchScreen(
                 imageVector = LeftArrow.vector,
                 contentDescription = "뒤로"
             )
-            ProfileSearchField(text = "", onTextChange = {})
+            ProfileSearchField(
+                text = uiState.value.searchText,
+                onTextChange = { newText ->
+                    viewModel.changeSearchText(newText)
+                }
+            )
         }
     }
 }
@@ -63,9 +73,7 @@ private fun ProfileSearchField(
 ) {
     BasicTextField(
         value = text,
-        onValueChange = { newValue ->
-            onTextChange(newValue)
-        },
+        onValueChange = onTextChange,
         textStyle = KusitmsTypo.current.Text_Medium.copy(color = KusitmsColorPalette.current.Grey100),
         decorationBox = { innerTextField ->
             Column(
@@ -77,9 +85,10 @@ private fun ProfileSearchField(
                     )
             ) {
                 Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
+                    verticalAlignment = Alignment.Bottom,
+                    horizontalArrangement = Arrangement.Start,
+                    modifier = Modifier.padding(start = 16.dp),
+                    ) {
                     innerTextField()
                 }
                 Spacer(modifier = Modifier.height(8.dp))
