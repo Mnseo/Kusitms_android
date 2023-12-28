@@ -27,6 +27,7 @@ import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTheme
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
 import com.kusitms.presentation.model.profile.Profile
+import com.kusitms.presentation.navigation.NavRoutes
 
 @Composable
 fun ProfileListScreen(navController: NavController) {
@@ -48,7 +49,7 @@ fun ProfileListScreen(navController: NavController) {
         items(profiles) { profile ->
             ProfileItem(
                 profile = profile,
-                onClick = { navController.graph })
+                onClick = { navController.navigate(NavRoutes.ProfileDetail.route) })
         }
     }
 }

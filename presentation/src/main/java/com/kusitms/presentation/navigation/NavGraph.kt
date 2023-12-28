@@ -216,6 +216,9 @@ fun MainNavigation() {
                     onProfileClick = {
                         navController.navigate(NavRoutes.ProfileDetail.createRoute(it.profileId))
                     },
+                    onBack = {
+                        navController.navigateUp()
+                    }
                 )
             }
 

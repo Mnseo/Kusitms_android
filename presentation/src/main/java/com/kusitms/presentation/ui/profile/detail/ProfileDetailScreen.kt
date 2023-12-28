@@ -18,40 +18,48 @@ import com.kusitms.presentation.ui.profile.detail.ProfileDetailInfo
 @Composable
 fun ProfileDetailScreen(
     onProfileClick: (Profile) -> Unit,
+    onBack: () -> Unit,
 ) {
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(KusitmsColorPalette.current.Grey900)
-    ) {
-        item {
-            KusitsmTopBarBackTextWithIcon(
-                text = stringResource(id = R.string.profile_detail_topbar),
-                onBackClick = { /* TODO */ }) {
-                Text(
-                    text = "차단",
-                    style = KusitmsTypo.current.Text_Medium,
-                    color = KusitmsColorPalette.current.Grey400
-                )
-            }
+    Column() {
+        KusitsmTopBarBackTextWithIcon(
+            text = stringResource(id = R.string.profile_detail_topbar),
+            onBackClick = {
+                onBack()
+            }) {
+            Text(
+                text = "차단",
+                style = KusitmsTypo.current.Text_Medium,
+                color = KusitmsColorPalette.current.Grey400
+            )
         }
-        item {
-            Box(modifier = Modifier.padding(horizontal = 32.dp, vertical = 8.dp)) {
-                ProfileDetailImage()
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(KusitmsColorPalette.current.Grey900)
+        ) {
+            item {
+
             }
-        }
-        item {
-            Box(modifier = Modifier.padding(horizontal = 32.dp, vertical = 8.dp)) {
-                ProfileDetailInfo()
+            item {
+                Box(modifier = Modifier.padding(horizontal = 32.dp, vertical = 8.dp)) {
+                    ProfileDetailImage()
+                }
+            }
+            item {
+                Box(modifier = Modifier.padding(horizontal = 32.dp, vertical = 8.dp)) {
+                    ProfileDetailInfo()
+                }
             }
         }
     }
+
 }
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun ProfileDetailScreenPreview() {
     ProfileDetailScreen(
-        onProfileClick = {}
+        onProfileClick = {},
+        onBack = {}
     )
 }
