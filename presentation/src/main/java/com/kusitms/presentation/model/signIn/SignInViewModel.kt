@@ -42,6 +42,15 @@ class SignInViewModel @Inject constructor(
     private val _selectedImage = MutableStateFlow<String?>(null)
     val selectedImage: StateFlow<String?> = _selectedImage.asStateFlow()
 
+    private val _link = MutableStateFlow<List<String>?>(null)
+    val link: StateFlow<List<String>?> = _link
+
+    private val _linkCount = MutableStateFlow(1)
+    val linkCount: StateFlow<Int> = _linkCount
+
+    private val _introduce = MutableStateFlow("")
+    val introduce: StateFlow<String> = _introduce
+
 
     fun loadLoginMemberProfile() {
         viewModelScope.launch {
@@ -54,6 +63,7 @@ class SignInViewModel @Inject constructor(
                     _name.value = it.name
                     _email.value = it.email
                     _phoneNum.value = it.phoneNumber
+                    validateFields()
                 }
             }
             result.onFailure {
@@ -64,18 +74,37 @@ class SignInViewModel @Inject constructor(
 
     fun updateMajor(newMajor: String) {
         _major.value = newMajor
+        validateFields()
     }
 
     fun updateSelectedPart(part: String) {
         _selectedPart.value = part
+        validateFields()
     }
 
     fun updateFavoriteCategory(selectedCategories: List<String>) {
         _favoriteCategory.value = selectedCategories
+        validateFields()
     }
 
     fun updateSelectedImage(imageString: String) {
         _selectedImage.value = imageString
+    }
+
+    fun updateLink(links: List<String>) {
+        _link.value = links
+    }
+
+    fun linkCountUp() {
+        _linkCount.value += 1
+    }
+
+    fun linkCountDown() {
+        _linkCount.value -= 1
+    }
+
+    fun updateIntroduce(introduce: String) {
+        _introduce.value = introduce
     }
 
 
@@ -84,7 +113,9 @@ class SignInViewModel @Inject constructor(
     }
 
     private fun validateFields() {
-        _isAllFieldsValid.value = !(_selectedPart.value.isNullOrBlank() || _favoriteCategory.value.isNullOrEmpty() || _major.value.isNullOrBlank())
+        _isAllFieldsValid.value = _major.value.isNotBlank() &&
+                _selectedPart.value != null &&
+                _favoriteCategory.value.orEmpty().isNotEmpty()
     }
 
 

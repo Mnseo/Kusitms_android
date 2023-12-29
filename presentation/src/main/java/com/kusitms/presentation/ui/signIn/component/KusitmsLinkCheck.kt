@@ -30,7 +30,7 @@ import com.kusitms.presentation.common.ui.theme.kusimsShapes
 fun KusitmsLinkCheck() {
     Row(
         modifier = Modifier
-            .width(295.dp)
+            .width(290.dp)
             .height(48.dp),
         horizontalArrangement = Arrangement.spacedBy(4.dp, Alignment.Start),
         verticalAlignment = Alignment.CenterVertically
@@ -44,56 +44,21 @@ fun KusitmsLinkCheck() {
 @Composable
 fun LinkTextField() {
     val textState = remember { mutableStateOf(TextFieldValue()) }
-    var isClicked by remember { mutableStateOf(false) }
-//    var borderColor by remember { mutableStateOf(KusitmsColorPalette.current.White) }
-    Row(
-        modifier = Modifier
-            .width(177.dp)
-            .height(48.dp)
-            .border(
-                width = 1.dp,
-                color = KusitmsColorPalette.current.Grey700,
-                shape = RoundedCornerShape(12.dp)
-            )
-            .background(
-                color = KusitmsColorPalette.current.Grey700,
-                shape = RoundedCornerShape(12.dp)
-            ),
-        horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.Start),
-        verticalAlignment = Alignment.CenterVertically
+    val isClicked by remember { mutableStateOf(false) }
+    val borderColor = if(isClicked) KusitmsColorPalette.current.Main500 else KusitmsColorPalette.current.Grey700
+    Box(modifier = Modifier
+        .width(170.dp)
+        .height(48.dp)
+        .border(width = 1.dp, color = borderColor, shape = RoundedCornerShape(12.dp))
+        .background(color = KusitmsColorPalette.current.Grey700, shape = RoundedCornerShape(12.dp)),
     ) {
-        Box(
+        KusitmsInputField(
+            text = R.string.login_id_validation,
+            value = "textState.value",
             modifier = Modifier
-                .width(129.dp)
+                .width(170.dp)
                 .height(48.dp)
-                .background(KusitmsColorPalette.current.Grey700)
-                .padding(start = 12.dp, top = 12.dp, end = 12.dp, bottom = 12.dp),
-        ) {
-            TextField(
-                value = textState.value,
-                onValueChange = {
-                    run { textState.value = it }
-                },
-                colors = TextFieldDefaults.textFieldColors(
-                    containerColor = Color.Transparent,
-                    cursorColor = KusitmsColorPalette.current.Main500,
-                    disabledLabelColor = Color.Transparent,
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent
-                ),
-                placeholder = { Text(stringResource(id = R.string.signin2_placeholder2), style = KusitmsTypo.current.Text_Medium, color = KusitmsColorPalette.current.White ) }
-            )
-        }
-
-        Image(
-            painter = painterResource(id = R.drawable.ic_inputx),
-            contentDescription = null, contentScale = ContentScale.None,
-            modifier = Modifier
-                .width(24.dp)
-                .height(24.dp)
-                .padding(1.dp)
-                .clickable { textState.value = TextFieldValue("") } )
-
+        )
     }
 }
 
@@ -101,5 +66,8 @@ fun LinkTextField() {
 @Preview
 @Composable
 fun exampleRow() {
-    KusitmsLinkCheck()
+    Column(modifier = Modifier
+        .fillMaxSize()){
+        KusitmsLinkCheck()
+    }
 }

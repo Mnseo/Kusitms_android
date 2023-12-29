@@ -140,7 +140,7 @@
     <!-- SignInScreen3-->
     <string name="signin3_text1">가입이 완료되었습니다</string>
     <string name="signin3_text2">큐밀리</string>
-    <string name="signin3_text3">큐시즘과 함께 성장하는 채연님의</string>
+    <string name="signin3_text3">큐시즘과 함께 성장하는</string>
     <string name="signin3_text4">모습을 기대할게요</string>
     <string name="signin3_btn">시작하기</string>
 

@@ -73,7 +73,8 @@ fun SignInMember1(
         TitleColumn(major = major, onMajorChange = onMajorChange, viewModel = viewModel)
 
         ButtonRowSignIn1(text1 = "이전으로", text2 = "다음으로", navController = navController, KusitmsColorPalette.current.Grey600, KusitmsColorPalette.current.Grey600,
-            onNextClick = { navController.navigate(NavRoutes.SignInAdditionalProfile.route)}
+            onNextClick = { navController.navigate(NavRoutes.SignInAdditionalProfile.route)},
+            viewModel = viewModel
         )
     }
 }
@@ -106,7 +107,7 @@ fun TitleColumn(
             isOpenPartBottomSheet
         ){
             isOpenPartBottomSheet = it
-            if(selectedPart != null) {
+            if(!selectedPart.isNullOrBlank()) {
                 isOpenPartBottomSheet = false
             }
         }
@@ -239,8 +240,10 @@ fun ButtonRowSignIn1(
     navController: NavController,
     color1: Color,
     color2: Color,
-    onNextClick: () -> Unit
+    onNextClick: () -> Unit,
+    viewModel: SignInViewModel
 ) {
+    val validateFields by viewModel.isAllFieldsValid.collectAsState()
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -265,8 +268,11 @@ fun ButtonRowSignIn1(
                 .weight(1f)
                 .height(56.dp),
             onClick = {
-                onNextClick()
-                Log.d("Click", "go to SignIn")
+                if(validateFields) {
+                    onNextClick()
+                    Log.d("Click_SignInDefault", "go to SignIn")
+                    Log.d("Click_SignInDefault", validateFields.toString())
+                }
             },
             colors = ButtonDefaults.buttonColors(containerColor = color2),
             shape = RoundedCornerShape(size = 12.dp)
@@ -276,12 +282,4 @@ fun ButtonRowSignIn1(
     }
 }
 
-@Composable
-fun ShowPartSnack(scaffoldState: ScaffoldState) {
-    val coroutineScope = rememberCoroutineScope()
-
-    coroutineScope.launch {
-        scaffoldState.snackbarHostState.currentSnackbarData?.dismiss()
-    }
-}
 

@@ -3,6 +3,7 @@ package com.kusitms.presentation.model.login
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kusitms.domain.usecase.signin.AuthMemberProfileUseCase
 import com.kusitms.domain.usecase.signin.GetLoginMemberProfileUseCase
 import com.kusitms.domain.usecase.signin.LoginMemberUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,7 +19,8 @@ enum class LoginStatus { SUCCESS, ERROR, DEFAULT}
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val loginMemberUseCase: LoginMemberUseCase,
-    private val getLoginMemberUseCase: GetLoginMemberProfileUseCase
+    private val getLoginMemberUseCase: GetLoginMemberProfileUseCase,
+    private val authMemberProfileUseCase: AuthMemberProfileUseCase
 ): ViewModel() {
     private val _email = MutableStateFlow("")
     val email: StateFlow<String> = _email
@@ -41,32 +43,44 @@ class LoginViewModel @Inject constructor(
         _loginStatus.value = loginStatus
     }
 
-    fun validateLogin() {
+    private val _isProfileLoaded = MutableStateFlow(false)
+    val isProfileLoaded: StateFlow<Boolean> = _isProfileLoaded
+
+
+    fun checkProfileDatastore() {
+        viewModelScope.launch {
+            val profile = authMemberProfileUseCase()
+            profile
+                .onSuccess {
+                _isProfileLoaded.value = profile != null }
+                .onFailure {
+                    Timber.e(it)
+                }
+
+        }
+    }
+
+        fun validateLogin() {
         viewModelScope.launch {
             val email = email.value
             val password = password.value
             Log.d("login_status", loginStatus.toString())
             loginMemberUseCase(email,password)
                 .onSuccess {
-                    updateLoginStatus(LoginStatus.SUCCESS)
                     fetchAndSetUserProfile()
+                    updateLoginStatus(LoginStatus.SUCCESS)
                 }.onFailure {
                     Timber.e(it)
                     updateLoginStatus(LoginStatus.ERROR)
                 }
         }
     }
-    private fun fetchAndSetUserProfile() {
+
+    fun fetchAndSetUserProfile() {
         viewModelScope.launch {
             val profileResult = getLoginMemberUseCase.fetchLoginMemberProfile()
             Log.d("fetch", profileResult.toString())
-//            if (profileResult) {
-//                val profile = profileResult.data
-//                signInViewModel.updateName(profile.name)
-//                signInViewModel.updatePhoneNum(profile.phoneNumber)
-//                signInViewModel.updateEmail(profile.email)
-//            } else if (profileResult is Result.Failure) {
-//            }
+            checkProfileDatastore()
         }
     }
 

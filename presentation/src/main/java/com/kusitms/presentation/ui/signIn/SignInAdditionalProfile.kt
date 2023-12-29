@@ -59,9 +59,9 @@ fun SignIn2Member(viewModel: SignInViewModel,navController: NavController) {
         Title2Column()
         PhotoColumn(viewModel)
         KusitmsMarginVerticalSpacer(size = 10)
-        introColumn()
+        introColumn(viewModel)
         KusitmsMarginVerticalSpacer(size = 4)
-        LinkColumn()
+        LinkColumn(viewModel)
         Spacer(modifier = Modifier.weight(1f))
         ButtonRow("이전으로", "가입완료", navController, KusitmsColorPalette.current.Grey600,KusitmsColorPalette.current.Main500,
             onNextClick = { navController.navigate(NavRoutes.SignInProfileComplete.route)})
@@ -142,7 +142,7 @@ fun TextColumn() {
 }
 
 @Composable
-fun introColumn() {
+fun introColumn(viewModel: SignInViewModel) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -154,15 +154,15 @@ fun introColumn() {
 
     ) {
         Text(text = stringResource(id = R.string.signin2_title1), style = KusitmsTypo.current.SubTitle2_Semibold, color = KusitmsColorPalette.current.Grey300 )
-        introTextField()
+        introTextField(viewModel)
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun introTextField() {
+fun introTextField(viewModel: SignInViewModel) {
     val maxLength = 100
-    val textState = remember { mutableStateOf(TextFieldValue()) }
+    val textState by viewModel.introduce.collectAsState()
     Column(
         modifier = Modifier
             .fillMaxWidth(),
@@ -176,9 +176,9 @@ fun introTextField() {
                 .background(KusitmsColorPalette.current.Grey600, shape = RoundedCornerShape(16.dp))
         ) {
             TextField(
-                value = textState.value,
+                value = textState,
                 onValueChange = {
-                    if(it.text.length <= maxLength) { textState.value = it }
+                    if(it.length <= maxLength) { viewModel.updateIntroduce(it) }
                 },
                 shape = RoundedCornerShape(16.dp),
                 colors = TextFieldDefaults.textFieldColors(
@@ -191,13 +191,13 @@ fun introTextField() {
                 placeholder = {Text(stringResource(id = R.string.signin2_placeholder1), style = KusitmsTypo.current.Text_Medium, color = KusitmsColorPalette.current.Grey400 )}
             )
         }
-        Text(text = "${textState.value.text.length}/$maxLength", style = KusitmsTypo.current.Caption1, color = KusitmsColorPalette.current.Grey400)
+        Text(text = "${textState.length}/$maxLength", style = KusitmsTypo.current.Caption1, color = KusitmsColorPalette.current.Grey400)
     }
 }
 
 @Composable
-fun LinkColumn() {
-    val currentLength = remember { mutableStateOf(1) }
+fun LinkColumn(viewModel: SignInViewModel) {
+    val currentLength by viewModel.linkCount.collectAsState()
     val maxLength = 4
     Column(
         modifier = Modifier
@@ -218,18 +218,19 @@ fun LinkColumn() {
                 color = KusitmsColorPalette.current.Grey300,
                 text = stringResource(id = R.string.signin2_title2),
             )
-            LinkRow1(currentLength, maxLength)
+            LinkRow1(viewModel, maxLength)
         }
         Spacer(modifier = Modifier .height(14.dp))
-        repeat(currentLength.value) {
-            LinkRow2()
+        repeat(currentLength) {
+            LinkRow2(viewModel)
         }
     }
 
 }
 
 @Composable
-fun LinkRow1(currentLength: MutableState<Int>, maxLength: Int) {
+fun LinkRow1(viewModel: SignInViewModel, maxLength: Int) {
+    val linkCount by viewModel.linkCount.collectAsState()
     Row(
         modifier = Modifier
             .width(125.dp)
@@ -245,10 +246,10 @@ fun LinkRow1(currentLength: MutableState<Int>, maxLength: Int) {
         Text(
             style= KusitmsTypo.current.Caption1,
             color = KusitmsColorPalette.current.Grey300,
-            text = "추가하기${currentLength.value}/${maxLength}",
+            text = "추가하기${linkCount}/${maxLength}",
             modifier = Modifier.clickable {
-                if (currentLength.value < maxLength) { // 4개 이상 추가되지 않도록 제한
-                    currentLength.value += 1
+                if (linkCount< maxLength) { // 4개 이상 추가되지 않도록 제한
+                    viewModel.linkCountUp()
                 }
             }
         )
@@ -256,7 +257,7 @@ fun LinkRow1(currentLength: MutableState<Int>, maxLength: Int) {
 }
 
 @Composable
-fun LinkRow2() {
+fun LinkRow2(viewModel: SignInViewModel) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -266,7 +267,7 @@ fun LinkRow2() {
     ) {
         KusitmsLinkCheck()
         IconButton(
-            onClick = {  },
+            onClick = { viewModel.linkCountDown() },
         ) {
             Icon(
                 painterResource(id = R.drawable.ic_trashcan),

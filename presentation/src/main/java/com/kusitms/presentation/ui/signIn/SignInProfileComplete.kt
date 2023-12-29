@@ -9,6 +9,8 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -23,14 +25,16 @@ import androidx.navigation.compose.rememberNavController
 import coil.ImageLoader
 import coil.compose.rememberAsyncImagePainter
 import coil.decode.SvgDecoder
+import com.kusitms.domain.usecase.signin.AuthMemberProfileUseCase
 import com.kusitms.presentation.R
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
+import com.kusitms.presentation.model.signIn.SignInViewModel
 import com.kusitms.presentation.navigation.NavRoutes
 import com.kusitms.presentation.navigation.NavRoutes.LoginNonMember.route
 
 @Composable
-fun SignInProfileComplete(navController: NavHostController) {
+fun SignInProfileComplete(viewModel: SignInViewModel, navController: NavHostController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -39,7 +43,7 @@ fun SignInProfileComplete(navController: NavHostController) {
         verticalArrangement = Arrangement.Top
     ) {
         Spacer(modifier = Modifier.weight(1f))
-        SignIn3Card()
+        SignIn3Card(viewModel)
         Spacer(modifier = Modifier.weight(1f))
         btn(color = KusitmsColorPalette.current.Main500, text = stringResource(id = R.string.signin3_btn), navController = navController)
         Spacer(modifier = Modifier.height(20.dp))
@@ -47,7 +51,8 @@ fun SignInProfileComplete(navController: NavHostController) {
 }
 
 @Composable
-fun SignIn3Card() {
+fun SignIn3Card(viewModel: SignInViewModel) {
+    val name by viewModel.name.collectAsState()
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -56,15 +61,16 @@ fun SignIn3Card() {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        middleCard()
+        middleCard(viewModel)
         Spacer(modifier = Modifier.height(32.dp))
-        Text(text = stringResource(id = R.string.signin3_text3), style= KusitmsTypo.current.Body1, color = KusitmsColorPalette.current.Grey200)
+        Text(text = stringResource(id = R.string.signin3_text3) + " ${name}님의", style= KusitmsTypo.current.Body1, color = KusitmsColorPalette.current.Grey200)
         Text(text = stringResource(id = R.string.signin3_text4), style = KusitmsTypo.current.Body1, color = KusitmsColorPalette.current.Grey200)
     }
 }
 
 @Composable
-fun middleCard() {
+fun middleCard(viewModel: SignInViewModel) {
+    val name by viewModel.name.collectAsState()
     Box(
         modifier = Modifier
             .shadow(
@@ -85,7 +91,7 @@ fun middleCard() {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             rocket()
-            nameBox(name = "이채연")
+            nameBox(name = name)
         }
     }
 }
@@ -161,9 +167,3 @@ fun btn(color: Color, text: String, navController: NavHostController) {
     }
 }
 
-
-@Preview
-@Composable
-fun example() {
-    SignInProfileComplete(navController = rememberNavController())
-}
