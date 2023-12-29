@@ -187,6 +187,10 @@
     <string name="profile_detail_phone">번호</string>
     <string name="profile_detail_link">링크</string>
 
+    <!-- ProfileSearch -->
+    <string name="profile_search_hint">"이름, 학교, 학과, 관심 분야"</string>
+
+
 
 
 </resources>
