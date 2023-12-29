@@ -15,4 +15,8 @@ class ProfileSearchViewModel @Inject constructor() : ViewModel() {
     fun changeSearchText(searchText: String) {
         _uiState.value = _uiState.value.copy(searchText = searchText)
     }
+
+    fun clearSearchText() {
+        changeSearchText("")
+    }
 }
