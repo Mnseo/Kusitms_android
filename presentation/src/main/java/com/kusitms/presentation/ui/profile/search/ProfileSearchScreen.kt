@@ -3,6 +3,7 @@ package com.kusitms.presentation.ui.profile.search
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -12,14 +13,17 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
+import com.kusitms.presentation.common.ui.theme.KusitmsTypo
 import com.kusitms.presentation.model.profile.search.ProfileSearchViewModel
 import com.kusitms.presentation.ui.ImageVector.LeftArrow
 
@@ -63,8 +67,21 @@ fun ProfileSearchScreen(
                 }
             )
         }
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = "궁금한 학회원 프로필을\n" +
+                        "검색해보세요",
+                textAlign = TextAlign.Center,
+                style = KusitmsTypo.current.Caption1,
+                color = KusitmsColorPalette.current.Grey400
+            )
+        }
     }
 }
+
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
