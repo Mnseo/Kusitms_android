@@ -7,10 +7,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.material3.Icon
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -26,25 +23,34 @@ import com.kusitms.presentation.ui.signIn.LinkCheckBox
 
 
 @Composable
-fun LinkItem(category: LinkCategory, onClick: (LinkCategory) ->Unit) {
-    val isSelected by remember { mutableStateOf(false)}
+fun LinkItem(category: LinkCategory, onClick: (LinkCategory) -> Unit) {
+    var isSelected by remember { mutableStateOf(false) }
     val background = if (isSelected) KusitmsColorPalette.current.Grey500 else Color.Transparent
-    Row(modifier = Modifier
-        .fillMaxWidth()
-        .height(56.dp)
-        .background(color = background, shape = RoundedCornerShape(size = 12.dp))
-        .clickable { onClick(category)}
-        .padding(horizontal = 12.dp),
-    horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.Start),
-    verticalAlignment = Alignment.CenterVertically,
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(56.dp)
+            .background(color = background, shape = RoundedCornerShape(size = 12.dp))
+            .clickable {
+                isSelected = !isSelected
+                onClick(category)
+            }
+            .padding(horizontal = 12.dp),
+        horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.Start),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
-        category.icon?.let { iconRes->
-            Icon(painter= painterResource(id = iconRes), contentDescription = null, tint = Color.Unspecified)
+        category.linkType.iconRes?.let { painterResource(id = it) }?.let {
+            Icon(
+                painter = it,
+                contentDescription = category.linkType.displayName,
+                tint = Color.Unspecified
+            )
         }
-        Text(text = category.name, style = KusitmsTypo.current.Text_Medium, color = KusitmsColorPalette.current.Grey100)
-
-
+        Text(
+            text = category.linkType.displayName,
+            style = KusitmsTypo.current.Text_Medium,
+            color = KusitmsColorPalette.current.Grey100
+        )
     }
 }
-
-

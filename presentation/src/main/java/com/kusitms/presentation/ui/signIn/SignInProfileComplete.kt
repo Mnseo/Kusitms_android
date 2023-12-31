@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -90,29 +91,15 @@ fun middleCard(viewModel: SignInViewModel) {
             verticalArrangement = Arrangement.spacedBy(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            rocket()
+            Image(
+                painter = painterResource(id = R.drawable.screen3_rocket),
+                contentDescription = null
+            )
             nameBox(name = name)
         }
     }
 }
 
-@Composable
-fun rocket() {
-    val imageLoader = ImageLoader.Builder(LocalContext.current)
-        .components { 
-            add(SvgDecoder.Factory())
-        }
-        .build()
-    
-    Image(
-        painter = rememberAsyncImagePainter(R.drawable.screen3_rocket, imageLoader),
-        contentDescription = null,
-        modifier = Modifier
-            .width(200.dp)
-            .height(200.dp)
-
-    )
-}
 
 @Composable
 fun nameBox(name: String) {

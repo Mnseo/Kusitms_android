@@ -1,18 +1,24 @@
 package com.kusitms.presentation.model.signIn
 
+import androidx.annotation.DrawableRes
 import com.kusitms.presentation.R
 
 data class LinkCategory(
-    val id: Int,
-    val name: String,
-    val icon: Int? = null
+    val linkType: LinkType,
 )
 
-val linkCategories = listOf(
-    LinkCategory(1, "깃허브", R.drawable.ic_category_design),
-    LinkCategory(2, "노션", R.drawable.ic_category_design),
-    LinkCategory(3, "비핸스", R.drawable.ic_category_design),
-    LinkCategory(4, "티스토리", R.drawable.ic_category_design),
-    LinkCategory(5, "벨로그", R.drawable.ic_category_design)
+enum class LinkType(val displayName: String, @DrawableRes val iconRes: Int?) {
+    LINK("Link", R.drawable.ic_github),
+    BRUNCH("Brunch", R.drawable.ic_brunch),
+    TISTORY("Tistory", R.drawable.ic_tistory),
+    NOTION("Notion", R.drawable.ic_notion),
+    BEHANCE("Behance", R.drawable.ic_behance),
+    LINKEDIN("Linkedin", R.drawable.ic_linkedin),
+    GITHUB("Github", R.drawable.ic_github)
+}
 
-)
+val linkCategories = LinkType.values().map { linkType ->
+    LinkCategory(linkType)
+}
+
+

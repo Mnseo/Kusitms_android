@@ -25,9 +25,11 @@ import com.kusitms.presentation.common.ui.KusitmsMarginHorizontalSpacer
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
 import com.kusitms.presentation.common.ui.theme.kusimsShapes
+import com.kusitms.presentation.model.signIn.SignInViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @Composable
-fun KusitmsLinkCheck() {
+fun KusitmsLinkCheck(viewModel: SignInViewModel, onClick: () -> Unit) {
     Row(
         modifier = Modifier
             .width(290.dp)
@@ -35,15 +37,15 @@ fun KusitmsLinkCheck() {
         horizontalArrangement = Arrangement.spacedBy(4.dp, Alignment.Start),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        LinkCheckBox()
-        LinkTextField()
+        LinkCheckBox(viewModel= viewModel, onClick = onClick)
+        LinkTextField(viewModel)
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalCoroutinesApi::class)
 @Composable
-fun LinkTextField() {
-    val textState = remember { mutableStateOf(TextFieldValue()) }
+fun LinkTextField(viewModel: SignInViewModel) {
+    val textState = viewModel.link.collectAsState()
     val isClicked by remember { mutableStateOf(false) }
     val borderColor = if(isClicked) KusitmsColorPalette.current.Main500 else KusitmsColorPalette.current.Grey700
     Box(modifier = Modifier
@@ -54,20 +56,11 @@ fun LinkTextField() {
     ) {
         KusitmsInputField(
             text = R.string.login_id_validation,
-            value = "textState.value",
+            value = textState.value,
+            onValueChange = { viewModel.updateLink(it) },
             modifier = Modifier
                 .width(170.dp)
                 .height(48.dp)
         )
-    }
-}
-
-
-@Preview
-@Composable
-fun exampleRow() {
-    Column(modifier = Modifier
-        .fillMaxSize()){
-        KusitmsLinkCheck()
     }
 }

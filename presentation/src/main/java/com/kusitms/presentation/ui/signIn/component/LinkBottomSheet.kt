@@ -19,6 +19,7 @@ import com.kusitms.presentation.R
 import com.kusitms.presentation.common.ui.KusitmsMarginVerticalSpacer
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
+import com.kusitms.presentation.model.signIn.SignInViewModel
 import com.kusitms.presentation.model.signIn.linkCategories
 import com.kusitms.presentation.ui.ImageVector.xIcon
 
@@ -26,6 +27,7 @@ import com.kusitms.presentation.ui.ImageVector.xIcon
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LinkBottomSheet(
+    viewModel: SignInViewModel,
     openBottomSheet : Boolean = false,
     onChangeOpenBottomSheet: (Boolean) -> Unit = {}
 ) {
@@ -53,7 +55,7 @@ fun LinkBottomSheet(
             ) {
                 LinkBottomSheetTitle(onClick = {onChangeOpenBottomSheet(false)})
                 KusitmsMarginVerticalSpacer(size = 20)
-                LinkSelectColumn()
+                LinkSelectColumn(viewModel)
             }
 
         }
@@ -62,15 +64,13 @@ fun LinkBottomSheet(
 }
 
 @Composable
-fun LinkSelectColumn() {
-    val linkCategories = linkCategories
+fun LinkSelectColumn(viewModel: SignInViewModel) {
     LazyColumn(modifier = Modifier.padding(horizontal = 24.dp)) {
         items(linkCategories) { category ->
             LinkItem(
                 category = category,
-                onClick = { selectedLink ->
-                    //var name = selectedLink.name.toString()
-                    //viewModel.updateLinkCategory(name)
+                onClick = { selectedCategory ->
+                    viewModel.updateLinkType(selectedCategory.linkType)
                 }
             )
         }
@@ -87,7 +87,7 @@ fun LinkBottomSheetTitle(onClick: ()-> Unit) {
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(text = stringResource(id = R.string.part_snack_title), style = KusitmsTypo.current.SubTitle2_Semibold, color = KusitmsColorPalette.current.Grey300)
+        Text(text = stringResource(id = R.string.signin2_title2), style = KusitmsTypo.current.SubTitle2_Semibold, color = KusitmsColorPalette.current.Grey300)
         xIcon.drawxIcon(modifier = Modifier.clickable { onClick() })
     }
 }

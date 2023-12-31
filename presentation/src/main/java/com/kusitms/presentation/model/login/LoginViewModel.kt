@@ -47,12 +47,13 @@ class LoginViewModel @Inject constructor(
     val isProfileLoaded: StateFlow<Boolean> = _isProfileLoaded
 
 
-    fun checkProfileDatastore() {
+    private fun checkProfileDatastore() {
         viewModelScope.launch {
             val profile = authMemberProfileUseCase()
             profile
                 .onSuccess {
-                _isProfileLoaded.value = profile != null }
+                _isProfileLoaded.value = true
+                }
                 .onFailure {
                     Timber.e(it)
                 }
@@ -64,11 +65,11 @@ class LoginViewModel @Inject constructor(
         viewModelScope.launch {
             val email = email.value
             val password = password.value
-            Log.d("login_status", loginStatus.toString())
+            Log.d("login_status", _loginStatus.value.toString())
             loginMemberUseCase(email,password)
                 .onSuccess {
-                    fetchAndSetUserProfile()
                     updateLoginStatus(LoginStatus.SUCCESS)
+                    fetchAndSetUserProfile()
                 }.onFailure {
                     Timber.e(it)
                     updateLoginStatus(LoginStatus.ERROR)

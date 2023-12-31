@@ -18,14 +18,15 @@ import androidx.compose.ui.unit.dp
 import com.kusitms.presentation.R
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
+import com.kusitms.presentation.model.signIn.SignInViewModel
 import com.kusitms.presentation.ui.signIn.component.LinkBottomSheet
 
 @Composable
-fun LinkCheckBox() {
+fun LinkCheckBox(viewModel: SignInViewModel, onClick: () -> Unit) {
     var isOpenLinkBottomSheet by remember { mutableStateOf(false)}
 
     if (isOpenLinkBottomSheet) {
-        LinkBottomSheet() {
+        LinkBottomSheet(viewModel) {
             isOpenLinkBottomSheet = it
         }
     }
@@ -45,19 +46,13 @@ fun LinkCheckBox() {
         Text(text = stringResource(id = R.string.signin2_checkbox), style = KusitmsTypo.current.Text_Medium, color = KusitmsColorPalette.current.Grey400)
         IconButton(
             modifier= Modifier.size(24.dp),
-            onClick = { isOpenLinkBottomSheet = true }) {
+            onClick = onClick) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_under_errow),
                 contentDescription = null,
                 tint = KusitmsColorPalette.current.Grey400
             )
-        }
+        }}
 
     }
-}
 
-@Preview
-@Composable
-fun openBottom() {
-    LinkCheckBox()
-}

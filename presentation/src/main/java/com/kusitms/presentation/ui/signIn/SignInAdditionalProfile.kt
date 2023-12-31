@@ -1,8 +1,6 @@
 package com.kusitms.presentation.ui.signIn
 
-import android.content.Context
 import android.net.Uri
-import android.util.Base64
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
@@ -19,12 +17,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.kusitms.presentation.R
 import com.kusitms.presentation.common.theme.KusitmsScaffoldNonScroll
 import com.kusitms.presentation.common.ui.ButtonRow
@@ -32,13 +27,16 @@ import com.kusitms.presentation.common.ui.KusitmsMarginVerticalSpacer
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
 import com.kusitms.presentation.model.signIn.SignInViewModel
+
 import com.kusitms.presentation.navigation.NavRoutes
 import com.kusitms.presentation.ui.ImageVector.*
-import java.io.ByteArrayOutputStream
+import com.kusitms.presentation.ui.signIn.component.LinkBottomSheet
+
 
 
 @Composable
-fun SignInAdditionalProfile(viewModel: SignInViewModel,navController: NavHostController) {
+fun SignInAdditionalProfile(viewModel: SignInViewModel, navController: NavHostController) {
+
     KusitmsScaffoldNonScroll(topbarText = "프로필 설정", navController = navController) {
         SignIn2Member(viewModel = viewModel, navController = navController)
     }
@@ -48,6 +46,7 @@ fun SignInAdditionalProfile(viewModel: SignInViewModel,navController: NavHostCon
 @Composable
 fun SignIn2Member(viewModel: SignInViewModel,navController: NavController) {
     val scrollState = rememberScrollState()
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -72,11 +71,11 @@ fun SignIn2Member(viewModel: SignInViewModel,navController: NavController) {
 @Composable
 fun PhotoColumn(viewModel: SignInViewModel) {
     val context = LocalContext.current
+    val imageUri by viewModel.selectedImage.collectAsState() // This should be a Uri? in your ViewModel
+
     val imagePickerLauncher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
-        // 이미지 처리 및 ViewModel 업데이트 로직
         uri?.let {
-            val imageString = convertUriToString(uri, context)
-            viewModel.updateSelectedImage(imageString)
+            viewModel.updateSelectedImage(uri) // Update the ViewModel with the Uri
         }
     }
 
@@ -95,7 +94,7 @@ fun PhotoColumn(viewModel: SignInViewModel) {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            ImagePhoto()
+            ImagePhoto(imageUri)
         }
     }
 }
@@ -199,6 +198,17 @@ fun introTextField(viewModel: SignInViewModel) {
 fun LinkColumn(viewModel: SignInViewModel) {
     val currentLength by viewModel.linkCount.collectAsState()
     val maxLength = 4
+    var isOpenLinkBottomSheet by remember { mutableStateOf(false)}
+
+    if(isOpenLinkBottomSheet) {
+        LinkBottomSheet(
+            viewModel, isOpenLinkBottomSheet
+        ) {
+            isOpenLinkBottomSheet = it
+        }
+    }
+
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -222,7 +232,7 @@ fun LinkColumn(viewModel: SignInViewModel) {
         }
         Spacer(modifier = Modifier .height(14.dp))
         repeat(currentLength) {
-            LinkRow2(viewModel)
+            LinkRow2(onClick =  {isOpenLinkBottomSheet = true}, viewModel = viewModel)
         }
     }
 
@@ -257,7 +267,7 @@ fun LinkRow1(viewModel: SignInViewModel, maxLength: Int) {
 }
 
 @Composable
-fun LinkRow2(viewModel: SignInViewModel) {
+fun LinkRow2(onClick: ()-> Unit, viewModel: SignInViewModel) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -265,7 +275,7 @@ fun LinkRow2(viewModel: SignInViewModel) {
         horizontalArrangement = Arrangement.spacedBy(0.dp, Alignment.Start),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        KusitmsLinkCheck()
+        KusitmsLinkCheck(viewModel, onClick)
         IconButton(
             onClick = { viewModel.linkCountDown() },
         ) {
@@ -280,17 +290,3 @@ fun LinkRow2(viewModel: SignInViewModel) {
     }
 }
 
-fun convertUriToString(uri: Uri, context: Context): String {
-    val inputStream = context.contentResolver.openInputStream(uri)
-    val byteArrayOutputStream = ByteArrayOutputStream()
-
-    val buffer = ByteArray(1024)
-    var bytesRead: Int
-    while (inputStream?.read(buffer).also { bytesRead = it ?: -1 } != -1) {
-        byteArrayOutputStream.write(buffer, 0, bytesRead)
-    }
-
-    val imageBytes = byteArrayOutputStream.toByteArray()
-
-    return Base64.encodeToString(imageBytes, Base64.DEFAULT)
-}

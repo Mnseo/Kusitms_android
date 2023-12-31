@@ -1,12 +1,12 @@
 package com.kusitms.presentation.model.signIn
 
+import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kusitms.domain.model.login.LoginMemberProfile
 import com.kusitms.domain.usecase.signin.AuthMemberProfileUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -39,11 +39,15 @@ class SignInViewModel @Inject constructor(
     private val _email = MutableStateFlow("")
     val email: StateFlow<String> = _email
 
-    private val _selectedImage = MutableStateFlow<String?>(null)
-    val selectedImage: StateFlow<String?> = _selectedImage.asStateFlow()
+    private val _selectedImage = MutableStateFlow<Uri?>(null)
+    val selectedImage: StateFlow<Uri?> = _selectedImage.asStateFlow()
 
-    private val _link = MutableStateFlow<List<String>?>(null)
-    val link: StateFlow<List<String>?> = _link
+    private val _link = MutableStateFlow<String>("")
+    val link: StateFlow<String> = _link
+
+    private val _selectedLinkType = MutableStateFlow<LinkType?>(null)
+    val selectedLinkType: StateFlow<LinkType?> = _selectedLinkType.asStateFlow()
+
 
     private val _linkCount = MutableStateFlow(1)
     val linkCount: StateFlow<Int> = _linkCount
@@ -87,11 +91,15 @@ class SignInViewModel @Inject constructor(
         validateFields()
     }
 
-    fun updateSelectedImage(imageString: String) {
-        _selectedImage.value = imageString
+    fun updateSelectedImage(uri: Uri?) {
+        _selectedImage.value = uri
     }
 
-    fun updateLink(links: List<String>) {
+    fun updateLinkType(linkType: LinkType) {
+        _selectedLinkType.value = linkType
+    }
+
+    fun updateLink(links: String) {
         _link.value = links
     }
 
@@ -107,16 +115,9 @@ class SignInViewModel @Inject constructor(
         _introduce.value = introduce
     }
 
-
-    fun onButtonClick(): Boolean {
-        return _isAllFieldsValid.value == true
-    }
-
     private fun validateFields() {
         _isAllFieldsValid.value = _major.value.isNotBlank() &&
                 _selectedPart.value != null &&
                 _favoriteCategory.value.orEmpty().isNotEmpty()
     }
-
-
 }
