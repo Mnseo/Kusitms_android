@@ -22,6 +22,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
 import com.kusitms.presentation.model.profile.search.ProfileSearchViewModel
@@ -87,6 +89,6 @@ fun ProfileSearchScreen(
 @Composable
 fun ProfileSearchScreenPreview() {
     ProfileSearchScreen(
-        onBackClick = {}
+        onBackClick = {},
     )
 }
