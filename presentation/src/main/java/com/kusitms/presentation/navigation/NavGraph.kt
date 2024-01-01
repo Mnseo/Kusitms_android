@@ -210,7 +210,7 @@ fun MainNavigation() {
                 ProfileSearchScreen(
                     onBackClick = {
                         navController.navigateUp()
-                    }
+                    },
                 )
             }
 
