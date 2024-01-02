@@ -69,6 +69,12 @@ fun ProfileSearchScreen(
                 }
             )
         }
+        if (uiState.value.hasData) {
+            ProfileSearchExist()
+        } else {
+            ProfileSearchNone()
+        }
+
         Box(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
