@@ -4,6 +4,7 @@ import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kusitms.domain.model.Link
 import com.kusitms.domain.model.login.LoginMemberProfile
 import com.kusitms.domain.usecase.signin.AuthMemberProfileUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -45,9 +46,11 @@ class SignInViewModel @Inject constructor(
     private val _link = MutableStateFlow<String>("")
     val link: StateFlow<String> = _link
 
-    private val _selectedLinkType = MutableStateFlow<LinkType?>(null)
-    val selectedLinkType: StateFlow<LinkType?> = _selectedLinkType.asStateFlow()
+    private val _linkType = MutableStateFlow<LinkType?>(null)
+    val linkType: StateFlow<LinkType?> = _linkType.asStateFlow()
 
+    private val _linkItems = MutableStateFlow<List<LinkItem>>(listOf(LinkItem(LinkType.LINK, "")))
+    val linkItems: StateFlow<List<LinkItem>> = _linkItems.asStateFlow()
 
     private val _linkCount = MutableStateFlow(1)
     val linkCount: StateFlow<Int> = _linkCount
@@ -95,20 +98,35 @@ class SignInViewModel @Inject constructor(
         _selectedImage.value = uri
     }
 
-    fun updateLinkType(linkType: LinkType) {
-        _selectedLinkType.value = linkType
+    fun updateLinkTypeAt(index: Int, linkType: LinkType) {
+        val updatedItems = _linkItems.value.toMutableList()
+        if (index in updatedItems.indices) {
+            val currentItem = updatedItems[index]
+            updatedItems[index] = currentItem.copy(linkType = linkType)
+            _linkItems.value = updatedItems
+        }
     }
 
     fun updateLink(links: String) {
         _link.value = links
     }
-
-    fun linkCountUp() {
-        _linkCount.value += 1
+    fun addLinkItem() {
+        val newLinkItem = LinkItem(LinkType.LINK, "") //기본 설정값
+        _linkItems.value = _linkItems.value + newLinkItem
     }
 
-    fun linkCountDown() {
-        _linkCount.value -= 1
+    fun updateLinkItem(index: Int, linkType: LinkType, url: String) {
+        val updatedItems = _linkItems.value.toMutableList()
+        if (index in updatedItems.indices) {
+            updatedItems[index] = LinkItem(linkType, url)
+            _linkItems.value = updatedItems
+        }
+    }
+
+    fun removeLinkItem() {
+        if (_linkItems.value.isNotEmpty()) {
+            _linkItems.value = _linkItems.value.dropLast(1)
+        }
     }
 
     fun updateIntroduce(introduce: String) {

@@ -28,9 +28,8 @@ fun ImagePhoto(imageUri: Uri?) {
             painter = painter,
             contentDescription = "Selected Image",
             modifier = Modifier
-                .padding(0.83333.dp)
-                .width(44.dp)
-                .height(44.dp)
+                .width(96.dp)
+                .height(96.dp)
         )
     } else {
         Image(

@@ -44,7 +44,8 @@ fun LinkItem(category: LinkCategory, onClick: (LinkCategory) -> Unit) {
             Icon(
                 painter = it,
                 contentDescription = category.linkType.displayName,
-                tint = Color.Unspecified
+                tint = Color.Unspecified,
+                modifier = Modifier.size(20.dp)
             )
         }
         Text(

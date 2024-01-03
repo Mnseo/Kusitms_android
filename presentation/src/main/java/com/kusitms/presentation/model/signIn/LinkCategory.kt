@@ -7,6 +7,11 @@ data class LinkCategory(
     val linkType: LinkType,
 )
 
+data class LinkItem(
+    val linkType: LinkType,
+    val linkUrl: String
+)
+
 enum class LinkType(val displayName: String, @DrawableRes val iconRes: Int?) {
     LINK("Link", R.drawable.ic_github),
     BRUNCH("Brunch", R.drawable.ic_brunch),

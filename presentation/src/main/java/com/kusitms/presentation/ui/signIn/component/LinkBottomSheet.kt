@@ -11,9 +11,7 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kusitms.presentation.R
 import com.kusitms.presentation.common.ui.KusitmsMarginVerticalSpacer
@@ -28,8 +26,9 @@ import com.kusitms.presentation.ui.ImageVector.xIcon
 @Composable
 fun LinkBottomSheet(
     viewModel: SignInViewModel,
-    openBottomSheet : Boolean = false,
-    onChangeOpenBottomSheet: (Boolean) -> Unit = {}
+    openBottomSheet: Boolean = false,
+    linkItemIndex: Int,
+    onChangeOpenBottomSheet: (Boolean, Any?) -> Unit = { b: Boolean, any: Any? -> }
 ) {
     val bottomSheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true
@@ -39,7 +38,7 @@ fun LinkBottomSheet(
         ModalBottomSheet(
             containerColor = KusitmsColorPalette.current.Grey600,
             dragHandle = {Box(Modifier.height(0.dp))},
-            onDismissRequest = { onChangeOpenBottomSheet(false) },
+            onDismissRequest = { onChangeOpenBottomSheet(false, null) },
             sheetState = bottomSheetState,
             modifier = Modifier
                 .fillMaxWidth()
@@ -53,9 +52,9 @@ fun LinkBottomSheet(
                 horizontalAlignment = Alignment.Start,
                 verticalArrangement = Arrangement.Top
             ) {
-                LinkBottomSheetTitle(onClick = {onChangeOpenBottomSheet(false)})
+                LinkBottomSheetTitle(onClick = {onChangeOpenBottomSheet(false, null)})
                 KusitmsMarginVerticalSpacer(size = 20)
-                LinkSelectColumn(viewModel)
+                LinkSelectColumn(viewModel, linkItemIndex)
             }
 
         }
@@ -64,13 +63,13 @@ fun LinkBottomSheet(
 }
 
 @Composable
-fun LinkSelectColumn(viewModel: SignInViewModel) {
-    LazyColumn(modifier = Modifier.padding(horizontal = 24.dp)) {
+fun LinkSelectColumn(viewModel: SignInViewModel, linkItemIndex: Int) {
+    LazyColumn(modifier = Modifier.padding(horizontal = 12.dp)) {
         items(linkCategories) { category ->
             LinkItem(
                 category = category,
-                onClick = { selectedCategory ->
-                    viewModel.updateLinkType(selectedCategory.linkType)
+                onClick = {
+                    viewModel.updateLinkTypeAt(linkItemIndex, category.linkType)
                 }
             )
         }
@@ -87,7 +86,7 @@ fun LinkBottomSheetTitle(onClick: ()-> Unit) {
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(text = stringResource(id = R.string.signin2_title2), style = KusitmsTypo.current.SubTitle2_Semibold, color = KusitmsColorPalette.current.Grey300)
+        Text(text = stringResource(id = R.string.signin2_title3), style = KusitmsTypo.current.SubTitle2_Semibold, color = KusitmsColorPalette.current.Grey300)
         xIcon.drawxIcon(modifier = Modifier.clickable { onClick() })
     }
 }

@@ -3,20 +3,21 @@ package com.kusitms.presentation.ui.signIn
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
@@ -26,6 +27,7 @@ import com.kusitms.presentation.common.ui.ButtonRow
 import com.kusitms.presentation.common.ui.KusitmsMarginVerticalSpacer
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
+import com.kusitms.presentation.model.signIn.LinkType
 import com.kusitms.presentation.model.signIn.SignInViewModel
 
 import com.kusitms.presentation.navigation.NavRoutes
@@ -162,6 +164,8 @@ fun introColumn(viewModel: SignInViewModel) {
 fun introTextField(viewModel: SignInViewModel) {
     val maxLength = 100
     val textState by viewModel.introduce.collectAsState()
+    val interactionSource = remember { MutableInteractionSource() }
+    var isTextFieldFocused by remember { mutableStateOf(false) }
     Column(
         modifier = Modifier
             .fillMaxWidth(),
@@ -180,12 +184,15 @@ fun introTextField(viewModel: SignInViewModel) {
                     if(it.length <= maxLength) { viewModel.updateIntroduce(it) }
                 },
                 shape = RoundedCornerShape(16.dp),
-                colors = TextFieldDefaults.textFieldColors(
-                    containerColor = KusitmsColorPalette.current.Grey600,
-                    cursorColor = KusitmsColorPalette.current.Grey600,
-                    disabledLabelColor = KusitmsColorPalette.current.Grey600,
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = KusitmsColorPalette.current.Grey600,
+                    unfocusedContainerColor = KusitmsColorPalette.current.Grey600,
+                    disabledContainerColor = KusitmsColorPalette.current.Grey600,
+                    cursorColor = KusitmsColorPalette.current.Grey400,
                     focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent
+                    unfocusedIndicatorColor = Color.Transparent,
+                    focusedTextColor = KusitmsColorPalette.current.White,
+                    disabledLabelColor = KusitmsColorPalette.current.Grey600,
                 ),
                 placeholder = {Text(stringResource(id = R.string.signin2_placeholder1), style = KusitmsTypo.current.Text_Medium, color = KusitmsColorPalette.current.Grey400 )}
             )
@@ -196,18 +203,19 @@ fun introTextField(viewModel: SignInViewModel) {
 
 @Composable
 fun LinkColumn(viewModel: SignInViewModel) {
-    val currentLength by viewModel.linkCount.collectAsState()
+    val linkItems by viewModel.linkItems.collectAsState()
     val maxLength = 4
-    var isOpenLinkBottomSheet by remember { mutableStateOf(false)}
+    var isOpenLinkBottomSheet by remember { mutableStateOf(false) }
+    var selectedLinkItemIndex by remember { mutableStateOf(-1) } // 선택된 링크 아이템의 인덱스
 
-    if(isOpenLinkBottomSheet) {
-        LinkBottomSheet(
-            viewModel, isOpenLinkBottomSheet
-        ) {
-            isOpenLinkBottomSheet = it
+    if (isOpenLinkBottomSheet) {
+        LinkBottomSheet(viewModel = viewModel, isOpenLinkBottomSheet, selectedLinkItemIndex) { isOpen, selectedData ->
+            isOpenLinkBottomSheet = isOpen
+            if (!isOpen && selectedData is LinkType) {
+                viewModel.updateLinkItem(selectedLinkItemIndex, selectedData, linkItems[selectedLinkItemIndex].linkUrl)
+            }
         }
     }
-
 
     Column(
         modifier = Modifier
@@ -231,16 +239,17 @@ fun LinkColumn(viewModel: SignInViewModel) {
             LinkRow1(viewModel, maxLength)
         }
         Spacer(modifier = Modifier .height(14.dp))
-        repeat(currentLength) {
-            LinkRow2(onClick =  {isOpenLinkBottomSheet = true}, viewModel = viewModel)
-        }
+        LinkItemsDisplay(viewModel, onLinkTypeChange = { index ->
+            selectedLinkItemIndex = index
+            isOpenLinkBottomSheet = true
+        })
     }
 
 }
 
 @Composable
 fun LinkRow1(viewModel: SignInViewModel, maxLength: Int) {
-    val linkCount by viewModel.linkCount.collectAsState()
+    val linkItems by viewModel.linkItems.collectAsState()
     Row(
         modifier = Modifier
             .width(125.dp)
@@ -256,10 +265,10 @@ fun LinkRow1(viewModel: SignInViewModel, maxLength: Int) {
         Text(
             style= KusitmsTypo.current.Caption1,
             color = KusitmsColorPalette.current.Grey300,
-            text = "추가하기${linkCount}/${maxLength}",
+            text = "추가하기${linkItems.size}/${maxLength}",
             modifier = Modifier.clickable {
-                if (linkCount< maxLength) { // 4개 이상 추가되지 않도록 제한
-                    viewModel.linkCountUp()
+                if (linkItems.size < maxLength) { // 4개 이상 추가되지 않도록 제한
+                    viewModel.addLinkItem()
                 }
             }
         )
@@ -267,7 +276,23 @@ fun LinkRow1(viewModel: SignInViewModel, maxLength: Int) {
 }
 
 @Composable
-fun LinkRow2(onClick: ()-> Unit, viewModel: SignInViewModel) {
+fun LinkItemsDisplay(viewModel: SignInViewModel, onLinkTypeChange: (Int) -> Unit) {
+    val linkItems by viewModel.linkItems.collectAsState()
+
+    linkItems.forEachIndexed { index, _ ->
+        LinkRow2(viewModel, index, onClick = { onLinkTypeChange(index) })
+        KusitmsMarginVerticalSpacer(size = 8)
+    }
+}
+
+@Composable
+fun LinkRow2(
+    viewModel: SignInViewModel,
+    linkItemIndex: Int, // 현재 링크 아이템의 인덱스
+    onClick: () -> Unit // 링크 타입 변경 시 호출될 함수
+) {
+    val linkItems by viewModel.linkItems.collectAsState()
+    val currentLinkItem = linkItems.getOrNull(linkItemIndex) ?: return
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -275,9 +300,14 @@ fun LinkRow2(onClick: ()-> Unit, viewModel: SignInViewModel) {
         horizontalArrangement = Arrangement.spacedBy(0.dp, Alignment.Start),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        KusitmsLinkCheck(viewModel, onClick)
+        KusitmsLinkCheck(
+            viewModel,
+            linkItemIndex,
+            currentLinkItem.linkType,
+            onClick
+        )
         IconButton(
-            onClick = { viewModel.linkCountDown() },
+            onClick = { viewModel.removeLinkItem() },
         ) {
             Icon(
                 painterResource(id = R.drawable.ic_trashcan),
