@@ -13,6 +13,8 @@ import com.kusitms.data.remote.entity.response.notice.CommentPayload
 import com.kusitms.data.remote.entity.response.notice.CurriculumPayload
 import com.kusitms.data.remote.entity.response.notice.FindPwCodeVerifyResponse
 import com.kusitms.data.remote.entity.response.notice.NoticePayload
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -23,6 +25,12 @@ interface KusitmsApi {
         @Query("email") email: String,
         @Query("password") password: String
     ): LoginResponse
+
+    @POST("member")
+    suspend fun sendAdditionalProfile(
+        @Part("dto") dto: RequestBody,
+        @Part file: MultipartBody.Part
+    ): BaseResponse<Unit>
 
 
     @GET("member/info")
@@ -90,7 +98,7 @@ interface KusitmsApi {
 
     @FormUrlEncoded
     @POST("member/verify")
-    suspend fun sendCode(
+     suspend fun sendCode(
         @Field("email") email: String
     ): BaseResponse<Unit>
 

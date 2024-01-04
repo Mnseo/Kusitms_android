@@ -74,10 +74,10 @@ fun LikeCategoryTab(selectedCategory: PartCategory, onCategorySelected: (PartCat
         }
     )
     when (selectedCategory.name) {
-        "기획" -> LikeCategoryItems(categories[0].subCategories, viewModel)
-        "개발" -> LikeCategoryItems(categories[1].subCategories, viewModel)
-        "디자인" -> LikeCategoryItems(categories[2].subCategories, viewModel)
-        "기타" -> LikeCategoryItems(categories[3].subCategories, viewModel)
+        "기획" -> LikeCategoryItems(category = categories[0], viewModel = viewModel)
+        "개발" -> LikeCategoryItems(category = categories[1], viewModel = viewModel)
+        "디자인" -> LikeCategoryItems(category = categories[2], viewModel = viewModel)
+        "기타" -> LikeCategoryItems(category = categories[3], viewModel = viewModel)
         else -> {}
     }
 }

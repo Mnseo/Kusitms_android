@@ -4,7 +4,9 @@ import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kusitms.domain.model.Interest
 import com.kusitms.domain.model.Link
+import com.kusitms.domain.model.SignInProfile
 import com.kusitms.domain.model.login.LoginMemberProfile
 import com.kusitms.domain.usecase.signin.AuthMemberProfileUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -30,6 +32,9 @@ class SignInViewModel @Inject constructor(
 
     private val _favoriteCategory = MutableStateFlow<List<String>?>(null)
     val favoriteCategory: StateFlow<List<String>?> = _favoriteCategory
+
+    private val _interests = MutableStateFlow<List<InterestItem>>(emptyList())
+    val interests: StateFlow<List<InterestItem>> = _interests.asStateFlow()
 
     private val _name = MutableStateFlow("")
     val name: StateFlow<String> = _name
@@ -89,8 +94,8 @@ class SignInViewModel @Inject constructor(
         validateFields()
     }
 
-    fun updateFavoriteCategory(selectedCategories: List<String>) {
-        _favoriteCategory.value = selectedCategories
+    fun updateInterests(interestItems: List<InterestItem>) {
+        _interests.value = interestItems
         validateFields()
     }
 
@@ -136,6 +141,22 @@ class SignInViewModel @Inject constructor(
     private fun validateFields() {
         _isAllFieldsValid.value = _major.value.isNotBlank() &&
                 _selectedPart.value != null &&
-                _favoriteCategory.value.orEmpty().isNotEmpty()
+                _interests.value.isNotEmpty()
+    }
+
+    fun sendAdditionalProfile() {
+        viewModelScope.launch {
+            val signInProfile = SignInProfile(
+                major = major.value,
+                part = selectedPart.value ?: return@launch,
+                interests = interests.value.map {
+                    Interest(category = it.category, content =  it.content)
+                },
+                description = introduce.value,
+                links = linkItems.value.map {
+                    Link(it.linkType.toString(), it.linkUrl)
+                }
+            )
+        }
     }
 }

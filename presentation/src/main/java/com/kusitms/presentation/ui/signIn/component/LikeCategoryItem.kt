@@ -19,10 +19,7 @@ import androidx.compose.ui.unit.dp
 import com.google.android.material.color.utilities.DislikeAnalyzer
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
-import com.kusitms.presentation.model.signIn.PartCategory
-import com.kusitms.presentation.model.signIn.SignInViewModel
-import com.kusitms.presentation.model.signIn.categories
-import com.kusitms.presentation.model.signIn.getAllSubCategories
+import com.kusitms.presentation.model.signIn.*
 
 @Composable
 fun LikeCategoryItem(subCategoryName:String, isSelected: Boolean, onSelect: () -> Unit) {
@@ -51,8 +48,8 @@ fun LikeCategoryItem(subCategoryName:String, isSelected: Boolean, onSelect: () -
 }
 
 @Composable
-fun LikeCategoryItems(subCategories: List<String>, viewModel: SignInViewModel) {
-    val selectedCategories = viewModel.favoriteCategory.collectAsState().value.orEmpty().toMutableSet()
+fun LikeCategoryItems(category: PartCategory, viewModel: SignInViewModel) {
+    val selectedInterests = viewModel.interests.collectAsState().value.toMutableSet()
 
     LazyVerticalGrid(
         columns = GridCells.Fixed(2), // 2개의 컬럼을 가진 그리드
@@ -63,17 +60,18 @@ fun LikeCategoryItems(subCategories: List<String>, viewModel: SignInViewModel) {
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        items(subCategories) { subCategory ->
+        items(category.subCategories) { subCategory ->
+            val interestItem = InterestItem(mapCategoryToValue(category.name), subCategory)
             LikeCategoryItem(
                 subCategoryName = subCategory,
-                isSelected = subCategory in selectedCategories,
+                isSelected = interestItem in selectedInterests,
                 onSelect = {
-                    if (subCategory in selectedCategories) {
-                        selectedCategories.remove(subCategory)
+                    if (interestItem in selectedInterests) {
+                        selectedInterests.remove(interestItem)
                     } else {
-                        selectedCategories.add(subCategory)
+                        selectedInterests.add(interestItem)
                     }
-                    viewModel.updateFavoriteCategory(selectedCategories.toList())
+                    viewModel.updateInterests(selectedInterests.toList())
                 }
             )
         }

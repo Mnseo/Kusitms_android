@@ -90,9 +90,9 @@ fun TitleColumn(
     val phoneNum by viewModel.phoneNum.collectAsState()
     val name by viewModel.name.collectAsState()
     val selectedPart by viewModel.selectedPart.collectAsState()
-    val selectedCategories by viewModel.favoriteCategory.collectAsState()
-    val likeCategoryText = if (selectedCategories?.isNotEmpty() == true) {
-        selectedCategories!!.joinToString(", ")
+    val interests by viewModel.interests.collectAsState()
+    val likeCategoryText = if (interests.isNotEmpty()) {
+        interests.joinToString(", ") { it.content }
     } else {
         stringResource(id = R.string.signin_member_hint1_3)
     }

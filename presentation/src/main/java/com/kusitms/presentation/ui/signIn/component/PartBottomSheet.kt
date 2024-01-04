@@ -23,6 +23,7 @@ import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
 import com.kusitms.presentation.model.signIn.SignInViewModel
 import com.kusitms.presentation.model.signIn.categories
+import com.kusitms.presentation.model.signIn.mapCategoryToValue
 import com.kusitms.presentation.ui.ImageVector.xIcon
 import kotlinx.coroutines.launch
 
@@ -77,9 +78,9 @@ fun partSelectColumn(viewModel: SignInViewModel) {
         items(filteredCategories) { category ->
             partSelectItem(category = category,
                 onClick = { selectedCategory ->
-                viewModel.updateSelectedPart(selectedCategory.name)
-                    Log.d("Part", viewModel.selectedPart.value.toString())
-                          },
+                    val selectedValue = mapCategoryToValue(selectedCategory.name)
+                    viewModel.updateSelectedPart(selectedValue)
+                    Log.d("Part", viewModel.selectedPart.value.toString()) },
                 viewModel = viewModel)
         }
     }
