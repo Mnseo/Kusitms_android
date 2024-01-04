@@ -20,7 +20,7 @@ import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
 
 @Composable
-fun ProfileSearchNone() {
+fun ProfileSearchNone(searchText: String) {
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.SpaceBetween
@@ -39,7 +39,7 @@ fun ProfileSearchNone() {
         Box(modifier = Modifier.fillMaxWidth(),
             contentAlignment = Alignment.Center) {
             Text(
-                text = "‘2채연’에 해당하는 프로필이 없어요\n" +
+                text = "‘${searchText}’에 해당하는 프로필이 없어요\n" +
                         "검색어를 확인해보시겠어요?",
                 textAlign = TextAlign.Center,
                 style = KusitmsTypo.current.Caption1,
@@ -55,5 +55,5 @@ fun ProfileSearchNone() {
 @Preview
 @Composable
 fun ProfileSearchNonePriview() {
-    ProfileSearchNone()
+    ProfileSearchNone("")
 }

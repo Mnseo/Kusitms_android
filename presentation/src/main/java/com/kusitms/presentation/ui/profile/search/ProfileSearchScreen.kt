@@ -69,27 +69,34 @@ fun ProfileSearchScreen(
                 }
             )
         }
-        if (uiState.value.hasData) {
-            ProfileSearchExist()
+        if (uiState.value.searchText.isEmpty()) {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = "궁금한 학회원 프로필을\n" +
+                            "검색해보세요",
+                    textAlign = TextAlign.Center,
+                    style = KusitmsTypo.current.Caption1,
+                    color = KusitmsColorPalette.current.Grey400
+                )
+            }
         } else {
-            ProfileSearchNone()
+            if (profilesContainsSearchText(uiState.value.searchText)) {
+                ProfileSearchExist()
+            } else {
+                ProfileSearchNone(uiState.value.searchText)
+            }
         }
 
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text = "궁금한 학회원 프로필을\n" +
-                        "검색해보세요",
-                textAlign = TextAlign.Center,
-                style = KusitmsTypo.current.Caption1,
-                color = KusitmsColorPalette.current.Grey400
-            )
-        }
     }
 }
 
+// profiles에 검색어가 포함되는지 확인하는 함수
+fun profilesContainsSearchText(searchText: String): Boolean {
+    return false
+}
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
