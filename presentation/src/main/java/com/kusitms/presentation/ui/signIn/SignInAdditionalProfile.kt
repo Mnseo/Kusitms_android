@@ -1,45 +1,62 @@
 package com.kusitms.presentation.ui.signIn
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.*
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.kusitms.presentation.R
 import com.kusitms.presentation.common.theme.KusitmsScaffoldNonScroll
 import com.kusitms.presentation.common.ui.ButtonRow
 import com.kusitms.presentation.common.ui.KusitmsMarginVerticalSpacer
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
+import com.kusitms.presentation.model.signIn.LinkType
+import com.kusitms.presentation.model.signIn.SignInStatus
+import com.kusitms.presentation.model.signIn.SignInViewModel
+
 import com.kusitms.presentation.navigation.NavRoutes
 import com.kusitms.presentation.ui.ImageVector.*
+import com.kusitms.presentation.ui.signIn.component.LinkBottomSheet
+
 
 
 @Composable
-fun SignInAdditionalProfile(navController: NavHostController) {
+fun SignInAdditionalProfile(viewModel: SignInViewModel, navController: NavHostController) {
+
     KusitmsScaffoldNonScroll(topbarText = "프로필 설정", navController = navController) {
-        SignIn2Member(navController = navController)
+        SignIn2Member(viewModel = viewModel, navController = navController)
     }
 }
 
 
 @Composable
-fun SignIn2Member(navController: NavController) {
+fun SignIn2Member(viewModel: SignInViewModel,navController: NavController) {
     val scrollState = rememberScrollState()
+    val signInStatus by viewModel.signInStatus.collectAsState()
+
+    LaunchedEffect(signInStatus) {
+        if(signInStatus == SignInStatus.SUCCESS) {
+            navController.navigate(NavRoutes.SignInProfileComplete.route)
+        }
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -49,25 +66,38 @@ fun SignIn2Member(navController: NavController) {
         verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.Top)
     ) {
         Title2Column()
-        PhotoColumn()
+        PhotoColumn(viewModel)
         KusitmsMarginVerticalSpacer(size = 10)
-        introColumn()
+        introColumn(viewModel)
         KusitmsMarginVerticalSpacer(size = 4)
-        LinkColumn()
+        LinkColumn(viewModel)
         Spacer(modifier = Modifier.weight(1f))
         ButtonRow("이전으로", "가입완료", navController, KusitmsColorPalette.current.Grey600,KusitmsColorPalette.current.Main500,
-            onNextClick = { navController.navigate(NavRoutes.SignInProfileComplete.route)})
+            onNextClick = { viewModel.sendAdditionalProfile() }
+        )
         KusitmsMarginVerticalSpacer(size = 24)
     }
 }
 
 @Composable
-fun PhotoColumn() {
+fun PhotoColumn(viewModel: SignInViewModel) {
+    val context = LocalContext.current
+    val imageUri by viewModel.selectedImage.collectAsState() // This should be a Uri? in your ViewModel
+
+    val imagePickerLauncher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+        uri?.let {
+            viewModel.updateSelectedImage(uri) // Update the ViewModel with the Uri
+        }
+    }
+
     Box(
         modifier = Modifier
             .width(96.dp)
             .height(96.dp)
             .background(color = Color(0xFF20232D), shape = RoundedCornerShape(size = 12.dp))
+            .clickable {
+                imagePickerLauncher.launch("image/*")
+            }
     ) {
         Column(
             modifier = Modifier
@@ -75,7 +105,7 @@ fun PhotoColumn() {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            ImagePhoto()
+            ImagePhoto(imageUri)
         }
     }
 }
@@ -122,7 +152,7 @@ fun TextColumn() {
 }
 
 @Composable
-fun introColumn() {
+fun introColumn(viewModel: SignInViewModel) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -134,15 +164,15 @@ fun introColumn() {
 
     ) {
         Text(text = stringResource(id = R.string.signin2_title1), style = KusitmsTypo.current.SubTitle2_Semibold, color = KusitmsColorPalette.current.Grey300 )
-        introTextField()
+        introTextField(viewModel)
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun introTextField() {
+fun introTextField(viewModel: SignInViewModel) {
     val maxLength = 100
-    val textState = remember { mutableStateOf(TextFieldValue()) }
+    val textState by viewModel.introduce.collectAsState()
     Column(
         modifier = Modifier
             .fillMaxWidth(),
@@ -156,29 +186,45 @@ fun introTextField() {
                 .background(KusitmsColorPalette.current.Grey600, shape = RoundedCornerShape(16.dp))
         ) {
             TextField(
-                value = textState.value,
+                value = textState,
                 onValueChange = {
-                    if(it.text.length <= maxLength) { textState.value = it }
+                    if(it.length <= maxLength) { viewModel.updateIntroduce(it) }
                 },
                 shape = RoundedCornerShape(16.dp),
-                colors = TextFieldDefaults.textFieldColors(
-                    containerColor = KusitmsColorPalette.current.Grey600,
-                    cursorColor = KusitmsColorPalette.current.Grey600,
-                    disabledLabelColor = KusitmsColorPalette.current.Grey600,
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = KusitmsColorPalette.current.Grey600,
+                    unfocusedContainerColor = KusitmsColorPalette.current.Grey600,
+                    disabledContainerColor = KusitmsColorPalette.current.Grey600,
+                    cursorColor = KusitmsColorPalette.current.Grey400,
                     focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent
+                    unfocusedIndicatorColor = Color.Transparent,
+                    focusedTextColor = KusitmsColorPalette.current.White,
+                    unfocusedTextColor = KusitmsColorPalette.current.White,
+                    disabledLabelColor = KusitmsColorPalette.current.White,
                 ),
                 placeholder = {Text(stringResource(id = R.string.signin2_placeholder1), style = KusitmsTypo.current.Text_Medium, color = KusitmsColorPalette.current.Grey400 )}
             )
         }
-        Text(text = "${textState.value.text.length}/$maxLength", style = KusitmsTypo.current.Caption1, color = KusitmsColorPalette.current.Grey400)
+        Text(text = "${textState.length}/$maxLength", style = KusitmsTypo.current.Caption1, color = KusitmsColorPalette.current.Grey400)
     }
 }
 
 @Composable
-fun LinkColumn() {
-    val currentLength = remember { mutableStateOf(1) }
+fun LinkColumn(viewModel: SignInViewModel) {
+    val linkItems by viewModel.linkItems.collectAsState()
     val maxLength = 4
+    var isOpenLinkBottomSheet by remember { mutableStateOf(false) }
+    var selectedLinkItemIndex by remember { mutableStateOf(-1) } // 선택된 링크 아이템의 인덱스
+
+    if (isOpenLinkBottomSheet) {
+        LinkBottomSheet(viewModel = viewModel, isOpenLinkBottomSheet, selectedLinkItemIndex) { isOpen, selectedData ->
+            isOpenLinkBottomSheet = isOpen
+            if (!isOpen && selectedData is LinkType) {
+                viewModel.updateLinkItem(selectedLinkItemIndex, selectedData, linkItems[selectedLinkItemIndex].linkUrl)
+            }
+        }
+    }
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -198,18 +244,20 @@ fun LinkColumn() {
                 color = KusitmsColorPalette.current.Grey300,
                 text = stringResource(id = R.string.signin2_title2),
             )
-            LinkRow1(currentLength, maxLength)
+            LinkRow1(viewModel, maxLength)
         }
         Spacer(modifier = Modifier .height(14.dp))
-        repeat(currentLength.value) {
-            LinkRow2()
-        }
+        LinkItemsDisplay(viewModel, onLinkTypeChange = { index ->
+            selectedLinkItemIndex = index
+            isOpenLinkBottomSheet = true
+        })
     }
 
 }
 
 @Composable
-fun LinkRow1(currentLength: MutableState<Int>, maxLength: Int) {
+fun LinkRow1(viewModel: SignInViewModel, maxLength: Int) {
+    val linkItems by viewModel.linkItems.collectAsState()
     Row(
         modifier = Modifier
             .width(125.dp)
@@ -225,10 +273,10 @@ fun LinkRow1(currentLength: MutableState<Int>, maxLength: Int) {
         Text(
             style= KusitmsTypo.current.Caption1,
             color = KusitmsColorPalette.current.Grey300,
-            text = "추가하기${currentLength.value}/${maxLength}",
+            text = "추가하기${linkItems.size}/${maxLength}",
             modifier = Modifier.clickable {
-                if (currentLength.value < maxLength) { // 4개 이상 추가되지 않도록 제한
-                    currentLength.value += 1
+                if (linkItems.size < maxLength) { // 4개 이상 추가되지 않도록 제한
+                    viewModel.addLinkItem()
                 }
             }
         )
@@ -236,7 +284,23 @@ fun LinkRow1(currentLength: MutableState<Int>, maxLength: Int) {
 }
 
 @Composable
-fun LinkRow2() {
+fun LinkItemsDisplay(viewModel: SignInViewModel, onLinkTypeChange: (Int) -> Unit) {
+    val linkItems by viewModel.linkItems.collectAsState()
+
+    linkItems.forEachIndexed { index, _ ->
+        LinkRow2(viewModel, index, onClick = { onLinkTypeChange(index) })
+        KusitmsMarginVerticalSpacer(size = 8)
+    }
+}
+
+@Composable
+fun LinkRow2(
+    viewModel: SignInViewModel,
+    linkItemIndex: Int, // 현재 링크 아이템의 인덱스
+    onClick: () -> Unit // 링크 타입 변경 시 호출될 함수
+) {
+    val linkItems by viewModel.linkItems.collectAsState()
+    val currentLinkItem = linkItems.getOrNull(linkItemIndex) ?: return
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -244,9 +308,14 @@ fun LinkRow2() {
         horizontalArrangement = Arrangement.spacedBy(0.dp, Alignment.Start),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        KusitmsLinkCheck()
+        KusitmsLinkCheck(
+            viewModel,
+            linkItemIndex,
+            currentLinkItem.linkType,
+            onClick
+        )
         IconButton(
-            onClick = {  },
+            onClick = { viewModel.removeLinkItem() },
         ) {
             Icon(
                 painterResource(id = R.drawable.ic_trashcan),
@@ -259,9 +328,3 @@ fun LinkRow2() {
     }
 }
 
-
-@Preview
-@Composable
-fun example2() {
-    SignInAdditionalProfile(navController = rememberNavController())
-}

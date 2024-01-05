@@ -39,6 +39,10 @@ import kotlinx.coroutines.launch
 @Composable
 fun SignInDefaultProfile(viewModel: SignInViewModel, navController: NavHostController) {
     val major by viewModel.major.collectAsState()
+    LaunchedEffect(Unit) {
+        viewModel.loadLoginMemberProfile()
+    }
+
     KusitmsScaffoldNonScroll(topbarText = "프로필 설정", navController = navController) {
         SignInMember1(
             navController = navController,
@@ -69,7 +73,8 @@ fun SignInMember1(
         TitleColumn(major = major, onMajorChange = onMajorChange, viewModel = viewModel)
 
         ButtonRowSignIn1(text1 = "이전으로", text2 = "다음으로", navController = navController, KusitmsColorPalette.current.Grey600, KusitmsColorPalette.current.Grey600,
-            onNextClick = { navController.navigate(NavRoutes.SignInAdditionalProfile.route)}
+            onNextClick = { navController.navigate(NavRoutes.SignInAdditionalProfile.route)},
+            viewModel = viewModel
         )
     }
 }
@@ -85,9 +90,16 @@ fun TitleColumn(
     val phoneNum by viewModel.phoneNum.collectAsState()
     val name by viewModel.name.collectAsState()
     val selectedPart by viewModel.selectedPart.collectAsState()
+    val interests by viewModel.interests.collectAsState()
+    val likeCategoryText = if (interests.isNotEmpty()) {
+        interests.joinToString(", ") { it.content }
+    } else {
+        stringResource(id = R.string.signin_member_hint1_3)
+    }
 
     var isOpenPartBottomSheet by remember { mutableStateOf(false) }
     var isOpenLikeCategoryBottomSheet by remember { mutableStateOf(false) }
+
 
     if(isOpenPartBottomSheet){
         PartBottomSheet(
@@ -95,8 +107,7 @@ fun TitleColumn(
             isOpenPartBottomSheet
         ){
             isOpenPartBottomSheet = it
-            if(selectedPart != null) {
-                //Part Item 클릭시 닫기
+            if(!selectedPart.isNullOrBlank()) {
                 isOpenPartBottomSheet = false
             }
         }
@@ -181,7 +192,7 @@ fun TitleColumn(
         Text(text = stringResource(id = R.string.signin_member_caption1_4), style = KusitmsTypo.current.Caption1, color = KusitmsColorPalette.current.Grey400)
         Spacer(modifier = Modifier.height(5.dp))
         KusitmsSnackField(
-            text = stringResource(id =R.string.signin_member_hint1_3),
+            text = likeCategoryText,
             onSnackClick = {
                 isOpenLikeCategoryBottomSheet = true
             }
@@ -229,8 +240,10 @@ fun ButtonRowSignIn1(
     navController: NavController,
     color1: Color,
     color2: Color,
-    onNextClick: () -> Unit
+    onNextClick: () -> Unit,
+    viewModel: SignInViewModel
 ) {
+    val validateFields by viewModel.isAllFieldsValid.collectAsState()
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -255,8 +268,11 @@ fun ButtonRowSignIn1(
                 .weight(1f)
                 .height(56.dp),
             onClick = {
-                onNextClick()
-                Log.d("Click", "go to SignIn")
+                if(validateFields) {
+                    onNextClick()
+                    Log.d("Click_SignInDefault", "go to SignIn")
+                    Log.d("Click_SignInDefault", validateFields.toString())
+                }
             },
             colors = ButtonDefaults.buttonColors(containerColor = color2),
             shape = RoundedCornerShape(size = 12.dp)
@@ -266,12 +282,4 @@ fun ButtonRowSignIn1(
     }
 }
 
-@Composable
-fun ShowPartSnack(scaffoldState: ScaffoldState) {
-    val coroutineScope = rememberCoroutineScope()
-
-    coroutineScope.launch {
-        scaffoldState.snackbarHostState.currentSnackbarData?.dismiss()
-    }
-}
 

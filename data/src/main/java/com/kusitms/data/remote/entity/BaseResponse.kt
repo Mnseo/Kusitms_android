@@ -6,6 +6,11 @@ open class BaseResponse<T>(
     val payload: T
 )
 
+open class nullExceptionResponse<T> (
+    val result: Result,
+    val payload: T?
+    )
+
 data class Result(
     val code: Int,
     val message: String

@@ -74,9 +74,10 @@ fun LoginMemberColumn1(viewModel: LoginViewModel) {
 @Composable
 fun LoginMemberColumn2(viewModel: LoginViewModel, navController: NavHostController) {
     val loginStatus by viewModel.loginStatus.collectAsState()
+    val datastoreStatus by viewModel.isProfileLoaded.collectAsState()
 
-    LaunchedEffect(loginStatus) {
-        if (loginStatus == LoginStatus.SUCCESS) {
+    LaunchedEffect(loginStatus, datastoreStatus) {
+        if (loginStatus == LoginStatus.SUCCESS && datastoreStatus) {
             navController.navigate(NavRoutes.SignInDefault.route)
             viewModel.updateLoginStatus(LoginStatus.DEFAULT)
         }

@@ -6,4 +6,8 @@ import kotlinx.coroutines.flow.Flow
 
 interface AuthRepository {
     suspend fun getLoginMemberProfile() : Result<LoginMemberProfile?>
+
+    suspend fun logOutMember(): Result<Unit>
+
+    suspend fun signOutMember(): Result<Unit>
 }

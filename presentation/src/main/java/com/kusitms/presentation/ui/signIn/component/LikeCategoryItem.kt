@@ -19,14 +19,10 @@ import androidx.compose.ui.unit.dp
 import com.google.android.material.color.utilities.DislikeAnalyzer
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
-import com.kusitms.presentation.model.signIn.PartCategory
-import com.kusitms.presentation.model.signIn.SignInViewModel
-import com.kusitms.presentation.model.signIn.categories
-import com.kusitms.presentation.model.signIn.getAllSubCategories
+import com.kusitms.presentation.model.signIn.*
 
 @Composable
-fun LikeCategoryItem(subCategoryName:String) {
-    var isSelected by remember { mutableStateOf(false) }
+fun LikeCategoryItem(subCategoryName:String, isSelected: Boolean, onSelect: () -> Unit) {
     Box(
         modifier = Modifier
             .height(44.dp)
@@ -35,9 +31,7 @@ fun LikeCategoryItem(subCategoryName:String) {
                 color = KusitmsColorPalette.current.Grey500,
                 shape = RoundedCornerShape(12.dp)
             )
-            .clickable {
-                isSelected = !isSelected // Toggle the selection state
-            }
+            .clickable(onClick = onSelect)
             .background(
                 color = if (isSelected) KusitmsColorPalette.current.Grey500 else KusitmsColorPalette.current.Grey600,
                 shape = RoundedCornerShape(12.dp)
@@ -54,7 +48,9 @@ fun LikeCategoryItem(subCategoryName:String) {
 }
 
 @Composable
-fun LikeCategoryItems(subCategories: List<String>) {
+fun LikeCategoryItems(category: PartCategory, viewModel: SignInViewModel) {
+    val selectedInterests = viewModel.interests.collectAsState().value.toMutableSet()
+
     LazyVerticalGrid(
         columns = GridCells.Fixed(2), // 2개의 컬럼을 가진 그리드
         modifier = Modifier
@@ -64,8 +60,20 @@ fun LikeCategoryItems(subCategories: List<String>) {
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        items(subCategories) { subCategory ->
-            LikeCategoryItem(subCategoryName = subCategory)
+        items(category.subCategories) { subCategory ->
+            val interestItem = InterestItem(mapCategoryToValue(category.name), subCategory)
+            LikeCategoryItem(
+                subCategoryName = subCategory,
+                isSelected = interestItem in selectedInterests,
+                onSelect = {
+                    if (interestItem in selectedInterests) {
+                        selectedInterests.remove(interestItem)
+                    } else {
+                        selectedInterests.add(interestItem)
+                    }
+                    viewModel.updateInterests(selectedInterests.toList())
+                }
+            )
         }
     }
 }

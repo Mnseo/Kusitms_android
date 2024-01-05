@@ -15,12 +15,22 @@ class AuthTokenInterceptor @Inject constructor(
 ) : Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response {
-        var request = chain.request().newBuilder()
-            .addHeader("Authorization", "${authDataStore.authToken}")
-            .build()
+        val originalRequest = chain.request()
+        val requestBuilder = originalRequest.newBuilder()
 
-        val response = chain.proceed(request)
-        // 토큰 만료 감지
+        // "auth/logout" 엔드포인트 확인
+        if (originalRequest.url.encodedPath.endsWith("auth/logout")) {
+            // logout 엔드포인트의 경우 refreshToken 사용
+            requestBuilder.addHeader("Authorization", "${authDataStore.refreshToken}")
+        } else {
+            // 다른 엔드포인트의 경우 authToken 사용
+            requestBuilder.addHeader("Authorization", "${authDataStore.authToken}")
+        }
+
+        var request = requestBuilder.build()
+        var response = chain.proceed(request)
+
+        // 토큰 만료 감지 및 처리
         if (response.code == 500) {
             // 토큰 매니저 인스턴스를 가져오고 토큰 갱신을 시도
             runBlocking {
@@ -30,10 +40,10 @@ class AuthTokenInterceptor @Inject constructor(
             }
             // 갱신된 토큰으로 요청 재시도
             request = chain.request().newBuilder()
-                .addHeader("Authorization", "${authDataStore.authToken}")
+                .addHeader("Authorization", "Bearer ${authDataStore.authToken}")
                 .build()
             response.close() // 이전 응답 닫기
-           return chain.proceed(request)
+            return chain.proceed(request)
         }
 
         return response

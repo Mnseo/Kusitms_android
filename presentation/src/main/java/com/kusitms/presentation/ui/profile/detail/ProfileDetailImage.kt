@@ -27,10 +27,8 @@ import androidx.compose.ui.unit.dp
 import com.kusitms.presentation.R
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
-import com.kusitms.presentation.ui.ImageVector.icons.Icons
-import com.kusitms.presentation.ui.ImageVector.icons.KusitmsIcons
-import com.kusitms.presentation.ui.signIn.nameBox
-import com.kusitms.presentation.ui.signIn.rocket
+
+
 
 @Composable
 fun ProfileDetailImage() {
