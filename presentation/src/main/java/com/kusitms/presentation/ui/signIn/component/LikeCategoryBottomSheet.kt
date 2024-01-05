@@ -85,7 +85,7 @@ fun LikeCategoryTab(selectedCategory: PartCategory, onCategorySelected: (PartCat
 @Composable
 fun LikeBottomSheetContent(viewModel: SignInViewModel, onClick:() ->Unit) {
     var selectedCategory by remember { mutableStateOf(categories.first()) }
-    val favoriteCategoryCount by viewModel.favoriteCategory.collectAsState()
+    val favoriteCategoryCount by viewModel.interests.collectAsState()
     val buttonText = if (favoriteCategoryCount?.isNotEmpty() == true) "확인" else "관심 카테고리를 선택해주세요"
     val buttonColor = if (favoriteCategoryCount?.isNotEmpty() == true) KusitmsColorPalette.current.Grey100 else KusitmsColorPalette.current.Grey500
     val buttonTextColor = if (favoriteCategoryCount?.isNotEmpty() == true) KusitmsColorPalette.current.Grey600 else KusitmsColorPalette.current.Grey400
@@ -134,7 +134,7 @@ fun LikeBottomSheetContent(viewModel: SignInViewModel, onClick:() ->Unit) {
 
 @Composable
 fun CategoryBottomSheetTitle(viewModel: SignInViewModel) {
-    val favoriteCategoryCount = viewModel.favoriteCategory.collectAsState().value?.size ?: 0
+    val favoriteCategoryCount = viewModel.interests.value?.size ?: 0
     Row(
         modifier = Modifier
             .fillMaxWidth()

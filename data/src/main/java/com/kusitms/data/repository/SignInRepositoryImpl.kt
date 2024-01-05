@@ -1,5 +1,6 @@
 package com.kusitms.data.repository
 
+import android.util.Log
 import com.google.gson.Gson
 import com.kusitms.data.local.AuthDataStore
 import com.kusitms.data.remote.api.KusitmsApi
@@ -73,27 +74,26 @@ class SignInRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun postAdditionalProfile(profile: SignInProfile, file: File): Result<Unit> {
+    override suspend fun postAdditionalProfile(profile: SignInProfile, filePart: MultipartBody.Part): Result<Unit> {
         return try {
-            val additionalProfileBody = profile.toBody()
-            val requestBody = Gson().toJson(additionalProfileBody)
-                .toRequestBody("application/json".toMediaTypeOrNull())
+            val gson = Gson()
+            val profileJson = gson.toJson(profile)
+            val profileRequestBody = profileJson.toRequestBody("application/json".toMediaTypeOrNull())
 
-            val fileRequestBody = file.asRequestBody("multipart/form-data".toMediaTypeOrNull())
-            val filePart = MultipartBody.Part.createFormData("file", file.name, fileRequestBody)
-
-
+            Log.d("profileRequestBody", profileJson.toString())
             val response = kusitmsApi.sendAdditionalProfile(
-                RequestBody.create("multipart/form-data".toMediaTypeOrNull(), "{\"dto\": $requestBody}"),
+                profileRequestBody,
                 filePart
             )
-            if (response.result == null) {
-                Result.failure(RuntimeException("Failed to upload profile data"))
-            } else {
+
+            if (response.result.code == 200) {
                 Result.success(Unit)
+            } else {
+                Result.failure(RuntimeException("올바른 데이터를 받지 못했습니다."))
             }
         } catch (e: Exception) {
             Result.failure(e)
         }
     }
+
 }

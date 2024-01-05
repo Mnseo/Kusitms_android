@@ -1,6 +1,7 @@
 package com.kusitms.data.remote.api
 
 import com.kusitms.data.remote.entity.BaseResponse
+import com.kusitms.data.remote.entity.nullExceptionResponse
 import com.kusitms.data.remote.entity.request.CommentContentRequestBody
 import com.kusitms.data.remote.entity.request.UpdatePasswordRequest
 import com.kusitms.data.remote.entity.response.CheckPasswordPayload
@@ -26,11 +27,12 @@ interface KusitmsApi {
         @Query("password") password: String
     ): LoginResponse
 
+    @Multipart
     @POST("member")
     suspend fun sendAdditionalProfile(
         @Part("dto") dto: RequestBody,
         @Part file: MultipartBody.Part
-    ): BaseResponse<Unit>
+    ): nullExceptionResponse<Unit>
 
 
     @GET("member/info")

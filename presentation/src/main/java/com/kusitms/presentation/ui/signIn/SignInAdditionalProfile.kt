@@ -28,6 +28,7 @@ import com.kusitms.presentation.common.ui.KusitmsMarginVerticalSpacer
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
 import com.kusitms.presentation.model.signIn.LinkType
+import com.kusitms.presentation.model.signIn.SignInStatus
 import com.kusitms.presentation.model.signIn.SignInViewModel
 
 import com.kusitms.presentation.navigation.NavRoutes
@@ -48,6 +49,13 @@ fun SignInAdditionalProfile(viewModel: SignInViewModel, navController: NavHostCo
 @Composable
 fun SignIn2Member(viewModel: SignInViewModel,navController: NavController) {
     val scrollState = rememberScrollState()
+    val signInStatus by viewModel.signInStatus.collectAsState()
+
+    LaunchedEffect(signInStatus) {
+        if(signInStatus == SignInStatus.SUCCESS) {
+            navController.navigate(NavRoutes.SignInProfileComplete.route)
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -65,7 +73,8 @@ fun SignIn2Member(viewModel: SignInViewModel,navController: NavController) {
         LinkColumn(viewModel)
         Spacer(modifier = Modifier.weight(1f))
         ButtonRow("이전으로", "가입완료", navController, KusitmsColorPalette.current.Grey600,KusitmsColorPalette.current.Main500,
-            onNextClick = { navController.navigate(NavRoutes.SignInProfileComplete.route)})
+            onNextClick = { viewModel.sendAdditionalProfile() }
+        )
         KusitmsMarginVerticalSpacer(size = 24)
     }
 }
@@ -164,8 +173,6 @@ fun introColumn(viewModel: SignInViewModel) {
 fun introTextField(viewModel: SignInViewModel) {
     val maxLength = 100
     val textState by viewModel.introduce.collectAsState()
-    val interactionSource = remember { MutableInteractionSource() }
-    var isTextFieldFocused by remember { mutableStateOf(false) }
     Column(
         modifier = Modifier
             .fillMaxWidth(),
@@ -192,7 +199,8 @@ fun introTextField(viewModel: SignInViewModel) {
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent,
                     focusedTextColor = KusitmsColorPalette.current.White,
-                    disabledLabelColor = KusitmsColorPalette.current.Grey600,
+                    unfocusedTextColor = KusitmsColorPalette.current.White,
+                    disabledLabelColor = KusitmsColorPalette.current.White,
                 ),
                 placeholder = {Text(stringResource(id = R.string.signin2_placeholder1), style = KusitmsTypo.current.Text_Medium, color = KusitmsColorPalette.current.Grey400 )}
             )

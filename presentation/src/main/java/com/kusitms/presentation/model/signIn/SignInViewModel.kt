@@ -1,7 +1,11 @@
 package com.kusitms.presentation.model.signIn
 
+import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.util.Log
+import androidx.annotation.DrawableRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kusitms.domain.model.Interest
@@ -9,17 +13,32 @@ import com.kusitms.domain.model.Link
 import com.kusitms.domain.model.SignInProfile
 import com.kusitms.domain.model.login.LoginMemberProfile
 import com.kusitms.domain.usecase.signin.AuthMemberProfileUseCase
+import com.kusitms.domain.usecase.signin.postAdditionalProfileUseCase
+import com.kusitms.presentation.R
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import timber.log.Timber
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.FileOutputStream
 import javax.inject.Inject
+import kotlin.math.sign
+
+enum class SignInStatus { SUCCESS, ERROR,DEFAULT }
 
 @HiltViewModel
 class SignInViewModel @Inject constructor(
-    private val authMemberProfileUseCase: AuthMemberProfileUseCase
+    private val authMemberProfileUseCase: AuthMemberProfileUseCase,
+    private val postAdditionalProfileUseCase: postAdditionalProfileUseCase,
+    @ApplicationContext private val context: Context
 ): ViewModel() {
     private val _major = MutableStateFlow("")
     val major: StateFlow<String> = _major
@@ -48,20 +67,14 @@ class SignInViewModel @Inject constructor(
     private val _selectedImage = MutableStateFlow<Uri?>(null)
     val selectedImage: StateFlow<Uri?> = _selectedImage.asStateFlow()
 
-    private val _link = MutableStateFlow<String>("")
-    val link: StateFlow<String> = _link
-
-    private val _linkType = MutableStateFlow<LinkType?>(null)
-    val linkType: StateFlow<LinkType?> = _linkType.asStateFlow()
-
     private val _linkItems = MutableStateFlow<List<LinkItem>>(listOf(LinkItem(LinkType.LINK, "")))
     val linkItems: StateFlow<List<LinkItem>> = _linkItems.asStateFlow()
 
-    private val _linkCount = MutableStateFlow(1)
-    val linkCount: StateFlow<Int> = _linkCount
-
     private val _introduce = MutableStateFlow("")
     val introduce: StateFlow<String> = _introduce
+
+    private val _signInStatus = MutableStateFlow(SignInStatus.DEFAULT)
+    val signInStatus : StateFlow<SignInStatus> = _signInStatus
 
 
     fun loadLoginMemberProfile() {
@@ -112,9 +125,6 @@ class SignInViewModel @Inject constructor(
         }
     }
 
-    fun updateLink(links: String) {
-        _link.value = links
-    }
     fun addLinkItem() {
         val newLinkItem = LinkItem(LinkType.LINK, "") //기본 설정값
         _linkItems.value = _linkItems.value + newLinkItem
@@ -138,13 +148,42 @@ class SignInViewModel @Inject constructor(
         _introduce.value = introduce
     }
 
+    fun updateSignInStatus(signInStatus: SignInStatus) {
+        _signInStatus.value = signInStatus
+    }
+
     private fun validateFields() {
         _isAllFieldsValid.value = _major.value.isNotBlank() &&
                 _selectedPart.value != null &&
                 _interests.value.isNotEmpty()
     }
 
+    private fun uriToFile(context: Context, fileUri: Uri): MultipartBody.Part {
+        val inputStream = context.contentResolver.openInputStream(fileUri)
+        val tempFile = File.createTempFile("upload", "jpg", context.cacheDir).apply {
+            deleteOnExit()
+        }
+        FileOutputStream(tempFile).use { fileOutputStream ->
+            inputStream?.copyTo(fileOutputStream)
+        }
+
+        val requestFile = tempFile.asRequestBody("image/jpeg".toMediaTypeOrNull())
+        return MultipartBody.Part.createFormData("image", tempFile.name, requestFile)
+    }
+
+    private fun getDefaultImagePart(context: Context): MultipartBody.Part {
+        val bitmap = BitmapFactory.decodeResource(context.resources, R.drawable.ic_profile_default)
+        val byteArrayOutputStream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)
+        val requestBody = byteArrayOutputStream.toByteArray().toRequestBody("image/jpeg".toMediaTypeOrNull())
+
+        return MultipartBody.Part.createFormData("image", "default.jpg", requestBody)
+    }
+
     fun sendAdditionalProfile() {
+        val imageUri = selectedImage.value
+        val imagePart = imageUri?.let { uriToFile(context, it) }
+            ?: getDefaultImagePart(context)
         viewModelScope.launch {
             val signInProfile = SignInProfile(
                 major = major.value,
@@ -157,6 +196,20 @@ class SignInViewModel @Inject constructor(
                     Link(it.linkType.toString(), it.linkUrl)
                 }
             )
+            Log.d("signInProfile", signInProfile.toString())
+
+
+            Log.d("성공", "api_profile 성공")
+            postAdditionalProfileUseCase(signInProfile, imagePart)
+                .onSuccess {
+                    Log.d("signIn_profile", "성공")
+                    updateSignInStatus(SignInStatus.SUCCESS)
+                }
+                .onFailure {
+                    Log.d("signIn_profile", "실패")
+                    Timber.e(it)
+                    updateSignInStatus(SignInStatus.ERROR)
+                }
         }
     }
 }
