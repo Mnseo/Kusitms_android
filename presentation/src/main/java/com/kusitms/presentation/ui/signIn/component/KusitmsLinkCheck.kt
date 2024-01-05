@@ -67,7 +67,7 @@ fun LinkTextField(viewModel: SignInViewModel, linkItemIndex: Int) {
         .background(color = KusitmsColorPalette.current.Grey700, shape = RoundedCornerShape(12.dp)),
     ) {
         KusitmsInputField(
-            text = R.string.login_id_validation,
+            text = R.string.signin2_placeholder2,
             value = textState.value,
             onValueChange = {
                 textState.value = it
