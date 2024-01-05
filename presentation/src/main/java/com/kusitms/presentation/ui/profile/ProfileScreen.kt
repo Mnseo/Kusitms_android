@@ -97,7 +97,9 @@ fun ProfileScreen(
                 )
             }
         }
-        ProfileListScreen()
+        ProfileListScreen(
+            navController = navController
+        )
     }
 }
 

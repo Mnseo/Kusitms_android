@@ -152,7 +152,7 @@
     <string name="setting_nonmember_title3">로그인</string>
     <string name="setting_member_title1">푸시알림</string>
 
-    
+
     <string name="notice_report_title_commercial">상업적 광고 및 판매</string>
     <string name="notice_report_title_abuse">욕설/비하</string>
     <string name="notice_report_title_fraud">유출/사칭/사기</string>
@@ -171,6 +171,22 @@
     <!-- Profile -->
     <string name="profile_topbar">프로필</string>
     <string name="profile_part_toggle">파트 선택</string>
+    <string name="profile_part_plan">기획팀</string>
+    <string name="profile_part_dev">개발팀</string>
+    <string name="profile_part_design">디자인팀</string>
+
+
+    <!-- ProfileDetail -->
+    <string name="profile_detail_topbar">이채연의 프로필</string>
+    <string name="profile_detail_name">이채연</string>
+    <string name="profile_detail_part">27기 디자이너</string>
+    <string name="profile_detail_comment">코멘트</string>
+    <string name="profile_detail_profile">프로필</string>
+    <string name="profile_detail_major">전공</string>
+    <string name="profile_detail_like">관심</string>
+    <string name="profile_detail_email">이메일</string>
+    <string name="profile_detail_phone">번호</string>
+    <string name="profile_detail_link">링크</string>
 
 
 
