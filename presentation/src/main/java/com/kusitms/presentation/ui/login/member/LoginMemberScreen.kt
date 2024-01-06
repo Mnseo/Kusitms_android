@@ -77,9 +77,13 @@ fun LoginMemberColumn2(viewModel: LoginViewModel, navController: NavHostControll
     val datastoreStatus by viewModel.isProfileLoaded.collectAsState()
 
     LaunchedEffect(loginStatus, datastoreStatus) {
-        if (loginStatus == LoginStatus.SUCCESS && datastoreStatus) {
+        if (loginStatus == LoginStatus.NONEXIST && datastoreStatus) {
             navController.navigate(NavRoutes.SignInDefault.route)
             viewModel.updateLoginStatus(LoginStatus.DEFAULT)
+        }
+        // Detail 정보가 있으면 공지사항으로 옮겨가게 해놨습니다 홈화면으로 대체해야합니다!
+        else if (loginStatus == LoginStatus.EXIST) {
+            navController.navigate(NavRoutes.Notice.route)
         }
     }
     Column(modifier = Modifier
