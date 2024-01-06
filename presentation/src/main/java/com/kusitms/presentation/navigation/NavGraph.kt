@@ -188,7 +188,11 @@ fun MainNavigation() {
             }
 
             kusitmsComposableWithAnimation(NavRoutes.ProfileSearch.route) {
-                ProfileSearchScreen()
+                ProfileSearchScreen(
+                    onBackClick = {
+                        navController.navigateUp()
+                    },
+                )
             }
 
 
