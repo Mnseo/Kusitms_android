@@ -2,6 +2,7 @@ package com.kusitms.presentation.common.ui.theme
 
 import androidx.compose.material.Typography
 import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -114,3 +115,84 @@ data class CustomTypography(
 
     )
 val KusitmsTypo = staticCompositionLocalOf { CustomTypography() }
+
+data class Type(
+
+    val SubTitle1:  TextStyle = TextStyle(
+        fontFamily = FontFamily.Default,
+        fontWeight = FontWeight.Bold,
+        fontSize =  14.sp,
+        lineHeight = 20.sp,
+    ),
+
+    val HeadLine2: TextStyle = TextStyle(
+        fontFamily = FontFamily.Default,
+        fontWeight = FontWeight.ExtraBold,
+        fontSize =  24.sp,
+        lineHeight = 32.sp,
+    ),
+
+    val HeadLine3: TextStyle = TextStyle(
+        fontFamily = FontFamily.Default,
+        fontWeight = FontWeight.ExtraBold,
+        fontSize =  24.sp,
+        lineHeight = 32.sp,
+    ),
+
+    val HeadLine4: TextStyle = TextStyle(
+        fontFamily = FontFamily.Default,
+        fontWeight = FontWeight.ExtraBold,
+        fontSize =  18.sp,
+        lineHeight = 24.sp,
+    ),
+
+    val HeadLine5: TextStyle = TextStyle(
+        fontFamily = FontFamily.Default,
+        fontWeight = FontWeight.Bold,
+        fontSize =  16.sp,
+        lineHeight = 22.sp,
+    ),
+
+    val HeadLine6: TextStyle = TextStyle(
+        fontFamily = FontFamily.Default,
+        fontWeight = FontWeight.Bold,
+        fontSize =  16.sp,
+        lineHeight = 22.sp,
+    ),
+
+    val Body1: TextStyle = TextStyle(
+        fontFamily = FontFamily.Default,
+        fontWeight = FontWeight.Medium,
+        fontSize =  16.sp,
+        lineHeight = 24.sp,
+    ),
+
+    val Body2: TextStyle = TextStyle(
+        fontFamily = Pretendard,
+        fontWeight = FontWeight.Medium,
+        fontSize =  14.sp,
+        lineHeight = 22.sp,
+    ),
+
+    val Body3: TextStyle = TextStyle(
+        fontFamily = Pretendard,
+        fontWeight = FontWeight.Medium,
+        fontSize =  12.sp,
+        lineHeight = 20.sp,
+    ),
+
+    val Caption1: TextStyle = TextStyle(
+        fontFamily = Pretendard,
+        fontWeight = FontWeight.Bold,
+        fontSize =  11.sp,
+        lineHeight = 16.sp,
+    ),
+
+    val Caption2: TextStyle = TextStyle(
+        fontFamily = Pretendard,
+        fontWeight = FontWeight.SemiBold,
+        fontSize =  10.sp,
+        lineHeight = 12.sp,
+    ),
+    )
+val TmTypo = staticCompositionLocalOf { Type() }

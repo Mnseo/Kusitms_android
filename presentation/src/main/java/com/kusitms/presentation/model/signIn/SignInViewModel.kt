@@ -174,10 +174,10 @@ class SignInViewModel @Inject constructor(
     private fun getDefaultImagePart(context: Context): MultipartBody.Part {
         val bitmap = BitmapFactory.decodeResource(context.resources, R.drawable.ic_profile_default)
         val byteArrayOutputStream = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)
-        val requestBody = byteArrayOutputStream.toByteArray().toRequestBody("image/jpeg".toMediaTypeOrNull())
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
+        val requestBody = byteArrayOutputStream.toByteArray().toRequestBody("image/png".toMediaTypeOrNull())
 
-        return MultipartBody.Part.createFormData("image", "default.jpg", requestBody)
+        return MultipartBody.Part.createFormData("image", "default.png", requestBody)
     }
 
     fun sendAdditionalProfile() {

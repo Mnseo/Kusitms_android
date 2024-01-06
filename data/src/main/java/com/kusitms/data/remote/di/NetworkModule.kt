@@ -5,17 +5,17 @@ import com.kusitms.data.BuildConfig
 import com.kusitms.data.local.AuthDataStore
 import com.kusitms.data.remote.api.KusitmsApi
 import com.kusitms.data.remote.api.KusitmsTokenApi
+import com.kusitms.data.remote.util.NullOnEmptyConverterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import retrofit2.Retrofit
-import javax.inject.Singleton
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import javax.inject.Provider
 import javax.inject.Qualifier
+import javax.inject.Singleton
 
 
 @Module
@@ -37,6 +37,7 @@ class NetworkModule {
         return Retrofit.Builder()
             .baseUrl(kusitmsServer)
             .client(okHttpClient)
+            .addConverterFactory(NullOnEmptyConverterFactory())
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(KusitmsApi::class.java)

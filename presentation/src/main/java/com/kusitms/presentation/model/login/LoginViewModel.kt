@@ -14,7 +14,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 
-enum class LoginStatus { SUCCESS, ERROR, DEFAULT}
+enum class LoginStatus { SUCCESS, ERROR, DEFAULT, EXIST, NONEXIST}
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
@@ -80,9 +80,21 @@ class LoginViewModel @Inject constructor(
     fun fetchAndSetUserProfile() {
         viewModelScope.launch {
             val profileResult = getLoginMemberUseCase.fetchLoginMemberProfile()
+            if (profileResult.isSuccess) {
+                val profile = profileResult.getOrNull()
+                Log.d("profile fetch", profile.toString())
+                if (profile != null) {
+                    if(profile.memberDetailExist) {
+                        updateLoginStatus(LoginStatus.EXIST)
+                    } else if (!profile.memberDetailExist) {
+                        updateLoginStatus(LoginStatus.NONEXIST)
+                    }
+                }
+            }
             Log.d("fetch", profileResult.toString())
             checkProfileDatastore()
         }
     }
 
 }
+

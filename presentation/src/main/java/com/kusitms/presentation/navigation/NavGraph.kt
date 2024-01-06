@@ -37,6 +37,7 @@ import com.kusitms.presentation.model.login.LoginViewModel
 import com.kusitms.presentation.model.login.findPw.FindPwViewModel
 import com.kusitms.presentation.model.setting.SettingViewModel
 import com.kusitms.presentation.model.signIn.SignInRequestViewModel
+import com.kusitms.presentation.model.signIn.SplashViewModel
 import com.kusitms.presentation.ui.home.HomeScreen
 import com.kusitms.presentation.ui.login.NonMemberScreen
 import com.kusitms.presentation.ui.login.findPw.FindPwCheckEmail
@@ -67,7 +68,7 @@ fun MainNavigation() {
     val signInViewModel: SignInViewModel = hiltViewModel()
     val signInReqeustViewModel: SignInRequestViewModel = hiltViewModel()
     val imageViewerViewModel: ImageViewerViewModel = hiltViewModel()
-
+    val splashViewModel: SplashViewModel = hiltViewModel()
     val snackbarHostState = remember { SnackbarHostState() }
 
 
@@ -90,7 +91,7 @@ fun MainNavigation() {
             modifier = Modifier.background(color = KusitmsColorPalette.current.Grey900),
         ) {
             kusitmsComposableWithAnimation(NavRoutes.SplashScreen.route) {
-                SplashScreen(navController)
+                SplashScreen(splashViewModel,navController)
             }
 
             kusitmsComposableWithAnimation(NavRoutes.SignInDefault.route) { SignInDefaultProfile(signInViewModel, navController) }
