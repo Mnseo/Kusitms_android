@@ -1,5 +1,6 @@
 package com.kusitms.presentation.ui.ImageVector
 
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -12,6 +13,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.path
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import coil.ImageLoader
 import coil.compose.rememberAsyncImagePainter
@@ -19,20 +21,26 @@ import coil.decode.SvgDecoder
 import com.kusitms.presentation.R
 
 @Composable
-fun ImagePhoto() {
-    val imageLoader = ImageLoader.Builder(LocalContext.current)
-        .components {
-            add(SvgDecoder.Factory())
-        }
-        .build()
-    Image(
-        painter = rememberAsyncImagePainter(R.drawable.screen2_photo, imageLoader),
-        contentDescription = null,
-        modifier = Modifier
-            .padding(0.83333.dp)
-            .width(44.dp)
-            .height(44.dp)
-    )
+fun ImagePhoto(imageUri: Uri?) {
+    if (imageUri != null) {
+        val painter = rememberAsyncImagePainter(model = imageUri)
+        Image(
+            painter = painter,
+            contentDescription = "Selected Image",
+            modifier = Modifier
+                .width(96.dp)
+                .height(96.dp)
+        )
+    } else {
+        Image(
+            painter = painterResource(id = R.drawable.screen2_photo),
+            contentDescription = null,
+            modifier = Modifier
+                .padding(0.83333.dp)
+                .width(44.dp)
+                .height(44.dp)
+        )
+    }
 }
 
 @Composable

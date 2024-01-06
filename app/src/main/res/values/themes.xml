@@ -2,7 +2,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
     <style name="Theme.Kusitms" parent="android:Theme.Material.Wallpaper.NoTitleBar">
-        <item name="android:statusBarColor">@color/status_bar_color</item>
+        <item name="android:statusBarColor">#0f1011</item>
         <item name="android:windowLightStatusBar">false</item>
         <item name="android:windowBackground">#0f1011</item>
     </style>

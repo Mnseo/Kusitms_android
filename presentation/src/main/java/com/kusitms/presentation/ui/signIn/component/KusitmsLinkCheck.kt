@@ -25,81 +25,57 @@ import com.kusitms.presentation.common.ui.KusitmsMarginHorizontalSpacer
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
 import com.kusitms.presentation.common.ui.theme.kusimsShapes
+import com.kusitms.presentation.model.signIn.LinkType
+import com.kusitms.presentation.model.signIn.SignInViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @Composable
-fun KusitmsLinkCheck() {
+fun KusitmsLinkCheck(
+    viewModel: SignInViewModel,
+    linkItemIndex: Int, // 현재 링크 아이템의 인덱스
+    currentLinkType: LinkType, // 현재 링크 아이템의 링크 타입
+    onLinkTypeChange: () -> Unit // 링크 타입 변경 시 호출될 함수
+) {
     Row(
         modifier = Modifier
-            .width(295.dp)
+            .width(290.dp)
             .height(48.dp),
         horizontalArrangement = Arrangement.spacedBy(4.dp, Alignment.Start),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        LinkCheckBox()
-        LinkTextField()
+        LinkCheckBox(
+            viewModel = viewModel,
+            linkItemIndex = linkItemIndex,
+            currentLinkType = currentLinkType,
+            onClick = onLinkTypeChange
+        )
+        LinkTextField(viewModel, linkItemIndex)
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalCoroutinesApi::class)
 @Composable
-fun LinkTextField() {
-    val textState = remember { mutableStateOf(TextFieldValue()) }
-    var isClicked by remember { mutableStateOf(false) }
-//    var borderColor by remember { mutableStateOf(KusitmsColorPalette.current.White) }
-    Row(
-        modifier = Modifier
-            .width(177.dp)
-            .height(48.dp)
-            .border(
-                width = 1.dp,
-                color = KusitmsColorPalette.current.Grey700,
-                shape = RoundedCornerShape(12.dp)
-            )
-            .background(
-                color = KusitmsColorPalette.current.Grey700,
-                shape = RoundedCornerShape(12.dp)
-            ),
-        horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.Start),
-        verticalAlignment = Alignment.CenterVertically
+fun LinkTextField(viewModel: SignInViewModel, linkItemIndex: Int) {
+    val linkItem = viewModel.linkItems.value[linkItemIndex]
+    val textState = remember { mutableStateOf(linkItem.linkUrl) }
+    val isClicked by remember { mutableStateOf(false) }
+    val borderColor = if(isClicked) KusitmsColorPalette.current.Main500 else KusitmsColorPalette.current.Grey700
+    Box(modifier = Modifier
+        .width(180.dp)
+        .height(48.dp)
+        .border(width = 1.dp, color = borderColor, shape = RoundedCornerShape(12.dp))
+        .background(color = KusitmsColorPalette.current.Grey700, shape = RoundedCornerShape(12.dp)),
     ) {
-        Box(
+        KusitmsInputField(
+            text = R.string.signin2_placeholder2,
+            value = textState.value,
+            onValueChange = {
+                textState.value = it
+                viewModel.updateLinkItem(linkItemIndex, linkItem.linkType, it) // 값이 변경될 때 업데이트
+            },
             modifier = Modifier
-                .width(129.dp)
+                .width(180.dp)
                 .height(48.dp)
-                .background(KusitmsColorPalette.current.Grey700)
-        ) {
-            KusitmsMarginHorizontalSpacer(size = 0)
-            TextField(
-                value = textState.value,
-                onValueChange = {
-                    run { textState.value = it }
-                },
-                colors = TextFieldDefaults.textFieldColors(
-                    containerColor = Color.Transparent,
-                    cursorColor = KusitmsColorPalette.current.Main500,
-                    disabledLabelColor = Color.Transparent,
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent
-                ),
-                placeholder = { Text(stringResource(id = R.string.signin2_placeholder2), style = KusitmsTypo.current.Text_Medium, color = KusitmsColorPalette.current.White ) }
-            )
-        }
-
-        Image(
-            painter = painterResource(id = R.drawable.ic_inputx),
-            contentDescription = null, contentScale = ContentScale.None,
-            modifier = Modifier
-                .width(24.dp)
-                .height(24.dp)
-                .padding(1.dp)
-                .clickable { textState.value = TextFieldValue("") } )
-
+        )
     }
-}
-
-
-@Preview
-@Composable
-fun exampleRow() {
-    KusitmsLinkCheck()
 }

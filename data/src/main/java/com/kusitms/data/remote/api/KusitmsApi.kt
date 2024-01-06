@@ -1,6 +1,7 @@
 package com.kusitms.data.remote.api
 
 import com.kusitms.data.remote.entity.BaseResponse
+import com.kusitms.data.remote.entity.nullExceptionResponse
 import com.kusitms.data.remote.entity.request.CommentContentRequestBody
 import com.kusitms.data.remote.entity.request.UpdatePasswordRequest
 import com.kusitms.data.remote.entity.response.CheckPasswordPayload
@@ -13,6 +14,8 @@ import com.kusitms.data.remote.entity.response.notice.CommentPayload
 import com.kusitms.data.remote.entity.response.notice.CurriculumPayload
 import com.kusitms.data.remote.entity.response.notice.FindPwCodeVerifyResponse
 import com.kusitms.data.remote.entity.response.notice.NoticePayload
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -23,6 +26,13 @@ interface KusitmsApi {
         @Query("email") email: String,
         @Query("password") password: String
     ): LoginResponse
+
+    @Multipart
+    @POST("member")
+    suspend fun sendAdditionalProfile(
+        @Part("dto") dto: RequestBody,
+        @Part file: MultipartBody.Part
+    ): nullExceptionResponse<Unit>
 
 
     @GET("member/info")
@@ -90,7 +100,7 @@ interface KusitmsApi {
 
     @FormUrlEncoded
     @POST("member/verify")
-    suspend fun sendCode(
+     suspend fun sendCode(
         @Field("email") email: String
     ): BaseResponse<Unit>
 
@@ -117,4 +127,14 @@ interface KusitmsApi {
     suspend fun updatePasswordAsLoggedIn(
         @Body passwordRequest: UpdatePasswordRequest
     ) : BaseResponse<Unit>
+
+    //로그아웃 및 탈퇴
+    @DELETE("auth/logout")
+    suspend fun logOutMember(): BaseResponse<Unit>
+
+    @DELETE("member")
+    suspend fun signOutMember(): BaseResponse<Unit>
+
+
+
 }

@@ -20,3 +20,12 @@ val categories = listOf(
 fun getAllSubCategories(categories: List<PartCategory>): List<String> {
     return categories.flatMap { it.subCategories }
 }
+
+fun mapCategoryToValue(categoryName: String): String {
+    return when (categoryName) {
+        "기획" -> "PLANNING"
+        "개발" -> "DEVELOPMENT"
+        "디자인" -> "DESIGN"
+        else -> "EXTRA" // 다른 경우에는 그대로 반환
+    }
+}

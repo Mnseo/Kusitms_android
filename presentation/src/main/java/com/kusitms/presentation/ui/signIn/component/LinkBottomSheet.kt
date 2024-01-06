@@ -1,18 +1,14 @@
-package com.kusitms.presentation.ui.signIn
+package com.kusitms.presentation.ui.signIn.component
 
-import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Text
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -22,29 +18,27 @@ import com.kusitms.presentation.common.ui.KusitmsMarginVerticalSpacer
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
 import com.kusitms.presentation.model.signIn.SignInViewModel
-import com.kusitms.presentation.model.signIn.categories
-import com.kusitms.presentation.model.signIn.mapCategoryToValue
+import com.kusitms.presentation.model.signIn.linkCategories
 import com.kusitms.presentation.ui.ImageVector.xIcon
-import kotlinx.coroutines.launch
 
 
 @OptIn(ExperimentalMaterial3Api::class)
-@ExperimentalMaterialApi
 @Composable
-fun PartBottomSheet(
+fun LinkBottomSheet(
     viewModel: SignInViewModel,
-    openBottomSheet : Boolean = false,
-    onChangeOpenBottomSheet : (Boolean) -> Unit = {}
-){
+    openBottomSheet: Boolean = false,
+    linkItemIndex: Int,
+    onChangeOpenBottomSheet: (Boolean, Any?) -> Unit = { b: Boolean, any: Any? -> }
+) {
     val bottomSheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true
     )
 
-    if (openBottomSheet) {
+    if(openBottomSheet) {
         ModalBottomSheet(
             containerColor = KusitmsColorPalette.current.Grey600,
             dragHandle = {Box(Modifier.height(0.dp))},
-            onDismissRequest = { onChangeOpenBottomSheet(false) },
+            onDismissRequest = { onChangeOpenBottomSheet(false, null) },
             sheetState = bottomSheetState,
             modifier = Modifier
                 .fillMaxWidth()
@@ -58,36 +52,32 @@ fun PartBottomSheet(
                 horizontalAlignment = Alignment.Start,
                 verticalArrangement = Arrangement.Top
             ) {
-                partSnackTitle( onClick = { onChangeOpenBottomSheet(false) } )
+                LinkBottomSheetTitle(onClick = {onChangeOpenBottomSheet(false, null)})
                 KusitmsMarginVerticalSpacer(size = 20)
-                partSelectColumn(viewModel = viewModel)
+                LinkSelectColumn(viewModel, linkItemIndex)
             }
+
         }
     }
+
 }
 
-
-
 @Composable
-fun partSelectColumn(viewModel: SignInViewModel) {
-    val filteredCategories = categories.filter { it.name != "기타" }
-    LazyColumn(
-        modifier = Modifier
-            .padding(horizontal = 24.dp)
-    ) {
-        items(filteredCategories) { category ->
-            partSelectItem(category = category,
-                onClick = { selectedCategory ->
-                    val selectedValue = mapCategoryToValue(selectedCategory.name)
-                    viewModel.updateSelectedPart(selectedValue)
-                    Log.d("Part", viewModel.selectedPart.value.toString()) },
-                viewModel = viewModel)
+fun LinkSelectColumn(viewModel: SignInViewModel, linkItemIndex: Int) {
+    LazyColumn(modifier = Modifier.padding(horizontal = 12.dp)) {
+        items(linkCategories) { category ->
+            LinkItem(
+                category = category,
+                onClick = {
+                    viewModel.updateLinkTypeAt(linkItemIndex, category.linkType)
+                }
+            )
         }
     }
 }
 
 @Composable
-fun partSnackTitle(onClick: () -> Unit) {
+fun LinkBottomSheetTitle(onClick: ()-> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -96,11 +86,8 @@ fun partSnackTitle(onClick: () -> Unit) {
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(text = stringResource(id = R.string.part_snack_title), style = KusitmsTypo.current.SubTitle2_Semibold, color = KusitmsColorPalette.current.Grey300)
+        Text(text = stringResource(id = R.string.signin2_title3), style = KusitmsTypo.current.SubTitle2_Semibold, color = KusitmsColorPalette.current.Grey300)
         xIcon.drawxIcon(modifier = Modifier.clickable { onClick() })
-
     }
 }
-
-
 

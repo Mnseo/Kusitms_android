@@ -93,29 +93,10 @@ fun MainNavigation() {
                 SplashScreen(navController)
             }
 
-            //SignInScreen
-            kusitmsComposableWithAnimation(NavRoutes.SignInDefault.route) {
-                SignInDefaultProfile(
-                    signInViewModel,
-                    navController
-                )
-            }
-            kusitmsComposableWithAnimation(NavRoutes.SignInAdditionalProfile.route) {
-                SignInAdditionalProfile(
-                    navController
-                )
-            }
-            kusitmsComposableWithAnimation(NavRoutes.SignInProfileComplete.route) {
-                SignInProfileComplete(
-                    navController
-                )
-            }
-            kusitmsComposableWithAnimation(NavRoutes.SignInRequest.route) {
-                SignInRequestScreen(
-                    signInReqeustViewModel,
-                    navController
-                )
-            }
+            kusitmsComposableWithAnimation(NavRoutes.SignInDefault.route) { SignInDefaultProfile(signInViewModel, navController) }
+            kusitmsComposableWithAnimation(NavRoutes.SignInAdditionalProfile.route) { SignInAdditionalProfile(signInViewModel, navController) }
+            kusitmsComposableWithAnimation(NavRoutes.SignInProfileComplete.route) { SignInProfileComplete(signInViewModel, navController)}
+            kusitmsComposableWithAnimation(NavRoutes.SignInRequest.route) { SignInRequestScreen(signInReqeustViewModel, navController) }
 
             //LoginScreen
             kusitmsComposableWithAnimation(NavRoutes.LoginMemberScreen.route) {
