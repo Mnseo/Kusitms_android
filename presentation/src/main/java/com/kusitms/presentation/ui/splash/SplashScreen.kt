@@ -1,13 +1,12 @@
 package com.kusitms.presentation.ui.splash
 
 import android.os.Build.VERSION.SDK_INT
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -24,17 +23,35 @@ import coil.size.Size.Companion.ORIGINAL
 import com.kusitms.presentation.R
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
+import com.kusitms.presentation.model.signIn.SplashViewModel
+import com.kusitms.presentation.model.signIn.TokenStatus
 import com.kusitms.presentation.navigation.NavRoutes
 import kotlinx.coroutines.delay
 
 @Composable
-fun SplashScreen(navController: NavController) {
-    LaunchedEffect(key1 = true) {
-        delay(2000)
-        navController.navigate(NavRoutes.LogInScreen.route) {
-            popUpTo(NavRoutes.SplashScreen.route) { inclusive = true}
+fun SplashScreen(viewModel: SplashViewModel, navController: NavController) {
+    val tokenStatus by viewModel.tokenStatus.collectAsState()
+
+    LaunchedEffect(tokenStatus) {
+        viewModel.verifyToken()
+        Log.d("tokenStatus", tokenStatus.toString())
+        when (tokenStatus) {
+            TokenStatus.VALID -> {
+                delay(2000)
+                navController.navigate(NavRoutes.Notice.route) {
+                    popUpTo(NavRoutes.SplashScreen.route) { inclusive = true }
+                }
+            }
+            TokenStatus.DEFAULT, TokenStatus.INVALID -> {
+                delay(2000)
+                navController.navigate(NavRoutes.LogInScreen.route) {
+                    popUpTo(NavRoutes.SplashScreen.route) { inclusive = true }
+                }
+            }
+            else -> Unit
         }
     }
+
     Splash()
 }
 

@@ -82,6 +82,7 @@ class LoginViewModel @Inject constructor(
             val profileResult = getLoginMemberUseCase.fetchLoginMemberProfile()
             if (profileResult.isSuccess) {
                 val profile = profileResult.getOrNull()
+                Log.d("profile fetch", profile.toString())
                 if (profile != null) {
                     if(profile.memberDetailExist) {
                         updateLoginStatus(LoginStatus.EXIST)
