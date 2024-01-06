@@ -87,11 +87,17 @@ class SignInRepositoryImpl @Inject constructor(
             )
             Log.d("응답", response.toString())
 
-            if (response.result.code == 200) {
-                Result.success(Unit)
+            if(response.isSuccessful){
+                if (response.code() == 200) {
+                    Result.success(Unit)
+                } else {
+                    Result.failure(RuntimeException("올바른 데이터를 받지 못했습니다."))
+                }
             } else {
                 Result.failure(RuntimeException("올바른 데이터를 받지 못했습니다."))
             }
+
+
         } catch (e: Exception) {
             Result.failure(e)
         }

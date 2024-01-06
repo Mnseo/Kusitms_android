@@ -32,7 +32,7 @@ interface KusitmsApi {
     suspend fun sendAdditionalProfile(
         @Part("dto") dto: RequestBody,
         @Part file: MultipartBody.Part
-    ): nullExceptionResponse<Unit>
+    ): Response<BaseResponse<Unit?>?>
 
 
     @GET("member/info")
