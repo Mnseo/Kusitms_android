@@ -85,6 +85,7 @@ class SignInRepositoryImpl @Inject constructor(
                 profileRequestBody,
                 filePart
             )
+            Log.d("응답", response.toString())
 
             if (response.result.code == 200) {
                 Result.success(Unit)

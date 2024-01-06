@@ -46,7 +46,30 @@ data class ColorPalette(
 
     val GreyBlack7 : Color = Color(0xFF959698)
 
-
     )
 
+data class ColorPalette1(
+    val Gray950: Color = Color(0xFF191919),
+    val Gray900: Color = Color(0xFF212121),
+    val Gray700: Color = Color(0xFF444444),
+    val Gray550: Color = Color(0xFF6E6E6E),
+    val Gray500: Color = Color(0xFF828282),
+    val Gray400: Color = Color(0xFFA6A6A6),
+    val Gray300: Color = Color(0xFFC9C9C9),
+    val Gray200: Color = Color(0xFFE9E9E9),
+    val Gray50: Color = Color(0xFFF5F5F5),
+
+    val Error300: Color = Color(0xFFFC4E6D),
+    val TMTMBlue200: Color = Color(0xFF96D7FF),
+    val TMTMBlue400: Color = Color(0xFF36B2FF),
+    val color_button_active: Color = Color(0xFF44AEFF),
+    val GreyWhite: Color = Color(0xFFFFFFFF),
+    val ColorDivider: Color = Color(0xFFF0F0F0),
+    val color_text_body_quaternary : Color = Color(0xFF828282),
+    val color_text_body_primary: Color = Color(0xFF444444),
+    val color_text_body_quinary: Color = Color(0xFFC9C9C9),
+    val elevation_color_elevation_level01: Color = Color(0xFFF5F5F5),
+)
+
 val KusitmsColorPalette = staticCompositionLocalOf { ColorPalette() }
+val TmtmColorPalette = staticCompositionLocalOf { ColorPalette1() }

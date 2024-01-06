@@ -38,7 +38,7 @@ fun KusitmsLinkCheck(
 ) {
     Row(
         modifier = Modifier
-            .width(290.dp)
+            .width(300.dp)
             .height(48.dp),
         horizontalArrangement = Arrangement.spacedBy(4.dp, Alignment.Start),
         verticalAlignment = Alignment.CenterVertically
@@ -49,6 +49,7 @@ fun KusitmsLinkCheck(
             currentLinkType = currentLinkType,
             onClick = onLinkTypeChange
         )
+        KusitmsMarginHorizontalSpacer(size = 5)
         LinkTextField(viewModel, linkItemIndex)
     }
 }
@@ -61,7 +62,7 @@ fun LinkTextField(viewModel: SignInViewModel, linkItemIndex: Int) {
     val isClicked by remember { mutableStateOf(false) }
     val borderColor = if(isClicked) KusitmsColorPalette.current.Main500 else KusitmsColorPalette.current.Grey700
     Box(modifier = Modifier
-        .width(180.dp)
+        .width(220.dp)
         .height(48.dp)
         .border(width = 1.dp, color = borderColor, shape = RoundedCornerShape(12.dp))
         .background(color = KusitmsColorPalette.current.Grey700, shape = RoundedCornerShape(12.dp)),
@@ -74,8 +75,8 @@ fun LinkTextField(viewModel: SignInViewModel, linkItemIndex: Int) {
                 viewModel.updateLinkItem(linkItemIndex, linkItem.linkType, it) // 값이 변경될 때 업데이트
             },
             modifier = Modifier
-                .width(180.dp)
-                .height(48.dp)
+                .width(220.dp)
+                .wrapContentHeight()
         )
     }
 }
