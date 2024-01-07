@@ -160,6 +160,9 @@
     <string name="notice_report_title_fishing">낚시/놀람/도배</string>
     <string name="notice_report_title_pornography">음란물/불건전한 만남 및 대화</string>
 
+    <string name="logout_dialog_title">로그아웃</string>
+    <string name="logout_dialog_content">로그아웃을 진행할까요?</string>
+
     <string name="notice_report_content_commercial">타 서비스, 앱, 사이트 등 게시판 외부로 회원을\n유도하거나 공동구매, 할인 쿠폰, 홍보성 이벤트 등\n허가되지 않은 광고/홍보 게시물</string>
     <string name="notice_report_content_abuse">비아냥, 비속어 등 예의범절에 벗어나거나,\n특정인이나 단체, 지역을 비방하는 등 논란 및 분란을\n일으킬 수 있는 게시물</string>
     <string name="notice_report_content_fraud">게시물 무단 유출, 타인의 개인정보 유출, 관리자 사칭 등 타인의 권리를 침해하거나 관련법에 위배되는 게시물</string>

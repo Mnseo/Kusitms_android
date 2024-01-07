@@ -7,6 +7,6 @@ class MemberLogOutUseCase @Inject constructor(
     private val authRepository: AuthRepository
 ) {
     suspend operator fun invoke(): Result<Unit> {
-        return authRepository.signOutMember()
+        return authRepository.logOutMember()
     }
 }
