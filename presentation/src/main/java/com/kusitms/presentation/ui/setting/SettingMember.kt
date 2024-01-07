@@ -29,60 +29,48 @@ import com.kusitms.presentation.model.setting.getMemberSetting
 import com.kusitms.presentation.model.setting.openUriSetting
 import com.kusitms.presentation.navigation.NavRoutes
 
-sealed class SettingMemberDialogState {
-    object LogOutConfirm : SettingMemberDialogState()
-}
-
-@Composable
-fun LogOutDialog(
-    viewModel: SettingViewModel,
-    onConfirmLogOut: () -> Unit,
-    onCancel: () -> Unit
-) {
-    KusitmsDialog(
-        title = stringResource(id = R.string.logout_dialog_title),
-        content = {
-            Text(
-                text = stringResource(id = R.string.logout_dialog_content),
-                textAlign = TextAlign.Center,
-                style = KusitmsTypo.current.Caption1,
-                color = KusitmsColorPalette.current.Grey400
-            )
-            KusitmsMarginVerticalSpacer(size = 24)
-        },
-        okColor = KusitmsColorPalette.current.Sub2,
-        okText = "로그아웃하기",
-        onOk = {
-            viewModel.logOut()
-        },
-        onCancel = {
-//            openDialogState = null
-        }) {
-//        openDialogState = null
-    }
-
-}
-
-
 @Composable
 fun SettingMember(
     navController: NavHostController,
-    viewModel: SettingViewModel,
-    onShowSnackbar: suspend  (String) -> Unit
+    viewModel: SettingViewModel
 ) {
     val settingStatus by viewModel.settingStatus.collectAsState()
+    var openDialogState by remember { mutableStateOf(false) }
 
     LaunchedEffect(settingStatus) {
         when(settingStatus) {
             SettingViewModel.Companion.SettingStatus.LOGOUT, SettingViewModel.Companion.SettingStatus.SIGNOUT -> {
                 navController.navigate(NavRoutes.LogInScreen.route) {
-                    popUpTo(NavRoutes.SettingMember.route) { inclusive = true
-                    }
+                    popUpTo(NavRoutes.SettingMember.route) { inclusive = true }
                 }
 
         }
             //처리.. 필요..
             SettingViewModel.Companion.SettingStatus.ERROR, SettingViewModel.Companion.SettingStatus.DEFAULT -> {}
+        }
+    }
+
+    if(openDialogState) {
+        KusitmsDialog(
+            title = stringResource(id = R.string.logout_dialog_title),
+            content = {
+                Text(
+                    text = stringResource(id = R.string.logout_dialog_content),
+                    textAlign = TextAlign.Center,
+                    style = KusitmsTypo.current.Caption1,
+                    color = KusitmsColorPalette.current.Grey400
+                )
+                KusitmsMarginVerticalSpacer(size = 24)
+            },
+            okColor = KusitmsColorPalette.current.Sub2,
+            okText = "로그아웃하기",
+            onOk = {
+                viewModel.logOut()
+            },
+            onCancel = {
+             !openDialogState
+            }) {
+        openDialogState = false
         }
     }
 
@@ -134,14 +122,8 @@ fun SettingMemberColumn2(viewModel: SettingViewModel, navController: NavHostCont
 @Composable
 fun PreviewSettingMember() {
     val SettingViewModel:SettingViewModel = hiltViewModel()
-    val snackbarHostState = remember { SnackbarHostState() }
     SettingMember(
         navController = rememberNavController(),
-        viewModel = SettingViewModel,
-        onShowSnackbar = { message->
-            snackbarHostState.showSnackbar(
-                message = message
-            )
-        }
+        viewModel = SettingViewModel
     )
 }

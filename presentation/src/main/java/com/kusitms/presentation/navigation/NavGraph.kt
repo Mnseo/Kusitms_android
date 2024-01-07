@@ -143,12 +143,7 @@ fun MainNavigation() {
             kusitmsComposableWithAnimation(NavRoutes.SettingMember.route) {
                 SettingMember(
                     navController = navController,
-                    viewModel = SettingViewModel,
-                    onShowSnackbar = { message->
-                        snackbarHostState.showSnackbar(
-                            message = message
-                        )
-                    }
+                    viewModel = SettingViewModel
                 )
             }
             kusitmsComposableWithAnimation(NavRoutes.SettingNonMember.route) {

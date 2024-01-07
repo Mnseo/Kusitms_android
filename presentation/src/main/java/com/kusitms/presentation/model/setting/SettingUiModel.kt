@@ -27,9 +27,6 @@ class SettingViewModel @Inject constructor(
     private val _settingStatus = MutableStateFlow(SettingStatus.DEFAULT)
     val settingStatus: StateFlow<SettingStatus> = _settingStatus
 
-//    private val _snackbarEvent = MutableSharedFlow<SettingSnackbarEvent>()
-//    val snackbarEvent: SharedFlow<SettingSnackbarEvent> = _snackbarEvent.asSharedFlow()
-
 
     fun onToggleChange(newToggleState: Boolean) {
         _alarmState.value = newToggleState
@@ -65,7 +62,6 @@ class SettingViewModel @Inject constructor(
 
     companion object {
         enum class SettingStatus { LOGOUT, SIGNOUT, DEFAULT, ERROR}
-        enum class SettingMemberSnackbarEvent { LOGOUT, SIGNOUT, NETWORK_ERROR}
     }
 
 }

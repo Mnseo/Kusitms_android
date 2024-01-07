@@ -128,7 +128,6 @@ fun nameBox(name: String) {
     }
 }
 
-
 @Composable
 fun btn(color: Color, text: String, navController: NavHostController) {
     Button(
