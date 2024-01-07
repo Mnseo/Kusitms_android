@@ -118,7 +118,9 @@ fun MainNavigation() {
                     viewModel = findPwViewModel
                 )
             }
-            kusitmsComposableWithAnimation(NavRoutes.FindPwCodeValidation.route) {
+            kusitmsComposableWithAnimation(
+                NavRoutes.FindPwCodeValidation.route
+            ) {
                 FindPwCodeValidation(
                     navController,
                     viewModel = findPwViewModel
@@ -127,18 +129,26 @@ fun MainNavigation() {
             kusitmsComposableWithAnimation(
                 NavRoutes.FindPwSetNewPw.route,
                 arguments = NavRoutes.FindPwSetNewPw.navArguments
-            ) { FindPwSetNewPw(navController) }
-            kusitmsComposableWithAnimation(NavRoutes.FindPwMemberCurrent.route) {
-                FindPwMemberCurrent(
-                    navController
-                )
+            ) {
+                FindPwSetNewPw(navController)
+            }
+
+            kusitmsComposableWithAnimation(
+                NavRoutes.FindPwMemberCurrent.route
+            ) {
+                FindPwMemberCurrent(navController)
             }
 
             //SettingScreen
             kusitmsComposableWithAnimation(NavRoutes.SettingMember.route) {
                 SettingMember(
-                    navController,
-                    SettingViewModel
+                    navController = navController,
+                    viewModel = SettingViewModel,
+                    onShowSnackbar = { message->
+                        snackbarHostState.showSnackbar(
+                            message = message
+                        )
+                    }
                 )
             }
             kusitmsComposableWithAnimation(NavRoutes.SettingNonMember.route) {

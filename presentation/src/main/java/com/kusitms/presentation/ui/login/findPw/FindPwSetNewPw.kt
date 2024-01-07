@@ -67,13 +67,13 @@ fun SetNewPwColumn(viewModel: UpdatePwViewModel, navController: NavHostControlle
         KusitmsMarginVerticalSpacer(size = 204)
         FindPwSetPwInput(viewModel = viewModel)
         Spacer(modifier = Modifier.weight(1f))
-        SetNewPwButton(viewModel = viewModel, navController = navController)
+        SetNewPwButton(viewModel = viewModel)
         KusitmsMarginVerticalSpacer(size = 24)
     }
 }
 
 @Composable
-fun SetNewPwButton(viewModel: UpdatePwViewModel, navController: NavHostController) {
+fun SetNewPwButton(viewModel: UpdatePwViewModel) {
     val passwordErrorState = viewModel.passwordErrorState.collectAsState(initial = UpdatePwViewModel.PasswordErrorState.None)
 
     val buttonColor = when {

@@ -1,6 +1,7 @@
 package com.kusitms.presentation.model.setting
 
 import androidx.compose.ui.platform.UriHandler
+import androidx.compose.ui.text.font.FontVariation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
@@ -10,13 +11,10 @@ import com.kusitms.presentation.model.login.LoginStatus
 import com.kusitms.presentation.model.signIn.SignInViewModel
 import com.kusitms.presentation.navigation.NavRoutes
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-enum class SettingStatus { LOGOUT, SIGNOUT, DEFAULT, ERROR}
 
 @HiltViewModel
 class SettingViewModel @Inject constructor(
@@ -28,6 +26,9 @@ class SettingViewModel @Inject constructor(
 
     private val _settingStatus = MutableStateFlow(SettingStatus.DEFAULT)
     val settingStatus: StateFlow<SettingStatus> = _settingStatus
+
+//    private val _snackbarEvent = MutableSharedFlow<SettingSnackbarEvent>()
+//    val snackbarEvent: SharedFlow<SettingSnackbarEvent> = _snackbarEvent.asSharedFlow()
 
 
     fun onToggleChange(newToggleState: Boolean) {
@@ -41,17 +42,30 @@ class SettingViewModel @Inject constructor(
     fun logOut() {
         viewModelScope.launch {
             memberLogOutUseCase()
-                .onSuccess { updateSettingStatus(SettingStatus.LOGOUT) }
-                .onFailure { updateSettingStatus(SettingStatus.ERROR) }
+                .onSuccess {
+                    updateSettingStatus(SettingStatus.LOGOUT)
+                }
+                .onFailure {
+                    updateSettingStatus(SettingStatus.ERROR)
+                }
         }
     }
 
     fun signOut() {
         viewModelScope.launch {
             memberSignOutUseCase()
-                .onSuccess { updateSettingStatus(SettingStatus.SIGNOUT) }
-                .onFailure { updateSettingStatus(SettingStatus.ERROR) }
+                .onSuccess {
+                    updateSettingStatus(SettingStatus.SIGNOUT)
+                }
+                .onFailure {
+                    updateSettingStatus(SettingStatus.ERROR)
+                }
         }
+    }
+
+    companion object {
+        enum class SettingStatus { LOGOUT, SIGNOUT, DEFAULT, ERROR}
+        enum class SettingMemberSnackbarEvent { LOGOUT, SIGNOUT, NETWORK_ERROR}
     }
 
 }
