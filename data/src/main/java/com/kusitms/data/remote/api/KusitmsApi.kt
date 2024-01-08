@@ -136,5 +136,8 @@ interface KusitmsApi {
     suspend fun signOutMember(): BaseResponse<Unit>
 
 
+    // 프로필 리스트
+    @GET("member/info/list")
+    suspend fun getInfoListMember(): BaseResponse<Unit>
 
 }
