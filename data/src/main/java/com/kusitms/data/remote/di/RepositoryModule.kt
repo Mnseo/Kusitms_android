@@ -42,4 +42,9 @@ abstract class RepositoryModule {
     abstract fun bindAuthRepository(
         authRepository: AuthRepositoryImpl
     ): AuthRepository
+
+    @Binds
+    abstract fun bindProfileRepository(
+        profileRepository: ProfileRepositoryImpl
+    ): ProfileRepository
 }

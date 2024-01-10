@@ -4,6 +4,6 @@ import com.kusitms.data.remote.entity.response.LoginResponse
 import retrofit2.http.GET
 
 interface KusitmsTokenApi {
-    @GET("auth/reissue")
+    @GET("v1/auth/reissue")
     suspend fun RefreshAccessToken() : LoginResponse
 }
