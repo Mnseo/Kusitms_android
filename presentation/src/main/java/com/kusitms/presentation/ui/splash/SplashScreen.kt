@@ -38,7 +38,7 @@ fun SplashScreen(viewModel: SplashViewModel, navController: NavController) {
         when (tokenStatus) {
             TokenStatus.VALID -> {
                 delay(2000)
-                navController.navigate(NavRoutes.LogInScreen.route) {
+                navController.navigate(NavRoutes.Notice.route) {
                     popUpTo(NavRoutes.SplashScreen.route) { inclusive = true }
                 }
             }
