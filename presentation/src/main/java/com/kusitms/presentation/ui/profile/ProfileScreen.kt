@@ -50,6 +50,7 @@ fun ProfileScreen(
     navController: NavHostController
 ) {
     val expanded by viewModel.expended.collectAsState()
+    val profileList by viewModel.profileList.collectAsState()
 
     Column(
         modifier = Modifier
