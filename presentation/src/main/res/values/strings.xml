@@ -177,6 +177,7 @@
     <string name="profile_part_plan">기획팀</string>
     <string name="profile_part_dev">개발팀</string>
     <string name="profile_part_design">디자인팀</string>
+    <string name="profile_picture">프로필 사진</string>
 
 
     <!-- ProfileDetail -->

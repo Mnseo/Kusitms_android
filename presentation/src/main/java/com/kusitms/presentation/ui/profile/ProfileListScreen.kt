@@ -18,7 +18,6 @@ fun ProfileListScreen(
     navController: NavController,
     profileList: List<ProfileModel>,
 ) {
-    val listState = rememberLazyListState();
     LazyVerticalGrid(
         columns = GridCells.Adaptive(minSize = 152.dp),
         modifier = Modifier
