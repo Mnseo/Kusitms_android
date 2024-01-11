@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -20,7 +19,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import coil.size.Size
 import com.kusitms.domain.model.profile.ProfileModel
 import com.kusitms.presentation.R
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
@@ -69,7 +67,7 @@ fun ProfileItem(profile: ProfileModel, modifier: Modifier = Modifier, onClick: (
                 color = KusitmsColorPalette.current.White
             )
             Text(
-                text = profile.part,
+                text = mapPartToKorean(part = profile.part),
                 style = KusitmsTypo.current.Caption1,
                 color = KusitmsColorPalette.current.Grey400
             )
@@ -79,5 +77,17 @@ fun ProfileItem(profile: ProfileModel, modifier: Modifier = Modifier, onClick: (
             style = KusitmsTypo.current.Caption1,
             color = KusitmsColorPalette.current.Grey400
         )
+    }
+}
+
+
+// 파트 이름을 한글로 바꾸는 함수
+@Composable
+private fun mapPartToKorean(part: String): String {
+    return when (part) {
+        "PLANNING" -> "기획자"
+        "DESIGN" -> "디자이너"
+        "DEVELOPMENT" -> "개발자"
+        else -> part
     }
 }
