@@ -41,7 +41,6 @@ import com.kusitms.presentation.navigation.NavRoutes
 import com.kusitms.presentation.ui.ImageVector.icons.KusitmsIcons
 import com.kusitms.presentation.ui.ImageVector.icons.kusitmsicons.ArrowDown
 import com.kusitms.presentation.ui.ImageVector.icons.kusitmsicons.Search
-import com.kusitms.presentation.ui.login.LoginScreen
 
 
 @Composable
@@ -99,7 +98,8 @@ fun ProfileScreen(
             }
         }
         ProfileListScreen(
-            navController = navController
+            navController = navController,
+            profileList = profileList
         )
     }
 }

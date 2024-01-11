@@ -17,12 +17,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.kusitms.domain.model.profile.ProfileModel
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
-import com.kusitms.presentation.model.profile.Profile
 
 @Composable
-fun ProfileItem(profile: Profile, modifier: Modifier = Modifier, onClick: () -> Unit) {
+fun ProfileItem(profile: ProfileModel, modifier: Modifier = Modifier, onClick: () -> Unit) {
     Column(
         modifier = Modifier
             .then(modifier)
@@ -67,7 +67,7 @@ fun ProfileItem(profile: Profile, modifier: Modifier = Modifier, onClick: () -> 
             )
         }
         Text(
-            text = profile.introduction,
+            text = profile.description,
             style = KusitmsTypo.current.Caption1,
             color = KusitmsColorPalette.current.Grey400
         )

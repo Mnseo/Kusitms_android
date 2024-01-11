@@ -4,5 +4,5 @@ data class Profile(
     val profileId : Int = 0,
     val name: String,
     val part: String,
-    val introduction: String,
+    val description: String,
 )
