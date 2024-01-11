@@ -16,12 +16,13 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
 import com.kusitms.presentation.model.profile.search.ProfileSearchViewModel
@@ -30,9 +31,11 @@ import com.kusitms.presentation.ui.ImageVector.LeftArrow
 @Composable
 fun ProfileSearchScreen(
     viewModel: ProfileSearchViewModel = hiltViewModel(),
+    navController: NavHostController,
     onBackClick: () -> Unit,
 ) {
     val uiState = viewModel.uiState.collectAsState()
+    val profileList by viewModel.profileList.collectAsState()
 
     Column(
         modifier = Modifier
@@ -82,7 +85,10 @@ fun ProfileSearchScreen(
             }
         } else {
             if (profilesContainsSearchText(uiState.value.searchText)) {
-                ProfileSearchExist()
+                ProfileSearchExist(
+                    navController = navController,
+                    profileList = profileList
+                )
             } else {
                 ProfileSearchNone(uiState.value.searchText)
             }
@@ -96,10 +102,10 @@ fun profilesContainsSearchText(searchText: String): Boolean {
     return false
 }
 
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun ProfileSearchScreenPreview() {
-    ProfileSearchScreen(
-        onBackClick = {},
-    )
-}
+//@Preview(showBackground = true, showSystemUi = true)
+//@Composable
+//fun ProfileSearchScreenPreview() {
+//    ProfileSearchScreen(
+//        onBackClick = {},
+//    )
+//}
