@@ -15,17 +15,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.kusitms.domain.model.profile.ProfileModel
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
+import com.kusitms.presentation.model.profile.search.ProfileSearchViewModel
 import com.kusitms.presentation.navigation.NavRoutes
 import com.kusitms.presentation.ui.profile.ProfileItem
 
 @Composable
 fun ProfileSearchExist(
     navController: NavController,
-    profileList: List<ProfileModel>
+    viewModel: ProfileSearchViewModel
 ) {
+    val searchedProfiles = viewModel.getSearchProfiles()
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -37,7 +38,7 @@ fun ProfileSearchExist(
                 .padding(16.dp)
         ) {
             Text(
-                text = profileList.size.toString(),
+                text = searchedProfiles.size.toString(),
                 style = KusitmsTypo.current.Caption1,
                 color = KusitmsColorPalette.current.Grey400
             )
@@ -53,7 +54,7 @@ fun ProfileSearchExist(
                 .fillMaxSize()
                 .padding(horizontal = 0.dp),
         ) {
-            items(profileList) { profile ->
+            items(searchedProfiles) { profile ->
                 ProfileItem(
                     profile = profile,
                     onClick = { navController.navigate(NavRoutes.ProfileDetail.route) }

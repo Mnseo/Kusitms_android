@@ -23,10 +23,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.kusitms.domain.model.profile.ProfileModel
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
-import com.kusitms.presentation.model.profile.Profile
 import com.kusitms.presentation.model.profile.search.ProfileSearchViewModel
 import com.kusitms.presentation.ui.ImageVector.LeftArrow
 
@@ -86,10 +84,10 @@ fun ProfileSearchScreen(
                 )
             }
         } else {
-            if (profilesContainsSearchText(uiState.value.searchText, profileList)) {
+            if (viewModel.profilesContainsSearchText(uiState.value.searchText, profileList)) {
                 ProfileSearchExist(
                     navController = navController,
-                    profileList = profileList
+                    viewModel = viewModel
                 )
             } else {
                 ProfileSearchNone(uiState.value.searchText)
@@ -99,15 +97,4 @@ fun ProfileSearchScreen(
     }
 }
 
-// profiles에 검색어가 포함되는지 확인하는 함수
-fun profilesContainsSearchText(searchText: String, profileList: List<ProfileModel>): Boolean {
-    return profileList.any { it.name.contains(searchText) }
-}
 
-//@Preview(showBackground = true, showSystemUi = true)
-//@Composable
-//fun ProfileSearchScreenPreview() {
-//    ProfileSearchScreen(
-//        onBackClick = {},
-//    )
-//}
