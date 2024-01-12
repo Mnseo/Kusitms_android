@@ -37,7 +37,7 @@ fun ProfileSearchExist(
                 .padding(16.dp)
         ) {
             Text(
-                text = "1",
+                text = profileList.size.toString(),
                 style = KusitmsTypo.current.Caption1,
                 color = KusitmsColorPalette.current.Grey400
             )
