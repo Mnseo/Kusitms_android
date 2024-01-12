@@ -196,6 +196,8 @@
     <string name="profile_search_hint">이름, 학교, 학과, 관심 분야</string>
 
 
-
-
+    <string name="bottom_nav_home">홈</string>
+    <string name="bottom_nav_attendance">출석</string>
+    <string name="bottom_nav_notice">공지</string>
+    <string name="bottom_nav_profile">프로필</string>
 </resources>

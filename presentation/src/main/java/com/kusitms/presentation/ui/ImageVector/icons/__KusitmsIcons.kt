@@ -2,6 +2,10 @@ package com.kusitms.presentation.ui.ImageVector.icons
 
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.kusitms.presentation.ui.ImageVector.icons.kusitmsicons.ArrowDown
+import com.kusitms.presentation.ui.ImageVector.icons.kusitmsicons.BottomNavAttendance
+import com.kusitms.presentation.ui.ImageVector.icons.kusitmsicons.BottomNavHome
+import com.kusitms.presentation.ui.ImageVector.icons.kusitmsicons.BottomNavNotice
+import com.kusitms.presentation.ui.ImageVector.icons.kusitmsicons.BottomNavProfile
 import com.kusitms.presentation.ui.ImageVector.icons.kusitmsicons.Chat
 import com.kusitms.presentation.ui.ImageVector.icons.kusitmsicons.Checked
 import com.kusitms.presentation.ui.ImageVector.icons.kusitmsicons.Close
@@ -28,6 +32,6 @@ public val KusitmsIcons.Icons: ____KtList<ImageVector>
       return __Icons!!
     }
     __Icons= listOf(ArrowDown, Chat, Checked, Close, Download, Flag, MoreVertical,
-        Notice, NoticeDark, Search, Send, Setting, Unchecked, User, UserBackground)
+        Notice, NoticeDark, Search, Send, Setting, Unchecked, User, UserBackground,BottomNavAttendance, BottomNavHome, BottomNavNotice, BottomNavProfile,)
     return __Icons!!
   }
