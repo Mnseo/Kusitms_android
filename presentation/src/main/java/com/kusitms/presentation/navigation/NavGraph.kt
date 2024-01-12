@@ -17,22 +17,27 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavDeepLink
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.navOptions
+import com.kusitms.presentation.common.ui.KusitmsBottomNavigationBar
+import com.kusitms.presentation.common.ui.KusitmsBottomNavigationItem
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
+import com.kusitms.presentation.common.util.NavUtil.shownBottomBarNavRouteSet
 import com.kusitms.presentation.model.login.LoginViewModel
 import com.kusitms.presentation.model.login.findPw.FindPwViewModel
 import com.kusitms.presentation.model.setting.SettingViewModel
@@ -77,152 +82,194 @@ fun MainNavigation() {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(bottom = 66.dp),
+                    .padding(
+                        bottom = if (currentRoute in shownBottomBarNavRouteSet) 0.dp else 76.dp
+                    ),
                 contentAlignment = Alignment.BottomCenter
             ) {
                 SnackbarHost(hostState = snackbarHostState)
             }
+        },
+        bottomBar = {
+            if(currentRoute in shownBottomBarNavRouteSet)
+                KusitmsBottomNavigationBar(){
+                    TopLevelDestination.values().forEach {
+                        KusitmsBottomNavigationItem(
+                            selected = it.route == currentRoute,
+                            onClick = {
+                                if(it.route != currentRoute && it.route.isNotBlank()){
+                                    navController.navigate(
+                                        it.route,
+                                        navOptions = navOptions {
+                                            popUpTo(NavRoutes.HomeScreen.route) {
+                                               // saveState = true
+                                            }
+                                            launchSingleTop = true
+                                            restoreState = true
+                                        }
+                                    )
+                                }
+                            },
+                            label = stringResource(id = it.iconTextId),
+                            icon = {
+                                Icon(imageVector = it.icon, contentDescription = null,
+                                    tint = KusitmsColorPalette.current.Grey400)
 
+                            }, selectedIcon = {
+                                Icon(imageVector = it.icon, contentDescription = null,
+                                    tint = KusitmsColorPalette.current.Grey100)
+                            }
+                        )
+                    }
+                }
         }
     ) { paddingValues ->
-        NavHost(
-            navController = navController,
-            startDestination = NavRoutes.SplashScreen.route,
-            modifier = Modifier.background(color = KusitmsColorPalette.current.Grey900),
-        ) {
-            kusitmsComposableWithAnimation(NavRoutes.SplashScreen.route) {
-                SplashScreen(splashViewModel,navController)
-            }
-
-            kusitmsComposableWithAnimation(NavRoutes.SignInDefault.route) { SignInDefaultProfile(signInViewModel, navController) }
-            kusitmsComposableWithAnimation(NavRoutes.SignInAdditionalProfile.route) { SignInAdditionalProfile(signInViewModel, navController) }
-            kusitmsComposableWithAnimation(NavRoutes.SignInProfileComplete.route) { SignInProfileComplete(signInViewModel, navController)}
-            kusitmsComposableWithAnimation(NavRoutes.SignInRequest.route) { SignInRequestScreen(signInReqeustViewModel, navController) }
-
-            //LoginScreen
-            kusitmsComposableWithAnimation(NavRoutes.LoginMemberScreen.route) {
-                val loginViewModel: LoginViewModel = getViewModel()
-                LoginMemberScreen(viewModel = loginViewModel, navController = navController)
-            }
-            kusitmsComposableWithAnimation(NavRoutes.LoginNonMember.route) {
-                NonMemberScreen(
-                    navController
-                )
-            }
-            kusitmsComposableWithAnimation(NavRoutes.LogInScreen.route) { LoginScreen(navController) }
-
-            //FindPwScreen
-            kusitmsComposableWithAnimation(NavRoutes.FindPwCheckEmail.route) {
-                FindPwCheckEmail(
-                    navController,
-                    viewModel = findPwViewModel
-                )
-            }
-            kusitmsComposableWithAnimation(
-                NavRoutes.FindPwCodeValidation.route
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(color = KusitmsColorPalette.current.Grey900)
+                .padding(paddingValues)
+        ){
+            NavHost(
+                navController = navController,
+                startDestination = NavRoutes.SplashScreen.route,
+                modifier = Modifier.fillMaxSize(),
             ) {
-                FindPwCodeValidation(
-                    navController,
-                    viewModel = findPwViewModel
-                )
-            }
-            kusitmsComposableWithAnimation(
-                NavRoutes.FindPwSetNewPw.route,
-                arguments = NavRoutes.FindPwSetNewPw.navArguments
-            ) {
-                FindPwSetNewPw(navController)
-            }
+                kusitmsComposableWithAnimation(NavRoutes.SplashScreen.route) {
+                    SplashScreen(splashViewModel,navController)
+                }
 
-            kusitmsComposableWithAnimation(
-                NavRoutes.FindPwMemberCurrent.route
-            ) {
-                FindPwMemberCurrent(navController)
-            }
+                kusitmsComposableWithAnimation(NavRoutes.SignInDefault.route) { SignInDefaultProfile(signInViewModel, navController) }
+                kusitmsComposableWithAnimation(NavRoutes.SignInAdditionalProfile.route) { SignInAdditionalProfile(signInViewModel, navController) }
+                kusitmsComposableWithAnimation(NavRoutes.SignInProfileComplete.route) { SignInProfileComplete(signInViewModel, navController)}
+                kusitmsComposableWithAnimation(NavRoutes.SignInRequest.route) { SignInRequestScreen(signInReqeustViewModel, navController) }
 
-            //SettingScreen
-            kusitmsComposableWithAnimation(NavRoutes.SettingMember.route) {
-                SettingMember(
-                    navController = navController,
-                    viewModel = SettingViewModel
-                )
-            }
-            kusitmsComposableWithAnimation(NavRoutes.SettingNonMember.route) {
-                SettingNonMember(
-                    navController
-                )
-            }
+                //LoginScreen
+                kusitmsComposableWithAnimation(NavRoutes.LoginMemberScreen.route) {
+                    val loginViewModel: LoginViewModel = getViewModel()
+                    LoginMemberScreen(viewModel = loginViewModel, navController = navController)
+                }
+                kusitmsComposableWithAnimation(NavRoutes.LoginNonMember.route) {
+                    NonMemberScreen(
+                        navController
+                    )
+                }
+                kusitmsComposableWithAnimation(NavRoutes.LogInScreen.route) { LoginScreen(navController) }
 
-            //HomeScreen
-            kusitmsComposableWithAnimation(NavRoutes.HomeScreen.route) { HomeScreen(navController) }
+                //FindPwScreen
+                kusitmsComposableWithAnimation(NavRoutes.FindPwCheckEmail.route) {
+                    FindPwCheckEmail(
+                        navController,
+                        viewModel = findPwViewModel
+                    )
+                }
+                kusitmsComposableWithAnimation(
+                    NavRoutes.FindPwCodeValidation.route
+                ) {
+                    FindPwCodeValidation(
+                        navController,
+                        viewModel = findPwViewModel
+                    )
+                }
+                kusitmsComposableWithAnimation(
+                    NavRoutes.FindPwSetNewPw.route,
+                    arguments = NavRoutes.FindPwSetNewPw.navArguments
+                ) {
+                    FindPwSetNewPw(navController)
+                }
 
-            // NoticeScreen
-            kusitmsComposableWithAnimation(NavRoutes.Notice.route) {
-                NoticeScreen(
-                    onNoticeClick = {
-                        navController.navigate(NavRoutes.NoticeDetail.createRoute(it.noticeId))
-                    },
-                    onSettingClick = {
-                        navController.navigate(NavRoutes.SettingMember.route)
-                    }
-                )
-            }
+                kusitmsComposableWithAnimation(
+                    NavRoutes.FindPwMemberCurrent.route
+                ) {
+                    FindPwMemberCurrent(navController)
+                }
 
-            composable(
-                route = NavRoutes.NoticeDetail.route,
-                arguments = NavRoutes.NoticeDetail.navArguments
-            ) {
-                NoticeDetailScreen(
-                    onShowSnackbar = { message ->
-                        snackbarHostState.showSnackbar(
-                            message = message
-                        )
-                    },
-                    onBack = {
-                        navController.navigateUp()
-                    },
-                    imageViewerViewModel = imageViewerViewModel,
-                    onClickImage = {
-                        navController.navigate(NavRoutes.ImageViewer.route)
-                    }
-                )
-            }
+                //SettingScreen
+                kusitmsComposableWithAnimation(NavRoutes.SettingMember.route) {
+                    SettingMember(
+                        navController = navController,
+                        viewModel = SettingViewModel
+                    )
+                }
+                kusitmsComposableWithAnimation(NavRoutes.SettingNonMember.route) {
+                    SettingNonMember(
+                        navController
+                    )
+                }
 
-            // ProfileScreen
+                //HomeScreen
+                kusitmsComposableWithAnimation(NavRoutes.HomeScreen.route) { HomeScreen(navController) }
 
-            kusitmsComposableWithAnimation(NavRoutes.Profile.route) {
-                ProfileScreen(navController = navController)
-            }
+                // NoticeScreen
+                kusitmsComposableWithAnimation(NavRoutes.Notice.route) {
+                    NoticeScreen(
+                        onNoticeClick = {
+                            navController.navigate(NavRoutes.NoticeDetail.createRoute(it.noticeId))
+                        },
+                        onSettingClick = {
+                            navController.navigate(NavRoutes.SettingMember.route)
+                        }
+                    )
+                }
 
-            kusitmsComposableWithAnimation(NavRoutes.ProfileSearch.route) {
-                ProfileSearchScreen(
-                    onBackClick = {
-                        navController.navigateUp()
-                    },
-                )
-            }
+                composable(
+                    route = NavRoutes.NoticeDetail.route,
+                    arguments = NavRoutes.NoticeDetail.navArguments
+                ) {
+                    NoticeDetailScreen(
+                        onShowSnackbar = { message ->
+                            snackbarHostState.showSnackbar(
+                                message = message
+                            )
+                        },
+                        onBack = {
+                            navController.navigateUp()
+                        },
+                        imageViewerViewModel = imageViewerViewModel,
+                        onClickImage = {
+                            navController.navigate(NavRoutes.ImageViewer.route)
+                        }
+                    )
+                }
+
+                // ProfileScreen
+
+                kusitmsComposableWithAnimation(NavRoutes.Profile.route) {
+                    ProfileScreen(navController = navController)
+                }
+
+                kusitmsComposableWithAnimation(NavRoutes.ProfileSearch.route) {
+                    ProfileSearchScreen(
+                        onBackClick = {
+                            navController.navigateUp()
+                        },
+                    )
+                }
 
 
-            kusitmsComposableWithAnimation(NavRoutes.ProfileDetail.route) {
-                ProfileDetailScreen(
-                    onProfileClick = {
-                        navController.navigate(NavRoutes.ProfileDetail.createRoute(it.profileId))
-                    },
-                    onBack = {
-                        navController.navigateUp()
-                    }
-                )
-            }
+                kusitmsComposableWithAnimation(NavRoutes.ProfileDetail.route) {
+                    ProfileDetailScreen(
+                        onProfileClick = {
+                            navController.navigate(NavRoutes.ProfileDetail.createRoute(it.profileId))
+                        },
+                        onBack = {
+                            navController.navigateUp()
+                        }
+                    )
+                }
 
-            kusitmsComposableWithAnimation(NavRoutes.ImageViewer.route) {
+                kusitmsComposableWithAnimation(NavRoutes.ImageViewer.route) {
 
-                ImageViewerScreen(
-                    viewModel = imageViewerViewModel,
-                    onBack = {
-                        navController.popBackStack()
-                    }
-                )
+                    ImageViewerScreen(
+                        viewModel = imageViewerViewModel,
+                        onBack = {
+                            navController.popBackStack()
+                        }
+                    )
+                }
             }
         }
+
     }
 
 }
