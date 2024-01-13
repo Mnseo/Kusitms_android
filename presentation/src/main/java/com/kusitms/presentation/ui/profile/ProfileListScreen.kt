@@ -14,8 +14,8 @@ import com.kusitms.presentation.navigation.NavRoutes
 
 @Composable
 fun ProfileListScreen(
-    navController: NavController,
     profileList: List<ProfileModel>,
+    onProfileClick: (ProfileModel) -> Unit,
 ) {
     LazyVerticalGrid(
         columns = GridCells.Adaptive(minSize = 152.dp),
@@ -23,10 +23,13 @@ fun ProfileListScreen(
             .fillMaxSize()
             .padding(horizontal = 0.dp),
     ) {
-        items(profileList) { profile ->
-            ProfileItem(
-                profile = profile,
-                onClick = { navController.navigate(NavRoutes.ProfileDetail.route) })
+        if (profileList.isNotEmpty()) {
+            items(profileList) { profile ->
+                ProfileItem(
+                    profile = profile,
+                    onClick = { onProfileClick(profile) }
+                )
+            }
         }
     }
 }

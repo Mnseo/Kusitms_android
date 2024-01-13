@@ -9,13 +9,15 @@ import javax.inject.Inject
 class GetProfileDetailUseCase @Inject constructor(
     private val profileRepository: ProfileRepository,
 ) {
-    operator fun invoke(memberId: Int): Flow<ProfileModel> = flow {
+    operator fun invoke(
+        memberId: Int,
+    ): Flow<ProfileModel> = flow {
         profileRepository.getProfileDetail(
             memberId
         ).onSuccess {
-                emit(it)
-            }.onFailure {
-                throw it
-            }
+            emit(it)
+        }.onFailure {
+            throw it
+        }
     }
 }

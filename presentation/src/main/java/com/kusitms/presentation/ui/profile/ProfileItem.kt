@@ -25,7 +25,11 @@ import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
 
 @Composable
-fun ProfileItem(profile: ProfileModel, modifier: Modifier = Modifier, onClick: () -> Unit) {
+fun ProfileItem(
+    profile: ProfileModel,
+    modifier: Modifier = Modifier,
+    onClick: (ProfileModel) -> Unit
+) {
     Column(
         modifier = Modifier
             .then(modifier)
@@ -35,7 +39,9 @@ fun ProfileItem(profile: ProfileModel, modifier: Modifier = Modifier, onClick: (
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable(onClick = onClick),
+                .clickable {
+                           onClick(profile)
+                },
             shape = RoundedCornerShape(16.dp),
             colors = CardDefaults.cardColors(
                 containerColor = KusitmsColorPalette.current.Grey100,

@@ -91,18 +91,18 @@ fun MainNavigation() {
             }
         },
         bottomBar = {
-            if(currentRoute in shownBottomBarNavRouteSet)
-                KusitmsBottomNavigationBar(){
+            if (currentRoute in shownBottomBarNavRouteSet)
+                KusitmsBottomNavigationBar() {
                     TopLevelDestination.values().forEach {
                         KusitmsBottomNavigationItem(
                             selected = it.route == currentRoute,
                             onClick = {
-                                if(it.route != currentRoute && it.route.isNotBlank()){
+                                if (it.route != currentRoute && it.route.isNotBlank()) {
                                     navController.navigate(
                                         it.route,
                                         navOptions = navOptions {
                                             popUpTo(NavRoutes.HomeScreen.route) {
-                                               // saveState = true
+                                                // saveState = true
                                             }
                                             launchSingleTop = true
                                             restoreState = true
@@ -112,12 +112,16 @@ fun MainNavigation() {
                             },
                             label = stringResource(id = it.iconTextId),
                             icon = {
-                                Icon(imageVector = it.icon, contentDescription = null,
-                                    tint = KusitmsColorPalette.current.Grey400)
+                                Icon(
+                                    imageVector = it.icon, contentDescription = null,
+                                    tint = KusitmsColorPalette.current.Grey400
+                                )
 
                             }, selectedIcon = {
-                                Icon(imageVector = it.icon, contentDescription = null,
-                                    tint = KusitmsColorPalette.current.Grey100)
+                                Icon(
+                                    imageVector = it.icon, contentDescription = null,
+                                    tint = KusitmsColorPalette.current.Grey100
+                                )
                             }
                         )
                     }
@@ -129,20 +133,40 @@ fun MainNavigation() {
                 .fillMaxSize()
                 .background(color = KusitmsColorPalette.current.Grey900)
                 .padding(paddingValues)
-        ){
+        ) {
             NavHost(
                 navController = navController,
                 startDestination = NavRoutes.SplashScreen.route,
                 modifier = Modifier.fillMaxSize(),
             ) {
                 kusitmsComposableWithAnimation(NavRoutes.SplashScreen.route) {
-                    SplashScreen(splashViewModel,navController)
+                    SplashScreen(splashViewModel, navController)
                 }
 
-                kusitmsComposableWithAnimation(NavRoutes.SignInDefault.route) { SignInDefaultProfile(signInViewModel, navController) }
-                kusitmsComposableWithAnimation(NavRoutes.SignInAdditionalProfile.route) { SignInAdditionalProfile(signInViewModel, navController) }
-                kusitmsComposableWithAnimation(NavRoutes.SignInProfileComplete.route) { SignInProfileComplete(signInViewModel, navController)}
-                kusitmsComposableWithAnimation(NavRoutes.SignInRequest.route) { SignInRequestScreen(signInReqeustViewModel, navController) }
+                kusitmsComposableWithAnimation(NavRoutes.SignInDefault.route) {
+                    SignInDefaultProfile(
+                        signInViewModel,
+                        navController
+                    )
+                }
+                kusitmsComposableWithAnimation(NavRoutes.SignInAdditionalProfile.route) {
+                    SignInAdditionalProfile(
+                        signInViewModel,
+                        navController
+                    )
+                }
+                kusitmsComposableWithAnimation(NavRoutes.SignInProfileComplete.route) {
+                    SignInProfileComplete(
+                        signInViewModel,
+                        navController
+                    )
+                }
+                kusitmsComposableWithAnimation(NavRoutes.SignInRequest.route) {
+                    SignInRequestScreen(
+                        signInReqeustViewModel,
+                        navController
+                    )
+                }
 
                 //LoginScreen
                 kusitmsComposableWithAnimation(NavRoutes.LoginMemberScreen.route) {
@@ -154,7 +178,11 @@ fun MainNavigation() {
                         navController
                     )
                 }
-                kusitmsComposableWithAnimation(NavRoutes.LogInScreen.route) { LoginScreen(navController) }
+                kusitmsComposableWithAnimation(NavRoutes.LogInScreen.route) {
+                    LoginScreen(
+                        navController
+                    )
+                }
 
                 //FindPwScreen
                 kusitmsComposableWithAnimation(NavRoutes.FindPwCheckEmail.route) {
@@ -198,7 +226,11 @@ fun MainNavigation() {
                 }
 
                 //HomeScreen
-                kusitmsComposableWithAnimation(NavRoutes.HomeScreen.route) { HomeScreen(navController) }
+                kusitmsComposableWithAnimation(NavRoutes.HomeScreen.route) {
+                    HomeScreen(
+                        navController
+                    )
+                }
 
                 // NoticeScreen
                 kusitmsComposableWithAnimation(NavRoutes.Notice.route) {
@@ -235,7 +267,16 @@ fun MainNavigation() {
                 // ProfileScreen
 
                 kusitmsComposableWithAnimation(NavRoutes.Profile.route) {
-                    ProfileScreen(navController = navController)
+                    ProfileScreen(
+                        navController = navController,
+                        onProfileClick = {
+                            navController.navigate(
+                                NavRoutes.ProfileDetail.createRoute(
+                                    it.memberId
+                                )
+                            )
+                        }
+                    )
                 }
 
                 kusitmsComposableWithAnimation(NavRoutes.ProfileSearch.route) {
@@ -250,9 +291,6 @@ fun MainNavigation() {
 
                 kusitmsComposableWithAnimation(NavRoutes.ProfileDetail.route) {
                     ProfileDetailScreen(
-                        onProfileClick = {
-                            navController.navigate(NavRoutes.ProfileDetail.createRoute(it.profileId))
-                        },
                         onBack = {
                             navController.navigateUp()
                         }

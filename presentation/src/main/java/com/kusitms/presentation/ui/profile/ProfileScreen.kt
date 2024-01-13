@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.kusitms.domain.model.profile.ProfileModel
 import com.kusitms.presentation.R
 import com.kusitms.presentation.common.ui.KusitmsMarginVerticalSpacer
 import com.kusitms.presentation.common.ui.KusitsmTopBarTextWithIcon
@@ -46,7 +47,8 @@ import com.kusitms.presentation.ui.ImageVector.icons.kusitmsicons.Search
 @Composable
 fun ProfileScreen(
     viewModel: ProfileViewModel = hiltViewModel(),
-    navController: NavHostController
+    navController: NavHostController,
+    onProfileClick: (ProfileModel) -> Unit,
 ) {
     val expanded by viewModel.expended.collectAsState()
     val profileList by viewModel.profileList.collectAsState()
@@ -98,8 +100,8 @@ fun ProfileScreen(
             }
         }
         ProfileListScreen(
-            navController = navController,
-            profileList = profileList
+            profileList = profileList,
+            onProfileClick = onProfileClick,
         )
     }
 }
@@ -167,8 +169,3 @@ fun AllPartList(
 }
 
 
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun ProfileScreenPreview() {
-    ProfileScreen(navController = rememberNavController())
-}

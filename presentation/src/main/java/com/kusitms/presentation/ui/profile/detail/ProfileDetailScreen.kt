@@ -1,23 +1,25 @@
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.kusitms.presentation.R
 import com.kusitms.presentation.common.ui.KusitsmTopBarBackTextWithIcon
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
-import com.kusitms.presentation.model.profile.Profile
 import com.kusitms.presentation.ui.profile.detail.ProfileDetailImage
 import com.kusitms.presentation.ui.profile.detail.ProfileDetailInfo
+import com.kusitms.presentation.ui.profile.detail.ProfileDetailViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileDetailScreen(
-    onProfileClick: (Profile) -> Unit,
+    viewModel: ProfileDetailViewModel = hiltViewModel(),
     onBack: () -> Unit,
 ) {
     Column() {
@@ -53,13 +55,4 @@ fun ProfileDetailScreen(
         }
     }
 
-}
-
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun ProfileDetailScreenPreview() {
-    ProfileDetailScreen(
-        onProfileClick = {},
-        onBack = {}
-    )
 }
