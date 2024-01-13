@@ -142,4 +142,9 @@ interface KusitmsApi {
     @GET("v1/member/info/list")
     suspend fun getInfoListMember(): BaseResponse<List<ProfilePayload>>
 
+    // 프로필 상세 조회
+    @GET("v1/member/info/{memberId}")
+    suspend fun getProfileDetail(
+        @Path("memberId") memberId: Int,
+    ): BaseResponse<ProfilePayload>
 }

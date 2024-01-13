@@ -22,4 +22,17 @@ class ProfileRepositoryImpl @Inject constructor(
             Result.failure(e)
         }
     }
+
+    override suspend fun getProfileDetail(memberId: Int): Result<ProfileModel> {
+        return try {
+            val response = kusitmsApi.getProfileDetail(memberId)
+            if (response.result.code == 200 && response.payload != null) {
+                Result.success(response.payload.toModel())
+            } else {
+                Result.failure(java.lang.RuntimeException("프로필 상세 조회 실패: ${response.result.message}"))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 }
