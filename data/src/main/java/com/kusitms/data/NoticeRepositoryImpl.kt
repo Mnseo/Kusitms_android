@@ -23,7 +23,7 @@ class NoticeRepositoryImpl @Inject constructor(
 ) : NoticeRepository {
     override suspend fun getNoticeList(): Result<List<NoticeModel>> {
         return try {
-            val response = kusitmsApi.getNoticeList()
+            val response = kusitmsApi.getNoticeList(size = 30)
             if (response.result.code == 200 && response.payload != null) {
                 Result.success(response.payload.map { it.toModel() })
             } else {

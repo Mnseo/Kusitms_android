@@ -41,10 +41,13 @@ interface KusitmsApi {
     suspend fun loginMemberProfile(): LoginMemberProfileResponse
 
     // 공지사항 -> 차후에 분리하는 것도 좋을 듯 싶습니다.
-    @GET("v1/notice")
-    suspend fun getNoticeList(): BaseResponse<List<NoticePayload>>
+    @GET("v2/notice")
+    suspend fun getNoticeList(
+        @Query("cursor") cursor : Int? = null,
+        @Query("size") size : Int = 30
+    ): BaseResponse<List<NoticePayload>>
 
-    @GET("v1/notice/{noticeId}/detail")
+    @GET("v2/notice/{noticeId}/detail")
     suspend fun getNoticeDetail(
         @Path("noticeId") noticeId: Int,
     ): BaseResponse<NoticePayload>

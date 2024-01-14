@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -339,7 +340,7 @@ fun NoticeDetailScreen(
 
             item {
                 KusitmsMarginVerticalSpacer(size = 32)
-                if (notice.imageUrl.isNotBlank()) {
+                if (!notice.imageUrl.isNullOrEmpty()) {
                     LazyRow(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -347,11 +348,11 @@ fun NoticeDetailScreen(
                         contentPadding = PaddingValues(start = 20.dp),
                         horizontalArrangement = Arrangement.spacedBy(4.dp)
                     ) {
-                        item {
+                        items(notice.imageUrl ?: emptyList()){
                             NoticeDetailImageCard(
-                                notice.imageUrl,
+                                it,
                                 onClickImage = {
-                                    imageViewerViewModel.updateImageList(listOf(notice.imageUrl))
+                                    imageViewerViewModel.updateImageList(notice.imageUrl ?: emptyList())
                                     onClickImage()
                                 }
                             )

@@ -9,7 +9,7 @@ data class NoticePayload(
     val title : String? = "",
     val content : String? = "",
     val date : String? = "",
-    val imageUrl : String? = "",
+    val imageUrl : List<String>? = emptyList(),
     val viewYn : Boolean? = false,
     val name : String? = "",
     val profileImage : String? = ""
@@ -23,7 +23,7 @@ fun NoticePayload.toModel() =
         title = title ?: "",
         content = content ?: "",
         date = date ?: "",
-        imageUrl = imageUrl ?: "",
+        imageUrl = imageUrl ?: emptyList(),
         viewYn = viewYn ?: false,
         name = name ?: "",
         profileImage = profileImage ?: ""

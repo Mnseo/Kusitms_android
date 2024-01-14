@@ -7,7 +7,7 @@ data class NoticeModel(
     val title : String = "",
     val content : String = "",
     val date : String = "",
-    val imageUrl : String = "",
+    val imageUrl : List<String>? = emptyList(),
     val viewYn : Boolean = false,
     val name : String = "",
     val profileImage : String = ""
