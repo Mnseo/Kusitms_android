@@ -29,7 +29,8 @@ fun ProfileListScreen(
             items(profileList) { profile ->
                 ProfileItem(
                     profile = profile,
-                    onClick = { onProfileClick(profile)
+                    onClick = {
+                        onProfileClick(profile)
                     }
                 )
             }

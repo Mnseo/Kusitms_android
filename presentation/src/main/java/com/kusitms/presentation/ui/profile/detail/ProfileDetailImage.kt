@@ -83,13 +83,24 @@ fun ProfileDetailImage(
                 style = KusitmsTypo.current.Text_Medium,
                 color = KusitmsColorPalette.current.Grey400
             )
-            Text(
-                text = description,
-                style = KusitmsTypo.current.Caption1,
-                color = KusitmsColorPalette.current.Grey300,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.padding(horizontal = 28.dp)
-            )
+
+            if (description.isEmpty()) {
+                Text(
+                    text = stringResource(R.string.profile_detail_info_none),
+                    style = KusitmsTypo.current.Caption1,
+                    color = KusitmsColorPalette.current.Grey300,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(vertical = 28.dp)
+                )
+            } else {
+                Text(
+                    text = description,
+                    style = KusitmsTypo.current.Caption1,
+                    color = KusitmsColorPalette.current.Grey300,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(vertical = 28.dp)
+                )
+            }
         }
     }
 }

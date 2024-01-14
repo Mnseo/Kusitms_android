@@ -22,7 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavHostController
+import com.kusitms.domain.model.profile.ProfileModel
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
 import com.kusitms.presentation.model.profile.search.ProfileSearchViewModel
@@ -31,8 +31,8 @@ import com.kusitms.presentation.ui.ImageVector.LeftArrow
 @Composable
 fun ProfileSearchScreen(
     viewModel: ProfileSearchViewModel = hiltViewModel(),
-    navController: NavHostController,
     onBackClick: () -> Unit,
+    onProfileClick: (ProfileModel) -> Unit,
 ) {
     val uiState = viewModel.uiState.collectAsState()
     val profileList by viewModel.profileList.collectAsState()
@@ -86,8 +86,10 @@ fun ProfileSearchScreen(
         } else {
             if (viewModel.profilesContainsSearchText(uiState.value.searchText, profileList)) {
                 ProfileSearchExist(
-                    navController = navController,
-                    viewModel = viewModel
+                    viewModel = viewModel,
+                    onProfileClick = { profile ->
+                        onProfileClick(profile)
+                    }
                 )
             } else {
                 ProfileSearchNone(uiState.value.searchText)

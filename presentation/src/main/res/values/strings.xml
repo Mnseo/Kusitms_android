@@ -188,6 +188,7 @@
     <string name="profile_detail_email">이메일</string>
     <string name="profile_detail_phone">번호</string>
     <string name="profile_detail_link">링크</string>
+    <string name="profile_detail_info_none">아직 소개가 없어요</string>
     <string name="profile_detail_like_none">아직 관심 분야가 없어요</string>
     <string name="profile_detail_link_none">아직 링크가 없어요</string>
 
