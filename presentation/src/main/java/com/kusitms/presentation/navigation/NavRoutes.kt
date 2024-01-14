@@ -1,9 +1,5 @@
 package com.kusitms.presentation.navigation
 
-import androidx.compose.animation.AnimatedContentScope
-import androidx.compose.animation.EnterTransition
-import androidx.compose.animation.ExitTransition
-import androidx.compose.runtime.Composable
 import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
@@ -62,14 +58,14 @@ sealed class NavRoutes(
     object ProfileSearch : NavRoutes("ProfileSearch")
 
     object ProfileDetail : NavRoutes(
-        route = "ProfileDetail/{profileId}",
+        route = "ProfileDetail/{memberId}",
         navArguments = listOf(
-            navArgument("profileId"){
+            navArgument("memberId"){
                 type = NavType.IntType
             }
         )
     ) {
-        fun createRoute(profileId: Int) = "ProfileDetail/${profileId}"
+        fun createRoute(memberId: Int) = "ProfileDetail/${memberId}"
     }
 
     object ImageViewer : NavRoutes("ImageViewer")

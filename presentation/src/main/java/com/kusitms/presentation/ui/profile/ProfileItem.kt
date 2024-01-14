@@ -34,14 +34,14 @@ fun ProfileItem(
         modifier = Modifier
             .then(modifier)
             .padding(vertical = 32.dp, horizontal = 16.dp)
+            .clickable {
+                onClick(profile)
+            }
             .fillMaxWidth(),
     ) {
         Card(
             modifier = Modifier
-                .fillMaxWidth()
-                .clickable {
-                           onClick(profile)
-                },
+                .fillMaxWidth(),
             shape = RoundedCornerShape(16.dp),
             colors = CardDefaults.cardColors(
                 containerColor = KusitmsColorPalette.current.Grey100,
