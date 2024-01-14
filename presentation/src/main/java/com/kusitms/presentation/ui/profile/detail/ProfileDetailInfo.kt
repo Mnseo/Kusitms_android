@@ -81,11 +81,19 @@ fun ProfileDetailInfo(
                     modifier = Modifier
                         .padding(end = 36.dp)
                 )
-                Text(
-                    text = interests.joinToString(", ") { it.content },
-                    style = KusitmsTypo.current.Caption1,
-                    color = KusitmsColorPalette.current.Grey100
-                )
+                if (links.isEmpty()) {
+                    Text(
+                        text = stringResource(id = R.string.profile_detail_like_none),
+                        style = KusitmsTypo.current.Caption1,
+                        color = KusitmsColorPalette.current.Grey400
+                    )
+                } else {
+                    Text(
+                        text = interests.joinToString(", ") { it.content },
+                        style = KusitmsTypo.current.Caption1,
+                        color = KusitmsColorPalette.current.Grey100
+                    )
+                }
             }
             Row(
                 modifier = Modifier
@@ -136,9 +144,17 @@ fun ProfileDetailInfo(
                     modifier = Modifier
                         .padding(end = 36.dp)
                 )
-                links.forEach { link ->
-                    ProfileLink(link = link)
-                    Box(modifier = Modifier.width(4.dp))
+                if (links.isEmpty()) {
+                    Text(
+                        text = stringResource(id = R.string.profile_detail_link_none),
+                        style = KusitmsTypo.current.Caption1,
+                        color = KusitmsColorPalette.current.Grey400
+                    )
+                } else {
+                    links.forEach { link ->
+                        ProfileLink(link = link)
+                        Box(modifier = Modifier.width(4.dp))
+                    }
                 }
             }
         }
@@ -149,7 +165,6 @@ fun ProfileDetailInfo(
 fun ProfileLink(link: LinkModel) {
     val uriHandler = LocalUriHandler.current
 
-    // 동적으로 이미지 리소스 ID를 결정
     val imageResId = when (link.type) {
         "LINK" -> R.drawable.ic_link
         "BRUNCH" -> R.drawable.ic_brunch

@@ -1,4 +1,3 @@
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -27,8 +26,6 @@ fun ProfileDetailScreen(
     onBack: () -> Unit,
 ) {
     val profile by viewModel.profile.collectAsStateWithLifecycle()
-
-    Log.d("관심사", profile.interests.toString())
 
     Column {
         KusitsmTopBarBackTextWithIcon(
