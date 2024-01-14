@@ -10,5 +10,6 @@ data class ProfileModel(
     val major: String = "",
     val email: String = "",
     val phoneNumber: String = "",
-
+    val interests: List<InterestModel> = emptyList(),
+    val links: List<LinkModel> = emptyList()
 )

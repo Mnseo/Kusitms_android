@@ -1,12 +1,8 @@
 package com.kusitms.presentation.ui.profile.detail
 
-import android.content.Intent
-import android.net.Uri
-import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -22,15 +18,22 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import coil.size.Size
+import com.kusitms.domain.model.profile.InterestModel
+import com.kusitms.domain.model.profile.LinkModel
 import com.kusitms.presentation.R
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
 
 @Composable
-fun ProfileDetailInfo() {
+fun ProfileDetailInfo(
+    major: String,
+    interests: List<InterestModel>,
+    email: String,
+    phoneNumber: String,
+    links: List<LinkModel>,
+) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -43,7 +46,7 @@ fun ProfileDetailInfo() {
             modifier = Modifier.padding(vertical = 24.dp, horizontal = 8.dp)
         ) {
             Text(
-                text = "프로필",
+                text = stringResource(id = R.string.profile_detail_profile),
                 style = KusitmsTypo.current.SubTitle2_Semibold,
                 color = KusitmsColorPalette.current.White,
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
@@ -54,14 +57,14 @@ fun ProfileDetailInfo() {
                     .fillMaxWidth(),
             ) {
                 Text(
-                    text = "전공",
+                    text = stringResource(id = R.string.profile_detail_major),
                     style = KusitmsTypo.current.Caption1,
                     color = KusitmsColorPalette.current.Grey400,
                     modifier = Modifier
                         .padding(end = 36.dp)
                 )
                 Text(
-                    text = "시각디자인과",
+                    text = major,
                     style = KusitmsTypo.current.Caption1,
                     color = KusitmsColorPalette.current.Grey100
                 )
@@ -72,15 +75,14 @@ fun ProfileDetailInfo() {
                     .fillMaxWidth(),
             ) {
                 Text(
-                    text = "관심",
+                    text = stringResource(id = R.string.profile_detail_like),
                     style = KusitmsTypo.current.Caption1,
                     color = KusitmsColorPalette.current.Grey400,
                     modifier = Modifier
                         .padding(end = 36.dp)
                 )
                 Text(
-                    text = "UXUI 디자인, 데이터분석,\n" +
-                            "스타트업",
+                    text = interests.joinToString(", ") { it.content },
                     style = KusitmsTypo.current.Caption1,
                     color = KusitmsColorPalette.current.Grey100
                 )
@@ -91,14 +93,14 @@ fun ProfileDetailInfo() {
                     .fillMaxWidth(),
             ) {
                 Text(
-                    text = "이메일",
+                    text = stringResource(id = R.string.profile_detail_email),
                     style = KusitmsTypo.current.Caption1,
                     color = KusitmsColorPalette.current.Grey400,
                     modifier = Modifier
                         .padding(end = 24.dp)
                 )
                 Text(
-                    text = "chaeyeon_123@naver.com",
+                    text = email,
                     style = KusitmsTypo.current.Caption1,
                     color = KusitmsColorPalette.current.Grey100
                 )
@@ -109,14 +111,14 @@ fun ProfileDetailInfo() {
                     .fillMaxWidth(),
             ) {
                 Text(
-                    text = "번호",
+                    text = stringResource(id = R.string.profile_detail_phone),
                     style = KusitmsTypo.current.Caption1,
                     color = KusitmsColorPalette.current.Grey400,
                     modifier = Modifier
                         .padding(end = 36.dp)
                 )
                 Text(
-                    text = "010-1234-1234",
+                    text = phoneNumber,
                     style = KusitmsTypo.current.Caption1,
                     color = KusitmsColorPalette.current.Grey100
                 )
@@ -128,23 +130,37 @@ fun ProfileDetailInfo() {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "링크",
+                    text = stringResource(id = R.string.profile_detail_link),
                     style = KusitmsTypo.current.Caption1,
                     color = KusitmsColorPalette.current.Grey400,
                     modifier = Modifier
                         .padding(end = 36.dp)
                 )
-                ProfileLink(imageResId = R.drawable.ic_notion, uri = "https://www.notion.so/ko-kr")
-                Box(modifier = Modifier.width(4.dp))
-                ProfileLink(imageResId = R.drawable.ic_notion, uri = "https://www.notion.so/ko-kr")
+                links.forEach { link ->
+                    ProfileLink(link = link)
+                    Box(modifier = Modifier.width(4.dp))
+                }
             }
         }
     }
 }
 
 @Composable
-fun ProfileLink(@DrawableRes imageResId: Int, uri: String) {
+fun ProfileLink(link: LinkModel) {
     val uriHandler = LocalUriHandler.current
+
+    // 동적으로 이미지 리소스 ID를 결정
+    val imageResId = when (link.type) {
+        "LINK" -> R.drawable.ic_link
+        "BRUNCH" -> R.drawable.ic_brunch
+        "TISTORY" -> R.drawable.ic_tistory
+        "BEHANCE" -> R.drawable.ic_behance
+        "LINKEDIN" -> R.drawable.ic_linkedin
+        "GITHUB" -> R.drawable.ic_github
+        "NOTION" -> R.drawable.ic_notion
+        else -> R.drawable.ic_warning_sigb // 기본값
+    }
+
     Box(
         modifier = Modifier
             .width(49.dp)
@@ -153,7 +169,7 @@ fun ProfileLink(@DrawableRes imageResId: Int, uri: String) {
                 color = KusitmsColorPalette.current.Grey500,
                 shape = RoundedCornerShape(8.dp)
             )
-            .clickable { uriHandler.openUri(uri) }
+            .clickable { uriHandler.openUri(link.link) }
     ) {
         Image(
             painterResource(id = imageResId),
@@ -164,11 +180,4 @@ fun ProfileLink(@DrawableRes imageResId: Int, uri: String) {
             alignment = Alignment.Center
         )
     }
-}
-
-
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun ProfileDetailInfoPreview() {
-    ProfileDetailInfo()
 }

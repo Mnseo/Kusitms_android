@@ -28,5 +28,7 @@ fun ProfilePayload.toModel() =
         description = description ?: "",
         major = major,
         email = email,
-        phoneNumber = phoneNumber
+        phoneNumber = phoneNumber,
+        interests = interests,
+        links = links
     )

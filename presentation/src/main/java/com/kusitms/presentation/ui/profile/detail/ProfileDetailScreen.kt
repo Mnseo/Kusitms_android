@@ -1,3 +1,4 @@
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -27,9 +28,11 @@ fun ProfileDetailScreen(
 ) {
     val profile by viewModel.profile.collectAsStateWithLifecycle()
 
-    Column() {
+    Log.d("관심사", profile.interests.toString())
+
+    Column {
         KusitsmTopBarBackTextWithIcon(
-            text = stringResource(id = R.string.profile_detail_topbar),
+            text = stringResource(id = R.string.profile_detail_topbar, profile.name),
             onBackClick = {
                 onBack()
             }) {
@@ -49,12 +52,23 @@ fun ProfileDetailScreen(
             }
             item {
                 Box(modifier = Modifier.padding(horizontal = 32.dp, vertical = 8.dp)) {
-                    ProfileDetailImage()
+                    ProfileDetailImage(
+                        profile.name,
+                        profile.profileImage,
+                        profile.part,
+                        profile.description,
+                    )
                 }
             }
             item {
                 Box(modifier = Modifier.padding(horizontal = 32.dp, vertical = 8.dp)) {
-                    ProfileDetailInfo()
+                    ProfileDetailInfo(
+                        profile.major,
+                        profile.interests,
+                        profile.email,
+                        profile.phoneNumber,
+                        profile.links
+                    )
                 }
             }
         }
