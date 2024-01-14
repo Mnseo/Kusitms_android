@@ -50,6 +50,7 @@ fun NoticeComment(
     isLast : Boolean = false,
     onClickReport : () -> Unit = {},
     onClickDelete : () -> Unit = {},
+    onClickChildComment : () -> Unit = {},
     isParentCommentAsReply : Boolean = false
 ){
     Box(
@@ -126,7 +127,7 @@ fun NoticeComment(
             KusitmsMarginVerticalSpacer(size = 12)
             Row(
                 modifier = Modifier.padding(horizontal = 32.dp).wrapContentWidth().clickable {
-
+                    onClickChildComment()
                 },
                 verticalAlignment = Alignment.CenterVertically
             ){
