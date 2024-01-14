@@ -90,7 +90,7 @@ fun ProfileDetailImage(
                     style = KusitmsTypo.current.Caption1,
                     color = KusitmsColorPalette.current.Grey300,
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(vertical = 28.dp)
+                    modifier = Modifier.padding(vertical = 28.dp, horizontal = 28.dp)
                 )
             } else {
                 Text(
@@ -98,7 +98,7 @@ fun ProfileDetailImage(
                     style = KusitmsTypo.current.Caption1,
                     color = KusitmsColorPalette.current.Grey300,
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(vertical = 28.dp)
+                    modifier = Modifier.padding(vertical = 28.dp, horizontal = 28.dp)
                 )
             }
         }

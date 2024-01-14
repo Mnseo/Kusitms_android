@@ -12,7 +12,6 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kusitms.domain.model.profile.ProfileModel
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
@@ -61,11 +60,4 @@ fun ProfileSearchExist(
             }
         }
     }
-}
-
-@Preview
-@Composable
-fun ProfileSearchExistPriview(
-) {
-//    ProfileSearchExist()
 }

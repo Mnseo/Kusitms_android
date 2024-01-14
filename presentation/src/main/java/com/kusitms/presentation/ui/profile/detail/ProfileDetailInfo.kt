@@ -81,19 +81,11 @@ fun ProfileDetailInfo(
                     modifier = Modifier
                         .padding(end = 36.dp)
                 )
-                if (links.isEmpty()) {
-                    Text(
-                        text = stringResource(id = R.string.profile_detail_like_none),
-                        style = KusitmsTypo.current.Caption1,
-                        color = KusitmsColorPalette.current.Grey400
-                    )
-                } else {
-                    Text(
-                        text = interests.joinToString(", ") { it.content },
-                        style = KusitmsTypo.current.Caption1,
-                        color = KusitmsColorPalette.current.Grey100
-                    )
-                }
+                Text(
+                    text = interests.joinToString(", ") { it.content },
+                    style = KusitmsTypo.current.Caption1,
+                    color = KusitmsColorPalette.current.Grey100
+                )
             }
             Row(
                 modifier = Modifier
@@ -152,7 +144,15 @@ fun ProfileDetailInfo(
                     )
                 } else {
                     links.forEach { link ->
-                        ProfileLink(link = link)
+                        if (link.link.startsWith("https://")) {
+                            ProfileLink(link = link)
+                        } else {
+                            Text(
+                                text = stringResource(id = R.string.profile_detail_link_none),
+                                style = KusitmsTypo.current.Caption1,
+                                color = KusitmsColorPalette.current.Grey400
+                            )
+                        }
                         Box(modifier = Modifier.width(4.dp))
                     }
                 }
