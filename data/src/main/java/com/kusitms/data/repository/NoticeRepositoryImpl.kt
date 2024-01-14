@@ -1,8 +1,6 @@
-package com.kusitms.data
+package com.kusitms.data.repository
 
-import android.util.Log
 import com.kusitms.data.remote.api.KusitmsApi
-import com.kusitms.data.remote.entity.request.CommentContentRequestBody
 import com.kusitms.data.remote.entity.request.toBody
 import com.kusitms.data.remote.entity.response.notice.toModel
 import com.kusitms.domain.model.notice.CommentContentModel
