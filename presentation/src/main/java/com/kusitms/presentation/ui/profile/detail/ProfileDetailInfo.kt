@@ -146,12 +146,6 @@ fun ProfileDetailInfo(
                     links.forEach { link ->
                         if (link.link.startsWith("https://")) {
                             ProfileLink(link = link)
-                        } else {
-                            Text(
-                                text = stringResource(id = R.string.profile_detail_link_none),
-                                style = KusitmsTypo.current.Caption1,
-                                color = KusitmsColorPalette.current.Grey400
-                            )
                         }
                         Box(modifier = Modifier.width(4.dp))
                     }

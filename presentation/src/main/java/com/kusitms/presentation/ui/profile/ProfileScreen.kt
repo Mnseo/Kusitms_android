@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalCoroutinesApi::class)
+
 package com.kusitms.presentation.ui.profile
 
 import androidx.compose.foundation.Image
@@ -41,8 +43,10 @@ import com.kusitms.presentation.navigation.NavRoutes
 import com.kusitms.presentation.ui.ImageVector.icons.KusitmsIcons
 import com.kusitms.presentation.ui.ImageVector.icons.kusitmsicons.ArrowDown
 import com.kusitms.presentation.ui.ImageVector.icons.kusitmsicons.Search
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 
+@OptIn(ExperimentalCoroutinesApi::class)
 @Composable
 fun ProfileScreen(
     viewModel: ProfileViewModel = hiltViewModel(),
@@ -90,7 +94,6 @@ fun ProfileScreen(
                 expanded = expanded,
                 viewModel
             )
-
             if (expanded) {
                 AllPartList(
                     partNameList = categories,
