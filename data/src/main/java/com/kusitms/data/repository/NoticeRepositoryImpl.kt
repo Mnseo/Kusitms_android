@@ -146,4 +146,17 @@ class NoticeRepositoryImpl @Inject constructor(
             Result.failure(e)
         }
     }
+
+    override suspend fun getChildCommentList(commentId: Int): Result<List<CommentModel>> {
+        return try {
+            val response = kusitmsApi.getChildCommentList(commentId)
+            if (response.result.code == 200 && response.payload != null) {
+                Result.success(response.payload.map { it.toModel() })
+            } else {
+                Result.failure(RuntimeException("대댓글 조회 실패: ${response.result.message}"))
+            }
+        } catch (e: Exception){
+            Result.failure(e)
+        }
+    }
 }

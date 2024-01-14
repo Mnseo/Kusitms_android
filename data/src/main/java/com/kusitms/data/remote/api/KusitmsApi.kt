@@ -81,6 +81,11 @@ interface KusitmsApi {
         @Body reportCommentRequestBody: ReportCommentRequestBody,
     ): Response<BaseResponse<Unit>>
 
+    @GET("v1/comment/child/{commentId}")
+    suspend fun getChildCommentList(
+        @Path("commentId") commentId: Int,
+    ): BaseResponse<List<CommentPayload>>
+
     // SignInNonMember
     @FormUrlEncoded
     @POST("v1/member/check/register")
