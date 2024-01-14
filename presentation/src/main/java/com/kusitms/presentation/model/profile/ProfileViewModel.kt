@@ -42,7 +42,6 @@ class ProfileViewModel @Inject constructor(
 
             }.collect {
                 _profileList.value = it
-                getFilterProfiles()
             }
         }
     }
@@ -60,13 +59,10 @@ class ProfileViewModel @Inject constructor(
     private fun getFilterProfiles() {
         val selectedPart = uiState.value.currentSelectedPart
 
-        val filteredProfiles = if (selectedPart.isNotEmpty()) {
-            profileListInit.value.filter { profile ->
-                mapPartToKorean(profile.part).contains(selectedPart, ignoreCase = true)
-            }
-        } else {
-            profileListInit.value
+        val filteredProfiles = profileListInit.value.filter { profile ->
+            mapPartToKorean(profile.part).contains(selectedPart, ignoreCase = true)
         }
+
 
         _profileList.value = filteredProfiles
     }

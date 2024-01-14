@@ -46,7 +46,6 @@ import com.kusitms.presentation.ui.ImageVector.icons.kusitmsicons.Search
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 
-@OptIn(ExperimentalCoroutinesApi::class)
 @Composable
 fun ProfileScreen(
     viewModel: ProfileViewModel = hiltViewModel(),
