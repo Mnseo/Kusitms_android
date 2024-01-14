@@ -262,19 +262,21 @@ fun NoticeDetailScreen(
 
     if (openBottomSheet != null) {
         ModalBottomSheet(
-            containerColor = KusitmsColorPalette.current.Grey600,
+            containerColor = if(openBottomSheet is NoticeDetailModalState.Comment) KusitmsColorPalette.current.Grey700
+                    else KusitmsColorPalette.current.Grey600,
             dragHandle = { Box(Modifier.height(0.dp)) },
             onDismissRequest = { openBottomSheet = null },
             sheetState = bottomSheetState,
             modifier = Modifier
                 .fillMaxWidth()
+                .padding(top = if(openBottomSheet is NoticeDetailModalState.Comment) 48.dp else 0.dp)
                 .wrapContentHeight()
         ) {
             when (openBottomSheet ?: return@ModalBottomSheet) {
                 is NoticeDetailModalState.Comment -> {
                     NoticeCommentBottom(
-                        (openBottomSheet as NoticeDetailModalState.Comment).comment,
-                        emptyList()
+                        viewModel,
+                        (openBottomSheet as NoticeDetailModalState.Comment).comment
                     )
                 }
 
@@ -330,8 +332,9 @@ fun NoticeDetailScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f)
+                .padding(top = 20.dp)
             ,
-            contentPadding = PaddingValues(top = 20.dp),
+            //contentPadding = PaddingValues(top = ),
             state = listState
         ) {
             item {
@@ -406,7 +409,8 @@ fun NoticeDetailScreen(
                         openBottomSheet =
                             NoticeDetailModalState.Comment(comment)
                     },
-                    isLast = index == commentList.lastIndex
+                    isLast = index == commentList.lastIndex,
+                    isParentCommentAsReply = true
                 )
                 if (index == commentList.lastIndex && index != 0) {
                     KusitmsMarginVerticalSpacer(size = 20)

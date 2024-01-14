@@ -18,12 +18,16 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Divider
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -32,6 +36,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kusitms.domain.model.notice.CommentModel
 import com.kusitms.presentation.common.ui.KusitmsMarginVerticalSpacer
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
@@ -39,7 +45,10 @@ import com.kusitms.presentation.common.ui.theme.KusitmsTypo
 import com.kusitms.presentation.model.notice.CommentUiModel
 import com.kusitms.presentation.ui.ImageVector.icons.KusitmsIcons
 import com.kusitms.presentation.ui.ImageVector.icons.kusitmsicons.Close
+import com.kusitms.presentation.ui.notice.detail.comment.CommentInput
 import com.kusitms.presentation.ui.notice.detail.comment.NoticeComment
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
 fun BottomSheetDrawerBar(
@@ -54,26 +63,79 @@ fun BottomSheetDrawerBar(
 
 @Composable
 fun NoticeCommentBottom(
-    targetComment : CommentModel,
-    commentList : List<CommentModel>
+    noticeDetailViewModel: NoticeDetailViewModel = hiltViewModel(),
+    targetComment : CommentModel
 ){
+    val childCommentList by noticeDetailViewModel.childCommentList.collectAsStateWithLifecycle()
+
+    LaunchedEffect(key1 = targetComment.commentId){
+        noticeDetailViewModel.clearChildCommentList()
+        noticeDetailViewModel.fetchChildCommentList(
+            targetComment.commentId
+        )
+    }
+
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .fillMaxHeight()
             .statusBarsPadding()
             .systemBarsPadding()
-            .padding(top = 48.dp)
+            .fillMaxHeight()
+
     ) {
         BottomSheetDrawerBar(
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
-                .padding(vertical = 20.dp)
+                .padding(bottom = 20.dp)
         )
         KusitmsMarginVerticalSpacer(size = 20)
-        NoticeComment(comment = targetComment)
+        NoticeComment(
+            comment = targetComment,
+            isParentCommentAsReply = true
+        )
         KusitmsMarginVerticalSpacer(size = 20)
 
+        Divider(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(8.dp),
+            color = KusitmsColorPalette.current.Grey600
+        )
+
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f)
+        ){
+            itemsIndexed(
+                childCommentList
+            ) { index, comment ->
+                if (index == 0) {
+                    KusitmsMarginVerticalSpacer(size = 20)
+                }
+                NoticeComment(
+                    comment = comment,
+                    onClickReport = {
+//                        openBottomSheet =
+//                            NoticeDetailModalState.Report(comment, comment.writerId)
+                    },
+                    onClickDelete = {
+                        //openDialogState = NoticeDetailDialogState.CommentDelete(comment)
+                    },
+                    isLast = index == childCommentList.lastIndex
+                )
+                if (index == childCommentList.lastIndex && index != 0) {
+                    KusitmsMarginVerticalSpacer(size = 20)
+                }
+            }
+        }
+        CommentInput(
+            modifier = Modifier.padding(bottom = 42.dp),
+            onClickSend = {
+
+            }
+        )
     }
 }
 

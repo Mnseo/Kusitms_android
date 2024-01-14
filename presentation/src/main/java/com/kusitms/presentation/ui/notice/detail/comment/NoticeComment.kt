@@ -28,9 +28,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.kusitms.domain.model.notice.CommentModel
 import com.kusitms.presentation.common.ui.KusitmsMarginHorizontalSpacer
 import com.kusitms.presentation.common.ui.KusitmsMarginVerticalSpacer
@@ -84,7 +89,18 @@ fun NoticeComment(
                         contentDescription = "유저"
                     )
                 else {
-
+                    AsyncImage(
+                        model = ImageRequest.Builder(LocalContext.current)
+                            .data(comment.profileImageUrl)
+                            .crossfade(true)
+                            .build(),
+                        error = rememberVectorPainter(image = KusitmsIcons.UserBackground),
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .size(16.dp)
+                            .clip(RoundedCornerShape(4.dp))
+                    )
                 }
                 KusitmsMarginHorizontalSpacer(size = 8)
                 Text(
@@ -125,26 +141,29 @@ fun NoticeComment(
                 color =  KusitmsColorPalette.current.Grey100
             )
             KusitmsMarginVerticalSpacer(size = 12)
-            Row(
-                modifier = Modifier.padding(horizontal = 32.dp).wrapContentWidth().clickable {
-                    onClickChildComment()
-                },
-                verticalAlignment = Alignment.CenterVertically
-            ){
-                Image(
-                    modifier = Modifier
-                        .size(20.dp)
+            if(isParentCommentAsReply){
+                Row(
+                    modifier = Modifier.padding(horizontal = 32.dp).wrapContentWidth().clickable {
+                        onClickChildComment()
+                    },
+                    verticalAlignment = Alignment.CenterVertically
+                ){
+                    Image(
+                        modifier = Modifier
+                            .size(20.dp)
                         ,
-                    imageVector = KusitmsIcons.Chat,
-                    contentDescription = "답글"
-                )
-                KusitmsMarginHorizontalSpacer(size = 4)
-                Text(
-                    text ="${comment.commentCount}",
-                    style = KusitmsTypo.current.Caption1,
-                    color =  KusitmsColorPalette.current.GreyBlack7
-                )
+                        imageVector = KusitmsIcons.Chat,
+                        contentDescription = "답글"
+                    )
+                    KusitmsMarginHorizontalSpacer(size = 4)
+                    Text(
+                        text ="${comment.commentCount}",
+                        style = KusitmsTypo.current.Caption1,
+                        color =  KusitmsColorPalette.current.GreyBlack7
+                    )
+                }
             }
+
         }
         if(!isLast)
             Divider(
@@ -159,12 +178,13 @@ fun NoticeComment(
 
 @Composable
 fun CommentInput(
+    modifier: Modifier = Modifier,
     onClickSend : (String) -> Unit
 ){
     var textFieldValue by remember { mutableStateOf(TextFieldValue()) }
     //var isAnonymous by remember { mutableStateOf(false) }
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .height(64.dp)
             .background(KusitmsColorPalette.current.Grey700)
