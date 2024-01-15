@@ -192,7 +192,9 @@
     <string name="profile_detail_link_none">아직 링크가 없어요</string>
 
     <!-- ProfileSearch -->
-    <string name="profile_search_hint">이름, 학교, 학과, 관심 분야</string>
+    <string name="profile_search_hint">학회원 이름을 검색해보세요</string>
+    <string name="profile_search_back">뒤로</string>
+    <string name="profile_search_none">궁금한 학회원 프로필을\n검색해보세요</string>
 
 
     <string name="bottom_nav_home">홈</string>

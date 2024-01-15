@@ -19,10 +19,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.kusitms.domain.model.profile.ProfileModel
+import com.kusitms.presentation.R
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
 import com.kusitms.presentation.model.profile.search.ProfileSearchViewModel
@@ -57,7 +59,7 @@ fun ProfileSearchScreen(
                         onBackClick()
                     },
                 imageVector = LeftArrow.vector,
-                contentDescription = "뒤로"
+                contentDescription = stringResource(id = R.string.profile_search_back)
             )
             Spacer(modifier = Modifier.width(16.dp))
             ProfileSearchField(
@@ -76,8 +78,7 @@ fun ProfileSearchScreen(
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = "궁금한 학회원 프로필을\n" +
-                            "검색해보세요",
+                    text = stringResource(id = R.string.profile_search_none),
                     textAlign = TextAlign.Center,
                     style = KusitmsTypo.current.Caption1,
                     color = KusitmsColorPalette.current.Grey400
