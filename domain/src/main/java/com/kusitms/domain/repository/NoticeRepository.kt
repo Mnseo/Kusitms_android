@@ -37,4 +37,9 @@ interface NoticeRepository {
     suspend fun reportComment(
         reportCommentContentModel: ReportCommentContentModel
     ) : Result<ReportResult>
+
+    suspend fun getChildCommentList(
+        commentId: Int
+    ) : Result<List<CommentModel>>
+
 }

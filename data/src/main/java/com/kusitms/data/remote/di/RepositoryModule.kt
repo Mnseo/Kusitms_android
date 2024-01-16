@@ -1,6 +1,6 @@
 package com.kusitms.data.remote.di
 
-import com.kusitms.data.NoticeRepositoryImpl
+import com.kusitms.data.repository.NoticeRepositoryImpl
 import com.kusitms.data.repository.*
 import com.kusitms.domain.repository.*
 import dagger.Binds

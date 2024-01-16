@@ -10,6 +10,7 @@ import com.kusitms.domain.model.notice.ReportCommentContentModel
 import com.kusitms.domain.model.report.ReportResult
 import com.kusitms.domain.usecase.notice.AddNoticeCommentUseCase
 import com.kusitms.domain.usecase.notice.DeleteCommentUseCase
+import com.kusitms.domain.usecase.notice.GetChildCommentListUseCase
 import com.kusitms.domain.usecase.notice.GetNoticeCommentListUseCase
 import com.kusitms.domain.usecase.notice.GetNoticeDetailUseCase
 import com.kusitms.domain.usecase.report.ReportUseCase
@@ -34,13 +35,17 @@ class NoticeDetailViewModel @Inject constructor(
     private val getNoticeCommentListUseCase: GetNoticeCommentListUseCase,
     private val addNoticeCommentUseCase: AddNoticeCommentUseCase,
     private val deleteCommentUseCase: DeleteCommentUseCase,
-    private val reportUseCase: ReportUseCase
+    private val reportUseCase: ReportUseCase,
+    private val getChildCommentListUseCase : GetChildCommentListUseCase
 ) : ViewModel() {
 
     val noticeId: Int = savedStateHandle.get<Int>(NOTICE_ID_SAVED_STATE_KEY)!!
 
     private val _commentList = MutableStateFlow<List<CommentModel>>(emptyList())
     val commentList : StateFlow<List<CommentModel>> = _commentList.asStateFlow()
+
+    private val _childCommentList = MutableStateFlow<List<CommentModel>>(emptyList())
+    val childCommentList : StateFlow<List<CommentModel>> = _childCommentList.asStateFlow()
 
     private val _snackbarEvent = MutableSharedFlow<NoticeDetailSnackbarEvent>()
     val snackbarEvent : SharedFlow<NoticeDetailSnackbarEvent> = _snackbarEvent.asSharedFlow()
@@ -69,6 +74,26 @@ class NoticeDetailViewModel @Inject constructor(
             }.collectLatest {
                 _commentList.emit(it)
             }
+        }
+    }
+
+    fun fetchChildCommentList(
+        commentId: Int
+    ) {
+        viewModelScope.launch {
+            getChildCommentListUseCase(
+                commentId
+            ).catch {
+                // TODO
+            }.collectLatest {
+                _childCommentList.emit(it)
+            }
+        }
+    }
+
+    fun clearChildCommentList() {
+        viewModelScope.launch {
+            _childCommentList.emit(emptyList())
         }
     }
 

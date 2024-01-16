@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -54,6 +55,7 @@ import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.kusitms.domain.model.notice.CommentModel
 import com.kusitms.domain.model.notice.NoticeModel
 import com.kusitms.presentation.R
 import com.kusitms.presentation.common.ui.KusitmsDialog
@@ -76,18 +78,20 @@ import kotlinx.coroutines.launch
 import com.kusitms.presentation.ui.notice.detail.NoticeDetailViewModel.Companion.NoticeDetailSnackbarEvent as NoticeDetailSnackbarEvent
 import com.kusitms.presentation.ui.notice.detail.NoticeDetailViewModel.Companion.NoticeDetailDialogEvent as NoticeDetailDialogEvent
 
-sealed class NoticeDetailDialogState(val commentId: Int = 0) {
-    data class Report(val id: Int, val report: ReportCategory, val memberId: Int) :
-        NoticeDetailDialogState(id)
+sealed class NoticeDetailDialogState() {
+    data class Report(val comment: CommentModel, val report: ReportCategory, val memberId: Int) :
+        NoticeDetailDialogState()
 
     object AlreadyReport : NoticeDetailDialogState()
 
-    data class CommentDelete(val id: Int) : NoticeDetailDialogState(id)
+    data class CommentDelete(val comment: CommentModel) : NoticeDetailDialogState()
 }
 
-sealed class NoticeDetailModalState(val commentId: Int) {
-    data class More(val id: Int) : NoticeDetailModalState(id)
-    data class Report(val id: Int, val memberId: Int) : NoticeDetailModalState(id)
+sealed class NoticeDetailModalState() {
+    data class More(val comment: CommentModel) : NoticeDetailModalState()
+    data class Report(val comment: CommentModel, val memberId: Int) : NoticeDetailModalState()
+
+    data class Comment(val comment: CommentModel) : NoticeDetailModalState()
 
 }
 
@@ -189,7 +193,7 @@ fun NoticeDetailScreen(
                         okText = "신고하기",
                         onOk = {
                             viewModel.reportNoticeComment(
-                                commentId = reportState.commentId,
+                                commentId = reportState.comment.commentId,
                                 content = content,
                                 memberId = reportState.memberId
                             )
@@ -205,31 +209,32 @@ fun NoticeDetailScreen(
             }
 
             is NoticeDetailDialogState.CommentDelete -> {
-                KusitmsDialog(
-                    title = "댓글 삭제",
-                    content = {
-                        Text(
-                            text = "해당 댓글의 답글도 모두 삭제됩니다",
-                            textAlign = TextAlign.Center,
-                            style = KusitmsTypo.current.Caption1,
-                            color = KusitmsColorPalette.current.Grey300
-                        )
-                    },
-                    okColor = KusitmsColorPalette.current.Grey200,
-                    okText = "삭제하기",
-                    onOk = {
-                        openDialogState?.commentId?.let {
-                            viewModel.deleteNoticeComment(
-                                it
+                (openDialogState as NoticeDetailDialogState.CommentDelete).let { commentDeleteState ->
+                    KusitmsDialog(
+                        title = "댓글 삭제",
+                        content = {
+                            Text(
+                                text = "해당 댓글의 답글도 모두 삭제됩니다",
+                                textAlign = TextAlign.Center,
+                                style = KusitmsTypo.current.Caption1,
+                                color = KusitmsColorPalette.current.Grey300
                             )
-                        }
+                        },
+                        okColor = KusitmsColorPalette.current.Grey200,
+                        okText = "삭제하기",
+                        onOk = {
+                            viewModel.deleteNoticeComment(
+                                commentDeleteState.comment.commentId
+                            )
+                            openDialogState = null
+                        },
+                        onCancel = {
+                            openDialogState = null
+                        }) {
                         openDialogState = null
-                    },
-                    onCancel = {
-                        openDialogState = null
-                    }) {
-                    openDialogState = null
+                    }
                 }
+
             }
             is NoticeDetailDialogState.AlreadyReport -> {
                 KusitmsDialogSingleButton(
@@ -257,15 +262,24 @@ fun NoticeDetailScreen(
 
     if (openBottomSheet != null) {
         ModalBottomSheet(
-            containerColor = KusitmsColorPalette.current.Grey600,
+            containerColor = if(openBottomSheet is NoticeDetailModalState.Comment) KusitmsColorPalette.current.Grey700
+                    else KusitmsColorPalette.current.Grey600,
             dragHandle = { Box(Modifier.height(0.dp)) },
             onDismissRequest = { openBottomSheet = null },
             sheetState = bottomSheetState,
             modifier = Modifier
                 .fillMaxWidth()
+                .padding(top = if(openBottomSheet is NoticeDetailModalState.Comment) 48.dp else 0.dp)
                 .wrapContentHeight()
         ) {
             when (openBottomSheet ?: return@ModalBottomSheet) {
+                is NoticeDetailModalState.Comment -> {
+                    NoticeCommentBottom(
+                        viewModel,
+                        (openBottomSheet as NoticeDetailModalState.Comment).comment
+                    )
+                }
+
                 is NoticeDetailModalState.More -> {
                     NoticeMoreBottom()
                 }
@@ -275,7 +289,7 @@ fun NoticeDetailScreen(
                         onClick = {
                             (openBottomSheet as NoticeDetailModalState.Report).let { reportState ->
                                 openDialogState = NoticeDetailDialogState.Report(
-                                    id = reportState.commentId,
+                                    comment = reportState.comment,
                                     report = it,
                                     memberId = reportState.memberId
                                 )
@@ -318,8 +332,9 @@ fun NoticeDetailScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f)
+                .padding(top = 20.dp)
             ,
-            contentPadding = PaddingValues(top = 20.dp),
+            //contentPadding = PaddingValues(top = ),
             state = listState
         ) {
             item {
@@ -339,7 +354,7 @@ fun NoticeDetailScreen(
 
             item {
                 KusitmsMarginVerticalSpacer(size = 32)
-                if (notice.imageUrl.isNotBlank()) {
+                if (!notice.imageUrl.isNullOrEmpty()) {
                     LazyRow(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -347,11 +362,11 @@ fun NoticeDetailScreen(
                         contentPadding = PaddingValues(start = 20.dp),
                         horizontalArrangement = Arrangement.spacedBy(4.dp)
                     ) {
-                        item {
+                        items(notice.imageUrl ?: emptyList()){
                             NoticeDetailImageCard(
-                                notice.imageUrl,
+                                it,
                                 onClickImage = {
-                                    imageViewerViewModel.updateImageList(listOf(notice.imageUrl))
+                                    imageViewerViewModel.updateImageList(notice.imageUrl ?: emptyList())
                                     onClickImage()
                                 }
                             )
@@ -385,12 +400,17 @@ fun NoticeDetailScreen(
                     comment = comment,
                     onClickReport = {
                         openBottomSheet =
-                            NoticeDetailModalState.Report(comment.commentId, comment.writerId)
+                            NoticeDetailModalState.Report(comment, comment.writerId)
                     },
                     onClickDelete = {
-                        openDialogState = NoticeDetailDialogState.CommentDelete(comment.commentId)
+                        openDialogState = NoticeDetailDialogState.CommentDelete(comment)
                     },
-                    isLast = index == commentList.lastIndex
+                    onClickChildComment = {
+                        openBottomSheet =
+                            NoticeDetailModalState.Comment(comment)
+                    },
+                    isLast = index == commentList.lastIndex,
+                    isParentCommentAsReply = true
                 )
                 if (index == commentList.lastIndex && index != 0) {
                     KusitmsMarginVerticalSpacer(size = 20)
@@ -517,169 +537,6 @@ fun NoticeDetailImageCard(
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier.clip(RoundedCornerShape(16.dp))
-        )
-    }
-}
-
-@Composable
-fun NoticeMoreBottom(
-    onClickEdit: () -> Unit = {},
-    onClickDelete: () -> Unit = {}
-) {
-    var isDeleteMode by remember { mutableStateOf(false) }
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .statusBarsPadding()
-            .systemBarsPadding()
-    ) {
-        if (!isDeleteMode) {
-            ModalTextBox(
-                "공지 수정하기",
-                onClick = onClickEdit
-            )
-            ModalTextBox(
-                "공지 삭제하기",
-                onClick = {
-                    isDeleteMode = true
-                }
-            )
-        } else {
-            KusitmsMarginVerticalSpacer(size = 16)
-            Text(
-                modifier = Modifier.align(Alignment.CenterHorizontally),
-                text = "공지 삭제하기",
-                style = KusitmsTypo.current.SubTitle1_Semibold,
-                color = KusitmsColorPalette.current.Grey100
-            )
-            KusitmsMarginVerticalSpacer(size = 8)
-            Text(
-                modifier = Modifier.align(Alignment.CenterHorizontally),
-                text = "해당 공지 글이 삭제됩니다.",
-                style = KusitmsTypo.current.Text_Medium,
-                color = KusitmsColorPalette.current.Grey300
-            )
-            KusitmsMarginVerticalSpacer(size = 40)
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 20.dp),
-                horizontalArrangement = Arrangement.spacedBy(20.dp)
-
-            ) {
-                OutlinedButton(
-                    modifier = Modifier
-                        .weight(1f)
-                        .height(56.dp),
-                    onClick = {
-                        isDeleteMode = false
-                    },
-                    colors = ButtonDefaults.buttonColors(containerColor = KusitmsColorPalette.current.Grey600),
-                    border = BorderStroke(1.dp, KusitmsColorPalette.current.Grey400),
-                    shape = RoundedCornerShape(size = 12.dp)
-                ) {
-                    Text(
-                        text = "취소하기",
-                        style = KusitmsTypo.current.Text_Semibold,
-                        color = KusitmsColorPalette.current.Grey200
-                    )
-                }
-
-                Button(
-                    modifier = Modifier
-                        .weight(1f)
-                        .height(56.dp),
-                    onClick = {
-                        onClickDelete()
-                    },
-                    colors = ButtonDefaults.buttonColors(containerColor = KusitmsColorPalette.current.Grey100),
-                    shape = RoundedCornerShape(size = 12.dp)
-                ) {
-                    Text(
-                        text = "삭제하기",
-                        style = KusitmsTypo.current.Text_Semibold,
-                        color = KusitmsColorPalette.current.Grey600
-                    )
-                }
-            }
-        }
-        KusitmsMarginVerticalSpacer(size = 24)
-    }
-}
-
-@Composable
-fun NoticeCommentReportBottom(
-    onClick: (ReportCategory) -> Unit = {},
-    onDismiss: () -> Unit
-) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .statusBarsPadding()
-            .systemBarsPadding()
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 36.dp)
-        ) {
-            Text(
-                modifier = Modifier.padding(start = 12.dp),
-                text = "신고 사유 선택",
-                style = KusitmsTypo.current.SubTitle2_Semibold,
-                color = KusitmsColorPalette.current.Grey300
-            )
-            Spacer(
-                modifier = Modifier
-                    .height(0.dp)
-                    .weight(1f)
-            )
-            Image(
-                modifier = Modifier
-                    .size(24.dp)
-                    .clickable {
-                        onDismiss()
-                    },
-                imageVector = KusitmsIcons.Close,
-                contentDescription = "닫기"
-            )
-        }
-        KusitmsMarginVerticalSpacer(size = 20)
-        ReportCategory.values().forEach {
-            ModalTextBox(
-                text = stringResource(id = it.titleId),
-                boxPadding = PaddingValues(horizontal = 12.5.dp),
-                onClick = {
-                    onClick(it)
-                }
-            )
-        }
-        KusitmsMarginVerticalSpacer(size = 24)
-    }
-}
-
-
-@Composable
-fun ModalTextBox(
-    text: String,
-    boxPadding: PaddingValues = PaddingValues(horizontal = 20.dp),
-    onClick: () -> Unit
-) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(56.dp)
-            .clickable {
-                onClick()
-            }
-            .padding(boxPadding),
-        contentAlignment = Alignment.CenterStart
-    ) {
-        Text(
-            modifier = Modifier.padding(start = 12.dp),
-            text = text,
-            style = KusitmsTypo.current.Text_Medium,
-            color = KusitmsColorPalette.current.Grey100
         )
     }
 }

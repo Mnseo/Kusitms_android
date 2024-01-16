@@ -1,8 +1,6 @@
-package com.kusitms.data
+package com.kusitms.data.repository
 
-import android.util.Log
 import com.kusitms.data.remote.api.KusitmsApi
-import com.kusitms.data.remote.entity.request.CommentContentRequestBody
 import com.kusitms.data.remote.entity.request.toBody
 import com.kusitms.data.remote.entity.response.notice.toModel
 import com.kusitms.domain.model.notice.CommentContentModel
@@ -23,7 +21,7 @@ class NoticeRepositoryImpl @Inject constructor(
 ) : NoticeRepository {
     override suspend fun getNoticeList(): Result<List<NoticeModel>> {
         return try {
-            val response = kusitmsApi.getNoticeList()
+            val response = kusitmsApi.getNoticeList(size = 30)
             if (response.result.code == 200 && response.payload != null) {
                 Result.success(response.payload.map { it.toModel() })
             } else {
@@ -143,6 +141,19 @@ class NoticeRepositoryImpl @Inject constructor(
                 Result.success(ReportResult.ALREADY_REPORTED)
             }else {
                 Result.failure(RuntimeException("댓글 신고 실패: ${response.message()}"))
+            }
+        } catch (e: Exception){
+            Result.failure(e)
+        }
+    }
+
+    override suspend fun getChildCommentList(commentId: Int): Result<List<CommentModel>> {
+        return try {
+            val response = kusitmsApi.getChildCommentList(commentId)
+            if (response.result.code == 200 && response.payload != null) {
+                Result.success(response.payload.map { it.toModel() })
+            } else {
+                Result.failure(RuntimeException("대댓글 조회 실패: ${response.result.message}"))
             }
         } catch (e: Exception){
             Result.failure(e)
