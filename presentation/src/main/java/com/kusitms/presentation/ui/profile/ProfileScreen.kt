@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalCoroutinesApi::class)
+
 package com.kusitms.presentation.ui.profile
 
 import androidx.compose.foundation.Image
@@ -24,11 +26,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
+import com.kusitms.domain.model.profile.ProfileModel
 import com.kusitms.presentation.R
 import com.kusitms.presentation.common.ui.KusitmsMarginVerticalSpacer
 import com.kusitms.presentation.common.ui.KusitsmTopBarTextWithIcon
@@ -41,15 +43,17 @@ import com.kusitms.presentation.navigation.NavRoutes
 import com.kusitms.presentation.ui.ImageVector.icons.KusitmsIcons
 import com.kusitms.presentation.ui.ImageVector.icons.kusitmsicons.ArrowDown
 import com.kusitms.presentation.ui.ImageVector.icons.kusitmsicons.Search
-import com.kusitms.presentation.ui.login.LoginScreen
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 
 @Composable
 fun ProfileScreen(
     viewModel: ProfileViewModel = hiltViewModel(),
-    navController: NavHostController
+    navController: NavHostController,
+    onProfileClick: (ProfileModel) -> Unit,
 ) {
-    val expanded by viewModel.expended.collectAsState()
+    val expanded by viewModel.expended.collectAsStateWithLifecycle()
+    val profileList by viewModel.profileList.collectAsStateWithLifecycle()
 
     Column(
         modifier = Modifier
@@ -70,7 +74,7 @@ fun ProfileScreen(
                 )
             },
 
-        )
+            )
         KusitmsMarginVerticalSpacer(size = 32)
         Card(
             modifier = Modifier
@@ -89,7 +93,6 @@ fun ProfileScreen(
                 expanded = expanded,
                 viewModel
             )
-
             if (expanded) {
                 AllPartList(
                     partNameList = categories,
@@ -98,7 +101,10 @@ fun ProfileScreen(
             }
         }
         ProfileListScreen(
-            navController = navController
+            profileList = profileList,
+            onProfileClick = { profile ->
+                onProfileClick(profile)
+            },
         )
     }
 }
@@ -166,8 +172,3 @@ fun AllPartList(
 }
 
 
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun ProfileScreenPreview() {
-    ProfileScreen(navController = rememberNavController())
-}

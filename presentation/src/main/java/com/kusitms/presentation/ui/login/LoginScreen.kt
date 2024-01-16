@@ -112,7 +112,6 @@ fun ButtonColumn(navController: NavHostController) {
                 .fillMaxWidth()
                 .height(56.dp),
             onClick = {
-                      navController.navigate(NavRoutes.Profile.route)
             },
             colors = ButtonDefaults.buttonColors(containerColor = KusitmsColorPalette.current.Grey100),
             shape = RoundedCornerShape(size = 16.dp)

@@ -16,14 +16,15 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
-import androidx.navigation.NavHostController
+import com.kusitms.domain.model.profile.ProfileModel
+import com.kusitms.presentation.R
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
 import com.kusitms.presentation.model.profile.search.ProfileSearchViewModel
@@ -33,8 +34,10 @@ import com.kusitms.presentation.ui.ImageVector.LeftArrow
 fun ProfileSearchScreen(
     viewModel: ProfileSearchViewModel = hiltViewModel(),
     onBackClick: () -> Unit,
+    onProfileClick: (ProfileModel) -> Unit,
 ) {
     val uiState = viewModel.uiState.collectAsState()
+    val profileList by viewModel.profileList.collectAsState()
 
     Column(
         modifier = Modifier
@@ -56,7 +59,7 @@ fun ProfileSearchScreen(
                         onBackClick()
                     },
                 imageVector = LeftArrow.vector,
-                contentDescription = "뒤로"
+                contentDescription = stringResource(id = R.string.profile_search_back)
             )
             Spacer(modifier = Modifier.width(16.dp))
             ProfileSearchField(
@@ -75,16 +78,20 @@ fun ProfileSearchScreen(
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = "궁금한 학회원 프로필을\n" +
-                            "검색해보세요",
+                    text = stringResource(id = R.string.profile_search_none),
                     textAlign = TextAlign.Center,
                     style = KusitmsTypo.current.Caption1,
                     color = KusitmsColorPalette.current.Grey400
                 )
             }
         } else {
-            if (profilesContainsSearchText(uiState.value.searchText)) {
-                ProfileSearchExist()
+            if (viewModel.profilesContainsSearchText(uiState.value.searchText, profileList)) {
+                ProfileSearchExist(
+                    viewModel = viewModel,
+                    onProfileClick = { profile ->
+                        onProfileClick(profile)
+                    }
+                )
             } else {
                 ProfileSearchNone(uiState.value.searchText)
             }
@@ -93,15 +100,4 @@ fun ProfileSearchScreen(
     }
 }
 
-// profiles에 검색어가 포함되는지 확인하는 함수
-fun profilesContainsSearchText(searchText: String): Boolean {
-    return false
-}
 
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun ProfileSearchScreenPreview() {
-    ProfileSearchScreen(
-        onBackClick = {},
-    )
-}

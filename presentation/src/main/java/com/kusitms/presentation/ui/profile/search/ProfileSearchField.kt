@@ -1,6 +1,5 @@
 package com.kusitms.presentation.ui.profile.search
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -21,9 +20,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.kusitms.presentation.R
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
 import com.kusitms.presentation.ui.ImageVector.xIcon
@@ -46,7 +47,6 @@ fun ProfileSearchField(
         keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Search),
         keyboardActions = KeyboardActions(onDone = {
             submit()
-            Log.d("검색", "엔터")
         }),
         decorationBox = { innerTextField ->
             Row(
@@ -65,7 +65,7 @@ fun ProfileSearchField(
                     Box {
                         if (text.isEmpty()) {
                             Text(
-                                text = "이름, 학교, 학과, 관심 분야",
+                                text = stringResource(id = R.string.profile_search_hint),
                                 style = KusitmsTypo.current.Text_Medium,
                                 color = KusitmsColorPalette.current.Grey400
                             )
@@ -77,7 +77,7 @@ fun ProfileSearchField(
                 IconButton(onClick = onClearClick) {
                     Icon(
                         imageVector = xIcon.vector,
-                        contentDescription = "Clear Text",
+                        contentDescription = null,
                         tint = Color.Unspecified
                     )
                 }

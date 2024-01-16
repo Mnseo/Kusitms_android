@@ -12,25 +12,20 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.kusitms.domain.model.profile.ProfileModel
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
-import com.kusitms.presentation.model.profile.Profile
+import com.kusitms.presentation.model.profile.search.ProfileSearchViewModel
 import com.kusitms.presentation.ui.profile.ProfileItem
 
 @Composable
 fun ProfileSearchExist(
+    viewModel: ProfileSearchViewModel,
+    onProfileClick: (ProfileModel) -> Unit
 ) {
-    val profiles = listOf(
-        Profile(0, "이채연", "디자이너", "디자이너 한 줄 소개"),
-        Profile(1, "국준호", "기획자", "기획자 한 줄 소개"),
-        Profile(2, "장세은", "개발자", "개발자 한 줄 소개"),
-        Profile(3, "이안진", "개발자", "개발자 한 줄 소개"),
-        Profile(4, "신민서", "개발자", "개발자 한 줄 소개"),
-        Profile(5, "김서연", "기획자", "기획자 한 줄 소개"),
-        Profile(6, "안정후", "개발자", "개발자 한 줄 소개"),
-    )
+    val searchedProfiles = viewModel.getSearchProfiles()
+
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.SpaceBetween
@@ -41,7 +36,7 @@ fun ProfileSearchExist(
                 .padding(16.dp)
         ) {
             Text(
-                text = "1",
+                text = searchedProfiles.size.toString(),
                 style = KusitmsTypo.current.Caption1,
                 color = KusitmsColorPalette.current.Grey400
             )
@@ -57,19 +52,12 @@ fun ProfileSearchExist(
                 .fillMaxSize()
                 .padding(horizontal = 0.dp),
         ) {
-            items(profiles) { profile ->
+            items(searchedProfiles) { profile ->
                 ProfileItem(
                     profile = profile,
-                    onClick = {}
+                    onClick = { onProfileClick(profile) }
                 )
             }
         }
     }
-}
-
-@Preview
-@Composable
-fun ProfileSearchExistPriview(
-) {
-    ProfileSearchExist()
 }

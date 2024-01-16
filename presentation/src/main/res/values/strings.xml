@@ -177,22 +177,24 @@
     <string name="profile_part_plan">기획팀</string>
     <string name="profile_part_dev">개발팀</string>
     <string name="profile_part_design">디자인팀</string>
+    <string name="profile_picture">프로필 사진</string>
 
 
     <!-- ProfileDetail -->
-    <string name="profile_detail_topbar">이채연의 프로필</string>
-    <string name="profile_detail_name">이채연</string>
-    <string name="profile_detail_part">27기 디자이너</string>
-    <string name="profile_detail_comment">코멘트</string>
+    <string name="profile_detail_topbar">%s의 프로필</string>
     <string name="profile_detail_profile">프로필</string>
     <string name="profile_detail_major">전공</string>
     <string name="profile_detail_like">관심</string>
     <string name="profile_detail_email">이메일</string>
     <string name="profile_detail_phone">번호</string>
     <string name="profile_detail_link">링크</string>
+    <string name="profile_detail_info_none">아직 소개가 없어요</string>
+    <string name="profile_detail_link_none">아직 링크가 없어요</string>
 
     <!-- ProfileSearch -->
-    <string name="profile_search_hint">이름, 학교, 학과, 관심 분야</string>
+    <string name="profile_search_hint">학회원 이름을 검색해보세요</string>
+    <string name="profile_search_back">뒤로</string>
+    <string name="profile_search_none">궁금한 학회원 프로필을\n검색해보세요</string>
 
 
     <string name="bottom_nav_home">홈</string>
