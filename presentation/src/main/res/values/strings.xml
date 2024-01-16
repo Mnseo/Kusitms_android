@@ -201,4 +201,11 @@
     <string name="bottom_nav_attendance">출석</string>
     <string name="bottom_nav_notice">공지</string>
     <string name="bottom_nav_profile">프로필</string>
+
+
+
+    <!-- HomeScreen -->
+    <string name="home_alarm">알림</string>
+    <string name="home_setting">설정</string>
+
 </resources>
