@@ -3,7 +3,6 @@ package com.kusitms.presentation.ui.home
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -34,74 +33,71 @@ fun HomeProfile(
     modifier: Modifier = Modifier,
     onClickProfile: () -> Unit,
 ) {
-    Box(
+    Card(
         modifier = Modifier
-            .then(modifier)
             .fillMaxWidth()
             .padding(vertical = 16.dp)
+            .height(92.dp),
+        shape = RoundedCornerShape(24.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = KusitmsColorPalette.current.Grey800,
+        )
     ) {
-        Card(
+        Row(
             modifier = Modifier
-                .fillMaxWidth()
-                .height(92.dp),
-            shape = RoundedCornerShape(24.dp),
-            colors = CardDefaults.cardColors(
-                containerColor = KusitmsColorPalette.current.Grey800,
-            )
+                .padding(horizontal = 24.dp)
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Row(
+            Column(
                 modifier = Modifier
-                    .padding(horizontal = 24.dp)
-                    .fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
+                    .padding(vertical = 16.dp)
+                    .fillMaxHeight(),
+                verticalArrangement = Arrangement.SpaceEvenly,
             ) {
-                Column(
-                    modifier = Modifier.padding(vertical = 16.dp).fillMaxHeight(),
-                    verticalArrangement = Arrangement.SpaceEvenly,
-                ) {
-                    Row {
-                        Text(
-                            text = "채연님, 안녕하세요 ",
-                            style = KusitmsTypo.current.Text_Semibold,
-                            color = KusitmsColorPalette.current.White
-                        )
-                        Image(
-                            painter = painterResource(id = R.drawable.ic_hello_emoji),
-                            contentDescription = null,
-                        )
-                    }
+                Row {
                     Text(
-                        text = "27기 디자인팀",
-                        style = KusitmsTypo.current.Text_Medium,
-                        color = KusitmsColorPalette.current.Grey400,
+                        text = "채연님, 안녕하세요 ",
+                        style = KusitmsTypo.current.Text_Semibold,
+                        color = KusitmsColorPalette.current.White
+                    )
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_hello_emoji),
+                        contentDescription = null,
                     )
                 }
-                Card(
-                    modifier = Modifier
-                        .width(75.dp)
-                        .fillMaxHeight()
-                        .padding(vertical = 16.dp)
-                        .clickable { },
-                    shape = RoundedCornerShape(12.dp),
-                    colors = CardDefaults.cardColors(
-                        containerColor = KusitmsColorPalette.current.Grey600,
-                    ),
+                Text(
+                    text = "27기 디자인팀",
+                    style = KusitmsTypo.current.Text_Medium,
+                    color = KusitmsColorPalette.current.Grey400,
+                )
+            }
+            Card(
+                modifier = Modifier
+                    .width(75.dp)
+                    .fillMaxHeight()
+                    .padding(vertical = 16.dp)
+                    .clickable { },
+                shape = RoundedCornerShape(12.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = KusitmsColorPalette.current.Grey600,
+                ),
+            ) {
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Column(
-                        modifier = Modifier.fillMaxSize(),
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Text(
-                            text = "내 프로필",
-                            style = KusitmsTypo.current.Caption1,
-                            color = KusitmsColorPalette.current.White,
-                            textAlign = TextAlign.Center
-                        )
-                    }
+                    Text(
+                        text = "내 프로필",
+                        style = KusitmsTypo.current.Caption1,
+                        color = KusitmsColorPalette.current.White,
+                        textAlign = TextAlign.Center
+                    )
                 }
             }
         }
+
     }
 }
 

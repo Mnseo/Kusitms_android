@@ -71,10 +71,8 @@ fun HomeScreen(navController: NavHostController) {
                 )
             }
         }
-        
-        HomeProfile(profile = ProfileModel()) {
-            
-        }
+        HomeProfile(profile = ProfileModel()) { }
+        HomeNotice()
     }
 }
 
