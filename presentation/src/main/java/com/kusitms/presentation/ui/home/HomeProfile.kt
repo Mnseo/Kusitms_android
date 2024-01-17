@@ -18,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -53,17 +54,17 @@ fun HomeProfile(
             ) {
                 Row {
                     Text(
-                        text = "채연님, 안녕하세요 ",
+                        text = stringResource(R.string.home_profile),
                         style = KusitmsTypo.current.Text_Semibold,
                         color = KusitmsColorPalette.current.White
                     )
                     Image(
                         painter = painterResource(id = R.drawable.ic_hello_emoji),
-                        contentDescription = null,
+                        contentDescription = stringResource(id = R.string.home_ic_hello),
                     )
                 }
                 Text(
-                    text = "27기 디자인팀",
+                    text = stringResource(R.string.home_profile_part),
                     style = KusitmsTypo.current.Text_Medium,
                     color = KusitmsColorPalette.current.Grey400,
                 )
@@ -80,12 +81,14 @@ fun HomeProfile(
                 ),
             ) {
                 Column(
-                    modifier = Modifier.fillMaxWidth().fillMaxHeight(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight(),
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = "내 프로필",
+                        text = stringResource(R.string.home_profile_mine),
                         style = KusitmsTypo.current.Caption1,
                         color = KusitmsColorPalette.current.White,
                         textAlign = TextAlign.Center

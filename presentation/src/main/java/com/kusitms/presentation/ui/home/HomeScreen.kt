@@ -57,7 +57,7 @@ fun HomeScreen(navController: NavHostController) {
                     modifier = Modifier
                         .size(24.dp)
                         .clickable { },
-                    contentDescription = stringResource(id = R.string.home_alarm)
+                    contentDescription = stringResource(id = R.string.home_ic_alarm)
                 )
                 Spacer(modifier = Modifier.width(24.dp))
                 Image(
@@ -67,12 +67,17 @@ fun HomeScreen(navController: NavHostController) {
                             navController.navigate(NavRoutes.SettingMember.route)
                         },
                     imageVector = KusitmsIcons.Setting,
-                    contentDescription = stringResource(R.string.home_setting)
+                    contentDescription = stringResource(R.string.home_ic_setting)
                 )
             }
         }
+        Spacer(modifier = Modifier.height(8.dp))
         HomeProfile(profile = ProfileModel()) { }
-        HomeNotice()
+        Spacer(modifier = Modifier.height(8.dp))
+        HomeNoticeNone()
+        Spacer(modifier = Modifier.height(8.dp))
+        HomeCurriculumNone()
+        HomeTeamNone()
     }
 }
 

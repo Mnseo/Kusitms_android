@@ -16,6 +16,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kusitms.presentation.R
@@ -23,7 +24,7 @@ import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
 
 @Composable
-fun HomeCurriculum() {
+fun HomeCurriculumNone() {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -43,12 +44,12 @@ fun HomeCurriculum() {
                 verticalArrangement = Arrangement.SpaceEvenly
             ) {
                 Text(
-                    text = "다가오는 커리큘럼",
+                    text = stringResource(id = R.string.home_curriculum),
                     style = KusitmsTypo.current.Caption1,
                     color = KusitmsColorPalette.current.Main400,
                 )
                 Text(
-                    text = "큐시즘 전체 OT",
+                    text = stringResource(id = R.string.home_curriculum_title),
                     style = KusitmsTypo.current.SubTitle1_Medium,
                     color = KusitmsColorPalette.current.White,
                 )
@@ -70,11 +71,11 @@ fun HomeCurriculum() {
                     Row(modifier = Modifier.padding(bottom = 12.dp)) {
                         Image(
                             painter = painterResource(id = R.drawable.ic_calendar),
-                            contentDescription = null,
+                            contentDescription = stringResource(id = R.string.home_ic_calendar),
                         )
                         Spacer(modifier = Modifier.width(16.dp))
                         Text(
-                            text = "9월 16일 토 15:00~17:00",
+                            text = stringResource(id = R.string.home_curriculum_calendar),
                             style = KusitmsTypo.current.Caption1,
                             color = KusitmsColorPalette.current.Grey300
                         )
@@ -82,11 +83,11 @@ fun HomeCurriculum() {
                     Row(modifier = Modifier.padding(bottom = 12.dp)) {
                         Image(
                             painter = painterResource(id = R.drawable.ic_location),
-                            contentDescription = null,
+                            contentDescription = stringResource(id = R.string.home_ic_location),
                         )
                         Spacer(modifier = Modifier.width(16.dp))
                         Text(
-                            text = "서울창업허브 9층",
+                            text = stringResource(id = R.string.home_curriculum_location),
                             style = KusitmsTypo.current.Caption1,
                             color = KusitmsColorPalette.current.Grey300
                         )
@@ -94,11 +95,11 @@ fun HomeCurriculum() {
                     Row {
                         Image(
                             painter = painterResource(id = R.drawable.ic_wifi),
-                            contentDescription = null,
+                            contentDescription = stringResource(id = R.string.home_ic_wifi),
                         )
                         Spacer(modifier = Modifier.width(16.dp))
                         Text(
-                            text = "와이파이 정보가 없어요",
+                            text = stringResource(id = R.string.home_curriculum_wifi_none),
                             style = KusitmsTypo.current.Caption1,
                             color = KusitmsColorPalette.current.Grey400
                         )
@@ -114,5 +115,5 @@ fun HomeCurriculum() {
 @Preview
 @Composable
 fun HomeCurriculumPreview() {
-    HomeCurriculum()
+    HomeCurriculumNone()
 }
