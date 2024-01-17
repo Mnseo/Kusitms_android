@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -36,9 +35,7 @@ fun HomeProfile(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 16.dp)
-            .height(92.dp),
-        shape = RoundedCornerShape(24.dp),
+            .padding(vertical = 16.dp), shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(
             containerColor = KusitmsColorPalette.current.Grey800,
         )
@@ -51,8 +48,7 @@ fun HomeProfile(
         ) {
             Column(
                 modifier = Modifier
-                    .padding(vertical = 16.dp)
-                    .fillMaxHeight(),
+                    .padding(vertical = 20.dp),
                 verticalArrangement = Arrangement.SpaceEvenly,
             ) {
                 Row {
@@ -75,7 +71,7 @@ fun HomeProfile(
             Card(
                 modifier = Modifier
                     .width(75.dp)
-                    .fillMaxHeight()
+                    .height(92.dp)
                     .padding(vertical = 16.dp)
                     .clickable { },
                 shape = RoundedCornerShape(12.dp),
@@ -84,7 +80,7 @@ fun HomeProfile(
                 ),
             ) {
                 Column(
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier.fillMaxWidth().fillMaxHeight(),
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
@@ -97,7 +93,6 @@ fun HomeProfile(
                 }
             }
         }
-
     }
 }
 
