@@ -23,6 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.kusitms.domain.model.profile.ProfileModel
 import com.kusitms.presentation.R
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.navigation.NavRoutes
@@ -69,6 +70,10 @@ fun HomeScreen(navController: NavHostController) {
                     contentDescription = stringResource(R.string.home_setting)
                 )
             }
+        }
+        
+        HomeProfile(profile = ProfileModel()) {
+            
         }
     }
 }
