@@ -21,7 +21,7 @@ import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
 
 @Composable
-fun HomeNoticeNone() {
+fun HomeNoticeExist() {
     Card(
         modifier = Modifier
             .fillMaxWidth(),
@@ -53,6 +53,6 @@ fun HomeNoticeNone() {
 
 @Preview
 @Composable
-fun HomeNoticeNonePreview() {
-    HomeNoticeNone()
+fun HomeNoticeExistPreview() {
+    HomeNoticeExist()
 }

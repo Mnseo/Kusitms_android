@@ -114,6 +114,6 @@ fun HomeCurriculumNone() {
 
 @Preview
 @Composable
-fun HomeCurriculumPreview() {
+fun HomeCurriculumNonePreview() {
     HomeCurriculumNone()
 }

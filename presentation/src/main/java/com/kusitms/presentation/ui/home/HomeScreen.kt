@@ -77,7 +77,7 @@ fun HomeScreen(navController: NavHostController) {
         HomeNoticeNone()
         Spacer(modifier = Modifier.height(8.dp))
         HomeCurriculumNone()
-        HomeTeamNone()
+        HomeTeamExist()
     }
 }
 
