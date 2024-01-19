@@ -85,7 +85,7 @@ sealed class NoticeDetailDialogState() {
 
     object AlreadyReport : NoticeDetailDialogState()
 
-    data class CommentDelete(val comment: CommentModel) : NoticeDetailDialogState()
+    data class CommentDelete(val comment: CommentModel,val isChild : Boolean = false) : NoticeDetailDialogState()
 }
 
 sealed class NoticeDetailModalState() {
@@ -143,6 +143,11 @@ fun NoticeDetailScreen(
     )
 
     var openDialogState by remember { mutableStateOf<NoticeDetailDialogState?>(null) }
+
+    var openBottomSheetInCommentModal by remember { mutableStateOf<NoticeDetailModalState?>(null) }
+    val bottomSheetStateInCommentModal = rememberModalBottomSheetState(
+        skipPartiallyExpanded = true
+    )
 
     LaunchedEffect(key1 = Unit){
         viewModel.snackbarEvent.collect {
@@ -277,7 +282,13 @@ fun NoticeDetailScreen(
                 is NoticeDetailModalState.Comment -> {
                     NoticeCommentBottom(
                         viewModel,
-                        (openBottomSheet as NoticeDetailModalState.Comment).comment
+                        (openBottomSheet as NoticeDetailModalState.Comment).comment,
+                        onClickChildReport = {
+                            openBottomSheetInCommentModal = it
+                        },
+                        onClickChildDelete = {
+                            openDialogState = it
+                        }
                     )
                 }
 
@@ -295,12 +306,49 @@ fun NoticeDetailScreen(
                                     memberId = reportState.memberId
                                 )
                             }
-
+                        },
+                        onDismiss = {
                             openBottomSheet = null
                         }
+                    )
+                }
+            }
+
+
+        }
+    }
+    if (openBottomSheetInCommentModal is NoticeDetailModalState.Report) {
+        ModalBottomSheet(
+            containerColor = KusitmsColorPalette.current.Grey600,
+            dragHandle = { Box(Modifier.height(0.dp)) },
+            onDismissRequest = { openBottomSheetInCommentModal = null },
+            sheetState = bottomSheetStateInCommentModal,
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight()
+        ) {
+            when (openBottomSheetInCommentModal ?: return@ModalBottomSheet) {
+                is NoticeDetailModalState.Report -> {
+                    NoticeCommentReportBottom(
+                        onClick = {
+                            (openBottomSheetInCommentModal as NoticeDetailModalState.Report).let { reportState ->
+                                openDialogState =
+                                    NoticeDetailDialogState.Report(
+                                        comment = reportState.comment,
+                                        report = it,
+                                        memberId = reportState.memberId
+                                    )
+
+                            }
+
+                            openBottomSheetInCommentModal = null
+                        }
                     ) {
-                        openBottomSheet = null
+                        openBottomSheetInCommentModal = null
                     }
+                }
+                else -> {
+
                 }
             }
 
