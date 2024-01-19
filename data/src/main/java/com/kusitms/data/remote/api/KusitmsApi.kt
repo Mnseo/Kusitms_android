@@ -86,6 +86,13 @@ interface KusitmsApi {
         @Path("commentId") commentId: Int,
     ): BaseResponse<List<CommentPayload>>
 
+    @POST("v1/comment/{noticeId}/{commentId}")
+    suspend fun addNoticeChildComment(
+        @Path("noticeId") noticeId: Int,
+        @Path("commentId") commentId: Int,
+        @Body commentContentRequestBody: CommentContentRequestBody,
+    ): BaseResponse<CommentPayload>
+
     // SignInNonMember
     @FormUrlEncoded
     @POST("v1/member/check/register")

@@ -165,7 +165,7 @@ fun NoticeComment(
             }
 
         }
-        if(!isLast)
+        if(!isLast && !isParentCommentAsReply)
             Divider(
                 modifier = Modifier
                     .fillMaxWidth()
