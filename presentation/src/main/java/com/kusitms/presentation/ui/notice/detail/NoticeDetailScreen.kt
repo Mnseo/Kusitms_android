@@ -72,6 +72,7 @@ import com.kusitms.presentation.ui.ImageVector.icons.kusitmsicons.MoreVertical
 import com.kusitms.presentation.ui.ImageVector.icons.kusitmsicons.UserBackground
 import com.kusitms.presentation.ui.notice.detail.comment.CommentInput
 import com.kusitms.presentation.ui.notice.detail.comment.NoticeComment
+import com.kusitms.presentation.ui.notice.detail.vote.NoticeVote
 import com.kusitms.presentation.ui.viewer.ImageViewerViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -350,6 +351,11 @@ fun NoticeDetailScreen(
                     style = KusitmsTypo.current.Body2,
                     color = KusitmsColorPalette.current.Grey300
                 )
+            }
+
+            item {
+                KusitmsMarginVerticalSpacer(size = 32)
+                NoticeVote()
             }
 
             item {
