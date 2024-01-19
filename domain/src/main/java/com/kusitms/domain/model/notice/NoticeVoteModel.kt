@@ -12,8 +12,7 @@ data class NoticeVoteItem(
     val count: Int = 0,
     val item: String = "",
     val members: List<NoticeVoteMember> = emptyList(),
-    val voteItemId: Int = 0,
-    val selected : Boolean = false
+    val voteItemId: Int = 0
 )
 
 data class NoticeVoteMember(
