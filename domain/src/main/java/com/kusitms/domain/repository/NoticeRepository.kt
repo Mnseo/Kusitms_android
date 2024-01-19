@@ -42,4 +42,9 @@ interface NoticeRepository {
         commentId: Int
     ) : Result<List<CommentModel>>
 
+    suspend fun addNoticeChildComment(
+        noticeId: Int,
+        commentId : Int,
+        commentContentModel: CommentContentModel
+    ) : Result<CommentModel>
 }

@@ -159,4 +159,25 @@ class NoticeRepositoryImpl @Inject constructor(
             Result.failure(e)
         }
     }
+
+    override suspend fun addNoticeChildComment(
+        noticeId: Int,
+        commentId: Int,
+        commentContentModel: CommentContentModel
+    ): Result<CommentModel> {
+        return try {
+            val response = kusitmsApi.addNoticeChildComment(
+                noticeId = noticeId,
+                commentId = commentId,
+                commentContentRequestBody = commentContentModel.toBody()
+            )
+            if (response.result.code == 200 && response.payload != null) {
+                Result.success(response.payload.toModel())
+            } else {
+                Result.failure(RuntimeException("대댓글 등록 실패: ${response.result.message}"))
+            }
+        } catch (e: Exception){
+            Result.failure(e)
+        }
+    }
 }
