@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -36,7 +37,7 @@ fun HomeProfile(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 16.dp), shape = RoundedCornerShape(24.dp),
+            .padding(vertical = 20.dp), shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(
             containerColor = KusitmsColorPalette.current.Grey800,
         )
@@ -58,6 +59,7 @@ fun HomeProfile(
                         style = KusitmsTypo.current.Text_Semibold,
                         color = KusitmsColorPalette.current.White
                     )
+                    Spacer(modifier = Modifier.width(4.dp))
                     Image(
                         painter = painterResource(id = R.drawable.ic_hello_emoji),
                         contentDescription = stringResource(id = R.string.home_ic_hello),

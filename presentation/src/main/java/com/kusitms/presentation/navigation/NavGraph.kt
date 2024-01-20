@@ -230,7 +230,7 @@ fun MainNavigation() {
                 //HomeScreen
                 kusitmsComposableWithAnimation(NavRoutes.HomeScreen.route) {
                     HomeScreen(
-                        navController
+                        navController = navController
                     )
                 }
 

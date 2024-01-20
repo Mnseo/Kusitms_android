@@ -21,17 +21,22 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.kusitms.domain.model.profile.ProfileModel
 import com.kusitms.presentation.R
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
+import com.kusitms.presentation.model.home.HomeViewModel
 import com.kusitms.presentation.navigation.NavRoutes
 import com.kusitms.presentation.ui.ImageVector.icons.KusitmsIcons
 import com.kusitms.presentation.ui.ImageVector.icons.kusitmsicons.Setting
 
 @Composable
-fun HomeScreen(navController: NavHostController) {
+fun HomeScreen(
+    viewModel: HomeViewModel = hiltViewModel(),
+    navController: NavHostController,
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -74,7 +79,7 @@ fun HomeScreen(navController: NavHostController) {
         Spacer(modifier = Modifier.height(8.dp))
         HomeProfile(profile = ProfileModel()) { }
         Spacer(modifier = Modifier.height(8.dp))
-        HomeNoticeNone()
+        HomeNoticeExist()
         Spacer(modifier = Modifier.height(8.dp))
         HomeCurriculumNone()
         HomeTeamExist()
