@@ -22,8 +22,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.kusitms.domain.model.home.NoticeRecentModel
 import com.kusitms.domain.model.profile.ProfileModel
 import com.kusitms.presentation.R
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
@@ -37,6 +39,15 @@ fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
     navController: NavHostController,
 ) {
+    val notice = listOf<NoticeRecentModel>(
+        NoticeRecentModel("공지 0", 0),
+        NoticeRecentModel("공지 1", 1),
+        NoticeRecentModel("공지 2", 2),
+    )
+
+    var currentNoticeIndex = viewModel.currentNoticeIndex.collectAsStateWithLifecycle()
+    var nextNoticeIndex = viewModel.nextNoticeIndex.collectAsStateWithLifecycle()
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -79,8 +90,9 @@ fun HomeScreen(
         Spacer(modifier = Modifier.height(8.dp))
         HomeProfile(profile = ProfileModel()) { }
         Spacer(modifier = Modifier.height(8.dp))
-        HomeNoticeExist()
-        Spacer(modifier = Modifier.height(8.dp))
+        HomeNotice(
+            notice, currentNoticeIndex, nextNoticeIndex
+        )
         HomeCurriculumNone()
         HomeTeamExist()
     }

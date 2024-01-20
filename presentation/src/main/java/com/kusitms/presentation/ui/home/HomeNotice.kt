@@ -1,18 +1,22 @@
 package com.kusitms.presentation.ui.home
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -21,45 +25,72 @@ import com.kusitms.domain.model.home.NoticeRecentModel
 import com.kusitms.presentation.R
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
-fun HomeNotice() {
-
+fun HomeNotice(
+    notice: List<NoticeRecentModel>,
+    currentNoticeIndex: State<Int>,
+    nextNoticeIndex: State<Int>,
+) {
+    if (notice.isNotEmpty()) {
+        HomeNoticeExist(
+            notice = notice,
+            currentNoticeIndex = currentNoticeIndex,
+            nextNoticeIndex = nextNoticeIndex
+        )
+    } else {
+        HomeNoticeNone()
+    }
 }
 
 
 @Composable
-fun HomeNoticeExist() {
-    val notice: List<NoticeRecentModel> = listOf(
-        NoticeRecentModel("공지 0", 0),
-        NoticeRecentModel("공지 1", 1),
-        NoticeRecentModel("공지 0", 2)
-    )
-    var currentNoticeIndex by remember {
-        mutableStateOf(0)
-    }
-    var nextNoticeIndex by remember {
-        mutableStateOf((currentNoticeIndex + 1) % notice.size)
-    }
-    var isTransitioning by remember {
-        mutableStateOf(false)
-    }
+fun HomeNoticeExist(
+    notice: List<NoticeRecentModel>,
+    currentNoticeIndex: State<Int>,
+    nextNoticeIndex: State<Int>,
+) {
 
-    val coroutineScope = rememberCoroutineScope()
-
-    LaunchedEffect(currentNoticeIndex) {
-        coroutineScope.launch {
-            delay(3000)
-            isTransitioning = true
-            delay(200)
-            currentNoticeIndex = nextNoticeIndex
-            nextNoticeIndex = (currentNoticeIndex + 1) % notice.size
-            isTransitioning = false
+    Card(
+        modifier = Modifier
+            .fillMaxWidth(),
+        colors = CardDefaults.cardColors(
+            containerColor = KusitmsColorPalette.current.Grey900,
+        ),
+    ) {
+        Row(
+            modifier = Modifier
+                .padding(horizontal = 12.dp, vertical = 12.dp)
+                .fillMaxWidth(),
+            verticalAlignment = Alignment.Top
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.ic_notice),
+                contentDescription = stringResource(id = R.string.home_ic_notice),
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Column {
+                Text(
+                    text = notice[currentNoticeIndex.value].title,
+                    style = KusitmsTypo.current.Text_Semibold,
+                    color = KusitmsColorPalette.current.White
+                )
+                Text(
+                    text = notice[nextNoticeIndex.value].title,
+                    style = KusitmsTypo.current.Text_Semibold,
+                    color = KusitmsColorPalette.current.White,
+                    modifier = Modifier
+                        .padding(top = 4.dp)
+                )
+            }
         }
     }
+}
 
+
+@Composable
+fun HomeNoticeNone() {
     Card(
         modifier = Modifier
             .fillMaxWidth(),
@@ -80,29 +111,20 @@ fun HomeNoticeExist() {
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = notice[currentNoticeIndex].title,
+                    text = stringResource(R.string.home_notice),
                     style = KusitmsTypo.current.Text_Semibold,
                     color = KusitmsColorPalette.current.White
                 )
-
-                if (isTransitioning) {
-                    val alpha = 1f - (200 / 300f) // 200ms transition duration
-                    Text(
-                        text = notice[nextNoticeIndex].title,
-                        style = KusitmsTypo.current.SubTitle1_Medium,
-                        color = KusitmsColorPalette.current.White,
-                        modifier = Modifier
-                            .graphicsLayer(alpha = alpha)
-                            .padding(top = 4.dp)
-                    )
-                }
             }
+            Spacer(modifier = Modifier.height(8.dp))
         }
     }
 }
 
+
 @Preview
 @Composable
 fun HomeNoticeExistPreview() {
-    HomeNoticeExist()
+    HomeNoticeNone(
+    )
 }
