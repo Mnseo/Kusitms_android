@@ -8,6 +8,7 @@ import com.kusitms.domain.model.notice.CommentModel
 import com.kusitms.domain.model.notice.NoticeModel
 import com.kusitms.domain.model.notice.ReportCommentContentModel
 import com.kusitms.domain.model.report.ReportResult
+import com.kusitms.domain.usecase.notice.AddNoticeChildCommentUseCase
 import com.kusitms.domain.usecase.notice.AddNoticeCommentUseCase
 import com.kusitms.domain.usecase.notice.DeleteCommentUseCase
 import com.kusitms.domain.usecase.notice.GetChildCommentListUseCase
@@ -36,7 +37,8 @@ class NoticeDetailViewModel @Inject constructor(
     private val addNoticeCommentUseCase: AddNoticeCommentUseCase,
     private val deleteCommentUseCase: DeleteCommentUseCase,
     private val reportUseCase: ReportUseCase,
-    private val getChildCommentListUseCase : GetChildCommentListUseCase
+    private val getChildCommentListUseCase : GetChildCommentListUseCase,
+    private val addNoticeChildCommentUseCase : AddNoticeChildCommentUseCase
 ) : ViewModel() {
 
     val noticeId: Int = savedStateHandle.get<Int>(NOTICE_ID_SAVED_STATE_KEY)!!
@@ -109,6 +111,24 @@ class NoticeDetailViewModel @Inject constructor(
                 _snackbarEvent.emit(NoticeDetailSnackbarEvent.NETWORK_ERROR)
             }.collectLatest {
                fetchCommentList()
+                _snackbarEvent.emit(NoticeDetailSnackbarEvent.ADDED_COMMENT)
+            }
+        }
+    }
+
+    fun addNoticeChildComment(
+        commentId: Int,
+        content : String
+    ){
+        viewModelScope.launch {
+            addNoticeChildCommentUseCase(
+                noticeId = noticeId,
+                commentId = commentId,
+                content = CommentContentModel(content)
+            ).catch {
+                _snackbarEvent.emit(NoticeDetailSnackbarEvent.NETWORK_ERROR)
+            }.collectLatest {
+                fetchCommentList()
                 _snackbarEvent.emit(NoticeDetailSnackbarEvent.ADDED_COMMENT)
             }
         }

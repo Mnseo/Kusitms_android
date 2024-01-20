@@ -18,14 +18,18 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -42,13 +46,10 @@ import com.kusitms.domain.model.notice.CommentModel
 import com.kusitms.presentation.common.ui.KusitmsMarginVerticalSpacer
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
-import com.kusitms.presentation.model.notice.CommentUiModel
 import com.kusitms.presentation.ui.ImageVector.icons.KusitmsIcons
 import com.kusitms.presentation.ui.ImageVector.icons.kusitmsicons.Close
 import com.kusitms.presentation.ui.notice.detail.comment.CommentInput
 import com.kusitms.presentation.ui.notice.detail.comment.NoticeComment
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 @Composable
 fun BottomSheetDrawerBar(
@@ -61,10 +62,13 @@ fun BottomSheetDrawerBar(
 }
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NoticeCommentBottom(
     noticeDetailViewModel: NoticeDetailViewModel = hiltViewModel(),
-    targetComment : CommentModel
+    targetComment : CommentModel,
+    onClickChildReport : (NoticeDetailModalState.Report) -> Unit,
+    onClickChildDelete : (NoticeDetailDialogState.CommentDelete) -> Unit
 ){
     val childCommentList by noticeDetailViewModel.childCommentList.collectAsStateWithLifecycle()
 
@@ -74,8 +78,6 @@ fun NoticeCommentBottom(
             targetComment.commentId
         )
     }
-
-
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -117,11 +119,15 @@ fun NoticeCommentBottom(
                 NoticeComment(
                     comment = comment,
                     onClickReport = {
-//                        openBottomSheet =
-//                            NoticeDetailModalState.Report(comment, comment.writerId)
+                        onClickChildReport(
+                            NoticeDetailModalState.Report(comment, comment.writerId)
+                        )
                     },
                     onClickDelete = {
-                        //openDialogState = NoticeDetailDialogState.CommentDelete(comment)
+                        onClickChildDelete(
+                            NoticeDetailDialogState.CommentDelete(comment)
+                        )
+
                     },
                     isLast = index == childCommentList.lastIndex
                 )
@@ -133,7 +139,7 @@ fun NoticeCommentBottom(
         CommentInput(
             modifier = Modifier.padding(bottom = 42.dp),
             onClickSend = {
-
+                noticeDetailViewModel.addNoticeChildComment(targetComment.commentId,it)
             }
         )
     }
@@ -269,6 +275,7 @@ fun NoticeCommentReportBottom(
                 boxPadding = PaddingValues(horizontal = 12.5.dp),
                 onClick = {
                     onClick(it)
+                    onDismiss()
                 }
             )
         }
