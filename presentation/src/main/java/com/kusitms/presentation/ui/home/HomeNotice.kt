@@ -78,67 +78,74 @@ fun HomeNoticeExist(
             )
             Spacer(modifier = Modifier.width(8.dp))
 
-            Column {
-                AnimatedContent(
-                    targetState = notice[currentNoticeIndex.value].title,
-                    transitionSpec = {
-                        slideIntoContainer(
-                            towards = AnimatedContentTransitionScope.SlideDirection.Up,
-                            animationSpec = tween(durationMillis = 500)
-                        ) togetherWith
-                                slideOutOfContainer(
-                                    towards = AnimatedContentTransitionScope.SlideDirection.Up,
-                                    animationSpec = tween(durationMillis = 500)
-                                )
-                    },
-                    contentAlignment = Alignment.Center
-                ) { targetCount ->
-                    Column {
+            if (notice.isNotEmpty()) {
+                Column {
+                    AnimatedContent(
+                        targetState = notice[currentNoticeIndex.value].title,
+                        transitionSpec = {
+                            slideIntoContainer(
+                                towards = AnimatedContentTransitionScope.SlideDirection.Up,
+                                animationSpec = tween(durationMillis = 500)
+                            ) togetherWith
+                                    slideOutOfContainer(
+                                        towards = AnimatedContentTransitionScope.SlideDirection.Up,
+                                        animationSpec = tween(durationMillis = 500)
+                                    )
+                        },
+                        contentAlignment = Alignment.Center
+                    ) { targetCount ->
+                        Column {
+                            Text(
+                                text = targetCount,
+                                style = KusitmsTypo.current.Text_Semibold,
+                                color = KusitmsColorPalette.current.White,
+                                modifier = Modifier.clickable { }
+                            )
+                        }
+                    }
+
+                    AnimatedContent(
+                        targetState = notice[nextNoticeIndex.value].title,
+                        transitionSpec = {
+                            slideIntoContainer(
+                                towards = AnimatedContentTransitionScope.SlideDirection.Up,
+                                animationSpec = tween(durationMillis = 500)
+                            ) togetherWith
+                                    slideOutOfContainer(
+                                        towards = AnimatedContentTransitionScope.SlideDirection.Up,
+                                        animationSpec = tween(durationMillis = 500)
+                                    )
+                        },
+                        contentAlignment = Alignment.Center
+                    ) { targetCount ->
+
                         Text(
                             text = targetCount,
                             style = KusitmsTypo.current.Text_Semibold,
                             color = KusitmsColorPalette.current.White,
-                            modifier = Modifier.clickable { }
+                        )
+                        Box(
+                            modifier = Modifier
+                                .padding(top = 4.dp)
+                                .fillMaxWidth()
+                                .height(16.dp)
+                                .background(
+                                    brush = verticalGradient(
+                                        0f to KusitmsColorPalette.current.Grey900.copy(alpha = 0f),
+                                        0.7f to KusitmsColorPalette.current.Grey900,
+                                        tileMode = TileMode.Clamp
+                                    )
+                                )
                         )
                     }
                 }
-
-                AnimatedContent(
-                    targetState = notice[nextNoticeIndex.value].title,
-                    transitionSpec = {
-                        slideIntoContainer(
-                            towards = AnimatedContentTransitionScope.SlideDirection.Up,
-                            animationSpec = tween(durationMillis = 500)
-                        ) togetherWith
-                                slideOutOfContainer(
-                                    towards = AnimatedContentTransitionScope.SlideDirection.Up,
-                                    animationSpec = tween(durationMillis = 500)
-                                )
-                    },
-                    contentAlignment = Alignment.Center
-                ) { targetCount ->
-
-                    Text(
-                        text = targetCount,
-                        style = KusitmsTypo.current.Text_Semibold,
-                        color = KusitmsColorPalette.current.White,
-                    )
-                    Box(
-                        modifier = Modifier
-                            .padding(top = 4.dp)
-                            .fillMaxWidth()
-                            .height(16.dp)
-                            .background(
-                                brush = verticalGradient(
-                                    0f to KusitmsColorPalette.current.Grey900.copy(alpha = 0f),
-                                    0.7f to KusitmsColorPalette.current.Grey900,
-                                    tileMode = TileMode.Clamp
-                                )
-                            )
-                    )
-                }
+            } else {
+                Text(
+                    text = stringResource(R.string.home_notice),
+                    style = KusitmsTypo.current.Text_Semibold,
+                    color = KusitmsColorPalette.current.White
+                )
             }
-
         }
     }
 }

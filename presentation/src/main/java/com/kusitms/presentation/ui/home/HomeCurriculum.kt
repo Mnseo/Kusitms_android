@@ -24,7 +24,7 @@ import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
 
 @Composable
-fun HomeCurriculumNone() {
+fun HomeCurriculum() {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -115,5 +115,5 @@ fun HomeCurriculumNone() {
 @Preview
 @Composable
 fun HomeCurriculumNonePreview() {
-    HomeCurriculumNone()
+    HomeCurriculum()
 }
