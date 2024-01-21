@@ -26,6 +26,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.kusitms.domain.model.home.NoticeRecentModel
+import com.kusitms.domain.model.home.TeamMatchingModel
 import com.kusitms.domain.model.profile.ProfileModel
 import com.kusitms.presentation.R
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
@@ -43,6 +44,11 @@ fun HomeScreen(
         NoticeRecentModel("공지 0", 0),
         NoticeRecentModel("공지 1", 1),
         NoticeRecentModel("공지 2", 2),
+    )
+
+    val team : List<TeamMatchingModel> = listOf(
+        TeamMatchingModel(teamId = 1, curriculumName = "큐시즘 전체 OT"),
+        TeamMatchingModel(teamId = 10, curriculumName = "기업프로젝트"),
     )
 
     var currentNoticeIndex = viewModel.currentNoticeIndex.collectAsStateWithLifecycle()
@@ -93,8 +99,8 @@ fun HomeScreen(
         HomeNotice(
             notice, currentNoticeIndex, nextNoticeIndex
         )
-        HomeCurriculumNone()
-        HomeTeamExist()
+        HomeCurriculum()
+        HomeTeam(team)
     }
 }
 
