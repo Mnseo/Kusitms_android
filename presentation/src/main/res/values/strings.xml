@@ -183,6 +183,7 @@
     <!-- ProfileDetail -->
     <string name="profile_detail_topbar">%s의 프로필</string>
     <string name="profile_detail_profile">프로필</string>
+    <string name="profile_detail_period_part">%s기 %s</string>
     <string name="profile_detail_major">전공</string>
     <string name="profile_detail_like">관심</string>
     <string name="profile_detail_email">이메일</string>

@@ -52,6 +52,7 @@ fun ProfileDetailScreen(
                     ProfileDetailImage(
                         profile.name,
                         profile.profileImage,
+                        profile.period,
                         profile.part,
                         profile.description,
                     )
