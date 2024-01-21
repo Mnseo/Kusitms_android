@@ -2,23 +2,28 @@ package com.kusitms.presentation.model.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kusitms.domain.model.home.MemberInfoDetailModel
 import com.kusitms.domain.model.home.NoticeRecentModel
 import com.kusitms.domain.model.login.LoginMemberProfile
+import com.kusitms.domain.usecase.home.GetMemberInfoDetailUseCase
 import com.kusitms.domain.usecase.signin.GetLoginMemberProfileUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val getInfoMemberUseCase: GetLoginMemberProfileUseCase,
-
+    getMemberInfoDetailUseCase: GetMemberInfoDetailUseCase,
 ) : ViewModel() {
     private val initNotice: Int = 0
     private val transitionDuration = 200L
@@ -26,8 +31,12 @@ class HomeViewModel @Inject constructor(
     private var _infoProfile: LoginMemberProfile = LoginMemberProfile("", "", "", "", false)
     var infoProfile: LoginMemberProfile = _infoProfile
 
-
-
+    val detailMemberInfo = getMemberInfoDetailUseCase().catch {
+    }.stateIn(
+        viewModelScope,
+        started = SharingStarted.Eagerly,
+        initialValue = MemberInfoDetailModel()
+    )
 
     val _notices = mutableListOf(
         NoticeRecentModel("공지 0", 0),
@@ -36,10 +45,8 @@ class HomeViewModel @Inject constructor(
     )
 
     private val _uiState = MutableStateFlow(HomeUiState(initNotice))
-    val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
 
     private var _isTransitioning = MutableStateFlow(false)
-    var isTransitioning: StateFlow<Boolean> = _isTransitioning.asStateFlow()
 
     private var _currentNoticeIndex = MutableStateFlow(0)
     var currentNoticeIndex: StateFlow<Int> = _currentNoticeIndex.asStateFlow()
@@ -75,15 +82,6 @@ class HomeViewModel @Inject constructor(
                 delay(transitionDuration)
                 _isTransitioning.value = false
             }
-        }
-    }
-
-    private fun mapPartToKorean(part: String): String {
-        return when (part) {
-            "PLANNING" -> "기획팀"
-            "DESIGN" -> "디자인팀"
-            "DEVELOPMENT" -> "개발팀"
-            else -> part
         }
     }
 }

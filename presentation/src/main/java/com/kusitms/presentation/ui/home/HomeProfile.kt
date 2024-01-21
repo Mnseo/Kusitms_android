@@ -22,6 +22,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.kusitms.domain.model.home.MemberInfoDetailModel
 import com.kusitms.domain.model.login.LoginMemberProfile
 import com.kusitms.presentation.R
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
@@ -29,8 +30,8 @@ import com.kusitms.presentation.common.ui.theme.KusitmsTypo
 
 @Composable
 fun HomeProfile(
-    profile: LoginMemberProfile,
-    modifier: Modifier = Modifier,
+    info: LoginMemberProfile,
+    detailInfo: MemberInfoDetailModel,
     onClickProfile: () -> Unit,
 ) {
     Card(
@@ -54,7 +55,7 @@ fun HomeProfile(
             ) {
                 Row {
                     Text(
-                        text = stringResource(R.string.home_profile, profile.name),
+                        text = stringResource(R.string.home_profile, info.name),
                         style = KusitmsTypo.current.Text_Semibold,
                         color = KusitmsColorPalette.current.White
                     )
@@ -64,12 +65,18 @@ fun HomeProfile(
                         contentDescription = stringResource(id = R.string.home_ic_hello),
                     )
                 }
+                Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = stringResource(R.string.home_profile_part, profile.period.toString(), profile.period.toString()),
+                    text = stringResource(
+                        R.string.home_profile_part,
+                        info.period.toString(),
+                        mapPartToKorean(detailInfo.part)
+                    ),
                     style = KusitmsTypo.current.Text_Medium,
                     color = KusitmsColorPalette.current.Grey400,
                 )
             }
+            
             Card(
                 modifier = Modifier
                     .width(75.dp)
@@ -99,3 +106,14 @@ fun HomeProfile(
         }
     }
 }
+
+
+private fun mapPartToKorean(part: String): String {
+    return when (part) {
+        "PLANNING" -> "기획팀"
+        "DESIGN" -> "디자인팀"
+        "DEVELOPMENT" -> "개발팀"
+        else -> part
+    }
+}
+

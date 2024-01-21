@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -40,6 +41,7 @@ fun HomeScreen(
     navController: NavHostController,
 ) {
     val infoUser = viewModel.infoProfile
+    val detailMemberInfo by viewModel.detailMemberInfo.collectAsStateWithLifecycle()
 
     val notice = listOf<NoticeRecentModel>(
         NoticeRecentModel("공지 0", 0),
@@ -47,7 +49,7 @@ fun HomeScreen(
         NoticeRecentModel("공지 2", 2),
     )
 
-    val team : List<TeamMatchingModel> = listOf(
+    val team: List<TeamMatchingModel> = listOf(
         TeamMatchingModel(teamId = 1, curriculumName = "큐시즘 전체 OT"),
         TeamMatchingModel(teamId = 10, curriculumName = "기업프로젝트"),
     )
@@ -95,7 +97,7 @@ fun HomeScreen(
             }
         }
         Spacer(modifier = Modifier.height(8.dp))
-        HomeProfile(profile = infoUser) { }
+        HomeProfile(info = infoUser, detailInfo = detailMemberInfo) { }
         Spacer(modifier = Modifier.height(8.dp))
         HomeNotice(
             notice, currentNoticeIndex, nextNoticeIndex
