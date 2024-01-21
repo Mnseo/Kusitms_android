@@ -40,6 +40,8 @@ fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
     navController: NavHostController,
 ) {
+    val infoUser = viewModel.infoProfile
+
     val notice = listOf<NoticeRecentModel>(
         NoticeRecentModel("공지 0", 0),
         NoticeRecentModel("공지 1", 1),
@@ -94,7 +96,7 @@ fun HomeScreen(
             }
         }
         Spacer(modifier = Modifier.height(8.dp))
-        HomeProfile(profile = ProfileModel()) { }
+        HomeProfile(profile = infoUser) { }
         Spacer(modifier = Modifier.height(8.dp))
         HomeNotice(
             notice, currentNoticeIndex, nextNoticeIndex

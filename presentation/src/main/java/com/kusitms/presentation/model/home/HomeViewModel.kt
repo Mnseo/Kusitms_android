@@ -1,10 +1,10 @@
 package com.kusitms.presentation.model.home
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.kusitms.domain.model.home.NoticeRecentModel
+import com.kusitms.domain.model.login.LoginMemberProfile
+import com.kusitms.domain.usecase.signin.GetLoginMemberProfileUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -17,9 +17,13 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
+    private val getInfoMemberUseCase: GetLoginMemberProfileUseCase,
 ) : ViewModel() {
     private val initNotice: Int = 0
     private val transitionDuration = 200L
+
+    private var _infoProfile: LoginMemberProfile = LoginMemberProfile("", "", "", "", false)
+    var infoProfile: LoginMemberProfile = _infoProfile
 
     val _notices = mutableListOf(
         NoticeRecentModel("공지 0", 0),
@@ -40,10 +44,21 @@ class HomeViewModel @Inject constructor(
     var nextNoticeIndex: StateFlow<Int> = _nextNoticeIndex.asStateFlow()
 
     init {
+        getUserProfile()
         changeCurrentNotice()
     }
 
-    fun changeCurrentNotice() {
+    private fun getUserProfile() {
+        viewModelScope.launch {
+            val profileResult = getInfoMemberUseCase.fetchLoginMemberProfile()
+            if (profileResult.isSuccess) {
+                _infoProfile = profileResult.getOrNull()!!
+                infoProfile = _infoProfile
+            }
+        }
+    }
+
+    private fun changeCurrentNotice() {
         val coroutineScope = CoroutineScope(Dispatchers.Main)
         coroutineScope.launch {
             while (true) {
