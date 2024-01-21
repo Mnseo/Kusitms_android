@@ -18,7 +18,7 @@ import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
 import com.kusitms.presentation.ui.profile.detail.ProfileDetailImage
 import com.kusitms.presentation.ui.profile.detail.ProfileDetailInfo
-import com.kusitms.presentation.ui.profile.detail.ProfileDetailViewModel
+import com.kusitms.presentation.model.profile.detail.ProfileDetailViewModel
 
 @Composable
 fun ProfileDetailScreen(

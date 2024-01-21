@@ -1,21 +1,20 @@
 package com.kusitms.data.remote.api
 
 import com.kusitms.data.remote.entity.BaseResponse
-import com.kusitms.data.remote.entity.nullExceptionResponse
 import com.kusitms.data.remote.entity.request.CommentContentRequestBody
+import com.kusitms.data.remote.entity.request.ReportCommentRequestBody
 import com.kusitms.data.remote.entity.request.UpdatePasswordRequest
 import com.kusitms.data.remote.entity.response.CheckPasswordPayload
 import com.kusitms.data.remote.entity.response.FindPwCheckEmailResponse
-import com.kusitms.data.remote.entity.request.ReportCommentRequestBody
 import com.kusitms.data.remote.entity.response.LoginMemberProfileResponse
 import com.kusitms.data.remote.entity.response.LoginResponse
 import com.kusitms.data.remote.entity.response.SignInRequestResponse
+import com.kusitms.data.remote.entity.response.home.MemberInfoDetailPayload
 import com.kusitms.data.remote.entity.response.notice.CommentPayload
 import com.kusitms.data.remote.entity.response.notice.CurriculumPayload
 import com.kusitms.data.remote.entity.response.notice.FindPwCodeVerifyResponse
 import com.kusitms.data.remote.entity.response.notice.NoticePayload
 import com.kusitms.data.remote.entity.response.profile.ProfilePayload
-import com.kusitms.domain.model.profile.ProfileModel
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Response
@@ -39,6 +38,10 @@ interface KusitmsApi {
 
     @GET("v1/member/info")
     suspend fun loginMemberProfile(): LoginMemberProfileResponse
+
+    // 사용자 상세 정보 조회
+    @GET("v1/member/info/detail")
+    suspend fun getMemberInfoDetail(): BaseResponse<MemberInfoDetailPayload>
 
     // 공지사항 -> 차후에 분리하는 것도 좋을 듯 싶습니다.
     @GET("v2/notice")

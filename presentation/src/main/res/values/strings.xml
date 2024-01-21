@@ -213,7 +213,7 @@
     <string name="home_ic_location">장소</string>
     <string name="home_ic_wifi">와이파이</string>
     <string name="home_profile">%s님, 안녕하세요 </string>
-    <string name="home_profile_part">29기 디자인팀</string>
+    <string name="home_profile_part">%s기 %s</string>
     <string name="home_profile_mine">내 프로필</string>
     <string name="home_notice">최근 공지가 올라오는 곳이에요</string>
     <string name="home_curriculum">다가오는 커리큘럼</string>

@@ -65,7 +65,7 @@ fun HomeProfile(
                     )
                 }
                 Text(
-                    text = stringResource(R.string.home_profile_part),
+                    text = stringResource(R.string.home_profile_part, profile.period.toString(), profile.period.toString()),
                     style = KusitmsTypo.current.Text_Medium,
                     color = KusitmsColorPalette.current.Grey400,
                 )

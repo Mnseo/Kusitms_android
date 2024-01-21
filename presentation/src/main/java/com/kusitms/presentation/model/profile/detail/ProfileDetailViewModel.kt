@@ -1,4 +1,4 @@
-package com.kusitms.presentation.ui.profile.detail
+package com.kusitms.presentation.model.profile.detail
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel

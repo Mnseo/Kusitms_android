@@ -18,12 +18,16 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val getInfoMemberUseCase: GetLoginMemberProfileUseCase,
+
 ) : ViewModel() {
     private val initNotice: Int = 0
     private val transitionDuration = 200L
 
     private var _infoProfile: LoginMemberProfile = LoginMemberProfile("", "", "", "", false)
     var infoProfile: LoginMemberProfile = _infoProfile
+
+
+
 
     val _notices = mutableListOf(
         NoticeRecentModel("공지 0", 0),
@@ -71,6 +75,15 @@ class HomeViewModel @Inject constructor(
                 delay(transitionDuration)
                 _isTransitioning.value = false
             }
+        }
+    }
+
+    private fun mapPartToKorean(part: String): String {
+        return when (part) {
+            "PLANNING" -> "기획팀"
+            "DESIGN" -> "디자인팀"
+            "DEVELOPMENT" -> "개발팀"
+            else -> part
         }
     }
 }
