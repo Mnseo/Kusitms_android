@@ -1,7 +1,7 @@
 package com.kusitms.presentation.navigation
 
+import MyProfileDetailScreen
 import ProfileDetailScreen
-import android.util.Log
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.EnterTransition
@@ -33,6 +33,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
+import com.kusitms.domain.model.home.MemberInfoDetailModel
+import com.kusitms.domain.model.login.LoginMemberProfile
 import com.kusitms.presentation.common.ui.KusitmsBottomNavigationBar
 import com.kusitms.presentation.common.ui.KusitmsBottomNavigationItem
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
@@ -232,11 +234,19 @@ fun MainNavigation() {
                 kusitmsComposableWithAnimation(NavRoutes.HomeScreen.route) {
                     HomeScreen(
                         navController = navController,
-                        onClickProfile = {
-                            Log.d("프로필", "프로필 클릭")
-                            navController.navigate(NavRoutes.ProfileDetail.createMyProfile(it.email))
-                        }
                     )
+                }
+
+                composable(
+                    route = NavRoutes.MyProfileDetail.route,
+                    arguments = NavRoutes.MyProfileDetail.navArguments
+                ) {
+                    MyProfileDetailScreen(
+                        info = LoginMemberProfile("", "", "", "", false),
+                        detailInfo = MemberInfoDetailModel(),
+                        onBack = { navController.navigateUp() }
+                    )
+
                 }
 
                 // NoticeScreen
@@ -293,7 +303,6 @@ fun MainNavigation() {
                     ProfileDetailScreen(
                         onBack = { navController.navigateUp() }
                     )
-
                 }
 
                 kusitmsComposableWithAnimation(NavRoutes.ProfileSearch.route) {

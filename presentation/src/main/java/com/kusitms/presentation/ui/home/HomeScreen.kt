@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
+import com.kusitms.domain.model.home.MemberInfoDetailModel
 import com.kusitms.domain.model.home.NoticeRecentModel
 import com.kusitms.domain.model.home.TeamMatchingModel
 import com.kusitms.domain.model.login.LoginMemberProfile
@@ -38,7 +39,6 @@ import com.kusitms.presentation.ui.ImageVector.icons.kusitmsicons.Setting
 fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
     navController: NavHostController,
-    onClickProfile: (LoginMemberProfile) -> Unit,
 ) {
     val infoUser = viewModel.infoProfile
     val detailMemberInfo by viewModel.detailMemberInfo.collectAsStateWithLifecycle()
@@ -97,7 +97,10 @@ fun HomeScreen(
             }
         }
         Spacer(modifier = Modifier.height(8.dp))
-        HomeProfile(info = infoUser, detailInfo = detailMemberInfo, onClickProfile = {onClickProfile(infoUser)})
+        HomeProfile(
+            info = infoUser, detailInfo = detailMemberInfo,
+            navController = navController,
+        )
         Spacer(modifier = Modifier.height(8.dp))
         HomeNotice(
             notice, currentNoticeIndex, nextNoticeIndex

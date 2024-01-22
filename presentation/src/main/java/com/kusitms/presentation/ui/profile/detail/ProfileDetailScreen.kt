@@ -14,6 +14,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.kusitms.domain.model.Interest
+import com.kusitms.domain.model.Link
+import com.kusitms.domain.model.home.MemberInfoDetailModel
+import com.kusitms.domain.model.login.LoginMemberProfile
 import com.kusitms.presentation.R
 import com.kusitms.presentation.common.ui.KusitsmTopBarBackTextWithIcon
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
@@ -32,7 +36,11 @@ fun ProfileDetailScreen(
 
     Column {
         KusitsmTopBarBackTextWithIcon(
-            text = stringResource(id = R.string.profile_detail_topbar, profile.name),
+            text = if (isMember.email == profile.email) {
+                stringResource(id = R.string.profile_my_detail_topbar, profile.name)
+            } else {
+                stringResource(id = R.string.profile_detail_topbar, profile.name)
+            },
             onBackClick = {
                 onBack()
             }) {
@@ -78,6 +86,52 @@ fun ProfileDetailScreen(
                         profile.phoneNumber,
                         profile.links
                     )
+                }
+            }
+        }
+    }
+}
+
+
+@Composable
+fun MyProfileDetailScreen(
+    info: LoginMemberProfile,
+    detailInfo: MemberInfoDetailModel,
+    onBack: () -> Unit,
+) {
+    Column {
+        KusitsmTopBarBackTextWithIcon(
+            text = stringResource(id = R.string.profile_my_detail_topbar, "profile.name"),
+            onBackClick = {
+                onBack()
+            }) {
+            // 내 프로필인지 판단해서 수정 혹은 차단 띄우기
+            Text(
+                text = stringResource(id = R.string.profile_detail_edit),
+                style = KusitmsTypo.current.Text_Medium,
+                color = KusitmsColorPalette.current.Main400,
+                modifier = Modifier.clickable { /* 수정 */ }
+            )
+        }
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(KusitmsColorPalette.current.Grey900)
+        ) {
+            item {
+                Box(modifier = Modifier.padding(horizontal = 32.dp, vertical = 8.dp)) {
+                    ProfileDetailImage(
+                        info.name,
+                        detailInfo.profileImage,
+                        info.period.toString(),
+                        detailInfo.part,
+                        detailInfo.description,
+                    )
+                }
+            }
+            item {
+                Box(modifier = Modifier.padding(horizontal = 32.dp, vertical = 8.dp)) {
+
                 }
             }
         }
