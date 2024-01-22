@@ -32,7 +32,7 @@ import com.kusitms.presentation.common.ui.theme.KusitmsTypo
 fun HomeProfile(
     info: LoginMemberProfile,
     detailInfo: MemberInfoDetailModel,
-    onClickProfile: () -> Unit,
+    onClickProfile: (LoginMemberProfile) -> Unit,
 ) {
     Card(
         modifier = Modifier
@@ -82,7 +82,9 @@ fun HomeProfile(
                     .width(75.dp)
                     .height(92.dp)
                     .padding(vertical = 16.dp)
-                    .clickable { },
+                    .clickable {
+                               onClickProfile(info)
+                    },
                 shape = RoundedCornerShape(12.dp),
                 colors = CardDefaults.cardColors(
                     containerColor = KusitmsColorPalette.current.Grey600,
@@ -99,7 +101,7 @@ fun HomeProfile(
                         text = stringResource(R.string.home_profile_mine),
                         style = KusitmsTypo.current.Caption1,
                         color = KusitmsColorPalette.current.White,
-                        textAlign = TextAlign.Center
+                        textAlign = TextAlign.Center,
                     )
                 }
             }

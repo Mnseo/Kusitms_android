@@ -1,6 +1,7 @@
 package com.kusitms.presentation.navigation
 
 import ProfileDetailScreen
+import android.util.Log
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.EnterTransition
@@ -36,7 +37,6 @@ import com.kusitms.presentation.common.ui.KusitmsBottomNavigationBar
 import com.kusitms.presentation.common.ui.KusitmsBottomNavigationItem
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.util.NavUtil.shownBottomBarNavRouteSet
-import com.kusitms.presentation.model.home.HomeViewModel
 import com.kusitms.presentation.model.login.LoginViewModel
 import com.kusitms.presentation.model.login.findPw.FindPwViewModel
 import com.kusitms.presentation.model.setting.SettingViewModel
@@ -232,6 +232,10 @@ fun MainNavigation() {
                 kusitmsComposableWithAnimation(NavRoutes.HomeScreen.route) {
                     HomeScreen(
                         navController = navController,
+                        onClickProfile = {
+                            Log.d("프로필", "프로필 클릭")
+                            navController.navigate(NavRoutes.ProfileDetail.createMyProfile(it.email))
+                        }
                     )
                 }
 

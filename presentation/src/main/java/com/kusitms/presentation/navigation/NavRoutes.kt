@@ -66,6 +66,7 @@ sealed class NavRoutes(
         )
     ) {
         fun createRoute(memberId: Int) = "ProfileDetail/${memberId}"
+        fun createMyProfile(memberEmail: String) = "ProfileDetail/${memberEmail}"
     }
 
     object ImageViewer : NavRoutes("ImageViewer")
