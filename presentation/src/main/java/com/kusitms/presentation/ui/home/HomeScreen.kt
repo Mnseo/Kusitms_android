@@ -28,6 +28,7 @@ import com.kusitms.domain.model.home.MemberInfoDetailModel
 import com.kusitms.domain.model.home.NoticeRecentModel
 import com.kusitms.domain.model.home.TeamMatchingModel
 import com.kusitms.domain.model.login.LoginMemberProfile
+import com.kusitms.domain.model.notice.NoticeModel
 import com.kusitms.presentation.R
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.model.home.HomeViewModel
@@ -39,15 +40,12 @@ import com.kusitms.presentation.ui.ImageVector.icons.kusitmsicons.Setting
 fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
     navController: NavHostController,
+    onClickNotice: (NoticeModel) -> Unit,
 ) {
     val infoUser = viewModel.infoProfile
     val detailMemberInfo by viewModel.detailMemberInfo.collectAsStateWithLifecycle()
 
-    val notice = listOf<NoticeRecentModel>(
-        NoticeRecentModel("공지 0", 0),
-        NoticeRecentModel("공지 1", 1),
-        NoticeRecentModel("공지 2", 2),
-    )
+    val notice by viewModel.notices.collectAsStateWithLifecycle()
 
     val team: List<TeamMatchingModel> = listOf(
         TeamMatchingModel(teamId = 1, curriculumName = "큐시즘 전체 OT"),
@@ -103,7 +101,10 @@ fun HomeScreen(
         )
         Spacer(modifier = Modifier.height(8.dp))
         HomeNotice(
-            notice, currentNoticeIndex, nextNoticeIndex
+            notice,
+            currentNoticeIndex,
+            nextNoticeIndex,
+            onClickNotice = onClickNotice,
         )
         HomeCurriculum()
         HomeTeam(team)

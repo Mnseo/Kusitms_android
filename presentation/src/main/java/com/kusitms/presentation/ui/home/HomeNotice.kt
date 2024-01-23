@@ -30,6 +30,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kusitms.domain.model.home.NoticeRecentModel
+import com.kusitms.domain.model.notice.NoticeModel
 import com.kusitms.presentation.R
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
@@ -39,12 +40,14 @@ fun HomeNotice(
     notice: List<NoticeRecentModel>,
     currentNoticeIndex: State<Int>,
     nextNoticeIndex: State<Int>,
+    onClickNotice: (NoticeModel) -> Unit,
 ) {
     if (notice.isNotEmpty()) {
         HomeNoticeExist(
             notice = notice,
             currentNoticeIndex = currentNoticeIndex,
-            nextNoticeIndex = nextNoticeIndex
+            nextNoticeIndex = nextNoticeIndex,
+            onClickNotice = onClickNotice
         )
     } else {
         HomeNoticeNone()
@@ -57,6 +60,7 @@ fun HomeNoticeExist(
     notice: List<NoticeRecentModel>,
     currentNoticeIndex: State<Int>,
     nextNoticeIndex: State<Int>,
+    onClickNotice: (NoticeModel) -> Unit,
 ) {
 
     Card(
@@ -99,7 +103,9 @@ fun HomeNoticeExist(
                                 text = targetCount,
                                 style = KusitmsTypo.current.Text_Semibold,
                                 color = KusitmsColorPalette.current.White,
-                                modifier = Modifier.clickable { }
+                                modifier = Modifier.clickable {
+                                    onClickNotice
+                                }
                             )
                         }
                     }

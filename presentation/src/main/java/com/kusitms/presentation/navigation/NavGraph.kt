@@ -234,6 +234,9 @@ fun MainNavigation() {
                 kusitmsComposableWithAnimation(NavRoutes.HomeScreen.route) {
                     HomeScreen(
                         navController = navController,
+                        onClickNotice = {
+                            navController.navigate(NavRoutes.NoticeDetail.createRoute(it.noticeId))
+                        }
                     )
                 }
 
