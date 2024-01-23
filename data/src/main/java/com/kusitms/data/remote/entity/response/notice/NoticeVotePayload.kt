@@ -28,19 +28,23 @@ data class NoticeVoteMemberPayload(
 
 fun NoticeVotePayload.toModel() =
     NoticeVoteModel(
-        items = items?.map { it.toModel() } ?: emptyList(),
+        items = items?.map { it.toModel(voteAttendId) } ?: emptyList(),
         total = total ?: 0,
         title = title ?: "",
-        voteAttendId = voteAttendId ?: 0,
-        voteId = voteId ?: 0
+        voteAttendId = voteAttendId ?: -1,
+        voteId = voteId ?: 0,
+        possibleVote = voteAttendId == null
     )
 
-fun NoticeVoteItemPayload.toModel() =
+fun NoticeVoteItemPayload.toModel(
+    voteAttendId : Int?
+) =
     NoticeVoteItem(
         count = count ?: 0,
         item = item ?: "0",
         members = members?.map { it.toModel() } ?: emptyList(),
-        voteItemId = voteItemId ?: 0
+        voteItemId = voteItemId ?: 0,
+        isVoted = if(voteAttendId == null) false else voteAttendId == voteItemId
     )
 
 fun NoticeVoteMemberPayload.toModel() =

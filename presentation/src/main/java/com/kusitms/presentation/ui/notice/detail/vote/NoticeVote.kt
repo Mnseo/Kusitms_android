@@ -98,44 +98,47 @@ fun NoticeVote(
                 }else {
                     NoticeVotedItem(
                         it,
-                        selectedNoteVoteItemList.contains(it)
+                        it.isVoted
                     )
                 }
                 KusitmsMarginVerticalSpacer(size = 4)
             }
-            KusitmsMarginVerticalSpacer(size = 12)
-            OutlinedButton(
-                modifier = Modifier
-                    .height(56.dp)
-                    .fillMaxWidth(),
-                shape = RoundedCornerShape(16.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = KusitmsColorPalette.current.Grey600,
-                    contentColor =  KusitmsColorPalette.current.Grey200,
-                    disabledContentColor =   KusitmsColorPalette.current.Grey500
-                ),
-                border = BorderStroke(1.dp, color =
-                    KusitmsColorPalette.current.Grey500
-                ),
-                enabled = selectedNoteVoteItemList.isNotEmpty(),
-                onClick = {
-                    selectedNoteVoteItemList.firstOrNull()?.let {
-                        onComplete(it.voteItemId)
-                    }
-
-                }
-            ) {
-                Box(
+            if(noticeVoteModel.possibleVote){
+                KusitmsMarginVerticalSpacer(size = 12)
+                OutlinedButton(
                     modifier = Modifier
-                        .fillMaxSize(),
-                    contentAlignment = Alignment.Center
+                        .height(56.dp)
+                        .fillMaxWidth(),
+                    shape = RoundedCornerShape(16.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = KusitmsColorPalette.current.Grey600,
+                        contentColor =  KusitmsColorPalette.current.Grey200,
+                        disabledContentColor =   KusitmsColorPalette.current.Grey500
+                    ),
+                    border = BorderStroke(1.dp, color =
+                    KusitmsColorPalette.current.Grey500
+                    ),
+                    enabled = selectedNoteVoteItemList.isNotEmpty(),
+                    onClick = {
+                        selectedNoteVoteItemList.firstOrNull()?.let {
+                            onComplete(it.voteItemId)
+                        }
+
+                    }
                 ) {
-                    Text(
-                        text = "투표하기",
-                        style = KusitmsTypo.current.SubTitle2_Semibold,
-                    )
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = "투표하기",
+                            style = KusitmsTypo.current.SubTitle2_Semibold,
+                        )
+                    }
                 }
             }
+
             KusitmsMarginVerticalSpacer(size = 16)
             Text(
                 text = "${noticeVoteModel.total}명 참여",
