@@ -1,6 +1,5 @@
 package com.kusitms.data.repository
 
-import android.util.Log
 import com.kusitms.data.remote.api.KusitmsApi
 import com.kusitms.data.remote.entity.request.toBody
 import com.kusitms.data.remote.entity.response.notice.toModel
@@ -192,6 +191,21 @@ class NoticeRepositoryImpl @Inject constructor(
                 Result.success(response.payload.toModel())
             } else {
                 Result.failure(RuntimeException("투표 조회 실패: ${response.result.message}"))
+            }
+        } catch (e: Exception){
+            Result.failure(e)
+        }
+    }
+
+    override suspend fun voteNoticeItem(voteItemId: Int): Result<Int>  {
+        return try {
+            val response = kusitmsApi.voteNoticeItem(
+                voteItemId = voteItemId
+            )
+            if (response.result.code == 200 && response.payload != null) {
+                Result.success(response.payload)
+            } else {
+                Result.failure(RuntimeException("투표 실패: ${response.result.message}"))
             }
         } catch (e: Exception){
             Result.failure(e)

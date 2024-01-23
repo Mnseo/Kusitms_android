@@ -61,7 +61,8 @@ import com.kusitms.presentation.ui.ImageVector.icons.kusitmsicons.UserBackground
 
 @Composable
 fun NoticeVote(
-    noticeVoteModel: NoticeVoteModel = NoticeVoteModel()
+    noticeVoteModel: NoticeVoteModel = NoticeVoteModel(),
+    onComplete : (Int) -> Unit
 ) {
     var selectedNoteVoteItemList by remember { mutableStateOf<List<NoticeVoteItem>>(emptyList()) }
 
@@ -118,6 +119,9 @@ fun NoticeVote(
                 ),
                 enabled = selectedNoteVoteItemList.isNotEmpty(),
                 onClick = {
+                    selectedNoteVoteItemList.firstOrNull()?.let {
+                        onComplete(it.voteItemId)
+                    }
 
                 }
             ) {

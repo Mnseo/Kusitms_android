@@ -16,6 +16,7 @@ import com.kusitms.domain.usecase.notice.GetChildCommentListUseCase
 import com.kusitms.domain.usecase.notice.GetNoticeCommentListUseCase
 import com.kusitms.domain.usecase.notice.GetNoticeDetailUseCase
 import com.kusitms.domain.usecase.notice.vote.GetNoticeVoteUseCase
+import com.kusitms.domain.usecase.notice.vote.VoteNoticeItemUseCase
 import com.kusitms.domain.usecase.report.ReportUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -41,7 +42,8 @@ class NoticeDetailViewModel @Inject constructor(
     private val reportUseCase: ReportUseCase,
     private val getChildCommentListUseCase : GetChildCommentListUseCase,
     private val addNoticeChildCommentUseCase : AddNoticeChildCommentUseCase,
-    private val getNoticeVoteUseCase : GetNoticeVoteUseCase
+    private val getNoticeVoteUseCase : GetNoticeVoteUseCase,
+    private val voteNoticeItemUseCase : VoteNoticeItemUseCase
 ) : ViewModel() {
 
     val noticeId: Int = savedStateHandle.get<Int>(NOTICE_ID_SAVED_STATE_KEY)!!
@@ -190,6 +192,23 @@ class NoticeDetailViewModel @Inject constructor(
                 //_snackbarEvent.emit(NoticeDetailSnackbarEvent.NETWORK_ERROR)
             }.collectLatest {
                 _noticeVote.emit(it)
+            }
+        }
+    }
+
+    fun voteNoticeItem(voteItemId : Int) {
+        viewModelScope.launch {
+            voteNoticeItemUseCase(
+                voteItemId
+            ).catch {
+                _snackbarEvent.emit(NoticeDetailSnackbarEvent.NETWORK_ERROR)
+            }.collectLatest {
+                _noticeVote.emit(
+                    noticeVote.value?.copy(
+                        possibleVote = false
+                    )
+                )
+                getNoticeVote(false)
             }
         }
     }

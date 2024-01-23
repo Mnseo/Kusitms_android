@@ -100,6 +100,11 @@ interface KusitmsApi {
         @Query("noticeId") noticeId: Int,
     ): BaseResponse<NoticeVotePayload>
 
+    @POST("v1/vote/attend")
+    suspend fun voteNoticeItem(
+        @Query("voteItemId") voteItemId: Int,
+    ): BaseResponse<Int>
+
 
     // SignInNonMember
     @FormUrlEncoded

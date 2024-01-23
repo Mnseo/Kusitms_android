@@ -392,7 +392,14 @@ fun NoticeDetailScreen(
 
             item {
                 KusitmsMarginVerticalSpacer(size = 32)
-                noticeVote?.let { NoticeVote(it) }
+                noticeVote?.let {
+                    NoticeVote(
+                        it,
+                        onComplete = {
+                            viewModel.voteNoticeItem(it)
+                        }
+                    )
+                }
             }
 
             item {

@@ -53,4 +53,9 @@ interface NoticeRepository {
     suspend fun getNoticeVote(
         noticeId: Int
     ) : Result<NoticeVoteModel>
+
+    suspend fun voteNoticeItem(
+        voteItemId : Int
+    ) : Result<Int>
+
 }
