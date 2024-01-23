@@ -10,6 +10,7 @@ import com.kusitms.data.remote.entity.response.LoginMemberProfileResponse
 import com.kusitms.data.remote.entity.response.LoginResponse
 import com.kusitms.data.remote.entity.response.SignInRequestResponse
 import com.kusitms.data.remote.entity.response.home.MemberInfoDetailPayload
+import com.kusitms.data.remote.entity.response.home.NoticeRecentPayload
 import com.kusitms.data.remote.entity.response.notice.CommentPayload
 import com.kusitms.data.remote.entity.response.notice.CurriculumPayload
 import com.kusitms.data.remote.entity.response.notice.FindPwCodeVerifyResponse
@@ -42,6 +43,14 @@ interface KusitmsApi {
     // 사용자 상세 정보 조회
     @GET("v1/member/info/detail")
     suspend fun getMemberInfoDetail(): BaseResponse<MemberInfoDetailPayload>
+
+
+    // 최신 공지 조회
+    @GET("v1/notice/recent")
+    suspend fun getNoticeRecent(): BaseResponse<List<NoticeRecentPayload>>
+
+
+
 
     // 공지사항 -> 차후에 분리하는 것도 좋을 듯 싶습니다.
     @GET("v2/notice")

@@ -6,6 +6,7 @@ import com.kusitms.domain.model.home.MemberInfoDetailModel
 import com.kusitms.domain.model.home.NoticeRecentModel
 import com.kusitms.domain.model.login.LoginMemberProfile
 import com.kusitms.domain.usecase.home.GetMemberInfoDetailUseCase
+import com.kusitms.domain.usecase.home.GetNoticeRecentUseCase
 import com.kusitms.domain.usecase.signin.GetLoginMemberProfileUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -24,6 +25,7 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val getInfoMemberUseCase: GetLoginMemberProfileUseCase,
     getMemberInfoDetailUseCase: GetMemberInfoDetailUseCase,
+    getNoticeRecentUseCase: GetNoticeRecentUseCase,
 ) : ViewModel() {
     private val initNotice: Int = 0
     private val transitionDuration = 200L
@@ -38,10 +40,12 @@ class HomeViewModel @Inject constructor(
         initialValue = MemberInfoDetailModel()
     )
 
-    val _notices = mutableListOf(
-        NoticeRecentModel("공지 0", 0),
-        NoticeRecentModel("공지 1", 1),
-        NoticeRecentModel("공지 2", 2),
+    val notices = getNoticeRecentUseCase().catch {
+
+    }.stateIn(
+        viewModelScope,
+        started = SharingStarted.Eagerly,
+        initialValue = emptyList()
     )
 
     private val _uiState = MutableStateFlow(HomeUiState(initNotice))
@@ -76,9 +80,14 @@ class HomeViewModel @Inject constructor(
                 delay(3000)
                 _isTransitioning.value = true
                 delay(100)
-                _currentNoticeIndex.value = _nextNoticeIndex.value
-                _nextNoticeIndex.value = (_currentNoticeIndex.value + 1) % _notices.size
-                _uiState.value = HomeUiState(_notices[_currentNoticeIndex.value].noticeId)
+
+                // Check if the list of notices is not empty before accessing elements
+                if (notices.value.isNotEmpty()) {
+                    _currentNoticeIndex.value = _nextNoticeIndex.value
+                    _nextNoticeIndex.value = (_currentNoticeIndex.value + 1) % notices.value.size
+                    _uiState.value = HomeUiState(notices.value[_currentNoticeIndex.value].noticeId)
+                }
+
                 delay(transitionDuration)
                 _isTransitioning.value = false
             }
