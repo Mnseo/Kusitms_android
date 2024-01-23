@@ -14,6 +14,7 @@ import com.kusitms.data.remote.entity.response.notice.CommentPayload
 import com.kusitms.data.remote.entity.response.notice.CurriculumPayload
 import com.kusitms.data.remote.entity.response.notice.FindPwCodeVerifyResponse
 import com.kusitms.data.remote.entity.response.notice.NoticePayload
+import com.kusitms.data.remote.entity.response.notice.NoticeVotePayload
 import com.kusitms.data.remote.entity.response.profile.ProfilePayload
 import com.kusitms.domain.model.profile.ProfileModel
 import okhttp3.MultipartBody
@@ -92,6 +93,13 @@ interface KusitmsApi {
         @Path("commentId") commentId: Int,
         @Body commentContentRequestBody: CommentContentRequestBody,
     ): BaseResponse<CommentPayload>
+
+    //vote
+    @GET("v1/vote")
+    suspend fun getNoticeVote(
+        @Query("noticeId") noticeId: Int,
+    ): BaseResponse<NoticeVotePayload>
+
 
     // SignInNonMember
     @FormUrlEncoded

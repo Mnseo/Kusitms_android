@@ -5,7 +5,8 @@ data class NoticeVoteModel(
     val title: String = "",
     val total: Int = 0,
     val voteAttendId: Int = 0,
-    val voteId: Int = 0
+    val voteId: Int = 0,
+    val possibleVote : Boolean = true
 )
 
 data class NoticeVoteItem(

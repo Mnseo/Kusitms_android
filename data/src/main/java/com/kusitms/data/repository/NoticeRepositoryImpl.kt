@@ -1,5 +1,6 @@
 package com.kusitms.data.repository
 
+import android.util.Log
 import com.kusitms.data.remote.api.KusitmsApi
 import com.kusitms.data.remote.entity.request.toBody
 import com.kusitms.data.remote.entity.response.notice.toModel
@@ -7,6 +8,7 @@ import com.kusitms.domain.model.notice.CommentContentModel
 import com.kusitms.domain.model.notice.CommentModel
 import com.kusitms.domain.model.notice.CurriculumModel
 import com.kusitms.domain.model.notice.NoticeModel
+import com.kusitms.domain.model.notice.NoticeVoteModel
 import com.kusitms.domain.model.notice.ReportCommentContentModel
 import com.kusitms.domain.model.report.ReportResult
 import com.kusitms.domain.repository.NoticeRepository
@@ -175,6 +177,21 @@ class NoticeRepositoryImpl @Inject constructor(
                 Result.success(response.payload.toModel())
             } else {
                 Result.failure(RuntimeException("대댓글 등록 실패: ${response.result.message}"))
+            }
+        } catch (e: Exception){
+            Result.failure(e)
+        }
+    }
+
+    override suspend fun getNoticeVote(noticeId: Int): Result<NoticeVoteModel> {
+        return try {
+            val response = kusitmsApi.getNoticeVote(
+                noticeId = noticeId
+            )
+            if (response.result.code == 200 && response.payload != null) {
+                Result.success(response.payload.toModel())
+            } else {
+                Result.failure(RuntimeException("투표 조회 실패: ${response.result.message}"))
             }
         } catch (e: Exception){
             Result.failure(e)

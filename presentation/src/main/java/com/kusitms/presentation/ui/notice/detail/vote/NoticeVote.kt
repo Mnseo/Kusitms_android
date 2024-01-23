@@ -37,6 +37,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -85,13 +86,20 @@ fun NoticeVote(
             )
             KusitmsMarginVerticalSpacer(size = 16)
             noticeVoteModel.items.forEach {
-                NoticeVotedItem(
-                    it,
-                    selectedNoteVoteItemList.contains(it),
-                    onClick = {
-                        selectedNoteVoteItemList = if(selectedNoteVoteItemList.contains(it)) emptyList() else listOf(it)
-                    }
-                )
+                if(noticeVoteModel.possibleVote){
+                    NoticePreVoteItem(
+                        it,
+                        selectedNoteVoteItemList.contains(it),
+                        onClick = {
+                            selectedNoteVoteItemList = if(selectedNoteVoteItemList.contains(it)) emptyList() else listOf(it)
+                        }
+                    )
+                }else {
+                    NoticeVotedItem(
+                        it,
+                        selectedNoteVoteItemList.contains(it)
+                    )
+                }
                 KusitmsMarginVerticalSpacer(size = 4)
             }
             KusitmsMarginVerticalSpacer(size = 12)
@@ -190,8 +198,7 @@ fun NoticePreVoteItem(
 @Composable
 fun NoticeVotedItem(
     noticeVoteItem : NoticeVoteItem,
-    isSelected : Boolean,
-    onClick : (NoticeVoteItem) -> Unit
+    isSelected : Boolean
 ) {
     var isExpandedMemberPopUp by remember { mutableStateOf(false) }
     val scrollState = rememberScrollState()
@@ -202,9 +209,12 @@ fun NoticeVotedItem(
             .fillMaxWidth()
             .heightIn(min = 48.dp)
             .let {
-                if(!isExpandedMemberPopUp) it.clickable {
-                    isExpandedMemberPopUp = true
-                } else it
+                if(noticeVoteItem.members.isNotEmpty()){
+                    if(!isExpandedMemberPopUp) it.clickable {
+                        isExpandedMemberPopUp = true
+                    } else it
+                }else it
+
             },
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(
@@ -251,7 +261,8 @@ fun NoticeVotedItem(
                 KusitmsMarginHorizontalSpacer(size = 4)
                 Image(
                     modifier = Modifier
-                        .size(24.dp),
+                        .size(24.dp)
+                        .rotate(if(isExpandedMemberPopUp) 180f else 0f),
                     imageVector = KusitmsIcons.ArrowDown,
                     contentDescription = "선택"
                 )
