@@ -10,6 +10,7 @@ import com.kusitms.data.remote.entity.response.LoginMemberProfileResponse
 import com.kusitms.data.remote.entity.response.LoginResponse
 import com.kusitms.data.remote.entity.response.SignInRequestResponse
 import com.kusitms.data.remote.entity.response.home.CurriculumRecentPayload
+import com.kusitms.data.remote.entity.response.home.HomeProfilePayload
 import com.kusitms.data.remote.entity.response.home.MemberInfoDetailPayload
 import com.kusitms.data.remote.entity.response.home.NoticeRecentPayload
 import com.kusitms.data.remote.entity.response.home.TeamMatchingPayload
@@ -46,6 +47,9 @@ interface KusitmsApi {
     @GET("v1/member/info/detail")
     suspend fun getMemberInfoDetail(): BaseResponse<MemberInfoDetailPayload>
 
+    // 홈 화면 사용자 정보 조회
+    @GET("v1/member/info/home")
+    suspend fun getMemberInfoHome(): BaseResponse<HomeProfilePayload>
 
     // 최신 공지 조회
     @GET("v1/notice/recent")

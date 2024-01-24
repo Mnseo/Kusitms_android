@@ -3,13 +3,11 @@ package com.kusitms.presentation.model.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kusitms.domain.model.home.CurriculumRecentModel
-import com.kusitms.domain.model.home.MemberInfoDetailModel
-import com.kusitms.domain.model.login.LoginMemberProfile
+import com.kusitms.domain.model.home.HomeProfileModel
 import com.kusitms.domain.usecase.home.GetCurriculumRecentUseCase
-import com.kusitms.domain.usecase.home.GetMemberInfoDetailUseCase
+import com.kusitms.domain.usecase.home.GetMemberInfoHomeUseCase
 import com.kusitms.domain.usecase.home.GetNoticeRecentUseCase
 import com.kusitms.domain.usecase.home.GetTeamMatchUseCase
-import com.kusitms.domain.usecase.signin.GetLoginMemberProfileUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -25,8 +23,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val getInfoMemberUseCase: GetLoginMemberProfileUseCase,
-    getMemberInfoDetailUseCase: GetMemberInfoDetailUseCase,
+    getMemberInfoHomeUseCase: GetMemberInfoHomeUseCase,
     getNoticeRecentUseCase: GetNoticeRecentUseCase,
     getCurriculumRecentUseCase: GetCurriculumRecentUseCase,
     getTeamMatchUseCase: GetTeamMatchUseCase
@@ -34,14 +31,11 @@ class HomeViewModel @Inject constructor(
     private val initNotice: Int = 0
     private val transitionDuration = 200L
 
-    private var _infoProfile: LoginMemberProfile = LoginMemberProfile("", "", "", "", false)
-    var infoProfile: LoginMemberProfile = _infoProfile
-
-    val detailMemberInfo = getMemberInfoDetailUseCase().catch {
+    val memberInfo = getMemberInfoHomeUseCase().catch {
     }.stateIn(
         viewModelScope,
         started = SharingStarted.Eagerly,
-        initialValue = MemberInfoDetailModel()
+        initialValue = HomeProfileModel()
     )
 
     val notices = getNoticeRecentUseCase().catch {
@@ -79,18 +73,7 @@ class HomeViewModel @Inject constructor(
     var nextNoticeIndex: StateFlow<Int> = _nextNoticeIndex.asStateFlow()
 
     init {
-        getUserProfile()
         changeCurrentNotice()
-    }
-
-    private fun getUserProfile() {
-        viewModelScope.launch {
-            val profileResult = getInfoMemberUseCase.fetchLoginMemberProfile()
-            if (profileResult.isSuccess) {
-                _infoProfile = profileResult.getOrNull()!!
-                infoProfile = _infoProfile
-            }
-        }
     }
 
     private fun changeCurrentNotice() {

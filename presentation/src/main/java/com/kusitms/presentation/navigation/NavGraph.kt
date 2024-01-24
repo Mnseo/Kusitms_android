@@ -234,6 +234,9 @@ fun MainNavigation() {
                         navController = navController,
                         onClickNotice = {
                             navController.navigate(NavRoutes.NoticeDetail.createRoute(it.noticeId))
+                        },
+                        onClickProfile = {
+                            navController.navigate(NavRoutes.MyProfileDetail.route)
                         }
                     )
                 }

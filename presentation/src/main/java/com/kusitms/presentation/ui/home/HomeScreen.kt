@@ -39,9 +39,9 @@ fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
     navController: NavHostController,
     onClickNotice: (NoticeRecentModel) -> Unit,
+    onClickProfile: () -> Unit
 ) {
-    val infoUser = viewModel.infoProfile
-    val detailMemberInfo by viewModel.detailMemberInfo.collectAsStateWithLifecycle()
+    val memberInfo by viewModel.memberInfo.collectAsStateWithLifecycle()
 
     val notice by viewModel.notices.collectAsStateWithLifecycle()
 
@@ -93,8 +93,8 @@ fun HomeScreen(
         }
         Spacer(modifier = Modifier.height(8.dp))
         HomeProfile(
-            info = infoUser, detailInfo = detailMemberInfo,
-            navController = navController,
+            info = memberInfo,
+            onClickProfile = onClickProfile
         )
         Spacer(modifier = Modifier.height(8.dp))
         HomeNotice(
