@@ -9,6 +9,7 @@ import com.kusitms.data.remote.entity.response.FindPwCheckEmailResponse
 import com.kusitms.data.remote.entity.response.LoginMemberProfileResponse
 import com.kusitms.data.remote.entity.response.LoginResponse
 import com.kusitms.data.remote.entity.response.SignInRequestResponse
+import com.kusitms.data.remote.entity.response.home.CurriculumRecentPayload
 import com.kusitms.data.remote.entity.response.home.MemberInfoDetailPayload
 import com.kusitms.data.remote.entity.response.home.NoticeRecentPayload
 import com.kusitms.data.remote.entity.response.notice.CommentPayload
@@ -49,7 +50,9 @@ interface KusitmsApi {
     @GET("v1/notice/recent")
     suspend fun getNoticeRecent(): BaseResponse<List<NoticeRecentPayload>>
 
-
+    // 최신 커리큘럼 조회
+    @GET("v1/curriculum/recent")
+    suspend fun getCurriculumRecent(): BaseResponse<CurriculumRecentPayload>
 
 
     // 공지사항 -> 차후에 분리하는 것도 좋을 듯 싶습니다.

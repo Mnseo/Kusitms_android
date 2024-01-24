@@ -2,9 +2,10 @@ package com.kusitms.presentation.model.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kusitms.domain.model.home.CurriculumRecentModel
 import com.kusitms.domain.model.home.MemberInfoDetailModel
-import com.kusitms.domain.model.home.NoticeRecentModel
 import com.kusitms.domain.model.login.LoginMemberProfile
+import com.kusitms.domain.usecase.home.GetCurriculumRecentUseCase
 import com.kusitms.domain.usecase.home.GetMemberInfoDetailUseCase
 import com.kusitms.domain.usecase.home.GetNoticeRecentUseCase
 import com.kusitms.domain.usecase.signin.GetLoginMemberProfileUseCase
@@ -26,6 +27,7 @@ class HomeViewModel @Inject constructor(
     private val getInfoMemberUseCase: GetLoginMemberProfileUseCase,
     getMemberInfoDetailUseCase: GetMemberInfoDetailUseCase,
     getNoticeRecentUseCase: GetNoticeRecentUseCase,
+    getCurriculumRecentUseCase: GetCurriculumRecentUseCase
 ) : ViewModel() {
     private val initNotice: Int = 0
     private val transitionDuration = 200L
@@ -46,6 +48,14 @@ class HomeViewModel @Inject constructor(
         viewModelScope,
         started = SharingStarted.Eagerly,
         initialValue = emptyList()
+    )
+
+    val curriculum = getCurriculumRecentUseCase().catch {
+
+    }.stateIn(
+        viewModelScope,
+        started = SharingStarted.Eagerly,
+        initialValue = CurriculumRecentModel()
     )
 
     private val _uiState = MutableStateFlow(HomeUiState(initNotice))

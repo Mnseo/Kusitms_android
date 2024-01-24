@@ -2,6 +2,7 @@ package com.kusitms.data.repository
 
 import com.kusitms.data.remote.api.KusitmsApi
 import com.kusitms.data.remote.entity.response.home.toModel
+import com.kusitms.domain.model.home.CurriculumRecentModel
 import com.kusitms.domain.model.home.MemberInfoDetailModel
 import com.kusitms.domain.model.home.NoticeRecentModel
 import com.kusitms.domain.repository.HomeRepository
@@ -31,7 +32,21 @@ class HomeRepositoryImpl @Inject constructor(
             if (response.result.code == 200) {
                 Result.success(response.payload.map { it.toModel() })
             } else {
-                Result.failure(java.lang.RuntimeException("최근 공지 조회 실패: ${response.result.message}"))
+                Result.failure(RuntimeException("최근 공지 조회 실패: ${response.result.message}"))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    override suspend fun getCurriculumRecent(): Result<CurriculumRecentModel> {
+        return try {
+            val response = kusitmsApi.getCurriculumRecent()
+
+            if (response.result.code == 200) {
+                Result.success(response.payload.toModel())
+            } else {
+                Result.failure(RuntimeException("최근 커리큘럼 조회 실패: ${response.result.message}"))
             }
         } catch (e: Exception) {
             Result.failure(e)
