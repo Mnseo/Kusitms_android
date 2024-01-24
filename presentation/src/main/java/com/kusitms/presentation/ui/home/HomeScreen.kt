@@ -32,7 +32,9 @@ import com.kusitms.presentation.model.home.HomeViewModel
 import com.kusitms.presentation.navigation.NavRoutes
 import com.kusitms.presentation.ui.ImageVector.icons.KusitmsIcons
 import com.kusitms.presentation.ui.ImageVector.icons.kusitmsicons.Setting
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
+@OptIn(ExperimentalCoroutinesApi::class)
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
@@ -44,13 +46,15 @@ fun HomeScreen(
 
     val notice by viewModel.notices.collectAsStateWithLifecycle()
 
+    val curriculum by viewModel.curriculum.collectAsStateWithLifecycle()
+
     val team: List<TeamMatchingModel> = listOf(
         TeamMatchingModel(teamId = 1, curriculumName = "큐시즘 전체 OT"),
         TeamMatchingModel(teamId = 10, curriculumName = "기업프로젝트"),
     )
 
-    var currentNoticeIndex = viewModel.currentNoticeIndex.collectAsStateWithLifecycle()
-    var nextNoticeIndex = viewModel.nextNoticeIndex.collectAsStateWithLifecycle()
+    val currentNoticeIndex = viewModel.currentNoticeIndex.collectAsStateWithLifecycle()
+    val nextNoticeIndex = viewModel.nextNoticeIndex.collectAsStateWithLifecycle()
 
     Column(
         modifier = Modifier
@@ -103,7 +107,9 @@ fun HomeScreen(
             nextNoticeIndex,
             onClickNotice = onClickNotice,
         )
-        HomeCurriculum()
+        HomeCurriculum(
+            curriculum = curriculum
+        )
         HomeTeam(team)
     }
 }

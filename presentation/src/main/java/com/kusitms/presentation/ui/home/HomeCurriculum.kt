@@ -17,14 +17,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.kusitms.domain.model.home.CurriculumRecentModel
 import com.kusitms.presentation.R
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
 
 @Composable
-fun HomeCurriculum() {
+fun HomeCurriculum(
+    curriculum: CurriculumRecentModel
+) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -48,8 +50,9 @@ fun HomeCurriculum() {
                     style = KusitmsTypo.current.Caption1,
                     color = KusitmsColorPalette.current.Main400,
                 )
+                Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = stringResource(id = R.string.home_curriculum_title),
+                    text = curriculum.curriculumName,
                     style = KusitmsTypo.current.SubTitle1_Medium,
                     color = KusitmsColorPalette.current.White,
                 )
@@ -75,7 +78,7 @@ fun HomeCurriculum() {
                         )
                         Spacer(modifier = Modifier.width(16.dp))
                         Text(
-                            text = stringResource(id = R.string.home_curriculum_calendar),
+                            text = curriculum.time,
                             style = KusitmsTypo.current.Caption1,
                             color = KusitmsColorPalette.current.Grey300
                         )
@@ -87,7 +90,7 @@ fun HomeCurriculum() {
                         )
                         Spacer(modifier = Modifier.width(16.dp))
                         Text(
-                            text = stringResource(id = R.string.home_curriculum_location),
+                            text = curriculum.place,
                             style = KusitmsTypo.current.Caption1,
                             color = KusitmsColorPalette.current.Grey300
                         )
@@ -98,22 +101,34 @@ fun HomeCurriculum() {
                             contentDescription = stringResource(id = R.string.home_ic_wifi),
                         )
                         Spacer(modifier = Modifier.width(16.dp))
-                        Text(
-                            text = stringResource(id = R.string.home_curriculum_wifi_none),
-                            style = KusitmsTypo.current.Caption1,
-                            color = KusitmsColorPalette.current.Grey400
-                        )
+                        if (curriculum.wifiName.isEmpty()) {
+                            Text(
+                                text = stringResource(id = R.string.home_curriculum_wifi_none),
+                                style = KusitmsTypo.current.Caption1,
+                                color = KusitmsColorPalette.current.Grey400
+                            )
+                        } else {
+                            Text(
+                                text = curriculum.wifiName,
+                                style = KusitmsTypo.current.Caption1,
+                                color = KusitmsColorPalette.current.Grey300
+                            )
+                            Spacer(modifier = Modifier.width(16.dp))
+                            Text(
+                                text = stringResource(id = R.string.home_ic_wifi_password),
+                                style = KusitmsTypo.current.Caption1,
+                                color = KusitmsColorPalette.current.Grey400
+                            )
+                            Spacer(modifier = Modifier.width(16.dp))
+                            Text(
+                                text = curriculum.wifiPassword,
+                                style = KusitmsTypo.current.Caption1,
+                                color = KusitmsColorPalette.current.Grey300
+                            )
+                        }
                     }
                 }
-
-
             }
         }
     }
-}
-
-@Preview
-@Composable
-fun HomeCurriculumNonePreview() {
-    HomeCurriculum()
 }
