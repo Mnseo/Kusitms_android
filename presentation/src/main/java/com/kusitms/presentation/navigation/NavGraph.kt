@@ -1,6 +1,5 @@
 package com.kusitms.presentation.navigation
 
-import MyProfileDetailScreen
 import ProfileDetailScreen
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedContentTransitionScope
@@ -33,8 +32,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
-import com.kusitms.domain.model.home.MemberInfoDetailModel
-import com.kusitms.domain.model.login.LoginMemberProfile
 import com.kusitms.presentation.common.ui.KusitmsBottomNavigationBar
 import com.kusitms.presentation.common.ui.KusitmsBottomNavigationItem
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
@@ -46,6 +43,7 @@ import com.kusitms.presentation.model.signIn.SignInRequestViewModel
 import com.kusitms.presentation.model.signIn.SignInViewModel
 import com.kusitms.presentation.model.signIn.SplashViewModel
 import com.kusitms.presentation.ui.home.HomeScreen
+import com.kusitms.presentation.ui.home.profile.MyProfileScreen
 import com.kusitms.presentation.ui.login.LoginScreen
 import com.kusitms.presentation.ui.login.NonMemberScreen
 import com.kusitms.presentation.ui.login.findPw.FindPwCheckEmail
@@ -244,9 +242,7 @@ fun MainNavigation() {
                     route = NavRoutes.MyProfileDetail.route,
                     arguments = NavRoutes.MyProfileDetail.navArguments
                 ) {
-                    MyProfileDetailScreen(
-                        info = LoginMemberProfile("", "", "", "", false),
-                        detailInfo = MemberInfoDetailModel(),
+                    MyProfileScreen(
                         onBack = { navController.navigateUp() }
                     )
 

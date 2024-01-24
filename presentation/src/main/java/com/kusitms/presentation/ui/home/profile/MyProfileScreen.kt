@@ -1,3 +1,5 @@
+package com.kusitms.presentation.ui.home.profile
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -17,46 +19,33 @@ import com.kusitms.presentation.R
 import com.kusitms.presentation.common.ui.KusitsmTopBarBackTextWithIcon
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
-import com.kusitms.presentation.model.profile.detail.ProfileDetailViewModel
+import com.kusitms.presentation.model.home.profile.MyProfileViewModel
 import com.kusitms.presentation.ui.profile.detail.ProfileDetailImage
 import com.kusitms.presentation.ui.profile.detail.ProfileDetailInfo
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
+
 @OptIn(ExperimentalCoroutinesApi::class)
 @Composable
-fun ProfileDetailScreen(
-    viewModel: ProfileDetailViewModel = hiltViewModel(),
+fun MyProfileScreen(
+    viewModel: MyProfileViewModel = hiltViewModel(),
     onBack: () -> Unit,
 ) {
-    val profile by viewModel.profile.collectAsStateWithLifecycle()
-    val isMember = viewModel.infoProfile
+    val infoUser = viewModel.infoProfile
+    val detailMemberInfo by viewModel.detailMemberInfo.collectAsStateWithLifecycle()
 
     Column {
         KusitsmTopBarBackTextWithIcon(
-            text = if (isMember.email == profile.email) {
-                stringResource(id = R.string.profile_my_detail_topbar, profile.name)
-            } else {
-                stringResource(id = R.string.profile_detail_topbar, profile.name)
-            },
+            text = stringResource(id = R.string.profile_my_detail_topbar, "profile.name"),
             onBackClick = {
                 onBack()
             }) {
-            // 내 프로필인지 판단해서 수정 혹은 차단 띄우기
-            if (isMember.email == profile.email) {
-                Text(
-                    text = stringResource(id = R.string.profile_detail_edit),
-                    style = KusitmsTypo.current.Text_Medium,
-                    color = KusitmsColorPalette.current.Main400,
-                    modifier = Modifier.clickable { /* 수정 */ }
-                )
-            } else {
-                Text(
-                    text = stringResource(id = R.string.profile_detail_block),
-                    style = KusitmsTypo.current.Text_Medium,
-                    color = KusitmsColorPalette.current.Grey400,
-                    modifier = Modifier.clickable { /* 차단 */ }
-                )
-            }
+            Text(
+                text = stringResource(id = R.string.profile_detail_edit),
+                style = KusitmsTypo.current.Text_Medium,
+                color = KusitmsColorPalette.current.Main400,
+                modifier = Modifier.clickable { /* 수정 */ }
+            )
         }
         LazyColumn(
             modifier = Modifier
@@ -66,26 +55,25 @@ fun ProfileDetailScreen(
             item {
                 Box(modifier = Modifier.padding(horizontal = 32.dp, vertical = 8.dp)) {
                     ProfileDetailImage(
-                        profile.name,
-                        profile.profileImage,
-                        profile.period,
-                        profile.part,
-                        profile.description,
+                        name = infoUser.name,
+                        profileImage = detailMemberInfo.profileImage,
+                        period = infoUser.period.toString(),
+                        part = detailMemberInfo.part,
+                        description = detailMemberInfo.description,
                     )
                 }
             }
             item {
                 Box(modifier = Modifier.padding(horizontal = 32.dp, vertical = 8.dp)) {
                     ProfileDetailInfo(
-                        profile.major,
-                        profile.interests,
-                        profile.email,
-                        profile.phoneNumber,
-                        profile.links
+                        detailMemberInfo.major,
+                        detailMemberInfo.interests,
+                        infoUser.email,
+                        infoUser.phoneNumber,
+                        detailMemberInfo.links
                     )
                 }
             }
         }
     }
 }
-
