@@ -25,7 +25,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.kusitms.domain.model.home.NoticeRecentModel
-import com.kusitms.domain.model.home.TeamMatchingModel
 import com.kusitms.presentation.R
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.model.home.HomeViewModel
@@ -48,10 +47,7 @@ fun HomeScreen(
 
     val curriculum by viewModel.curriculum.collectAsStateWithLifecycle()
 
-    val team: List<TeamMatchingModel> = listOf(
-        TeamMatchingModel(teamId = 1, curriculumName = "큐시즘 전체 OT"),
-        TeamMatchingModel(teamId = 10, curriculumName = "기업프로젝트"),
-    )
+    val team by viewModel.teamMatch.collectAsStateWithLifecycle()
 
     val currentNoticeIndex = viewModel.currentNoticeIndex.collectAsStateWithLifecycle()
     val nextNoticeIndex = viewModel.nextNoticeIndex.collectAsStateWithLifecycle()

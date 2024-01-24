@@ -8,6 +8,7 @@ import com.kusitms.domain.model.login.LoginMemberProfile
 import com.kusitms.domain.usecase.home.GetCurriculumRecentUseCase
 import com.kusitms.domain.usecase.home.GetMemberInfoDetailUseCase
 import com.kusitms.domain.usecase.home.GetNoticeRecentUseCase
+import com.kusitms.domain.usecase.home.GetTeamMatchUseCase
 import com.kusitms.domain.usecase.signin.GetLoginMemberProfileUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -27,7 +28,8 @@ class HomeViewModel @Inject constructor(
     private val getInfoMemberUseCase: GetLoginMemberProfileUseCase,
     getMemberInfoDetailUseCase: GetMemberInfoDetailUseCase,
     getNoticeRecentUseCase: GetNoticeRecentUseCase,
-    getCurriculumRecentUseCase: GetCurriculumRecentUseCase
+    getCurriculumRecentUseCase: GetCurriculumRecentUseCase,
+    getTeamMatchUseCase: GetTeamMatchUseCase
 ) : ViewModel() {
     private val initNotice: Int = 0
     private val transitionDuration = 200L
@@ -56,6 +58,14 @@ class HomeViewModel @Inject constructor(
         viewModelScope,
         started = SharingStarted.Eagerly,
         initialValue = CurriculumRecentModel()
+    )
+
+    val teamMatch = getTeamMatchUseCase().catch {
+
+    }.stateIn(
+        viewModelScope,
+        started = SharingStarted.Eagerly,
+        initialValue = emptyList()
     )
 
     private val _uiState = MutableStateFlow(HomeUiState(initNotice))
@@ -91,7 +101,6 @@ class HomeViewModel @Inject constructor(
                 _isTransitioning.value = true
                 delay(100)
 
-                // Check if the list of notices is not empty before accessing elements
                 if (notices.value.isNotEmpty()) {
                     _currentNoticeIndex.value = _nextNoticeIndex.value
                     _nextNoticeIndex.value = (_currentNoticeIndex.value + 1) % notices.value.size

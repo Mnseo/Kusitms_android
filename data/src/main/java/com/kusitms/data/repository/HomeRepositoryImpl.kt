@@ -5,6 +5,7 @@ import com.kusitms.data.remote.entity.response.home.toModel
 import com.kusitms.domain.model.home.CurriculumRecentModel
 import com.kusitms.domain.model.home.MemberInfoDetailModel
 import com.kusitms.domain.model.home.NoticeRecentModel
+import com.kusitms.domain.model.home.TeamMatchingModel
 import com.kusitms.domain.repository.HomeRepository
 import javax.inject.Inject
 
@@ -47,6 +48,20 @@ class HomeRepositoryImpl @Inject constructor(
                 Result.success(response.payload.toModel())
             } else {
                 Result.failure(RuntimeException("최근 커리큘럼 조회 실패: ${response.result.message}"))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    override suspend fun getTeamMatch(): Result<List<TeamMatchingModel>> {
+        return try {
+            val response = kusitmsApi.getTeamMatch()
+
+            if (response.result.code == 200) {
+                Result.success(response.payload.map { it.toModel() })
+            } else {
+                Result.failure(RuntimeException("팀 매칭 조회 실패: ${response.result.message}"))
             }
         } catch (e: Exception) {
             Result.failure(e)

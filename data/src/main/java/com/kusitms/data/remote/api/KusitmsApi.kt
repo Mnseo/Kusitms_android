@@ -12,6 +12,7 @@ import com.kusitms.data.remote.entity.response.SignInRequestResponse
 import com.kusitms.data.remote.entity.response.home.CurriculumRecentPayload
 import com.kusitms.data.remote.entity.response.home.MemberInfoDetailPayload
 import com.kusitms.data.remote.entity.response.home.NoticeRecentPayload
+import com.kusitms.data.remote.entity.response.home.TeamMatchingPayload
 import com.kusitms.data.remote.entity.response.notice.CommentPayload
 import com.kusitms.data.remote.entity.response.notice.CurriculumPayload
 import com.kusitms.data.remote.entity.response.notice.FindPwCodeVerifyResponse
@@ -53,6 +54,10 @@ interface KusitmsApi {
     // 최신 커리큘럼 조회
     @GET("v1/curriculum/recent")
     suspend fun getCurriculumRecent(): BaseResponse<CurriculumRecentPayload>
+
+    // 홈 화면 팀 매칭 조회
+    @GET("v1/team/match")
+    suspend fun getTeamMatch(): BaseResponse<List<TeamMatchingPayload>>
 
 
     // 공지사항 -> 차후에 분리하는 것도 좋을 듯 싶습니다.
