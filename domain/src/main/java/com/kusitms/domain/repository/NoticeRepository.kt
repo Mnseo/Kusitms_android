@@ -4,6 +4,7 @@ import com.kusitms.domain.model.notice.CommentContentModel
 import com.kusitms.domain.model.notice.CommentModel
 import com.kusitms.domain.model.notice.CurriculumModel
 import com.kusitms.domain.model.notice.NoticeModel
+import com.kusitms.domain.model.notice.NoticeVoteModel
 import com.kusitms.domain.model.notice.ReportCommentContentModel
 import com.kusitms.domain.model.report.ReportResult
 
@@ -47,4 +48,14 @@ interface NoticeRepository {
         commentId : Int,
         commentContentModel: CommentContentModel
     ) : Result<CommentModel>
+
+    //vote
+    suspend fun getNoticeVote(
+        noticeId: Int
+    ) : Result<NoticeVoteModel>
+
+    suspend fun voteNoticeItem(
+        voteItemId : Int
+    ) : Result<Int>
+
 }

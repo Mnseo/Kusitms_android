@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.kusitms.domain.model.notice.CommentContentModel
 import com.kusitms.domain.model.notice.CommentModel
 import com.kusitms.domain.model.notice.NoticeModel
+import com.kusitms.domain.model.notice.NoticeVoteModel
 import com.kusitms.domain.model.notice.ReportCommentContentModel
 import com.kusitms.domain.model.report.ReportResult
 import com.kusitms.domain.usecase.notice.AddNoticeChildCommentUseCase
@@ -14,6 +15,8 @@ import com.kusitms.domain.usecase.notice.DeleteCommentUseCase
 import com.kusitms.domain.usecase.notice.GetChildCommentListUseCase
 import com.kusitms.domain.usecase.notice.GetNoticeCommentListUseCase
 import com.kusitms.domain.usecase.notice.GetNoticeDetailUseCase
+import com.kusitms.domain.usecase.notice.vote.GetNoticeVoteUseCase
+import com.kusitms.domain.usecase.notice.vote.VoteNoticeItemUseCase
 import com.kusitms.domain.usecase.report.ReportUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -38,7 +41,9 @@ class NoticeDetailViewModel @Inject constructor(
     private val deleteCommentUseCase: DeleteCommentUseCase,
     private val reportUseCase: ReportUseCase,
     private val getChildCommentListUseCase : GetChildCommentListUseCase,
-    private val addNoticeChildCommentUseCase : AddNoticeChildCommentUseCase
+    private val addNoticeChildCommentUseCase : AddNoticeChildCommentUseCase,
+    private val getNoticeVoteUseCase : GetNoticeVoteUseCase,
+    private val voteNoticeItemUseCase : VoteNoticeItemUseCase
 ) : ViewModel() {
 
     val noticeId: Int = savedStateHandle.get<Int>(NOTICE_ID_SAVED_STATE_KEY)!!
@@ -55,8 +60,12 @@ class NoticeDetailViewModel @Inject constructor(
     private val _dialogEvent = MutableSharedFlow<NoticeDetailDialogEvent>()
     val dialogEvent : SharedFlow<NoticeDetailDialogEvent> = _dialogEvent.asSharedFlow()
 
+    private val _noticeVote = MutableStateFlow<NoticeVoteModel?>(null)
+    val noticeVote : StateFlow<NoticeVoteModel?> = _noticeVote.asStateFlow()
+
     init {
         fetchCommentList()
+        getNoticeVote(true)
     }
 
     val notice = getNoticeDetailUseCase(noticeId).catch {
@@ -172,6 +181,38 @@ class NoticeDetailViewModel @Inject constructor(
             }
         }
     }
+
+    fun getNoticeVote(isFirst : Boolean = false) {
+        viewModelScope.launch {
+            if(isFirst) _noticeVote.emit(null)
+            getNoticeVoteUseCase(
+                noticeId
+            ).catch {
+                _noticeVote.emit(null)
+                //_snackbarEvent.emit(NoticeDetailSnackbarEvent.NETWORK_ERROR)
+            }.collectLatest {
+                _noticeVote.emit(it)
+            }
+        }
+    }
+
+    fun voteNoticeItem(voteItemId : Int) {
+        viewModelScope.launch {
+            voteNoticeItemUseCase(
+                voteItemId
+            ).catch {
+                _snackbarEvent.emit(NoticeDetailSnackbarEvent.NETWORK_ERROR)
+            }.collectLatest {
+                _noticeVote.emit(
+                    noticeVote.value?.copy(
+                        possibleVote = false
+                    )
+                )
+                getNoticeVote(false)
+            }
+        }
+    }
+
 
     companion object {
         private const val NOTICE_ID_SAVED_STATE_KEY = "noticeId"
