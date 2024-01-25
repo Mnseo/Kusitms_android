@@ -32,8 +32,9 @@ import com.kusitms.presentation.common.ui.theme.KusitmsTypo
 fun ProfileDetailImage(
     name: String,
     profileImage: String,
+    period: String,
     part: String,
-    description: String
+    description: String,
 ) {
     Box(
         modifier = Modifier
@@ -79,7 +80,11 @@ fun ProfileDetailImage(
                 color = KusitmsColorPalette.current.White
             )
             Text(
-                text = part,
+                text = stringResource(
+                    id = R.string.profile_detail_period_part,
+                    period,
+                    mapPartToKorean(part)
+                ),
                 style = KusitmsTypo.current.Text_Medium,
                 color = KusitmsColorPalette.current.Grey400
             )
@@ -102,5 +107,14 @@ fun ProfileDetailImage(
                 )
             }
         }
+    }
+}
+
+private fun mapPartToKorean(part: String): String {
+    return when (part) {
+        "PLANNING" -> "기획자"
+        "DESIGN" -> "디자이너"
+        "DEVELOPMENT" -> "개발자"
+        else -> part
     }
 }

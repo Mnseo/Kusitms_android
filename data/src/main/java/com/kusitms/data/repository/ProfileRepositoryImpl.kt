@@ -30,7 +30,7 @@ class ProfileRepositoryImpl @Inject constructor(
             if (response.result.code == 200) {
                 Result.success(response.payload.toModel())
             } else {
-                Result.failure(java.lang.RuntimeException("프로필 상세 조회 실패: ${response.result.message}"))
+                Result.failure(RuntimeException("프로필 상세 조회 실패: ${response.result.message}"))
             }
         } catch (e: Exception) {
             Result.failure(e)

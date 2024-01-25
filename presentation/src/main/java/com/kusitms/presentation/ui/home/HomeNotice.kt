@@ -39,12 +39,14 @@ fun HomeNotice(
     notice: List<NoticeRecentModel>,
     currentNoticeIndex: State<Int>,
     nextNoticeIndex: State<Int>,
+    onClickNotice: (NoticeRecentModel) -> Unit,
 ) {
     if (notice.isNotEmpty()) {
         HomeNoticeExist(
             notice = notice,
             currentNoticeIndex = currentNoticeIndex,
-            nextNoticeIndex = nextNoticeIndex
+            nextNoticeIndex = nextNoticeIndex,
+            onClickNotice = onClickNotice
         )
     } else {
         HomeNoticeNone()
@@ -57,6 +59,7 @@ fun HomeNoticeExist(
     notice: List<NoticeRecentModel>,
     currentNoticeIndex: State<Int>,
     nextNoticeIndex: State<Int>,
+    onClickNotice: (NoticeRecentModel) -> Unit,
 ) {
 
     Card(
@@ -99,7 +102,9 @@ fun HomeNoticeExist(
                                 text = targetCount,
                                 style = KusitmsTypo.current.Text_Semibold,
                                 color = KusitmsColorPalette.current.White,
-                                modifier = Modifier.clickable { }
+                                modifier = Modifier.clickable {
+                                    onClickNotice(notice[currentNoticeIndex.value])
+                                }
                             )
                         }
                     }

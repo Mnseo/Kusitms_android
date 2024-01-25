@@ -19,9 +19,6 @@ import androidx.compose.ui.unit.dp
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
 import com.kusitms.presentation.ui.ImageVector.LeftArrow
-import com.kusitms.presentation.ui.ImageVector.icons.KusitmsIcons
-import com.kusitms.presentation.ui.ImageVector.icons.kusitmsicons.MoreVertical
-import com.kusitms.presentation.ui.notice.detail.NoticeDetailModalState
 
 @Composable
 fun KusitsmTopBarTextWithIcon(
@@ -52,9 +49,9 @@ fun KusitsmTopBarTextWithIcon(
 
 @Composable
 fun KusitsmTopBarBackTextWithIcon(
-    text : String,
-    onBackClick : () -> Unit,
-    iconContent : @Composable RowScope.() -> Unit
+    text: String,
+    onBackClick: () -> Unit,
+    iconContent: @Composable RowScope.() -> Unit
 ){
     Row(
         modifier = Modifier

@@ -15,44 +15,42 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.kusitms.domain.model.home.NoticeRecentModel
-import com.kusitms.domain.model.home.TeamMatchingModel
-import com.kusitms.domain.model.profile.ProfileModel
 import com.kusitms.presentation.R
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.model.home.HomeViewModel
 import com.kusitms.presentation.navigation.NavRoutes
 import com.kusitms.presentation.ui.ImageVector.icons.KusitmsIcons
 import com.kusitms.presentation.ui.ImageVector.icons.kusitmsicons.Setting
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
+@OptIn(ExperimentalCoroutinesApi::class)
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
     navController: NavHostController,
+    onClickNotice: (NoticeRecentModel) -> Unit,
+    onClickProfile: () -> Unit
 ) {
-    val notice = listOf<NoticeRecentModel>(
-        NoticeRecentModel("공지 0", 0),
-        NoticeRecentModel("공지 1", 1),
-        NoticeRecentModel("공지 2", 2),
-    )
+    val memberInfo by viewModel.memberInfo.collectAsStateWithLifecycle()
 
-    val team : List<TeamMatchingModel> = listOf(
-        TeamMatchingModel(teamId = 1, curriculumName = "큐시즘 전체 OT"),
-        TeamMatchingModel(teamId = 10, curriculumName = "기업프로젝트"),
-    )
+    val notice by viewModel.notices.collectAsStateWithLifecycle()
 
-    var currentNoticeIndex = viewModel.currentNoticeIndex.collectAsStateWithLifecycle()
-    var nextNoticeIndex = viewModel.nextNoticeIndex.collectAsStateWithLifecycle()
+    val curriculum by viewModel.curriculum.collectAsStateWithLifecycle()
+
+    val team by viewModel.teamMatch.collectAsStateWithLifecycle()
+
+    val currentNoticeIndex = viewModel.currentNoticeIndex.collectAsStateWithLifecycle()
+    val nextNoticeIndex = viewModel.nextNoticeIndex.collectAsStateWithLifecycle()
 
     Column(
         modifier = Modifier
@@ -94,19 +92,20 @@ fun HomeScreen(
             }
         }
         Spacer(modifier = Modifier.height(8.dp))
-        HomeProfile(profile = ProfileModel()) { }
+        HomeProfile(
+            info = memberInfo,
+            onClickProfile = onClickProfile
+        )
         Spacer(modifier = Modifier.height(8.dp))
         HomeNotice(
-            notice, currentNoticeIndex, nextNoticeIndex
+            notice,
+            currentNoticeIndex,
+            nextNoticeIndex,
+            onClickNotice = onClickNotice,
         )
-        HomeCurriculum()
+        HomeCurriculum(
+            curriculum = curriculum
+        )
         HomeTeam(team)
     }
-}
-
-
-@Preview
-@Composable
-fun HomePreview() {
-    HomeScreen(navController = rememberNavController())
 }

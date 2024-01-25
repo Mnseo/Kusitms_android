@@ -21,17 +21,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.kusitms.domain.model.profile.ProfileModel
+import com.kusitms.domain.model.home.HomeProfileModel
 import com.kusitms.presentation.R
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
 
 @Composable
 fun HomeProfile(
-    profile: ProfileModel,
-    modifier: Modifier = Modifier,
+    info: HomeProfileModel,
     onClickProfile: () -> Unit,
 ) {
     Card(
@@ -55,7 +53,7 @@ fun HomeProfile(
             ) {
                 Row {
                     Text(
-                        text = stringResource(R.string.home_profile),
+                        text = stringResource(R.string.home_profile, info.name),
                         style = KusitmsTypo.current.Text_Semibold,
                         color = KusitmsColorPalette.current.White
                     )
@@ -65,18 +63,24 @@ fun HomeProfile(
                         contentDescription = stringResource(id = R.string.home_ic_hello),
                     )
                 }
+                Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = stringResource(R.string.home_profile_part),
+                    text = stringResource(
+                        R.string.home_profile_part,
+                        info.period,
+                        mapPartToKorean(info.part)
+                    ),
                     style = KusitmsTypo.current.Text_Medium,
                     color = KusitmsColorPalette.current.Grey400,
                 )
             }
+            
             Card(
                 modifier = Modifier
                     .width(75.dp)
                     .height(92.dp)
                     .padding(vertical = 16.dp)
-                    .clickable { },
+                    .clickable { onClickProfile() },
                 shape = RoundedCornerShape(12.dp),
                 colors = CardDefaults.cardColors(
                     containerColor = KusitmsColorPalette.current.Grey600,
@@ -93,7 +97,7 @@ fun HomeProfile(
                         text = stringResource(R.string.home_profile_mine),
                         style = KusitmsTypo.current.Caption1,
                         color = KusitmsColorPalette.current.White,
-                        textAlign = TextAlign.Center
+                        textAlign = TextAlign.Center,
                     )
                 }
             }
@@ -101,12 +105,13 @@ fun HomeProfile(
     }
 }
 
-@Preview
-@Composable
-fun HomeProfilePreview() {
-    HomeProfile(
-        profile = ProfileModel(),
-        modifier = Modifier,
-        onClickProfile = {}
-    )
+
+private fun mapPartToKorean(part: String): String {
+    return when (part) {
+        "PLANNING" -> "기획팀"
+        "DESIGN" -> "디자인팀"
+        "DEVELOPMENT" -> "개발팀"
+        else -> part
+    }
 }
+

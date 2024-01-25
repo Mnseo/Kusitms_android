@@ -1,37 +1,70 @@
 package com.kusitms.presentation.model.home
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import com.kusitms.domain.model.home.NoticeRecentModel
+import androidx.lifecycle.viewModelScope
+import com.kusitms.domain.model.home.CurriculumRecentModel
+import com.kusitms.domain.model.home.HomeProfileModel
+import com.kusitms.domain.usecase.home.GetCurriculumRecentUseCase
+import com.kusitms.domain.usecase.home.GetMemberInfoHomeUseCase
+import com.kusitms.domain.usecase.home.GetNoticeRecentUseCase
+import com.kusitms.domain.usecase.home.GetTeamMatchUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
+    getMemberInfoHomeUseCase: GetMemberInfoHomeUseCase,
+    getNoticeRecentUseCase: GetNoticeRecentUseCase,
+    getCurriculumRecentUseCase: GetCurriculumRecentUseCase,
+    getTeamMatchUseCase: GetTeamMatchUseCase
 ) : ViewModel() {
     private val initNotice: Int = 0
     private val transitionDuration = 200L
 
-    val _notices = mutableListOf(
-        NoticeRecentModel("공지 0", 0),
-        NoticeRecentModel("공지 1", 1),
-        NoticeRecentModel("공지 2", 2),
+    val memberInfo = getMemberInfoHomeUseCase().catch {
+    }.stateIn(
+        viewModelScope,
+        started = SharingStarted.Eagerly,
+        initialValue = HomeProfileModel()
+    )
+
+    val notices = getNoticeRecentUseCase().catch {
+
+    }.stateIn(
+        viewModelScope,
+        started = SharingStarted.Eagerly,
+        initialValue = emptyList()
+    )
+
+    val curriculum = getCurriculumRecentUseCase().catch {
+
+    }.stateIn(
+        viewModelScope,
+        started = SharingStarted.Eagerly,
+        initialValue = CurriculumRecentModel()
+    )
+
+    val teamMatch = getTeamMatchUseCase().catch {
+
+    }.stateIn(
+        viewModelScope,
+        started = SharingStarted.Eagerly,
+        initialValue = emptyList()
     )
 
     private val _uiState = MutableStateFlow(HomeUiState(initNotice))
-    val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
 
     private var _isTransitioning = MutableStateFlow(false)
-    var isTransitioning: StateFlow<Boolean> = _isTransitioning.asStateFlow()
 
     private var _currentNoticeIndex = MutableStateFlow(0)
     var currentNoticeIndex: StateFlow<Int> = _currentNoticeIndex.asStateFlow()
@@ -43,16 +76,20 @@ class HomeViewModel @Inject constructor(
         changeCurrentNotice()
     }
 
-    fun changeCurrentNotice() {
+    private fun changeCurrentNotice() {
         val coroutineScope = CoroutineScope(Dispatchers.Main)
         coroutineScope.launch {
             while (true) {
                 delay(3000)
                 _isTransitioning.value = true
                 delay(100)
-                _currentNoticeIndex.value = _nextNoticeIndex.value
-                _nextNoticeIndex.value = (_currentNoticeIndex.value + 1) % _notices.size
-                _uiState.value = HomeUiState(_notices[_currentNoticeIndex.value].noticeId)
+
+                if (notices.value.isNotEmpty()) {
+                    _currentNoticeIndex.value = _nextNoticeIndex.value
+                    _nextNoticeIndex.value = (_currentNoticeIndex.value + 1) % notices.value.size
+                    _uiState.value = HomeUiState(notices.value[_currentNoticeIndex.value].noticeId)
+                }
+
                 delay(transitionDuration)
                 _isTransitioning.value = false
             }
