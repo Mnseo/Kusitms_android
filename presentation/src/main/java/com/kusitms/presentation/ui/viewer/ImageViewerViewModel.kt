@@ -13,6 +13,8 @@ class ImageViewerViewModel @Inject constructor() : ViewModel() {
     private val _imageList = MutableStateFlow<List<String>>(emptyList())
     val imageList : StateFlow<List<String>> = _imageList.asStateFlow()
 
+    var selectedIndex = 0
+
     fun updateImageList(images : List<String>){
         _imageList.value = images
     }
