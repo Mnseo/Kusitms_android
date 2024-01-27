@@ -1,5 +1,10 @@
 package com.kusitms.presentation.ui.viewer
 
+import android.app.DownloadManager
+import android.content.Context
+import android.os.Environment
+import android.os.Environment.DIRECTORY_DOWNLOADS
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -17,16 +22,9 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -38,6 +36,7 @@ import coil.request.ImageRequest
 import com.kusitms.presentation.R
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
+import com.kusitms.presentation.common.util.FileDownloadUtil
 import com.kusitms.presentation.ui.ImageVector.icons.KusitmsIcons
 import com.kusitms.presentation.ui.ImageVector.icons.kusitmsicons.Close
 import com.kusitms.presentation.ui.ImageVector.icons.kusitmsicons.Download
@@ -55,8 +54,7 @@ fun ImageViewerScreen(
             imageList.size
         }
     )
-
-    if(imageList.isEmpty()) return
+    val context = LocalContext.current
 
     Column(
         modifier = Modifier.fillMaxSize().background(KusitmsColorPalette.current.Grey800)
@@ -90,6 +88,15 @@ fun ImageViewerScreen(
                 modifier = Modifier
                     .size(20.dp)
                     .clickable {
+                        try {
+                            FileDownloadUtil.downloadImage(
+                                downloadManager = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager,
+                                url = imageList.get(imageHorizontalPager.currentPage),
+                                file = Environment.getExternalStoragePublicDirectory(DIRECTORY_DOWNLOADS)
+                            )
+                        }catch (e: Exception){
+                            // 에러 스낵바
+                        }
 
                     },
                 imageVector = KusitmsIcons.Download,
