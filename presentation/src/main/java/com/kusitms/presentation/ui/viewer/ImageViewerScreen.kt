@@ -22,6 +22,7 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -40,11 +41,13 @@ import com.kusitms.presentation.common.util.FileDownloadUtil
 import com.kusitms.presentation.ui.ImageVector.icons.KusitmsIcons
 import com.kusitms.presentation.ui.ImageVector.icons.kusitmsicons.Close
 import com.kusitms.presentation.ui.ImageVector.icons.kusitmsicons.Download
+import com.kusitms.presentation.ui.notice.detail.NoticeDetailViewModel
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ImageViewerScreen(
     viewModel: ImageViewerViewModel,
+    onShowSnackbar : suspend (String) -> Unit,
     onBack: () -> Unit
 ) {
     val imageList by viewModel.imageList.collectAsStateWithLifecycle()
@@ -55,6 +58,17 @@ fun ImageViewerScreen(
         }
     )
     val context = LocalContext.current
+
+    LaunchedEffect(key1 = Unit){
+        viewModel.snackbarEvent.collect {
+            onShowSnackbar(
+                when(it){
+                    ImageViewerViewModel.Companion.ImageViewerSnackbarEvent.DOWNLOAD_ERROR ->
+                        "다운로드 도중 에러가 발생하였습니다."
+                }
+            )
+        }
+    }
 
     Column(
         modifier = Modifier.fillMaxSize().background(KusitmsColorPalette.current.Grey800)
@@ -95,7 +109,7 @@ fun ImageViewerScreen(
                                 file = Environment.getExternalStoragePublicDirectory(DIRECTORY_DOWNLOADS)
                             )
                         }catch (e: Exception){
-                            // 에러 스낵바
+                            viewModel.emitSnackbarEvent(ImageViewerViewModel.Companion.ImageViewerSnackbarEvent.DOWNLOAD_ERROR)
                         }
 
                     },
