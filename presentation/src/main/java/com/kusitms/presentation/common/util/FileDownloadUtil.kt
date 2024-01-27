@@ -8,7 +8,8 @@ object FileDownloadUtil {
     fun downloadImage(
         downloadManager: DownloadManager,
         url : String,
-        file : File?
+        file : File?,
+        onError : () -> Unit
     ) {
         try {
             val targetFile = File(file, "/Kusitms/kusitms_${System.currentTimeMillis()}.png")
@@ -24,10 +25,7 @@ object FileDownloadUtil {
 
             downloadManager.enqueue(request)
         }catch (e: Exception){
-            //
+            onError()
         }
-
-
-
     }
 }

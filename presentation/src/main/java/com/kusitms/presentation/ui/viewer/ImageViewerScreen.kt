@@ -106,7 +106,10 @@ fun ImageViewerScreen(
                             FileDownloadUtil.downloadImage(
                                 downloadManager = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager,
                                 url = imageList.get(imageHorizontalPager.currentPage),
-                                file = Environment.getExternalStoragePublicDirectory(DIRECTORY_DOWNLOADS)
+                                file = Environment.getExternalStoragePublicDirectory(DIRECTORY_DOWNLOADS),
+                                onError = {
+                                    viewModel.emitSnackbarEvent(ImageViewerViewModel.Companion.ImageViewerSnackbarEvent.DOWNLOAD_ERROR)
+                                }
                             )
                         }catch (e: Exception){
                             viewModel.emitSnackbarEvent(ImageViewerViewModel.Companion.ImageViewerSnackbarEvent.DOWNLOAD_ERROR)
