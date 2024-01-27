@@ -328,6 +328,11 @@ fun MainNavigation() {
 
                     ImageViewerScreen(
                         viewModel = imageViewerViewModel,
+                        onShowSnackbar = { message ->
+                            snackbarHostState.showSnackbar(
+                                message = message
+                            )
+                        },
                         onBack = {
                             navController.popBackStack()
                         }

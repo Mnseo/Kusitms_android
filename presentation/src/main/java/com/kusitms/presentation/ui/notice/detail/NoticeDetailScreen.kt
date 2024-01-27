@@ -412,10 +412,11 @@ fun NoticeDetailScreen(
                         contentPadding = PaddingValues(start = 20.dp),
                         horizontalArrangement = Arrangement.spacedBy(4.dp)
                     ) {
-                        items(notice.imageUrl ?: emptyList()){
+                        itemsIndexed(notice.imageUrl ?: emptyList()){ index, item ->
                             NoticeDetailImageCard(
-                                it,
+                                item,
                                 onClickImage = {
+                                    imageViewerViewModel.selectedIndex = index
                                     imageViewerViewModel.updateImageList(notice.imageUrl ?: emptyList())
                                     onClickImage()
                                 }
