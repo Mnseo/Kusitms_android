@@ -1,4 +1,4 @@
-package com.kusitms.presentation.ui.home
+package com.kusitms.presentation.ui.home.profile
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable

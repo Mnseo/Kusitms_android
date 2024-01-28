@@ -1,4 +1,4 @@
-package com.kusitms.presentation.ui.home
+package com.kusitms.presentation.ui.home.team
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
