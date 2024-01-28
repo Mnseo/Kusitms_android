@@ -228,4 +228,7 @@
     <string name="home_team_none">아직 매칭된 팀이 없어요</string>
 
 
+    <!-- ImageViewer -->
+    <string name="image_viewer_error">다운로드 도중 에러가 발생하였습니다.</string>
+
 </resources>
