@@ -2,8 +2,8 @@ package com.kusitms.domain.model.notice
 
 data class NoticeModel(
     val noticeId : Int = 0,
-    val curriculum : String = "",
-    val team : String = "",
+    val curriculumName : String = "",
+    val teamName : String = "",
     val title : String = "",
     val content : String = "",
     val date : String = "",

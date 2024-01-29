@@ -54,6 +54,7 @@ import com.kusitms.presentation.ui.login.member.LoginMemberScreen
 import com.kusitms.presentation.ui.login.member.SignInDefaultProfile
 import com.kusitms.presentation.ui.notice.NoticeScreen
 import com.kusitms.presentation.ui.notice.detail.NoticeDetailScreen
+import com.kusitms.presentation.ui.notice.search.NoticeSearchScreen
 import com.kusitms.presentation.ui.profile.ProfileScreen
 import com.kusitms.presentation.ui.profile.search.ProfileSearchScreen
 import com.kusitms.presentation.ui.setting.SettingMember
@@ -253,9 +254,14 @@ fun MainNavigation() {
 
                 // NoticeScreen
                 kusitmsComposableWithAnimation(NavRoutes.Notice.route) {
+
                     NoticeScreen(
+                        viewModel = hiltViewModel(),
                         onNoticeClick = {
                             navController.navigate(NavRoutes.NoticeDetail.createRoute(it.noticeId))
+                        },
+                        onSearchClick = {
+                           navController.navigate(NavRoutes.NoticeSearch.route)
                         },
                         onSettingClick = {
                             navController.navigate(NavRoutes.SettingMember.route)
@@ -280,6 +286,18 @@ fun MainNavigation() {
                         onClickImage = {
                             navController.navigate(NavRoutes.ImageViewer.route)
                         }
+                    )
+                }
+
+                kusitmsComposableWithAnimation(NavRoutes.NoticeSearch.route) {
+                    NoticeSearchScreen(
+                        viewModel = hiltViewModel(),
+                        onNoticeClick = {
+                            navController.navigate(NavRoutes.NoticeDetail.createRoute(it.noticeId))
+                        },
+                        onBackClick = {
+                            navController.navigateUp()
+                        },
                     )
                 }
 

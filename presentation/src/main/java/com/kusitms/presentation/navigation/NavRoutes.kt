@@ -65,6 +65,8 @@ sealed class NavRoutes(
         fun createRoute(noticeId: Int) = "NoticeDetail/${noticeId}"
     }
 
+    object NoticeSearch : NavRoutes("NoticeSearch")
+
     object Profile : NavRoutes("Profile")
 
     object ProfileSearch : NavRoutes("ProfileSearch")

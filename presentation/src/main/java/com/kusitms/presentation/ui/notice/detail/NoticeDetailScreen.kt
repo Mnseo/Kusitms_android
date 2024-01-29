@@ -510,13 +510,13 @@ fun NoticeDetailTitleCard(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = notice.curriculum,
+                    text = notice.curriculumName,
                     style = KusitmsTypo.current.Caption1,
                     color = KusitmsColorPalette.current.Main2_500
                 )
                 KusitmsMarginHorizontalSpacer(size = 8)
                 Text(
-                    text = notice.team,
+                    text = notice.teamName,
                     style = KusitmsTypo.current.Caption1,
                     color = KusitmsColorPalette.current.Grey300
                 )

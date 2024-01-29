@@ -29,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -64,14 +65,16 @@ fun ImageViewerScreen(
             onShowSnackbar(
                 when(it){
                     ImageViewerViewModel.Companion.ImageViewerSnackbarEvent.DOWNLOAD_ERROR ->
-                        "다운로드 도중 에러가 발생하였습니다."
+                        context.getString(R.string.image_viewer_error)
                 }
             )
         }
     }
 
     Column(
-        modifier = Modifier.fillMaxSize().background(KusitmsColorPalette.current.Grey800)
+        modifier = Modifier
+            .fillMaxSize()
+            .background(KusitmsColorPalette.current.Grey800)
     ) {
         Row(
             modifier = Modifier
@@ -106,12 +109,14 @@ fun ImageViewerScreen(
                             FileDownloadUtil.downloadImage(
                                 downloadManager = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager,
                                 url = imageList.get(imageHorizontalPager.currentPage),
-                                file = Environment.getExternalStoragePublicDirectory(DIRECTORY_DOWNLOADS),
+                                file = Environment.getExternalStoragePublicDirectory(
+                                    DIRECTORY_DOWNLOADS
+                                ),
                                 onError = {
                                     viewModel.emitSnackbarEvent(ImageViewerViewModel.Companion.ImageViewerSnackbarEvent.DOWNLOAD_ERROR)
                                 }
                             )
-                        }catch (e: Exception){
+                        } catch (e: Exception) {
                             viewModel.emitSnackbarEvent(ImageViewerViewModel.Companion.ImageViewerSnackbarEvent.DOWNLOAD_ERROR)
                         }
 

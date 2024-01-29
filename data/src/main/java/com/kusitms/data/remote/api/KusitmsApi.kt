@@ -17,6 +17,7 @@ import com.kusitms.data.remote.entity.response.home.TeamMatchingPayload
 import com.kusitms.data.remote.entity.response.notice.CommentPayload
 import com.kusitms.data.remote.entity.response.notice.CurriculumPayload
 import com.kusitms.data.remote.entity.response.notice.FindPwCodeVerifyResponse
+import com.kusitms.data.remote.entity.response.notice.NoticeDetailPayload
 import com.kusitms.data.remote.entity.response.notice.NoticePayload
 import com.kusitms.data.remote.entity.response.notice.NoticeVotePayload
 import com.kusitms.data.remote.entity.response.profile.ProfilePayload
@@ -75,7 +76,7 @@ interface KusitmsApi {
     @GET("v2/notice/{noticeId}/detail")
     suspend fun getNoticeDetail(
         @Path("noticeId") noticeId: Int,
-    ): BaseResponse<NoticePayload>
+    ): BaseResponse<NoticeDetailPayload>
 
     @GET("v1/notice/curriculum")
     suspend fun getCurriculumList(): BaseResponse<List<CurriculumPayload>>
