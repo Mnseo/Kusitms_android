@@ -21,15 +21,25 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.kusitms.domain.model.profile.ProfileModel
 import com.kusitms.presentation.R
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
+import com.kusitms.presentation.ui.profile.ProfileListScreen
 
 
 @Composable
 fun HomeTeamDetailScreen(
-
 ) {
+    val profiles = listOf(
+        ProfileModel(0, "이채연", "디자이너", "디자이너 한 줄 소개"),
+        ProfileModel(1, "국준호", "기획자", "기획자 한 줄 소개"),
+        ProfileModel(2, "장세은", "개발자", "개발자 한 줄 소개"),
+        ProfileModel(3, "이안진", "개발자", "개발자 한 줄 소개"),
+        ProfileModel(4, "신민서", "개발자", "개발자 한 줄 소개"),
+        ProfileModel(5, "김서연", "기획자", "기획자 한 줄 소개"),
+        ProfileModel(6, "안정후", "개발자", "개발자 한 줄 소개"),
+    )
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -68,7 +78,15 @@ fun HomeTeamDetailScreen(
                     },
                 contentDescription = null
             )
-
+        }
+        Text(
+            text = "나와 함께한 팀원들이에요\n클릭하면 상세프로필을 볼 수 있어요",
+            style = KusitmsTypo.current.Caption1,
+            color = KusitmsColorPalette.current.Grey400,
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+        )
+        Column(modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp)) {
+            ProfileListScreen(profileList = profiles, onProfileClick = {})
         }
     }
 }
