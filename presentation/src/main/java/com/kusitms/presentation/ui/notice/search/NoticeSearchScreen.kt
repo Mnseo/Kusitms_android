@@ -52,8 +52,8 @@ import kotlinx.coroutines.flow.map
 @SuppressLint("FlowOperatorInvokedInComposition")
 @Composable
 fun NoticeSearchScreen(
-    viewModel : NoticeViewModel,
-    onNoticeClick : (NoticeModel) -> Unit,
+    viewModel: NoticeViewModel,
+    onNoticeClick: (NoticeModel) -> Unit,
     onBackClick: () -> Unit
 ) {
     var searchKeyword by remember { mutableStateOf("") }
@@ -61,13 +61,11 @@ fun NoticeSearchScreen(
     val searchedNoticeList by viewModel.noticeList
         .map {
             it.filter {
-                if(searchKeyword.isBlank()) false
-                else {
-                    it.title.contains(searchKeyword) ||
+                searchKeyword.isNotBlank() &&
+                    (it.title.contains(searchKeyword) ||
                     it.content.contains(searchKeyword) ||
                     it.curriculumName.contains(searchKeyword) ||
-                    it.teamName.contains(searchKeyword)
-                }
+                    it.teamName.contains(searchKeyword))
             }
         }
         .debounce(200)
@@ -113,8 +111,8 @@ fun NoticeSearchScreen(
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text =  if(searchKeyword.isBlank()) stringResource(id = R.string.notice_search_default)
-                            else stringResource(id = R.string.notice_search_empty,searchKeyword),
+                    text = if (searchKeyword.isBlank()) stringResource(id = R.string.notice_search_default)
+                    else stringResource(id = R.string.notice_search_empty, searchKeyword),
                     style = KusitmsTypo.current.Caption1,
                     color = KusitmsColorPalette.current.Grey400
                 )
@@ -128,13 +126,16 @@ fun NoticeSearchScreen(
                 item {
                     KusitmsMarginVerticalSpacer(size = 24)
                     Text(
-                        text = stringResource(id = R.string.notice_search_count,searchedNoticeList.size),
+                        text = stringResource(
+                            id = R.string.notice_search_count,
+                            searchedNoticeList.size
+                        ),
                         style = KusitmsTypo.current.Caption1,
                         color = KusitmsColorPalette.current.Grey400
                     )
                     KusitmsMarginVerticalSpacer(size = 12)
                 }
-                items(searchedNoticeList){
+                items(searchedNoticeList) {
                     KusitmsNoticeItem(
                         notice = it,
                         onClick = {
@@ -180,11 +181,11 @@ fun RowScope.SearchBar(
                         .weight(1f),
                     contentAlignment = Alignment.CenterStart
                 ) {
-                    if(searchKeyword.isBlank())
+                    if (searchKeyword.isBlank())
                         Text(
                             text = stringResource(id = R.string.notice_search_hint),
                             style = KusitmsTypo.current.Text_Medium,
-                            color =  KusitmsColorPalette.current.Grey400
+                            color = KusitmsColorPalette.current.Grey400
                         )
                     innerTextField()
                 }
