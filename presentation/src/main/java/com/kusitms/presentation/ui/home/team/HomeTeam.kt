@@ -1,5 +1,6 @@
 package com.kusitms.presentation.ui.home.team
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -30,6 +31,7 @@ import com.kusitms.presentation.common.ui.theme.KusitmsTypo
 @Composable
 fun HomeTeam(
     team: List<TeamMatchingModel>,
+    onClickTeam: () -> Unit
 ) {
     Card(
         modifier = Modifier
@@ -88,7 +90,10 @@ fun HomeTeam(
                     Text(
                         text = stringResource(R.string.home_team_none),
                         style = KusitmsTypo.current.Caption1,
-                        color = KusitmsColorPalette.current.Grey400
+                        color = KusitmsColorPalette.current.Grey400,
+                        modifier = Modifier.clickable {
+                            onClickTeam()
+                        }
                     )
                 }
             }

@@ -49,6 +49,8 @@ sealed class NavRoutes(
         ) = "ProfileDetail"
     }
 
+    object HomeTeamDetailScreen : NavRoutes("HomeTeamDetail")
+
     object SettingMember : NavRoutes("SettingMember")
     object SettingNonMember : NavRoutes("SettingNonMember")
 

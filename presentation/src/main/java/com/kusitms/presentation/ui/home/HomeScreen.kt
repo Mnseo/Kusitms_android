@@ -41,7 +41,8 @@ fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
     navController: NavHostController,
     onClickNotice: (NoticeRecentModel) -> Unit,
-    onClickProfile: () -> Unit
+    onClickProfile: () -> Unit,
+    onClickTeam: () -> Unit
 ) {
     val memberInfo by viewModel.memberInfo.collectAsStateWithLifecycle()
 
@@ -108,6 +109,6 @@ fun HomeScreen(
         HomeCurriculum(
             curriculum = curriculum
         )
-        HomeTeam(team)
+        HomeTeam(team, onClickTeam)
     }
 }

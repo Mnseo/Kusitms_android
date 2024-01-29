@@ -44,6 +44,7 @@ import com.kusitms.presentation.model.signIn.SignInViewModel
 import com.kusitms.presentation.model.signIn.SplashViewModel
 import com.kusitms.presentation.ui.home.HomeScreen
 import com.kusitms.presentation.ui.home.profile.MyProfileScreen
+import com.kusitms.presentation.ui.home.team.HomeTeamDetailScreen
 import com.kusitms.presentation.ui.login.LoginScreen
 import com.kusitms.presentation.ui.login.NonMemberScreen
 import com.kusitms.presentation.ui.login.findPw.FindPwCheckEmail
@@ -237,6 +238,9 @@ fun MainNavigation() {
                         },
                         onClickProfile = {
                             navController.navigate(NavRoutes.MyProfileDetail.route)
+                        },
+                        onClickTeam = {
+                            navController.navigate(NavRoutes.HomeTeamDetailScreen.route)
                         }
                     )
                 }
@@ -250,6 +254,12 @@ fun MainNavigation() {
                     )
 
                 }
+
+                // HomeTeamDetailScreen
+                kusitmsComposableWithAnimation(NavRoutes.HomeTeamDetailScreen.route) {
+                    HomeTeamDetailScreen()
+                }
+
 
                 // NoticeScreen
                 kusitmsComposableWithAnimation(NavRoutes.Notice.route) {
