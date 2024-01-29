@@ -34,8 +34,9 @@ enum class NoticeTab(val title : String){
 
 @Composable
 fun NoticeScreen(
-    viewModel: NoticeViewModel = hiltViewModel(),
+    viewModel: NoticeViewModel,
     onNoticeClick : (NoticeModel) -> Unit,
+    onSearchClick : () -> Unit,
     onSettingClick : () -> Unit
 ){
     var selectedTab by remember { mutableStateOf(NoticeTab.NOTICE) }
@@ -52,16 +53,16 @@ fun NoticeScreen(
         KusitsmTopBarTextWithIcon(
             text = "공지",
             iconContent = {
-//                Image(
-//                    modifier = Modifier
-//                        .size(24.dp)
-//                        .clickable {
-//
-//                        },
-//                    imageVector = KusitmsIcons.Search,
-//                    contentDescription = "검색")
-//
-//                KusitmsMarginHorizontalSpacer(size = 24)
+                Image(
+                    modifier = Modifier
+                        .size(24.dp)
+                        .clickable {
+                            onSearchClick()
+                        },
+                    imageVector = KusitmsIcons.Search,
+                    contentDescription = "검색")
+
+                KusitmsMarginHorizontalSpacer(size = 24)
 
                 Image(
                     modifier = Modifier
@@ -112,7 +113,9 @@ fun NoticeScreen(
 @Composable
 fun NoticeScreenPreview(){
     NoticeScreen(
+        viewModel = hiltViewModel(),
         onNoticeClick = {},
+        onSearchClick = {},
         onSettingClick = {}
     )
 }

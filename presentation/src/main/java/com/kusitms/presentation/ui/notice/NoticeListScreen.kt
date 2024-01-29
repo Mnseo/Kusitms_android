@@ -182,7 +182,8 @@ fun NoticeListScreen(
 @Composable
 fun KusitmsNoticeItem(
     notice : NoticeModel,
-    onClick : (NoticeModel) -> Unit
+    onClick : (NoticeModel) -> Unit,
+    useAlpha : Boolean = true
 ){
     Column(
         modifier = Modifier
@@ -191,7 +192,8 @@ fun KusitmsNoticeItem(
             }
             .padding(vertical = 16.dp)
             .alpha(
-                if (notice.viewYn) 0.5f else 1f
+                if(useAlpha) ( if (notice.viewYn) 0.5f else 1f )
+                else 1f
             )
     ) {
         Row(
@@ -199,13 +201,13 @@ fun KusitmsNoticeItem(
             verticalAlignment = Alignment.CenterVertically
         ){
             Text(
-                text = notice.curriculum,
+                text = notice.curriculumName,
                 style = KusitmsTypo.current.Caption1,
                 color =  KusitmsColorPalette.current.Main2_500
             )
             KusitmsMarginHorizontalSpacer(size = 8)
             Text(
-                text = notice.team,
+                text = notice.teamName,
                 style = KusitmsTypo.current.Caption1,
                 color =  KusitmsColorPalette.current.Grey400
             )

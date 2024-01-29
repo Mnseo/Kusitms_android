@@ -169,7 +169,11 @@
     <string name="notice_report_content_political">특정 정당이나 정치인에 대한 비난/비하/모욕 또는 지지/홍보/선거운동 및 선거 관련법에 위배되는 게시물</string>
     <string name="notice_report_content_fishing">중복글, 도배글, 낚시글, 내용 없는 게시물</string>
     <string name="notice_report_content_pornography">불법 촬영물, 청소년유해매체물, 외설, 음란물,\n음담패설, 신체사진을 포함하거나, 불건전한 만남,\n채팅, 대화, 통화를 위한 게시물</string>
-
+    
+    <string name="notice_search_default">궁금한 공지사항을\n검색해보세요</string>
+    <string name="notice_search_empty">\'%s\'에 해당하는\n공지가 없어요</string>
+    <string name="notice_search_count">%d개의 공지가 있어요</string>
+    <string name="notice_search_hint">공지 제목, 내용, 커리큘럼명, 주관팀</string>
 
     <!-- Profile -->
     <string name="profile_topbar">프로필</string>
