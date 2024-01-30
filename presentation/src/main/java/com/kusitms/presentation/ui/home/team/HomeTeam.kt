@@ -31,7 +31,7 @@ import com.kusitms.presentation.common.ui.theme.KusitmsTypo
 @Composable
 fun HomeTeam(
     team: List<TeamMatchingModel>,
-    onClickTeam: () -> Unit
+    onClickTeam: () -> Unit,
 ) {
     Card(
         modifier = Modifier
@@ -77,7 +77,7 @@ fun HomeTeam(
             if (team.isNotEmpty()) {
                 LazyRow(modifier = Modifier.fillMaxWidth(), content = {
                     items(team) { teamItem ->
-                        TeamMatchingItem(teamItem = teamItem)
+                        TeamMatchingItem(teamItem = teamItem, onClickTeam)
                     }
                 })
             } else {
@@ -91,9 +91,6 @@ fun HomeTeam(
                         text = stringResource(R.string.home_team_none),
                         style = KusitmsTypo.current.Caption1,
                         color = KusitmsColorPalette.current.Grey400,
-                        modifier = Modifier.clickable {
-                            onClickTeam()
-                        }
                     )
                 }
             }
@@ -103,9 +100,16 @@ fun HomeTeam(
 }
 
 @Composable
-fun TeamMatchingItem(teamItem: TeamMatchingModel) {
+fun TeamMatchingItem(
+    teamItem: TeamMatchingModel,
+    onClickTeam: () -> Unit,
+) {
     Card(
-        modifier = Modifier.padding(end = 12.dp, top = 12.dp),
+        modifier = Modifier
+            .padding(end = 12.dp, top = 12.dp)
+            .clickable {
+                onClickTeam()
+            },
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
             containerColor = KusitmsColorPalette.current.Grey600,

@@ -21,15 +21,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.kusitms.domain.model.profile.ProfileModel
 import com.kusitms.presentation.R
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
+import com.kusitms.presentation.model.home.team.HomeTeamViewModel
 import com.kusitms.presentation.ui.profile.ProfileListScreen
 
 
 @Composable
 fun HomeTeamDetailScreen(
+    viewModel: HomeTeamViewModel = hiltViewModel(),
+    onBack: () -> Unit,
 ) {
     val profiles = listOf(
         ProfileModel(0, "이채연", "디자이너", "디자이너 한 줄 소개"),
@@ -75,6 +79,7 @@ fun HomeTeamDetailScreen(
                 painterResource(id = R.drawable.ic_hide),
                 modifier = Modifier
                     .clickable {
+                        onBack()
                     },
                 contentDescription = null
             )
@@ -85,7 +90,11 @@ fun HomeTeamDetailScreen(
             color = KusitmsColorPalette.current.Grey400,
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
         )
-        Column(modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp)) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 8.dp)
+        ) {
             ProfileListScreen(profileList = profiles, onProfileClick = {})
         }
     }
@@ -95,5 +104,6 @@ fun HomeTeamDetailScreen(
 @Composable
 fun HomeTeamDeatilScreenPreview() {
     HomeTeamDetailScreen(
+        onBack = {}
     )
 }

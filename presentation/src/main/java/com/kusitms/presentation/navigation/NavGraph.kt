@@ -258,7 +258,7 @@ fun MainNavigation() {
 
                 // HomeTeamDetailScreen
                 kusitmsComposableWithAnimation(NavRoutes.HomeTeamDetailScreen.route) {
-                    HomeTeamDetailScreen()
+                    HomeTeamDetailScreen(onBack = { navController.navigateUp() })
                 }
 
 

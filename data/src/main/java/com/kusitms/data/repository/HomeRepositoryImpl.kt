@@ -7,12 +7,13 @@ import com.kusitms.domain.model.home.HomeProfileModel
 import com.kusitms.domain.model.home.MemberInfoDetailModel
 import com.kusitms.domain.model.home.NoticeRecentModel
 import com.kusitms.domain.model.home.TeamMatchingModel
+import com.kusitms.domain.model.home.TeamProfileModel
 import com.kusitms.domain.repository.HomeRepository
 import javax.inject.Inject
 
 class HomeRepositoryImpl @Inject constructor(
     private val kusitmsApi: KusitmsApi,
-): HomeRepository {
+) : HomeRepository {
 
 
     override suspend fun getMemberInfoHome(): Result<HomeProfileModel> {
@@ -79,6 +80,20 @@ class HomeRepositoryImpl @Inject constructor(
                 Result.success(response.payload.toModel())
             } else {
                 Result.failure(RuntimeException("홈 프로필 정보 조회 실패: ${response.result.message}"))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    override suspend fun getMemberInfoList(teamId: Int): Result<List<TeamProfileModel>> {
+        return try {
+            val response = kusitmsApi.getMemberInfoList(teamId)
+
+            if (response.result.code == 200) {
+                Result.success(response.payload.map { it.toModel() })
+            } else {
+                Result.failure(RuntimeException("팀 매칭 프로필 리스트 조회 실패: ${response.result.message}"))
             }
         } catch (e: Exception) {
             Result.failure(e)
