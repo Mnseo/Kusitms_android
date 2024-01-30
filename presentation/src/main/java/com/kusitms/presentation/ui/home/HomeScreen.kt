@@ -31,6 +31,8 @@ import com.kusitms.presentation.model.home.HomeViewModel
 import com.kusitms.presentation.navigation.NavRoutes
 import com.kusitms.presentation.ui.ImageVector.icons.KusitmsIcons
 import com.kusitms.presentation.ui.ImageVector.icons.kusitmsicons.Setting
+import com.kusitms.presentation.ui.home.profile.HomeProfile
+import com.kusitms.presentation.ui.home.team.HomeTeam
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -39,7 +41,8 @@ fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
     navController: NavHostController,
     onClickNotice: (NoticeRecentModel) -> Unit,
-    onClickProfile: () -> Unit
+    onClickProfile: () -> Unit,
+    onClickTeam: () -> Unit
 ) {
     val memberInfo by viewModel.memberInfo.collectAsStateWithLifecycle()
 
@@ -106,6 +109,6 @@ fun HomeScreen(
         HomeCurriculum(
             curriculum = curriculum
         )
-        HomeTeam(team)
+        HomeTeam(team, onClickTeam)
     }
 }
