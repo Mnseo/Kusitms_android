@@ -17,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kusitms.domain.model.home.CurriculumRecentModel
 import com.kusitms.presentation.R
@@ -25,7 +26,7 @@ import com.kusitms.presentation.common.ui.theme.KusitmsTypo
 
 @Composable
 fun HomeCurriculum(
-    curriculum: CurriculumRecentModel
+    curriculum: CurriculumRecentModel,
 ) {
     Card(
         modifier = Modifier
@@ -51,11 +52,19 @@ fun HomeCurriculum(
                     color = KusitmsColorPalette.current.Main400,
                 )
                 Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    text = curriculum.curriculumName,
-                    style = KusitmsTypo.current.SubTitle1_Medium,
-                    color = KusitmsColorPalette.current.White,
-                )
+                if (curriculum.curriculumName.isEmpty()) {
+                    Text(
+                        text = stringResource(id = R.string.home_curriculum_none),
+                        style = KusitmsTypo.current.SubTitle1_Semibold,
+                        color = KusitmsColorPalette.current.Grey400
+                    )
+                } else {
+                    Text(
+                        text = curriculum.curriculumName,
+                        style = KusitmsTypo.current.SubTitle1_Semibold,
+                        color = KusitmsColorPalette.current.White,
+                    )
+                }
             }
             Spacer(modifier = Modifier.height(12.dp))
             Card(
@@ -77,11 +86,19 @@ fun HomeCurriculum(
                             contentDescription = stringResource(id = R.string.home_ic_calendar),
                         )
                         Spacer(modifier = Modifier.width(16.dp))
-                        Text(
-                            text = curriculum.time,
-                            style = KusitmsTypo.current.Caption1,
-                            color = KusitmsColorPalette.current.Grey300
-                        )
+                        if (curriculum.time.isEmpty()) {
+                            Text(
+                                text = stringResource(id = R.string.home_curriculum_calendar_none),
+                                style = KusitmsTypo.current.Caption1,
+                                color = KusitmsColorPalette.current.Grey400
+                            )
+                        } else {
+                            Text(
+                                text = curriculum.time,
+                                style = KusitmsTypo.current.Caption1,
+                                color = KusitmsColorPalette.current.Grey300
+                            )
+                        }
                     }
                     Row(modifier = Modifier.padding(bottom = 12.dp)) {
                         Image(
@@ -89,13 +106,21 @@ fun HomeCurriculum(
                             contentDescription = stringResource(id = R.string.home_ic_location),
                         )
                         Spacer(modifier = Modifier.width(16.dp))
-                        Text(
-                            text = curriculum.place,
-                            style = KusitmsTypo.current.Caption1,
-                            color = KusitmsColorPalette.current.Grey300
-                        )
+                        if (curriculum.place.isEmpty()) {
+                            Text(
+                                text = stringResource(id = R.string.home_curriculum_location_none),
+                                style = KusitmsTypo.current.Caption1,
+                                color = KusitmsColorPalette.current.Grey400
+                            )
+                        } else {
+                            Text(
+                                text = curriculum.place,
+                                style = KusitmsTypo.current.Caption1,
+                                color = KusitmsColorPalette.current.Grey300
+                            )
+                        }
                     }
-                    Row {
+                    Row(modifier = Modifier.padding(bottom = 12.dp)) {
                         Image(
                             painter = painterResource(id = R.drawable.ic_wifi),
                             contentDescription = stringResource(id = R.string.home_ic_wifi),
@@ -113,13 +138,21 @@ fun HomeCurriculum(
                                 style = KusitmsTypo.current.Caption1,
                                 color = KusitmsColorPalette.current.Grey300
                             )
-                            Spacer(modifier = Modifier.width(16.dp))
+                        }
+                    }
+                    Row {
+                        Image(
+                            painter = painterResource(id = R.drawable.ic_lock),
+                            contentDescription = stringResource(id = R.string.home_ic_wifi_password),
+                        )
+                        Spacer(modifier = Modifier.width(16.dp))
+                        if (curriculum.wifiPassword.isEmpty()) {
                             Text(
-                                text = stringResource(id = R.string.home_ic_wifi_password),
+                                text = stringResource(id = R.string.home_curriculum_wifi_password_none),
                                 style = KusitmsTypo.current.Caption1,
                                 color = KusitmsColorPalette.current.Grey400
                             )
-                            Spacer(modifier = Modifier.width(16.dp))
+                        } else {
                             Text(
                                 text = curriculum.wifiPassword,
                                 style = KusitmsTypo.current.Caption1,
@@ -131,4 +164,11 @@ fun HomeCurriculum(
             }
         }
     }
+}
+
+
+@Preview
+@Composable
+fun HomeCurriculumPreview() {
+    HomeCurriculum(curriculum = CurriculumRecentModel("", "", "", "", ""))
 }
