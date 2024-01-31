@@ -73,7 +73,7 @@ sealed class NoticeDetailDialogState() {
 
     object AlreadyReport : NoticeDetailDialogState()
 
-    data class CommentDelete(val comment: CommentModel,val isChild : Boolean = false) : NoticeDetailDialogState()
+    data class CommentDelete(val comment: CommentModel,val parentComment : CommentModel? = null) : NoticeDetailDialogState()
 }
 
 sealed class NoticeDetailModalState() {
@@ -142,8 +142,6 @@ fun NoticeDetailScreen(
         viewModel.snackbarEvent.collect {
             onShowSnackbar(
                 when(it){
-                    NoticeDetailSnackbarEvent.ADDED_COMMENT -> "댓글이 추가되었습니다."
-                    NoticeDetailSnackbarEvent.DELETED_COMMENT -> "댓글이 삭제되었습니다."
                     NoticeDetailSnackbarEvent.REPORTED_COMMENT -> "댓글 신고가 완료되었습니다."
                     NoticeDetailSnackbarEvent.NETWORK_ERROR -> "네트워크 에러가 발생하였습니다."
                 }
@@ -218,9 +216,16 @@ fun NoticeDetailScreen(
                         okColor = KusitmsColorPalette.current.Grey200,
                         okText = "삭제하기",
                         onOk = {
-                            viewModel.deleteNoticeComment(
-                                commentDeleteState.comment.commentId
-                            )
+                            if(commentDeleteState.parentComment != null){
+                                viewModel.deleteNoticeChildComment(
+                                    commentDeleteState.comment.commentId,
+                                    commentDeleteState.parentComment.commentId
+                                )
+                            }else {
+                                viewModel.deleteNoticeComment(
+                                    commentDeleteState.comment.commentId,
+                                    )
+                            }
                             openDialogState = null
                         },
                         onCancel = {
@@ -372,7 +377,6 @@ fun NoticeDetailScreen(
                 .weight(1f)
                 .padding(top = 20.dp)
             ,
-            //contentPadding = PaddingValues(top = ),
             state = listState
         ) {
             item {
@@ -449,6 +453,7 @@ fun NoticeDetailScreen(
                 }
                 NoticeComment(
                     comment = comment,
+                    commentCount = comment.commentCount,
                     onClickReport = {
                         openBottomSheet =
                             NoticeDetailModalState.Report(comment, comment.writerId)

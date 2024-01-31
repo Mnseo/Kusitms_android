@@ -120,7 +120,6 @@ class NoticeDetailViewModel @Inject constructor(
                 _snackbarEvent.emit(NoticeDetailSnackbarEvent.NETWORK_ERROR)
             }.collectLatest {
                fetchCommentList()
-                _snackbarEvent.emit(NoticeDetailSnackbarEvent.ADDED_COMMENT)
             }
         }
     }
@@ -137,8 +136,12 @@ class NoticeDetailViewModel @Inject constructor(
             ).catch {
                 _snackbarEvent.emit(NoticeDetailSnackbarEvent.NETWORK_ERROR)
             }.collectLatest {
-                fetchCommentList()
-                _snackbarEvent.emit(NoticeDetailSnackbarEvent.ADDED_COMMENT)
+                _commentList.emit(commentList.value.map {
+                    it.copy(
+                        commentCount = it.commentCount + 1
+                    )
+                })
+                fetchChildCommentList(commentId)
             }
         }
     }
@@ -152,8 +155,27 @@ class NoticeDetailViewModel @Inject constructor(
             ).catch {
                 _snackbarEvent.emit(NoticeDetailSnackbarEvent.NETWORK_ERROR)
             }.collectLatest {
-                fetchCommentList()
-                _snackbarEvent.emit(NoticeDetailSnackbarEvent.DELETED_COMMENT)
+                fetchChildCommentList(commentId)
+            }
+        }
+    }
+
+    fun deleteNoticeChildComment(
+        commentId : Int,
+        parentCommentId : Int
+    ){
+        viewModelScope.launch {
+            deleteCommentUseCase(
+                commentId = commentId
+            ).catch {
+                _snackbarEvent.emit(NoticeDetailSnackbarEvent.NETWORK_ERROR)
+            }.collectLatest {
+                _commentList.emit(commentList.value.map {
+                    it.copy(
+                        commentCount = it.commentCount - 1
+                    )
+                })
+                fetchChildCommentList(parentCommentId)
             }
         }
     }
@@ -189,7 +211,6 @@ class NoticeDetailViewModel @Inject constructor(
                 noticeId
             ).catch {
                 _noticeVote.emit(null)
-                //_snackbarEvent.emit(NoticeDetailSnackbarEvent.NETWORK_ERROR)
             }.collectLatest {
                 _noticeVote.emit(it)
             }
@@ -218,7 +239,7 @@ class NoticeDetailViewModel @Inject constructor(
         private const val NOTICE_ID_SAVED_STATE_KEY = "noticeId"
 
         enum class NoticeDetailSnackbarEvent {
-            ADDED_COMMENT, DELETED_COMMENT, REPORTED_COMMENT, NETWORK_ERROR
+            REPORTED_COMMENT, NETWORK_ERROR
         }
 
         enum class NoticeDetailDialogEvent {
