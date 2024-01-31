@@ -241,7 +241,7 @@ fun MainNavigation() {
                             navController.navigate(NavRoutes.MyProfileDetail.route)
                         },
                         onClickTeam = {
-                            navController.navigate(NavRoutes.HomeTeamDetail.createRoute(it.teamId))
+                            navController.navigate(NavRoutes.HomeTeamDetail.createRoute(it.teamId, it.curriculumName))
                         }
                     )
                 }
@@ -259,8 +259,18 @@ fun MainNavigation() {
                     route = NavRoutes.HomeTeamDetail.route,
                     arguments = NavRoutes.HomeTeamDetail.navArguments
                 ) {
+                    val curriculumName = it.arguments?.getString("curriculumName")
+
                     HomeTeamDetailScreen(
-                        onBack = { navController.navigateUp() }
+                        onBack = { navController.navigateUp() },
+                        curriculumName = curriculumName.toString(),
+                        onProfileClick = {
+                            navController.navigate(
+                                NavRoutes.ProfileDetail.createRoute(
+                                    it.memberId
+                                )
+                            )
+                        }
                     )
                 }
 

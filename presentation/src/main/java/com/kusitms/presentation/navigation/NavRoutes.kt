@@ -43,15 +43,18 @@ sealed class NavRoutes(
     )
 
     object HomeTeamDetail : NavRoutes(
-        "HomeTeamDetail/{teamId}",
+        "HomeTeamDetail/{teamId}/{curriculumName}",
         navArguments = listOf(
             navArgument("teamId"
             ) {
                 type = NavType.IntType
+            },
+            navArgument("curriculumName") {
+                type = NavType.StringType
             }
         )
     ) {
-        fun createRoute(teamId: Int) = "HomeTeamDetail/${teamId}"
+        fun createRoute(teamId: Int, curriculumName: String) = "HomeTeamDetail/${teamId}/${curriculumName}"
     }
 
 

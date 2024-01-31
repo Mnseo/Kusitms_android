@@ -24,6 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.kusitms.domain.model.profile.ProfileModel
 import com.kusitms.presentation.R
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
@@ -37,6 +38,8 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 fun HomeTeamDetailScreen(
     viewModel: HomeTeamViewModel = hiltViewModel(),
     onBack: () -> Unit,
+    curriculumName: String,
+    onProfileClick: (ProfileModel) -> Unit,
 ) {
     val profileList by viewModel.profileList.collectAsStateWithLifecycle()
 
@@ -52,7 +55,7 @@ fun HomeTeamDetailScreen(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "기업 프로젝트",
+                text = curriculumName,
                 style = KusitmsTypo.current.Text_Semibold,
                 color = KusitmsColorPalette.current.Grey100,
             )
@@ -91,7 +94,10 @@ fun HomeTeamDetailScreen(
                 .fillMaxWidth()
                 .padding(horizontal = 8.dp)
         ) {
-            ProfileListScreen(profileList = profileList, onProfileClick = {})
+            ProfileListScreen(profileList = profileList,
+                onProfileClick = { profile ->
+                    onProfileClick(profile)
+                })
         }
     }
 }
@@ -100,6 +106,8 @@ fun HomeTeamDetailScreen(
 @Composable
 fun HomeTeamDeatilScreenPreview() {
     HomeTeamDetailScreen(
-        onBack = {}
+        onBack = {},
+        curriculumName = "",
+        onProfileClick = {}
     )
 }
