@@ -226,7 +226,11 @@
     <string name="home_profile_mine">내 프로필</string>
     <string name="home_notice">최근 공지가 올라오는 곳이에요</string>
     <string name="home_curriculum">다가오는 커리큘럼</string>
+    <string name="home_curriculum_none">아직 커리큘럼이 없어요</string>
+    <string name="home_curriculum_calendar_none">날짜 정보가 없어요</string>
+    <string name="home_curriculum_location_none">장소 정보가 없어요</string>
     <string name="home_curriculum_wifi_none">와이파이 정보가 없어요</string>
+    <string name="home_curriculum_wifi_password_none">와이파이 비밀번호가 없어요</string>
     <string name="home_team">팀 매칭</string>
     <string name="home_team_count">0</string>
     <string name="home_team_none">아직 매칭된 팀이 없어요</string>

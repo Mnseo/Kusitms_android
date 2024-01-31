@@ -25,6 +25,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.kusitms.domain.model.home.NoticeRecentModel
+import com.kusitms.domain.model.home.TeamMatchingModel
 import com.kusitms.presentation.R
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.model.home.HomeViewModel
@@ -42,7 +43,7 @@ fun HomeScreen(
     navController: NavHostController,
     onClickNotice: (NoticeRecentModel) -> Unit,
     onClickProfile: () -> Unit,
-    onClickTeam: () -> Unit
+    onClickTeam: (TeamMatchingModel) -> Unit
 ) {
     val memberInfo by viewModel.memberInfo.collectAsStateWithLifecycle()
 

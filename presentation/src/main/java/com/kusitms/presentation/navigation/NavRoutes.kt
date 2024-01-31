@@ -3,8 +3,6 @@ package com.kusitms.presentation.navigation
 import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
-import com.kusitms.domain.model.home.MemberInfoDetailModel
-import com.kusitms.domain.model.login.LoginMemberProfile
 
 
 //Main Route
@@ -42,14 +40,23 @@ sealed class NavRoutes(
     object HomeScreen : NavRoutes("Home")
     object MyProfileDetail : NavRoutes(
         route = "ProfileDetail",
+    )
+
+    object HomeTeamDetail : NavRoutes(
+        "HomeTeamDetail/{teamId}/{curriculumName}",
+        navArguments = listOf(
+            navArgument("teamId"
+            ) {
+                type = NavType.IntType
+            },
+            navArgument("curriculumName") {
+                type = NavType.StringType
+            }
+        )
     ) {
-        fun createRoute(
-            info: LoginMemberProfile,
-            detailInfo: MemberInfoDetailModel
-        ) = "ProfileDetail"
+        fun createRoute(teamId: Int, curriculumName: String) = "HomeTeamDetail/${teamId}/${curriculumName}"
     }
 
-    object HomeTeamDetailScreen : NavRoutes("HomeTeamDetail")
 
     object SettingMember : NavRoutes("SettingMember")
     object SettingNonMember : NavRoutes("SettingNonMember")

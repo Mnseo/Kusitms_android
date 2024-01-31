@@ -14,6 +14,7 @@ import com.kusitms.data.remote.entity.response.home.HomeProfilePayload
 import com.kusitms.data.remote.entity.response.home.MemberInfoDetailPayload
 import com.kusitms.data.remote.entity.response.home.NoticeRecentPayload
 import com.kusitms.data.remote.entity.response.home.TeamMatchingPayload
+import com.kusitms.data.remote.entity.response.home.TeamProfilePayload
 import com.kusitms.data.remote.entity.response.notice.CommentPayload
 import com.kusitms.data.remote.entity.response.notice.CurriculumPayload
 import com.kusitms.data.remote.entity.response.notice.FindPwCodeVerifyResponse
@@ -65,6 +66,11 @@ interface KusitmsApi {
     @GET("v1/team/match")
     suspend fun getTeamMatch(): BaseResponse<List<TeamMatchingPayload>>
 
+    // 매칭된 팀 정보 조회
+    @GET("v1/member/info/list/{teamId}")
+    suspend fun getMemberInfoList(
+        @Path("teamId") teamId: Int,
+        ): BaseResponse<List<TeamProfilePayload>>
 
     // 공지사항 -> 차후에 분리하는 것도 좋을 듯 싶습니다.
     @GET("v2/notice")
