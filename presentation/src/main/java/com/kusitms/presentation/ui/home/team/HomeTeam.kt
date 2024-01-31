@@ -31,7 +31,7 @@ import com.kusitms.presentation.common.ui.theme.KusitmsTypo
 @Composable
 fun HomeTeam(
     team: List<TeamMatchingModel>,
-    onClickTeam: () -> Unit,
+    onClickTeam: (TeamMatchingModel) -> Unit,
 ) {
     Card(
         modifier = Modifier
@@ -102,13 +102,13 @@ fun HomeTeam(
 @Composable
 fun TeamMatchingItem(
     teamItem: TeamMatchingModel,
-    onClickTeam: () -> Unit,
+    onClickTeam: (TeamMatchingModel) -> Unit,
 ) {
     Card(
         modifier = Modifier
             .padding(end = 12.dp, top = 12.dp)
             .clickable {
-                onClickTeam()
+                onClickTeam(teamItem)
             },
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(

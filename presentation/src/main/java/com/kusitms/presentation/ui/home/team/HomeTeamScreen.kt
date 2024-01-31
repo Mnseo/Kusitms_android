@@ -64,7 +64,7 @@ fun HomeTeamDetailScreen(
             ) {
                 Box(modifier = Modifier.padding(horizontal = 5.dp)) {
                     Text(
-                        text = "9",
+                        text = profileList.size.toString(),
                         style = KusitmsTypo.current.Caption1,
                         color = KusitmsColorPalette.current.Main400,
                     )

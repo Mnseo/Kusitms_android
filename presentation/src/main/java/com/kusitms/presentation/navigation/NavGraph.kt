@@ -241,7 +241,7 @@ fun MainNavigation() {
                             navController.navigate(NavRoutes.MyProfileDetail.route)
                         },
                         onClickTeam = {
-                            navController.navigate(NavRoutes.HomeTeamDetailScreen.route)
+                            navController.navigate(NavRoutes.HomeTeamDetail.createRoute(it.teamId))
                         }
                     )
                 }
@@ -253,14 +253,16 @@ fun MainNavigation() {
                     MyProfileScreen(
                         onBack = { navController.navigateUp() }
                     )
-
                 }
 
-                // HomeTeamDetailScreen
-                kusitmsComposableWithAnimation(NavRoutes.HomeTeamDetailScreen.route) {
-                    HomeTeamDetailScreen(onBack = { navController.navigateUp() })
+                composable(
+                    route = NavRoutes.HomeTeamDetail.route,
+                    arguments = NavRoutes.HomeTeamDetail.navArguments
+                ) {
+                    HomeTeamDetailScreen(
+                        onBack = { navController.navigateUp() }
+                    )
                 }
-
 
                 // NoticeScreen
                 kusitmsComposableWithAnimation(NavRoutes.Notice.route) {
