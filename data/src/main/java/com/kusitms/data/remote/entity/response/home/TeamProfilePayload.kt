@@ -1,8 +1,8 @@
 package com.kusitms.data.remote.entity.response.home
 
-import com.kusitms.domain.model.home.TeamProfileModel
 import com.kusitms.domain.model.profile.InterestModel
 import com.kusitms.domain.model.profile.LinkModel
+import com.kusitms.domain.model.profile.ProfileModel
 
 data class TeamProfilePayload(
     val memberId: Int? = 0,
@@ -19,7 +19,7 @@ data class TeamProfilePayload(
 )
 
 fun TeamProfilePayload.toModel() =
-    TeamProfileModel(
+    ProfileModel(
         memberId = memberId ?: 0,
         name = name ?: "",
         part = part ?: "",

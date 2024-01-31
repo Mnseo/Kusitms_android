@@ -5,7 +5,7 @@ import com.kusitms.domain.model.home.HomeProfileModel
 import com.kusitms.domain.model.home.MemberInfoDetailModel
 import com.kusitms.domain.model.home.NoticeRecentModel
 import com.kusitms.domain.model.home.TeamMatchingModel
-import com.kusitms.domain.model.home.TeamProfileModel
+import com.kusitms.domain.model.profile.ProfileModel
 
 interface HomeRepository {
     suspend fun getMemberInfoHome(): Result<HomeProfileModel>
@@ -15,5 +15,5 @@ interface HomeRepository {
     suspend fun getMemberInfoDetail(): Result<MemberInfoDetailModel>
     suspend fun getMemberInfoList(
         teamId: Int
-    ): Result<List<TeamProfileModel>>
+    ): Result<List<ProfileModel>>
 }

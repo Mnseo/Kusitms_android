@@ -1,6 +1,6 @@
 package com.kusitms.domain.usecase.home
 
-import com.kusitms.domain.model.home.TeamProfileModel
+import com.kusitms.domain.model.profile.ProfileModel
 import com.kusitms.domain.repository.HomeRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -11,11 +11,11 @@ class GetTeamProfileListUseCase @Inject constructor(
 ) {
     operator fun invoke(
         teamId: Int,
-    ): Flow<List<TeamProfileModel>> = flow {
+    ): Flow<List<ProfileModel>> = flow {
         homeRepository.getMemberInfoList(
             teamId = teamId
         ).onSuccess {
-                emit(it)
+                return@flow emit(it)
             }.onFailure {
                 throw it
             }

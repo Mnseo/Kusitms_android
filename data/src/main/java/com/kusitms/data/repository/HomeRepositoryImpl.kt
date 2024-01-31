@@ -7,7 +7,7 @@ import com.kusitms.domain.model.home.HomeProfileModel
 import com.kusitms.domain.model.home.MemberInfoDetailModel
 import com.kusitms.domain.model.home.NoticeRecentModel
 import com.kusitms.domain.model.home.TeamMatchingModel
-import com.kusitms.domain.model.home.TeamProfileModel
+import com.kusitms.domain.model.profile.ProfileModel
 import com.kusitms.domain.repository.HomeRepository
 import javax.inject.Inject
 
@@ -86,7 +86,7 @@ class HomeRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getMemberInfoList(teamId: Int): Result<List<TeamProfileModel>> {
+    override suspend fun getMemberInfoList(teamId: Int): Result<List<ProfileModel>> {
         return try {
             val response = kusitmsApi.getMemberInfoList(teamId)
 
