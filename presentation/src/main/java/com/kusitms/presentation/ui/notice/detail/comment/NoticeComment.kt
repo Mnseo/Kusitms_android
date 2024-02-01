@@ -52,6 +52,7 @@ import com.kusitms.presentation.ui.ImageVector.icons.kusitmsicons.UserBackground
 @Composable
 fun NoticeComment(
     comment: CommentModel,
+    commentCount : Int = 0,
     isLast : Boolean = false,
     onClickReport : () -> Unit = {},
     onClickDelete : () -> Unit = {},
@@ -157,7 +158,7 @@ fun NoticeComment(
                     )
                     KusitmsMarginHorizontalSpacer(size = 4)
                     Text(
-                        text ="${comment.commentCount}",
+                        text ="${commentCount}",
                         style = KusitmsTypo.current.Caption1,
                         color =  KusitmsColorPalette.current.GreyBlack7
                     )
