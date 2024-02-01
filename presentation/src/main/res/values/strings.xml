@@ -163,6 +163,23 @@
     <string name="logout_dialog_title">로그아웃</string>
     <string name="logout_dialog_content">로그아웃을 진행할까요?</string>
 
+    <string name="attend_topbar">출석</string>
+    <string name="attend_box1_title">다가오는 커리큘럼</string>
+    <string name="attend_box1_subTitle">%s</string>
+    <string name="attend_btn_attend">출석하기</string>
+
+    <string name="attend_box2_title">출석현황</string>
+    <string name="attend_btn2_attend">출석변경 요청하기</string>
+
+    <string name="attend_box3_title">벌점 %d점</string>
+    <string name="attend_box3_subTitle_ok">수료 가능한 점수예요</string>
+    <string name="attend_box3_subTitle_fail">벌점 6점부터 수료가 어려워요</string>
+
+    <string name="attend_box4_attend">출석</string>
+    <string name="attend_box4_non_attend">결석</string>
+    <string name="attend_box4_non_late">지각</string>
+
+
     <string name="notice_report_content_commercial">타 서비스, 앱, 사이트 등 게시판 외부로 회원을\n유도하거나 공동구매, 할인 쿠폰, 홍보성 이벤트 등\n허가되지 않은 광고/홍보 게시물</string>
     <string name="notice_report_content_abuse">비아냥, 비속어 등 예의범절에 벗어나거나,\n특정인이나 단체, 지역을 비방하는 등 논란 및 분란을\n일으킬 수 있는 게시물</string>
     <string name="notice_report_content_fraud">게시물 무단 유출, 타인의 개인정보 유출, 관리자 사칭 등 타인의 권리를 침해하거나 관련법에 위배되는 게시물</string>
