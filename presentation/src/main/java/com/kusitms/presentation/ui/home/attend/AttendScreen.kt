@@ -1,5 +1,6 @@
 package com.kusitms.presentation.ui.home.attend
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -112,16 +113,74 @@ fun AttendRecordColumn() {
             }
             KusitmsMarginVerticalSpacer(size = 24)
             Text(text = stringResource(R.string.attend_box3_title), style = KusitmsTypo.current.Header2, color = KusitmsColorPalette.current.Grey100)
-            KusitmsMarginVerticalSpacer(size = 6)
-            Row(modifier = Modifier
-                .fillMaxWidth()
-                .wrapContentHeight(), horizontalArrangement = Arrangement.Start, verticalAlignment = Alignment.CenterVertically) {
-                Text(text = stringResource(R.string.attend_box3_subTitle_ok), style = KusitmsTypo.current.Text_Semibold, color = KusitmsColorPalette.current.Sub1)
-                KusitmsMarginHorizontalSpacer(size = 6)
-                Icon(painter = painterResource(id = R.drawable.ic_thumb), contentDescription = null, tint = Color.Unspecified)
-            }
+            KusitmsMarginVerticalSpacer(size = 14)
+            AttendCanComplete()
             KusitmsMarginVerticalSpacer(size = 24)
+            AttendBoxRow()
 
+        }
+    }
+}
+
+@Composable
+fun AttendCanComplete() {
+    Row(modifier = Modifier
+        .fillMaxWidth()
+        .wrapContentHeight(), horizontalArrangement = Arrangement.Start, verticalAlignment = Alignment.CenterVertically) {
+        Text(text = stringResource(R.string.attend_box3_subTitle_ok), style = KusitmsTypo.current.Text_Semibold, color = KusitmsColorPalette.current.Sub1)
+        KusitmsMarginHorizontalSpacer(size = 6)
+        Icon(painter = painterResource(id = R.drawable.ic_thumb), contentDescription = null, tint = Color.Unspecified)
+    }
+}
+
+@Composable
+fun AttendNotComplete() {
+    Text(text = stringResource(R.string.attend_box3_subTitle_fail), style = KusitmsTypo.current.Text_Semibold, color = KusitmsColorPalette.current.Sub2)
+}
+
+@Composable
+fun AttendBoxRow() {
+    Row(modifier = Modifier
+        .fillMaxWidth()
+        .height(74.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically) {
+
+        AttendBoxItem(title = R.string.attend_box4_attend, Modifier.weight(1f))
+        Spacer(Modifier.width(12.dp))
+
+        AttendBoxItem(title = R.string.attend_box4_non_attend, Modifier.weight(1f))
+        Spacer(Modifier.width(12.dp))
+
+        AttendBoxItem(title = R.string.attend_box4_non_late, Modifier.weight(1f))
+    }
+}
+
+@Composable
+fun AttendBoxItem(
+    @StringRes title: Int,
+    modifier: Modifier = Modifier
+) {
+    Box(modifier = modifier
+        .height(74.dp)
+        .background(
+            color = KusitmsColorPalette.current.Grey600,
+            shape = RoundedCornerShape(12.dp)
+        )
+    ){
+        Column(modifier = Modifier
+            .fillMaxSize()
+            .padding(vertical = 10.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.SpaceBetween) {
+            Text(text = stringResource(id = title), // title을 파라미터로 전달
+                style = KusitmsTypo.current.Caption1,
+                color = KusitmsColorPalette.current.Grey300,
+            )
+            Text(text ="0회",
+                style = KusitmsTypo.current.SubTitle1_Semibold,
+                color = KusitmsColorPalette.current.Grey100,
+            )
         }
     }
 }
