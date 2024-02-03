@@ -14,11 +14,6 @@ import com.kusitms.presentation.model.home.attend.AttendViewModel
 fun CurriItem(
     status: AttendViewModel.Status
 ) {
-    val statusColor = when(status) {
-        AttendViewModel.Status.PRESENT -> KusitmsColorPalette.current.Sub1
-        AttendViewModel.Status.ABSENT, AttendViewModel.Status.LATE -> KusitmsColorPalette.current.Sub2
-        else -> ""
-    }
     Row(modifier = Modifier
         .fillMaxWidth()
         .height(78.dp),
@@ -36,6 +31,12 @@ fun CurriTitleRow(
     date: String,
     status: AttendViewModel.Status
 ) {
+    val statusColor = when(status) {
+        AttendViewModel.Status.PRESENT -> KusitmsColorPalette.current.Sub1
+        AttendViewModel.Status.ABSENT, AttendViewModel.Status.LATE -> KusitmsColorPalette.current.Sub2
+        else -> ""
+    }
+
     Row(
         modifier = Modifier
             .wrapContentWidth()
@@ -44,7 +45,9 @@ fun CurriTitleRow(
         verticalAlignment = Alignment.CenterVertically
     ) {
         status.toDrawable()
-        Column() {
+        Column(
+            modifier = Modifier.
+        ) {
 
         }
     }
