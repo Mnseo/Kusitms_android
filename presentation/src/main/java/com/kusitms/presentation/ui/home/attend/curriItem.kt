@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.modifier.modifierLocalMapOf
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kusitms.domain.model.home.AttendCurrentModel
 import com.kusitms.presentation.common.ui.KusitmsMarginHorizontalSpacer
@@ -25,6 +26,7 @@ fun CurriItem(
 ) {
     Row(modifier = Modifier
         .fillMaxWidth()
+        .background(color = KusitmsColorPalette.current.Grey600)
         .height(78.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
@@ -45,8 +47,8 @@ fun CurriBadge(
         else -> KusitmsColorPalette.current.Grey600
     }
     Column(
-        modifier =  Modifier
-            .width(52.dp)
+        modifier = Modifier
+            .width(92.dp)
             .fillMaxHeight(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(2.dp, Alignment.CenterVertically)
@@ -62,7 +64,9 @@ fun CurriBadge(
             Text(text = model.status,
                 style = KusitmsTypo.current.Text_Semibold,
                 color = statusColor,
-                modifier = Modifier.align(Alignment.Center)
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .padding(vertical = 4.dp)
             )
         }
         Text(text = model.time,
@@ -106,3 +110,13 @@ fun CurriTitleRow(
         }
     }
 }
+
+@Preview
+@Composable
+fun priviewModel() {
+    CurriItem(model = dummyData)
+}
+
+val dummyData = AttendCurrentModel(
+    57, "파트 크로스 스터디", "1월 24일", "오후 8:40", "출석"
+)

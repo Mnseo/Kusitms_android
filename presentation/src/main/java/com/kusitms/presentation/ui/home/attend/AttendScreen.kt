@@ -51,6 +51,8 @@ fun AttendScreen() {
         AttendPreColumn()
         KusitmsMarginVerticalSpacer(size = 24)
         AttendRecordColumn()
+        KusitmsMarginVerticalSpacer(size = 32)
+        AttendNotAttend()
     }
     ScrollBtn(scrollState = scrollState)
 }
@@ -148,6 +150,16 @@ fun AttendCanComplete() {
 @Composable
 fun AttendNotComplete() {
     Text(text = stringResource(R.string.attend_box3_subTitle_fail), style = KusitmsTypo.current.Text_Semibold, color = KusitmsColorPalette.current.Sub2)
+}
+
+@Composable
+fun AttendNotAttend() {
+    KusitmsMarginVerticalSpacer(size = 88)
+    Box(modifier = Modifier
+        .fillMaxWidth()
+        .wrapContentHeight()) {
+        Text(text = stringResource(R.string.attend_not_attend), style = KusitmsTypo.current.Caption1, color = KusitmsColorPalette.current.Grey400, modifier =  Modifier.align(Alignment.Center))
+    }
 }
 
 @Composable

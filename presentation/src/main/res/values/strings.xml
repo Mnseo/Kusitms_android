@@ -175,6 +175,8 @@
     <string name="attend_box3_subTitle_ok">수료 가능한 점수예요</string>
     <string name="attend_box3_subTitle_fail">벌점 6점부터 수료가 어려워요</string>
 
+    <string name="attend_not_attend">아직 출석현황이 없어요</string>
+
     <string name="attend_box4_attend">출석</string>
     <string name="attend_box4_non_attend">결석</string>
     <string name="attend_box4_non_late">지각</string>

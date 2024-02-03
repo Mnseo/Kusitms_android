@@ -12,6 +12,8 @@ import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.*
 import javax.inject.Inject
 
 
@@ -39,12 +41,26 @@ class AttendViewModel @Inject constructor(
         _attendScore.value = attendModel
     }
 
+    fun formatDate(dateString: String): String {
+        val originalFormat = SimpleDateFormat("MM월 dd일", Locale.KOREA)
+        val targetFormat = SimpleDateFormat("M월 d일", Locale.KOREA)
+        return try {
+            val parsedDate = originalFormat.parse(dateString)
+            parsedDate?.let { targetFormat.format(it) } ?: dateString
+        } catch (e: Exception) {
+            // 파싱에 실패시, 원본 날짜를 그대로 사용
+            dateString
+        }
+    }
+
     init {
         viewModelScope.launch {
             getAttendCurrentListUseCase().catch {
 
             }.collect() {
-                _attendCurrentList.value = it
+                _attendCurrentList.value = it.map { attendModel ->
+                    attendModel.copy(date = formatDate(attendModel.date))
+                }
             }
         }
     }
@@ -69,6 +85,4 @@ class AttendViewModel @Inject constructor(
             }
         }
     }
-
-
 }
