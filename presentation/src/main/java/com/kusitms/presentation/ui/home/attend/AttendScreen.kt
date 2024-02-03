@@ -28,15 +28,17 @@ import com.kusitms.presentation.common.ui.KusitmsMarginVerticalSpacer
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.R
 import com.kusitms.presentation.common.ui.KusitmsMarginHorizontalSpacer
+import com.kusitms.presentation.common.ui.KusitsmTopBarTextWithIcon
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
+import com.kusitms.presentation.model.home.attend.AttendViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Preview
 @Composable
-fun AttendScreen() {
-
+fun AttendScreen(
+) {
     val scrollState = rememberScrollState()
     Column(
         modifier = Modifier
@@ -47,6 +49,7 @@ fun AttendScreen() {
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.Top
     ) {
+        AttendTopBar()
         KusitmsMarginVerticalSpacer(size = 8)
         AttendPreColumn()
         KusitmsMarginVerticalSpacer(size = 24)
@@ -55,6 +58,23 @@ fun AttendScreen() {
         AttendNotAttend()
     }
     ScrollBtn(scrollState = scrollState)
+}
+
+@Composable
+fun AttendTopBar() {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(48.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.Start
+    ) {
+        Text(
+            text = "출석",
+            style = KusitmsTypo.current.SubTitle1_Semibold,
+            color = KusitmsColorPalette.current.Grey100
+        )
+    }
 }
 
 @Composable
@@ -79,16 +99,7 @@ fun AttendPreColumn() {
                 Text(text = stringResource(R.string.attend_box1_title), style = KusitmsTypo.current.Caption1, color = KusitmsColorPalette.current.Main500)
                 Text(text = stringResource(R.string.attend_box1_subTitle), style = KusitmsTypo.current.SubTitle1_Semibold, color = KusitmsColorPalette.current.White)
             }
-            Button(
-                modifier = Modifier
-                    .wrapContentWidth()
-                    .height(64.dp) ,
-                colors = ButtonDefaults.buttonColors(containerColor = KusitmsColorPalette.current.Main600) ,
-                shape = RoundedCornerShape(size = 12.dp),
-                onClick = { /*TODO*/ }
-            ) {
-                Text(text = stringResource(R.string.attend_btn_attend), style = KusitmsTypo.current.Text_Semibold, color = KusitmsColorPalette.current.White, maxLines = 1)
-            }
+            AttendBtnOff()
         }
     }
 }
@@ -212,7 +223,7 @@ fun AttendBoxItem(
             .padding(vertical = 10.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceBetween) {
-            Text(text = stringResource(id = title), // title을 파라미터로 전달
+            Text(text = stringResource(id = title),
                 style = KusitmsTypo.current.Caption1,
                 color = KusitmsColorPalette.current.Grey300,
             )

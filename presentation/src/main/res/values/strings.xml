@@ -168,6 +168,10 @@
     <string name="attend_box1_subTitle">%s</string>
     <string name="attend_btn_attend">출석하기</string>
 
+    <string name="attend_btn_attend_success">출석완료</string>
+    <string name="attend_btn_attend_failure">출석실패</string>
+    <string name="attend_btn_attend_wait">출석대기</string>
+
     <string name="attend_box2_title">출석현황</string>
     <string name="attend_btn2_attend">출석변경 요청하기</string>
 
@@ -180,6 +184,7 @@
     <string name="attend_box4_attend">출석</string>
     <string name="attend_box4_non_attend">결석</string>
     <string name="attend_box4_non_late">지각</string>
+
 
 
     <string name="notice_report_content_commercial">타 서비스, 앱, 사이트 등 게시판 외부로 회원을\n유도하거나 공동구매, 할인 쿠폰, 홍보성 이벤트 등\n허가되지 않은 광고/홍보 게시물</string>
