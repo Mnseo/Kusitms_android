@@ -1,10 +1,6 @@
 package com.kusitms.domain.repository
 
-import com.kusitms.domain.model.home.CurriculumRecentModel
-import com.kusitms.domain.model.home.HomeProfileModel
-import com.kusitms.domain.model.home.MemberInfoDetailModel
-import com.kusitms.domain.model.home.NoticeRecentModel
-import com.kusitms.domain.model.home.TeamMatchingModel
+import com.kusitms.domain.model.home.*
 import com.kusitms.domain.model.profile.ProfileModel
 
 interface HomeRepository {
@@ -16,4 +12,5 @@ interface HomeRepository {
     suspend fun getMemberInfoList(
         teamId: Int
     ): Result<List<ProfileModel>>
+    suspend fun getAttendCurrentList(): Result<List<AttendCurrentModel>>
 }

@@ -9,12 +9,7 @@ import com.kusitms.data.remote.entity.response.FindPwCheckEmailResponse
 import com.kusitms.data.remote.entity.response.LoginMemberProfileResponse
 import com.kusitms.data.remote.entity.response.LoginResponse
 import com.kusitms.data.remote.entity.response.SignInRequestResponse
-import com.kusitms.data.remote.entity.response.home.CurriculumRecentPayload
-import com.kusitms.data.remote.entity.response.home.HomeProfilePayload
-import com.kusitms.data.remote.entity.response.home.MemberInfoDetailPayload
-import com.kusitms.data.remote.entity.response.home.NoticeRecentPayload
-import com.kusitms.data.remote.entity.response.home.TeamMatchingPayload
-import com.kusitms.data.remote.entity.response.home.TeamProfilePayload
+import com.kusitms.data.remote.entity.response.home.*
 import com.kusitms.data.remote.entity.response.notice.CommentPayload
 import com.kusitms.data.remote.entity.response.notice.CurriculumPayload
 import com.kusitms.data.remote.entity.response.notice.FindPwCodeVerifyResponse
@@ -206,4 +201,15 @@ interface KusitmsApi {
     suspend fun getProfileDetail(
         @Path("memberId") memberId: Int,
     ): BaseResponse<ProfilePayload>
+
+
+    //이번주 커리큘럼 조회
+    @GET("v1/attend/info")
+    suspend fun getAttendInfo(): BaseResponse<AttendInfoPayload>
+
+
+    //커리큘럼 출석 조회
+    @GET("v1/attend/lists")
+    suspend fun getAttendCurrentList(): BaseResponse<List<AttendCurrentPayLoad>>
+
 }

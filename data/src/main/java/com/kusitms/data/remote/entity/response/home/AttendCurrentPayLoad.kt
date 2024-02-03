@@ -1,8 +1,8 @@
 package com.kusitms.data.remote.entity.response.home
 
-import com.kusitms.domain.model.home.AttendModel
+import com.kusitms.domain.model.home.AttendCurrentModel
 
-data class AttendPayLoad(
+data class AttendCurrentPayLoad(
     val attendId: Int,
     val curriculum: String,
     val date: String,
@@ -10,8 +10,8 @@ data class AttendPayLoad(
     val status:String
 )
 
-fun AttendPayLoad.toModel() =
-    AttendModel(
+fun AttendCurrentPayLoad.toModel() =
+    AttendCurrentModel(
         attendId = attendId ?: 0,
         curriculum = curriculum ?: "",
         date = date ?: "",

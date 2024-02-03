@@ -1,10 +1,13 @@
 package com.kusitms.presentation.model.home.attend
 
+import com.kusitms.domain.model.home.AttendCurrentModel
+
 data class AttendUiState(
     val curriculum:String,
     val date: String,
     val time: String,
-    val status: String
+    val status: String,
+    val attendList: List<AttendCurrentModel> = emptyList()
 )
 
 

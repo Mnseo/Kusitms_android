@@ -46,7 +46,6 @@ fun CurriTitleRow(
     ) {
         status.toDrawable()
         Column(
-            modifier = Modifier.
         ) {
 
         }

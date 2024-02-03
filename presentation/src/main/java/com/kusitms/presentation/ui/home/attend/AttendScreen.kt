@@ -1,14 +1,21 @@
 package com.kusitms.presentation.ui.home.attend
 
 import androidx.annotation.StringRes
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,13 +29,19 @@ import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.R
 import com.kusitms.presentation.common.ui.KusitmsMarginHorizontalSpacer
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @Preview
 @Composable
 fun AttendScreen() {
+
+    val scrollState = rememberScrollState()
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .verticalScroll(scrollState)
             .background(color = KusitmsColorPalette.current.Grey900)
             .padding(horizontal = 16.dp),
         horizontalAlignment = Alignment.Start,
@@ -38,8 +51,8 @@ fun AttendScreen() {
         AttendPreColumn()
         KusitmsMarginVerticalSpacer(size = 24)
         AttendRecordColumn()
-
     }
+    ScrollBtn(scrollState = scrollState)
 }
 
 @Composable
@@ -117,7 +130,6 @@ fun AttendRecordColumn() {
             AttendCanComplete()
             KusitmsMarginVerticalSpacer(size = 24)
             AttendBoxRow()
-
         }
     }
 }
@@ -136,6 +148,21 @@ fun AttendCanComplete() {
 @Composable
 fun AttendNotComplete() {
     Text(text = stringResource(R.string.attend_box3_subTitle_fail), style = KusitmsTypo.current.Text_Semibold, color = KusitmsColorPalette.current.Sub2)
+}
+
+@Composable
+fun ScrollBtn(scrollState: ScrollState) {
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomEnd) {
+        FloatingActionButton(
+            modifier = Modifier.padding(16.dp),
+            onClick = {
+                CoroutineScope(Dispatchers.Main).launch {
+                    scrollState.animateScrollTo(0)
+                }
+            },
+            backgroundColor = Color.Transparent
+        ) { Icon(painter = painterResource(id = R.drawable.ic_up_arrow_fill), contentDescription = "Go to top", tint = Color.Unspecified) }
+    }
 }
 
 @Composable
