@@ -177,7 +177,7 @@
 
     <!-- Profile -->
     <string name="profile_topbar">프로필</string>
-    <string name="profile_part_toggle">파트 선택</string>
+    <string name="profile_part_toggle">전체</string>
     <string name="profile_part_plan">기획팀</string>
     <string name="profile_part_dev">개발팀</string>
     <string name="profile_part_design">디자인팀</string>

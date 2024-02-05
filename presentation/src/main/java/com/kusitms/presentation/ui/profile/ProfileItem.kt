@@ -28,7 +28,7 @@ import com.kusitms.presentation.common.ui.theme.KusitmsTypo
 fun ProfileItem(
     profile: ProfileModel,
     modifier: Modifier = Modifier,
-    onClick: (ProfileModel) -> Unit
+    onClick: (ProfileModel) -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -81,7 +81,8 @@ fun ProfileItem(
         Text(
             text = profile.description,
             style = KusitmsTypo.current.Caption1,
-            color = KusitmsColorPalette.current.Grey400
+            color = KusitmsColorPalette.current.Grey400,
+            maxLines = 2
         )
     }
 }
