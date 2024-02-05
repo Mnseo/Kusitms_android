@@ -59,6 +59,8 @@ sealed class NavRoutes(
 
     object AttendanceScreen: NavRoutes("Attendance")
 
+    object CameraPreview: NavRoutes("CameraPreview")
+
 
     object SettingMember : NavRoutes("SettingMember")
     object SettingNonMember : NavRoutes("SettingNonMember")

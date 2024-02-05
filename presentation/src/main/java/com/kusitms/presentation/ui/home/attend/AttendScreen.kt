@@ -19,6 +19,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role.Companion.Image
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.kusitms.presentation.common.ui.KusitmsMarginVerticalSpacer
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.R
@@ -30,9 +31,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-@Preview
 @Composable
 fun AttendScreen(
+    viewModel: AttendViewModel,
+    navController: NavHostController
 ) {
     val scrollState = rememberScrollState()
     Box(
@@ -51,12 +53,14 @@ fun AttendScreen(
         ) {
             AttendTopBar()
             KusitmsMarginVerticalSpacer(size = 8)
-            AttendPreColumn()
+            AttendPreColumn(navController)
             KusitmsMarginVerticalSpacer(size = 24)
             AttendRecordColumn()
             KusitmsMarginVerticalSpacer(size = 32)
             AttendNotAttend()
-            Spacer(modifier = Modifier.weight(1f).background(color = KusitmsColorPalette.current.Grey800))
+            Spacer(modifier = Modifier
+                .weight(1f)
+                .background(color = KusitmsColorPalette.current.Grey800))
         }
     }
     ScrollBtn(scrollState = scrollState)
@@ -81,7 +85,7 @@ fun AttendTopBar() {
 }
 
 @Composable
-fun AttendPreColumn() {
+fun AttendPreColumn(navController: NavHostController) {
     Box(modifier = Modifier
         .fillMaxWidth()
         .padding(horizontal = 20.dp)
@@ -105,7 +109,7 @@ fun AttendPreColumn() {
                 KusitmsMarginVerticalSpacer(size = 4)
                 Text(text = stringResource(R.string.attend_box1_subTitle), style = KusitmsTypo.current.SubTitle1_Semibold, color = KusitmsColorPalette.current.White)
             }
-            AttendBtnOff()
+            AttendBtnOn(navController)
         }
     }
 }

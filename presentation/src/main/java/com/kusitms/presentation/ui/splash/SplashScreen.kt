@@ -34,7 +34,6 @@ fun SplashScreen(viewModel: SplashViewModel, navController: NavController) {
 
     LaunchedEffect(tokenStatus) {
         viewModel.verifyToken()
-        Log.d("tokenStatus", tokenStatus.toString())
         when (tokenStatus) {
             TokenStatus.VALID -> {
                 delay(2000)

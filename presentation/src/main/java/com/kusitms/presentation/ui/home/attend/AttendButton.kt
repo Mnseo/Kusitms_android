@@ -14,19 +14,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.kusitms.presentation.R
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
+import com.kusitms.presentation.navigation.NavRoutes
 
 @Composable
-fun AttendBtnOn() {
+fun AttendBtnOn(navController: NavHostController) {
     Button(
         modifier = Modifier
             .wrapContentWidth()
             .height(64.dp) ,
         colors = ButtonDefaults.buttonColors(containerColor = KusitmsColorPalette.current.Main600) ,
         shape = RoundedCornerShape(size = 12.dp),
-        onClick = { /*TODO*/ }
+        onClick = { navController.navigate(NavRoutes.CameraPreview.route) }
     ) {
         Text(text = stringResource(R.string.attend_btn_attend), style = KusitmsTypo.current.Text_Semibold, color = KusitmsColorPalette.current.White, maxLines = 1)
     }

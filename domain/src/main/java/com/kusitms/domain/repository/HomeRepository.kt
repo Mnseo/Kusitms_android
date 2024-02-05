@@ -13,4 +13,5 @@ interface HomeRepository {
         teamId: Int
     ): Result<List<ProfileModel>>
     suspend fun getAttendCurrentList(): Result<List<AttendCurrentModel>>
+    suspend fun getAttendInfo(): Result<AttendInfoModel>
 }
