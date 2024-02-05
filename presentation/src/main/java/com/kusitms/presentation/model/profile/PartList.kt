@@ -6,7 +6,8 @@ data class PartList(
 )
 
 val categories = listOf(
-    PartList(1, "기획팀"),
-    PartList(2, "디자인팀"),
-    PartList(3, "개발팀"),
+    PartList(1, "전체"),
+    PartList(2, "기획팀"),
+    PartList(3, "디자인팀"),
+    PartList(4, "개발팀"),
 )
