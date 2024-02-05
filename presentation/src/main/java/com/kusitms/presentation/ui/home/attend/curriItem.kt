@@ -15,6 +15,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kusitms.domain.model.home.AttendCurrentModel
 import com.kusitms.presentation.common.ui.KusitmsMarginHorizontalSpacer
+import com.kusitms.presentation.common.ui.KusitmsMarginVerticalSpacer
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
 import com.kusitms.presentation.model.home.attend.AttendViewModel
@@ -34,6 +35,7 @@ fun CurriItem(
         CurriTitleRow(model = model)
         CurriBadge(model = model)
     }
+    KusitmsMarginVerticalSpacer(size = 24)
 }
 
 @Composable
