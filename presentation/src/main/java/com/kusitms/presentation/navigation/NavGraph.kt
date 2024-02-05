@@ -43,6 +43,7 @@ import com.kusitms.presentation.model.signIn.SignInRequestViewModel
 import com.kusitms.presentation.model.signIn.SignInViewModel
 import com.kusitms.presentation.model.signIn.SplashViewModel
 import com.kusitms.presentation.ui.home.HomeScreen
+import com.kusitms.presentation.ui.home.attend.AttendScreen
 import com.kusitms.presentation.ui.home.profile.MyProfileScreen
 import com.kusitms.presentation.ui.home.team.HomeTeamDetailScreen
 import com.kusitms.presentation.ui.login.LoginScreen
@@ -228,6 +229,10 @@ fun MainNavigation() {
                     SettingNonMember(
                         navController
                     )
+                }
+
+                kusitmsComposableWithAnimation(NavRoutes.AttendanceScreen.route) {
+                    AttendScreen()
                 }
 
                 //HomeScreen

@@ -57,6 +57,8 @@ sealed class NavRoutes(
         fun createRoute(teamId: Int, curriculumName: String) = "HomeTeamDetail/${teamId}/${curriculumName}"
     }
 
+    object AttendanceScreen: NavRoutes("Attendance")
+
 
     object SettingMember : NavRoutes("SettingMember")
     object SettingNonMember : NavRoutes("SettingNonMember")

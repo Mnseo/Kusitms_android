@@ -32,6 +32,7 @@ fun AttendBtnOn() {
     }
 }
 
+@Preview
 @Composable
 fun AttendBtnOff() {
     Button(

@@ -9,13 +9,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -40,22 +35,29 @@ import kotlinx.coroutines.launch
 fun AttendScreen(
 ) {
     val scrollState = rememberScrollState()
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(scrollState)
-            .background(color = KusitmsColorPalette.current.Grey900)
-            .padding(horizontal = 16.dp),
-        horizontalAlignment = Alignment.Start,
-        verticalArrangement = Arrangement.Top
+            .background(color = KusitmsColorPalette.current.Grey800) // 배경색을 Grey800으로 적용
     ) {
-        AttendTopBar()
-        KusitmsMarginVerticalSpacer(size = 8)
-        AttendPreColumn()
-        KusitmsMarginVerticalSpacer(size = 24)
-        AttendRecordColumn()
-        KusitmsMarginVerticalSpacer(size = 32)
-        AttendNotAttend()
+        Column(
+            modifier = Modifier
+                .wrapContentHeight()
+                .fillMaxWidth()
+                .background(color = KusitmsColorPalette.current.Grey900),
+            horizontalAlignment = Alignment.Start,
+            verticalArrangement = Arrangement.Top
+        ) {
+            AttendTopBar()
+            KusitmsMarginVerticalSpacer(size = 8)
+            AttendPreColumn()
+            KusitmsMarginVerticalSpacer(size = 24)
+            AttendRecordColumn()
+            KusitmsMarginVerticalSpacer(size = 32)
+            AttendNotAttend()
+            Spacer(modifier = Modifier.weight(1f).background(color = KusitmsColorPalette.current.Grey800))
+        }
     }
     ScrollBtn(scrollState = scrollState)
 }
@@ -65,6 +67,7 @@ fun AttendTopBar() {
     Column(
         modifier = Modifier
             .fillMaxWidth()
+            .padding(horizontal = 20.dp)
             .height(48.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.Start
@@ -81,6 +84,7 @@ fun AttendTopBar() {
 fun AttendPreColumn() {
     Box(modifier = Modifier
         .fillMaxWidth()
+        .padding(horizontal = 20.dp)
         .height(108.dp)
         .background(color = KusitmsColorPalette.current.Grey800, shape = RoundedCornerShape(24.dp))
     ) {
@@ -94,9 +98,11 @@ fun AttendPreColumn() {
             Column(
                 modifier = Modifier
                     .width(188.dp)
-                    .height(56.dp)
+                    .height(56.dp),
+                verticalArrangement = Arrangement.Center
             ) {
                 Text(text = stringResource(R.string.attend_box1_title), style = KusitmsTypo.current.Caption1, color = KusitmsColorPalette.current.Main500)
+                KusitmsMarginVerticalSpacer(size = 4)
                 Text(text = stringResource(R.string.attend_box1_subTitle), style = KusitmsTypo.current.SubTitle1_Semibold, color = KusitmsColorPalette.current.White)
             }
             AttendBtnOff()
@@ -109,6 +115,7 @@ fun AttendRecordColumn() {
     Box(modifier = Modifier
         .fillMaxWidth()
         .height(266.dp)
+        .padding(horizontal = 20.dp)
         .background(color = KusitmsColorPalette.current.Grey800, shape = RoundedCornerShape(24.dp))){
 
         Column(
@@ -165,11 +172,14 @@ fun AttendNotComplete() {
 
 @Composable
 fun AttendNotAttend() {
-    KusitmsMarginVerticalSpacer(size = 88)
-    Box(modifier = Modifier
+    Column(modifier = Modifier
         .fillMaxWidth()
-        .wrapContentHeight()) {
-        Text(text = stringResource(R.string.attend_not_attend), style = KusitmsTypo.current.Caption1, color = KusitmsColorPalette.current.Grey400, modifier =  Modifier.align(Alignment.Center))
+        .background(color = KusitmsColorPalette.current.Grey800),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        KusitmsMarginVerticalSpacer(size = 88)
+        Text(text = stringResource(R.string.attend_not_attend), style = KusitmsTypo.current.Caption1, color = KusitmsColorPalette.current.Grey400)
     }
 }
 
