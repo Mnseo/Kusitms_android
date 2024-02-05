@@ -94,6 +94,7 @@ fun NoticeCommentBottom(
         KusitmsMarginVerticalSpacer(size = 20)
         NoticeComment(
             comment = targetComment,
+            commentCount = childCommentList.size,
             isParentCommentAsReply = true
         )
         KusitmsMarginVerticalSpacer(size = 20)
@@ -125,7 +126,10 @@ fun NoticeCommentBottom(
                     },
                     onClickDelete = {
                         onClickChildDelete(
-                            NoticeDetailDialogState.CommentDelete(comment)
+                            NoticeDetailDialogState.CommentDelete(
+                                comment = comment,
+                                parentComment = targetComment
+                            )
                         )
 
                     },
