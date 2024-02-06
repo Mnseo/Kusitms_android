@@ -36,6 +36,7 @@ import com.kusitms.presentation.common.ui.KusitmsBottomNavigationBar
 import com.kusitms.presentation.common.ui.KusitmsBottomNavigationItem
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.util.NavUtil.shownBottomBarNavRouteSet
+import com.kusitms.presentation.model.home.attend.AttendViewModel
 import com.kusitms.presentation.model.login.LoginViewModel
 import com.kusitms.presentation.model.login.findPw.FindPwViewModel
 import com.kusitms.presentation.model.setting.SettingViewModel
@@ -82,6 +83,7 @@ fun MainNavigation() {
     val imageViewerViewModel: ImageViewerViewModel = hiltViewModel()
     val splashViewModel: SplashViewModel = hiltViewModel()
     val snackbarHostState = remember { SnackbarHostState() }
+    val attendViewModel: AttendViewModel = hiltViewModel()
 
 
     Scaffold(
@@ -234,6 +236,7 @@ fun MainNavigation() {
 
                 kusitmsComposableWithAnimation(NavRoutes.AttendanceScreen.route) {
                     AttendScreen(
+                        attendViewModel,
                         navController
                     )
                 }

@@ -1,5 +1,7 @@
 package com.kusitms.presentation.ui.home.attend
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.annotation.StringRes
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
@@ -11,6 +13,8 @@ import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Text
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -30,7 +34,10 @@ import com.kusitms.presentation.model.home.attend.AttendViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.time.Duration
+import java.time.LocalDateTime
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AttendScreen(
     viewModel: AttendViewModel,
@@ -53,9 +60,9 @@ fun AttendScreen(
         ) {
             AttendTopBar()
             KusitmsMarginVerticalSpacer(size = 8)
-            AttendPreColumn(navController)
+            AttendPreColumn(viewModel,navController)
             KusitmsMarginVerticalSpacer(size = 24)
-            AttendRecordColumn()
+            AttendRecordColumn(viewModel)
             KusitmsMarginVerticalSpacer(size = 32)
             AttendNotAttend()
             Spacer(modifier = Modifier
@@ -84,8 +91,21 @@ fun AttendTopBar() {
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun AttendPreColumn(navController: NavHostController) {
+fun AttendPreColumn(
+    viewModel: AttendViewModel,
+    navController: NavHostController
+) {
+    val curri by viewModel.attendCurrentList.collectAsState()
+    val curriculum = curri.firstOrNull()?.curriculum ?: ""
+    val eventDate = curri.firstOrNull()?.date ?: ""
+    val currentDate = LocalDateTime.now()
+
+    // 남은 시간 계산
+    val eventDateTime = LocalDateTime.parse(eventDate)
+    val duration = Duration.between(currentDate, eventDateTime)
+
     Box(modifier = Modifier
         .fillMaxWidth()
         .padding(horizontal = 20.dp)
@@ -107,15 +127,26 @@ fun AttendPreColumn(navController: NavHostController) {
             ) {
                 Text(text = stringResource(R.string.attend_box1_title), style = KusitmsTypo.current.Caption1, color = KusitmsColorPalette.current.Main500)
                 KusitmsMarginVerticalSpacer(size = 4)
-                Text(text = stringResource(R.string.attend_box1_subTitle), style = KusitmsTypo.current.SubTitle1_Semibold, color = KusitmsColorPalette.current.White)
+                Text(text = curriculum, style = KusitmsTypo.current.SubTitle1_Semibold, color = KusitmsColorPalette.current.White)
             }
-            AttendBtnOn(navController)
+            if(duration.isNegative || duration.isZero) {
+                val minutesAfterStart = duration.abs().toMinutes()
+                if (minutesAfterStart <= 30) {
+                    AttendBtnOn(navController = navController)
+                } else {
+                    AttendBtnFailure()
+                }
+            } else {
+                AttendBtnOff()
+            }
         }
     }
 }
 
 @Composable
-fun AttendRecordColumn() {
+fun AttendRecordColumn(
+    viewModel: AttendViewModel
+) {
     Box(modifier = Modifier
         .fillMaxWidth()
         .height(266.dp)
@@ -151,21 +182,29 @@ fun AttendRecordColumn() {
             KusitmsMarginVerticalSpacer(size = 24)
             Text(text = stringResource(R.string.attend_box3_title), style = KusitmsTypo.current.Header2, color = KusitmsColorPalette.current.Grey100)
             KusitmsMarginVerticalSpacer(size = 14)
-            AttendCanComplete()
+            AttendCanComplete(viewModel)
             KusitmsMarginVerticalSpacer(size = 24)
-            AttendBoxRow()
+            AttendBoxRow(viewModel)
         }
     }
 }
 
 @Composable
-fun AttendCanComplete() {
+fun AttendCanComplete(
+    viewModel: AttendViewModel
+) {
+    val attendModel by viewModel.attendScore.collectAsState()
+    val penalty = attendModel.penalty
     Row(modifier = Modifier
         .fillMaxWidth()
         .wrapContentHeight(), horizontalArrangement = Arrangement.Start, verticalAlignment = Alignment.CenterVertically) {
-        Text(text = stringResource(R.string.attend_box3_subTitle_ok), style = KusitmsTypo.current.Text_Semibold, color = KusitmsColorPalette.current.Sub1)
-        KusitmsMarginHorizontalSpacer(size = 6)
-        Icon(painter = painterResource(id = R.drawable.ic_thumb), contentDescription = null, tint = Color.Unspecified)
+        if(penalty >= 6) {
+            AttendNotComplete()
+        } else {
+            Text(text = stringResource(R.string.attend_box3_subTitle_ok), style = KusitmsTypo.current.Text_Semibold, color = KusitmsColorPalette.current.Sub1)
+            KusitmsMarginHorizontalSpacer(size = 6)
+            Icon(painter = painterResource(id = R.drawable.ic_thumb), contentDescription = null, tint = Color.Unspecified)
+        }
     }
 }
 
@@ -203,27 +242,35 @@ fun ScrollBtn(scrollState: ScrollState) {
 }
 
 @Composable
-fun AttendBoxRow() {
+fun AttendBoxRow(
+    viewModel: AttendViewModel
+) {
+    val attendFlow by viewModel.attendScore.collectAsState()
+    val attendCount = attendFlow.present
+    val absentCount = attendFlow.absent
+    val lateCount = attendFlow.late
+
     Row(modifier = Modifier
         .fillMaxWidth()
         .height(74.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically) {
 
-        AttendBoxItem(title = R.string.attend_box4_attend, Modifier.weight(1f))
+        AttendBoxItem(title = R.string.attend_box4_attend, Modifier.weight(1f), "${attendCount}회")
         Spacer(Modifier.width(12.dp))
 
-        AttendBoxItem(title = R.string.attend_box4_non_attend, Modifier.weight(1f))
+        AttendBoxItem(title = R.string.attend_box4_non_attend, Modifier.weight(1f), "${absentCount}회")
         Spacer(Modifier.width(12.dp))
 
-        AttendBoxItem(title = R.string.attend_box4_non_late, Modifier.weight(1f))
+        AttendBoxItem(title = R.string.attend_box4_non_late, Modifier.weight(1f), "${lateCount}회")
     }
 }
 
 @Composable
 fun AttendBoxItem(
     @StringRes title: Int,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    text: String
 ) {
     Box(modifier = modifier
         .height(74.dp)
@@ -241,7 +288,7 @@ fun AttendBoxItem(
                 style = KusitmsTypo.current.Caption1,
                 color = KusitmsColorPalette.current.Grey300,
             )
-            Text(text ="0회",
+            Text(text = text,
                 style = KusitmsTypo.current.SubTitle1_Semibold,
                 color = KusitmsColorPalette.current.Grey100,
             )
