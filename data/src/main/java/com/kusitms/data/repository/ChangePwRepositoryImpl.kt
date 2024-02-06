@@ -2,6 +2,8 @@ package com.kusitms.data.repository
 
 import com.kusitms.data.remote.api.KusitmsApi
 import com.kusitms.data.remote.entity.request.UpdatePasswordRequest
+import com.kusitms.data.remote.entity.request.mapToPasswordRequestBody
+import com.kusitms.domain.model.login.LoginPasswordModel
 import com.kusitms.domain.repository.ChangePwRepository
 import javax.inject.Inject
 
@@ -9,9 +11,11 @@ class ChangePwRepositoryImpl@Inject constructor(
     private val kusitmsApi: KusitmsApi
 ): ChangePwRepository {
 
-    override suspend fun checkPassword(password : String): Result<Boolean> {
+    override suspend fun checkPassword(password: String): Result<Boolean> {
         return try {
-            val response = kusitmsApi.checkPassword(password)
+            val model = LoginPasswordModel(password)
+            val request = mapToPasswordRequestBody(model)
+            val response = kusitmsApi.checkPassword(request)
             if (response.result.code == 200 && response.payload != null) {
                 Result.success(response.payload.isCorrect)
             } else {

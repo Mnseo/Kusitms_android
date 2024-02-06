@@ -1,6 +1,8 @@
 package com.kusitms.presentation.navigation
 
 import ProfileDetailScreen
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.EnterTransition
@@ -69,6 +71,7 @@ import com.kusitms.presentation.ui.signIn.SignInRequestScreen
 import com.kusitms.presentation.ui.splash.SplashScreen
 import com.kusitms.presentation.ui.viewer.ImageViewerScreen
 import com.kusitms.presentation.ui.viewer.ImageViewerViewModel
+
 
 @Composable
 fun MainNavigation() {
@@ -234,11 +237,13 @@ fun MainNavigation() {
                     )
                 }
 
-                kusitmsComposableWithAnimation(NavRoutes.AttendanceScreen.route) {
-                    AttendScreen(
-                        attendViewModel,
-                        navController
-                    )
+                kusitmsComposableWithAnimation(NavRoutes.AttendScreen.route) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        AttendScreen(
+                            attendViewModel,
+                            navController
+                        )
+                    }
                 }
 
                 kusitmsComposableWithAnimation(NavRoutes.CameraPreview.route) {
@@ -291,7 +296,6 @@ fun MainNavigation() {
 
                 // NoticeScreen
                 kusitmsComposableWithAnimation(NavRoutes.Notice.route) {
-
                     NoticeScreen(
                         viewModel = hiltViewModel(),
                         onNoticeClick = {

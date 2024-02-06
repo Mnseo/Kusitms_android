@@ -22,7 +22,7 @@ import retrofit2.http.*
 
 
 interface KusitmsApi {
-    @GET("v1/auth/login/MEMBER")
+    @POST("v1/auth/login/MEMBER")
     suspend fun loginMember(
         @Body loginRequestBody: LoginRequestBody
     ): LoginResponse
@@ -129,22 +129,22 @@ interface KusitmsApi {
     ): BaseResponse<Int>
 
 
-    // SignInNonMember
+    // SignInNonMember (회원가입 가능 체크)
     @FormUrlEncoded
-    @GET("v1/member/check/register")
+    @POST("v1/member/check/register")
     suspend fun signInRequestCheck(
         @Body loginRequestBody: LoginRequestBody
     ): SignInRequestResponse
 
-    @FormUrlEncoded
-    @GET("v1/member/register")
+    @FormUrlEncoded //회원가입
+    @POST("v1/member/register")
     suspend fun signInRequest(
         @Body loginRequestBody: LoginRequestBody
     ): BaseResponse<Unit>
 
     // FindPw
     @FormUrlEncoded
-    @GET("v1/member/email")
+    @POST("v1/member/email") //이메일 존재 확인
     suspend fun verifyEmailCheck(
         @Body checkEmailRequestBody: CheckEmailRequestBody
     ): FindPwCheckEmailResponse
@@ -156,7 +156,7 @@ interface KusitmsApi {
     ): BaseResponse<Unit>
 
     @FormUrlEncoded
-    @POST("v1/member/verify/code")
+    @POST("v1/member/verify/code") //이메일 코드 검증
     suspend fun verifyCode(
         @Body emailVerifyRequestBody: EmailVerifyRequestBody
     ): FindPwCodeVerifyResponse
@@ -168,9 +168,9 @@ interface KusitmsApi {
     ): BaseResponse<Unit>
 
 
-    @GET("v1/member/password")
+    @POST("v1/member/password")
     suspend fun checkPassword(
-        @Body passwordRequestBody: passwordRequestBody
+        @Body passwordRequestBody: PasswordRequestBody
     ): BaseResponse<CheckPasswordPayload>
 
     @PUT("v1/member/password")
@@ -201,9 +201,13 @@ interface KusitmsApi {
     @GET("v1/attend/info")
     suspend fun getAttendInfo(): BaseResponse<AttendInfoPayload>
 
-
     //커리큘럼 출석 조회
     @GET("v1/attend/lists")
     suspend fun getAttendCurrentList(): BaseResponse<List<AttendCurrentPayLoad>>
+
+    //출석 정보 조회
+    @GET("v1/attend")
+    suspend fun getAttendScore(): BaseResponse<AttendPayload>
+
 
 }

@@ -57,7 +57,7 @@ sealed class NavRoutes(
         fun createRoute(teamId: Int, curriculumName: String) = "HomeTeamDetail/${teamId}/${curriculumName}"
     }
 
-    object AttendanceScreen: NavRoutes("Attendance")
+    object AttendScreen: NavRoutes("Attendance")
 
     object CameraPreview: NavRoutes("CameraPreview")
 
@@ -96,12 +96,4 @@ sealed class NavRoutes(
     }
 
     object ImageViewer : NavRoutes("ImageViewer")
-}
-
-
-//SignIn Route
-sealed class SignInNavRoutes(val route: String) {
-    object SignInScreen1 : NavRoutes("signin1")
-    object SignInScreen2 : NavRoutes("signin2")
-    object SignInScreen3 : NavRoutes("signin3")
 }

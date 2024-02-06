@@ -121,4 +121,17 @@ class HomeRepositoryImpl @Inject constructor(
             Result.failure(e)
         }
     }
+
+    override suspend fun getAttendScore(): Result<AttendModel> {
+        return try {
+            val response = kusitmsApi.getAttendScore()
+            if(response.result.code == 200) {
+                Result.success(response.payload.toModel())
+            } else {
+                Result.failure(RuntimeException("출석 정보 조회 실패: ${response.result.message}"))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 }

@@ -27,7 +27,8 @@ fun CurriItem(
 ) {
     Row(modifier = Modifier
         .fillMaxWidth()
-        .background(color = KusitmsColorPalette.current.Grey600)
+        .padding(horizontal = 20.dp)
+        .background(color = KusitmsColorPalette.current.Grey800)
         .height(78.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically

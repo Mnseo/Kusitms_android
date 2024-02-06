@@ -4,9 +4,11 @@ import android.util.Log
 import com.google.gson.Gson
 import com.kusitms.data.local.AuthDataStore
 import com.kusitms.data.remote.api.KusitmsApi
+import com.kusitms.data.remote.entity.request.mapToLoginRequestBody
 import com.kusitms.data.remote.entity.request.toBody
 import com.kusitms.data.remote.entity.response.toModel
 import com.kusitms.domain.model.SignInProfile
+import com.kusitms.domain.model.login.LoginMemberModel
 import com.kusitms.domain.model.login.LoginMemberProfile
 import com.kusitms.domain.model.signin.SignInRequestCheckModel
 import com.kusitms.domain.repository.SignInRepository
@@ -47,7 +49,9 @@ class SignInRepositoryImpl @Inject constructor(
         password: String
     ): Result<SignInRequestCheckModel> {
         return try {
-            val response = kusitmsApi.signInRequestCheck(email, password)
+            val model = LoginMemberModel(email, password)
+            val request = mapToLoginRequestBody(model)
+            val response = kusitmsApi.signInRequestCheck(request)
             if(response.payload == null) {
                 Result.failure(RuntimeException("올바른 데이터를 받지 못했습니다."))
             } else {
@@ -63,7 +67,9 @@ class SignInRepositoryImpl @Inject constructor(
         password: String
     ): Result<Unit> {
         return try {
-            val response = kusitmsApi.signInRequest(email, password)
+            val model = LoginMemberModel(email, password)
+            val request = mapToLoginRequestBody(model)
+            val response = kusitmsApi.signInRequest(request)
             if(response.result == null) {
                 Result.failure(RuntimeException("올바른 데이터를 받지 못했습니다."))
             } else {

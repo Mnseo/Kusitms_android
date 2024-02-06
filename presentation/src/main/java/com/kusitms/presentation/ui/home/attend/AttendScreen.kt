@@ -34,7 +34,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.time.Duration
+import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.Year
+import java.time.format.DateTimeFormatter
+import java.util.*
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -42,33 +46,44 @@ fun AttendScreen(
     viewModel: AttendViewModel,
     navController: NavHostController
 ) {
+    val attendCurrentList by viewModel.attendListInit.collectAsState()
     val scrollState = rememberScrollState()
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(scrollState)
-            .background(color = KusitmsColorPalette.current.Grey800) // 배경색을 Grey800으로 적용
-    ) {
+
         Column(
             modifier = Modifier
                 .wrapContentHeight()
                 .fillMaxWidth()
-                .background(color = KusitmsColorPalette.current.Grey900),
+                .background(color = KusitmsColorPalette.current.Grey800),
             horizontalAlignment = Alignment.Start,
             verticalArrangement = Arrangement.Top
         ) {
-            AttendTopBar()
-            KusitmsMarginVerticalSpacer(size = 8)
-            AttendPreColumn(viewModel,navController)
-            KusitmsMarginVerticalSpacer(size = 24)
-            AttendRecordColumn(viewModel)
-            KusitmsMarginVerticalSpacer(size = 32)
-            AttendNotAttend()
+            Column(
+                modifier = Modifier
+                    .wrapContentHeight()
+                    .fillMaxWidth()
+                    .background(color = KusitmsColorPalette.current.Grey900),
+                horizontalAlignment = Alignment.Start,
+                verticalArrangement = Arrangement.Top
+            ) {
+                AttendTopBar()
+                KusitmsMarginVerticalSpacer(size = 8)
+                AttendPreColumn(viewModel,navController)
+                KusitmsMarginVerticalSpacer(size = 24)
+                AttendRecordColumn(viewModel)
+                KusitmsMarginVerticalSpacer(size = 32)
+            }
+            if (attendCurrentList.isNotEmpty()) {
+                KusitmsMarginVerticalSpacer(size = 30)
+                attendCurrentList.forEach { model ->
+                    CurriItem(model = model)
+                }
+            } else {
+                AttendNotAttend()
+            }
             Spacer(modifier = Modifier
                 .weight(1f)
                 .background(color = KusitmsColorPalette.current.Grey800))
         }
-    }
     ScrollBtn(scrollState = scrollState)
 }
 
@@ -96,10 +111,13 @@ fun AttendPreColumn(
     viewModel: AttendViewModel,
     navController: NavHostController
 ) {
-    val curri by viewModel.attendCurrentList.collectAsState()
-    val curriculum = curri.firstOrNull()?.curriculum ?: ""
-    val eventDate = curri.firstOrNull()?.date ?: ""
+    val curri by viewModel.upcomingAttend.collectAsState()
+    val curriculum = curri?.curriculumName ?: ""
+    val eventDateTime = viewModel.combineDateAndTime(curri.date, curri.time)
     val currentTime = remember { mutableStateOf(LocalDateTime.now()) }
+    val duration = eventDateTime?.let {
+        Duration.between(currentTime.value, eventDateTime)
+    } ?: Duration.ZERO
 
     // 주기적으로 현재 시간 상태 업데이트
     LaunchedEffect(key1 = Unit) {
@@ -107,20 +125,6 @@ fun AttendPreColumn(
             currentTime.value = LocalDateTime.now()
             delay(60000)
         }
-    }
-
-    // 남은 시간 계산
-    val eventDateTime = LocalDateTime.parse(eventDate)
-    val duration = Duration.between(currentTime.value, eventDateTime)
-
-    val timeLeftText = if (duration.toDays() > 1) {
-        // 하루 이상 남았을 경우, D-x 형식
-        "D-${duration.toDays()}"
-    } else if (duration.toHours() < 24) {
-        // 24시간 이하로 남았을 경우, HH:mm 형식
-        "${duration.toHours().rem(24).toString().padStart(2, '0')}:${duration.toMinutes().rem(60).toString().padStart(2, '0')}"
-    } else {
-        "D-0"
     }
 
     Box(modifier = Modifier
@@ -146,17 +150,21 @@ fun AttendPreColumn(
                 KusitmsMarginVerticalSpacer(size = 4)
                 Text(text = curriculum, style = KusitmsTypo.current.SubTitle1_Semibold, color = KusitmsColorPalette.current.White)
             }
-            if(duration.isNegative || duration.isZero) {
+            if (duration.isNegative) {
                 val minutesAfterStart = duration.abs().toMinutes()
                 if (minutesAfterStart <= 30) {
-                    //30분 전 버튼
-                    AttendBtnOn(navController = navController)
+                    // 이벤트 시작 후 30분 이내
+                    AttendBtnOn(navController = navController) // 여기서 정책에 따라 AttendBtnFailure로 변경 가능
                 } else {
-                    //30분 이후 버튼
+                    // 이벤트 시작 후 30분 초과
                     AttendBtnFailure()
                 }
+            } else if (duration.isZero || (duration.toMinutes() in 1..30)) {
+                // 이벤트 시작 전 30분 이내
+                AttendBtnOn(navController = navController)
             } else {
-                AttendBtnOff(timeLeftText)
+                // 이벤트 시작까지 30분 이상 남음
+                AttendBtnOff("D-${duration.toDaysPart()} ${duration.toHoursPart()}:${duration.toMinutesPart()}")
             }
         }
     }
@@ -166,6 +174,8 @@ fun AttendPreColumn(
 fun AttendRecordColumn(
     viewModel: AttendViewModel
 ) {
+    val attendModel by viewModel.attendScore.collectAsState()
+    val penalty = attendModel.penalty
     Box(modifier = Modifier
         .fillMaxWidth()
         .height(266.dp)
@@ -199,7 +209,7 @@ fun AttendRecordColumn(
                 }
             }
             KusitmsMarginVerticalSpacer(size = 24)
-            Text(text = stringResource(R.string.attend_box3_title), style = KusitmsTypo.current.Header2, color = KusitmsColorPalette.current.Grey100)
+            Text(text = "벌점 ${penalty}점", style = KusitmsTypo.current.Header2, color = KusitmsColorPalette.current.Grey100)
             KusitmsMarginVerticalSpacer(size = 14)
             AttendCanComplete(viewModel)
             KusitmsMarginVerticalSpacer(size = 24)
@@ -247,11 +257,12 @@ fun AttendNotAttend() {
 
 @Composable
 fun ScrollBtn(scrollState: ScrollState) {
+    val coroutineScope = rememberCoroutineScope()
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomEnd) {
         FloatingActionButton(
             modifier = Modifier.padding(16.dp),
             onClick = {
-                CoroutineScope(Dispatchers.Main).launch {
+                coroutineScope.launch {
                     scrollState.animateScrollTo(0)
                 }
             },

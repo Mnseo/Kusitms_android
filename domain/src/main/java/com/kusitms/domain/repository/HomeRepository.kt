@@ -14,4 +14,5 @@ interface HomeRepository {
     ): Result<List<ProfileModel>>
     suspend fun getAttendCurrentList(): Result<List<AttendCurrentModel>>
     suspend fun getAttendInfo(): Result<AttendInfoModel>
+    suspend fun getAttendScore(): Result<AttendModel>
 }
