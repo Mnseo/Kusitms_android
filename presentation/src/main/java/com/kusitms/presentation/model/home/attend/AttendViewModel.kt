@@ -37,12 +37,22 @@ class AttendViewModel @Inject constructor(
     getAttendScoreUseCase: GetAttendScoreUseCase
 ):ViewModel() {
 
-    val attendListInit = getAttendCurrentListUseCase().catch {
-    }.stateIn(
-        viewModelScope,
-        started = SharingStarted.Eagerly,
-        initialValue = emptyList()
-    )
+    val attendListInit: StateFlow<List<AttendCurrentModel>> = getAttendCurrentListUseCase()
+        .catch { e ->
+        }
+        .map { list ->
+            list.map { model ->
+                model.copy(
+                    date = formatDate(model.date),
+                    time = formatTime(model.time)
+                )
+            }
+        }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.Eagerly,
+            initialValue = emptyList()
+        )
 
     val upcomingAttend = getAttendInfoUseCase().catch {
     }.stateIn(
@@ -61,12 +71,6 @@ class AttendViewModel @Inject constructor(
     private val _attendCurrentList = MutableStateFlow<List<AttendCurrentModel>>(emptyList())
     val attendCurrentList : StateFlow<List<AttendCurrentModel>> = _attendCurrentList.asStateFlow()
 
-    private val _eventDateTime = MutableStateFlow<LocalDateTime?>(null)
-    val eventDateTime: StateFlow<LocalDateTime?> = _eventDateTime
-
-    private val _attendScore = MutableStateFlow(
-        AttendModel(penalty = 0, present = 0, absent = 0, late = 0, passYn = "수료 가능한 점수에요")
-    )
 
     fun formatDate(dateString: String): String {
         val originalFormat = SimpleDateFormat("MM월 dd일", Locale.KOREA)
@@ -75,8 +79,21 @@ class AttendViewModel @Inject constructor(
             val parsedDate = originalFormat.parse(dateString)
             parsedDate?.let { targetFormat.format(it) } ?: dateString
         } catch (e: Exception) {
-            // 파싱에 실패시, 원본 날짜를 그대로 사용
+            Log.d("변환 실패", "date")
             dateString
+        }
+    }
+
+    fun formatTime(timeString: String): String {
+        val inputFormat = SimpleDateFormat("a hh:mm", Locale.KOREAN)
+        val outputFormat = SimpleDateFormat("a h:mm", Locale.KOREAN)
+
+        return try {
+            val date = inputFormat.parse(timeString)
+            outputFormat.format(date)
+        } catch (e: Exception) {
+            Log.d("변환 실패", "time")
+            timeString
         }
     }
 
@@ -94,18 +111,6 @@ class AttendViewModel @Inject constructor(
             LocalDateTime.parse(dateTimeStr, dateTimeFormatter)
         } catch (e: Exception) {
             null // 파싱 실패 시 null 반환
-        }
-    }
-
-    init {
-        viewModelScope.launch {
-            getAttendCurrentListUseCase().catch {
-
-            }.collect() {
-                _attendCurrentList.value = it.map { attendModel ->
-                    attendModel.copy(date = formatDate(attendModel.date))
-                }
-            }
         }
     }
 
