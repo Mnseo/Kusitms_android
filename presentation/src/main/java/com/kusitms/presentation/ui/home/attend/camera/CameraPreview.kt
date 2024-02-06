@@ -31,6 +31,7 @@ import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.common.InputImage
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 
+@androidx.compose.ui.tooling.preview.Preview
 @Composable
 fun CameraPreviewWithOverlay() {
     Box {
@@ -39,7 +40,6 @@ fun CameraPreviewWithOverlay() {
     }
 }
 
-@androidx.compose.ui.tooling.preview.Preview
 @Composable
 fun Overlay() {
     Surface {

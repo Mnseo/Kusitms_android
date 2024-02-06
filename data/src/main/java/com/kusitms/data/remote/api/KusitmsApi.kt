@@ -134,14 +134,14 @@ interface KusitmsApi {
 
     // SignInNonMember
     @FormUrlEncoded
-    @POST("v1/member/check/register")
+    @GET("v1/member/check/register")
     suspend fun signInRequestCheck(
         @Field("email") email: String,
         @Field("password") password: String,
     ): SignInRequestResponse
 
     @FormUrlEncoded
-    @POST("v1/member/register")
+    @GET("v1/member/register")
     suspend fun signInRequest(
         @Field("email") email: String,
         @Field("password") password: String,
@@ -149,7 +149,7 @@ interface KusitmsApi {
 
     // FindPw
     @FormUrlEncoded
-    @POST("v1/member/email")
+    @GET("v1/member/email")
     suspend fun verifyEmailCheck(
         @Field("email") email: String,
     ): FindPwCheckEmailResponse
