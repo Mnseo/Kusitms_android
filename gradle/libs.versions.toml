@@ -44,6 +44,12 @@ lottie-compose = "5.2.0"
 #timber
 timber = "5.0.1"
 
+#camerax
+camerax = "1.2.1"
+
+#mlkit
+mlkit = "17.2.0"
+
 #retrofit2
 okhttp3 = "4.10.0"
 interceptor = "4.9.0"
@@ -66,6 +72,15 @@ junit = { group = "junit", name = "junit", version.ref = "junit" }
 
 # timber
 timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
+
+# camera
+camera2 = { group= "androidx.camera", name="camera-camera2", version.ref="camerax"}
+camera2-lifecycle = { group= "androidx.camera", name="camera-lifecycle", version.ref="camerax"}
+camera2-view = { group= "androidx.camera", name="camera-view", version.ref="camerax"}
+
+#mlkit
+mlkit = {group = "com.google.mlkit", name="barcode-scanning", version.ref="mlkit"}
+
 
 # coroutines
 coroutine = {group = "org.jetbrains.kotlinx", name="kotlinx-coroutines-android", version.ref="coroutines"}
@@ -134,6 +149,13 @@ material3 = [
 coil = [
     "coil-compose",
     "coil-svg"
+]
+
+camerax=[
+    "camera2",
+    "camera2-lifecycle",
+    "camera2-view",
+    "mlkit"
 ]
 
 lifecycle = [

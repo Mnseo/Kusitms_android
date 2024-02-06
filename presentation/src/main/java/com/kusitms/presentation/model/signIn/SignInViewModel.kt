@@ -167,6 +167,7 @@ class SignInViewModel @Inject constructor(
             inputStream?.copyTo(fileOutputStream)
         }
 
+
         val requestFile = tempFile.asRequestBody("image/jpeg".toMediaTypeOrNull())
         return MultipartBody.Part.createFormData("image", tempFile.name, requestFile)
     }
