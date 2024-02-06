@@ -12,9 +12,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Text
 import androidx.compose.material3.Icon
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -33,6 +31,7 @@ import com.kusitms.presentation.common.ui.theme.KusitmsTypo
 import com.kusitms.presentation.model.home.attend.AttendViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.time.Duration
 import java.time.LocalDateTime
@@ -100,11 +99,29 @@ fun AttendPreColumn(
     val curri by viewModel.attendCurrentList.collectAsState()
     val curriculum = curri.firstOrNull()?.curriculum ?: ""
     val eventDate = curri.firstOrNull()?.date ?: ""
-    val currentDate = LocalDateTime.now()
+    val currentTime = remember { mutableStateOf(LocalDateTime.now()) }
+
+    // 주기적으로 현재 시간 상태 업데이트
+    LaunchedEffect(key1 = Unit) {
+        while (true) {
+            currentTime.value = LocalDateTime.now()
+            delay(60000)
+        }
+    }
 
     // 남은 시간 계산
     val eventDateTime = LocalDateTime.parse(eventDate)
-    val duration = Duration.between(currentDate, eventDateTime)
+    val duration = Duration.between(currentTime.value, eventDateTime)
+
+    val timeLeftText = if (duration.toDays() > 1) {
+        // 하루 이상 남았을 경우, D-x 형식
+        "D-${duration.toDays()}"
+    } else if (duration.toHours() < 24) {
+        // 24시간 이하로 남았을 경우, HH:mm 형식
+        "${duration.toHours().rem(24).toString().padStart(2, '0')}:${duration.toMinutes().rem(60).toString().padStart(2, '0')}"
+    } else {
+        "D-0"
+    }
 
     Box(modifier = Modifier
         .fillMaxWidth()
@@ -132,12 +149,14 @@ fun AttendPreColumn(
             if(duration.isNegative || duration.isZero) {
                 val minutesAfterStart = duration.abs().toMinutes()
                 if (minutesAfterStart <= 30) {
+                    //30분 전 버튼
                     AttendBtnOn(navController = navController)
                 } else {
+                    //30분 이후 버튼
                     AttendBtnFailure()
                 }
             } else {
-                AttendBtnOff()
+                AttendBtnOff(timeLeftText)
             }
         }
     }
