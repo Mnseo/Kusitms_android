@@ -99,6 +99,47 @@ class ProfileEditViewModel @Inject constructor(
         validateFields()
     }
 
+    fun updateSelectedImage(uri: Uri?) {
+        _selectedImage.value = uri
+    }
+
+    fun updateLinkTypeAt(index: Int, linkType: LinkType) {
+        val updatedItems = _linkItems.value.toMutableList()
+        if (index in updatedItems.indices) {
+            val currentItem = updatedItems[index]
+            updatedItems[index] = currentItem.copy(linkType = linkType)
+            _linkItems.value = updatedItems
+        }
+    }
+
+    fun addLinkItem() {
+        val newLinkItem = LinkItem(LinkType.LINK, "") //기본 설정값
+        _linkItems.value = _linkItems.value + newLinkItem
+    }
+
+    fun updateLinkItem(index: Int, linkType: LinkType, url: String) {
+        val updatedItems = _linkItems.value.toMutableList()
+        if (index in updatedItems.indices) {
+            updatedItems[index] = LinkItem(linkType, url)
+            _linkItems.value = updatedItems
+        }
+    }
+
+    fun removeLinkItem() {
+        if (_linkItems.value.isNotEmpty()) {
+            _linkItems.value = _linkItems.value.dropLast(1)
+        }
+    }
+
+    fun updateIntroduce(introduce: String) {
+        _introduce.value = introduce
+    }
+
+    fun updateSignInStatus(signInStatus: SignInStatus) {
+        _signInStatus.value = signInStatus
+    }
+
+
     private fun validateFields() {
         _isAllFieldsValid.value = _major.value.isNotBlank() &&
                 _selectedPart.value != null &&
@@ -116,5 +157,4 @@ class ProfileEditViewModel @Inject constructor(
         val phoneRegex = Regex("^01(?:0|1|[6-9])-(?:\\d{3}|\\d{4})-\\d{4}\$")
         return phoneNumber.matches(phoneRegex)
     }
-
 }
