@@ -2,20 +2,45 @@ package com.kusitms.presentation.model.profile.edit
 
 import android.net.Uri
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.kusitms.domain.model.home.MemberInfoDetailModel
+import com.kusitms.domain.model.login.LoginMemberProfile
+import com.kusitms.domain.usecase.home.GetMemberInfoDetailUseCase
+import com.kusitms.domain.usecase.signin.GetLoginMemberProfileUseCase
 import com.kusitms.presentation.model.signIn.InterestItem
 import com.kusitms.presentation.model.signIn.LinkItem
 import com.kusitms.presentation.model.signIn.LinkType
 import com.kusitms.presentation.model.signIn.SignInStatus
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class ProfileEditViewModel @Inject constructor(
-
+    private val getInfoMemberUseCase: GetLoginMemberProfileUseCase,
+    getMemberInfoDetailUseCase: GetMemberInfoDetailUseCase,
 ) : ViewModel() {
+
+    private var _infoProfile: LoginMemberProfile = LoginMemberProfile("", "", "", "", false)
+    var infoProfile: LoginMemberProfile = _infoProfile
+
+    val detailMemberInfo = getMemberInfoDetailUseCase().catch {
+    }.stateIn(
+        viewModelScope,
+        started = SharingStarted.Eagerly,
+        initialValue = MemberInfoDetailModel()
+    )
+
+    init {
+        getUserProfile()
+    }
+
     private val _uiState = MutableStateFlow(ProfileEditUiState())
     val uiState: StateFlow<ProfileEditUiState> = _uiState.asStateFlow()
 
@@ -167,4 +192,17 @@ class ProfileEditViewModel @Inject constructor(
         return phoneNumber.matches(phoneRegex)
     }
 
+
+    private fun getUserProfile() {
+        viewModelScope.launch {
+            val profileResult = getInfoMemberUseCase.fetchLoginMemberProfile()
+            if (profileResult.isSuccess) {
+                _infoProfile = profileResult.getOrNull()!!
+                _name.value = _infoProfile.name
+                _email.value = infoProfile.email
+                _phoneNum.value = infoProfile.phoneNumber
+                infoProfile = _infoProfile
+            }
+        }
+    }
 }

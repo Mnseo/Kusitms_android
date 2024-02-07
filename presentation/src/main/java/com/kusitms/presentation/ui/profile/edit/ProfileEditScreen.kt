@@ -118,6 +118,8 @@ private fun ProfileFilterButton(
     viewModel: ProfileEditViewModel,
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val infoUser = viewModel.infoProfile
+    val detailMemberInfo by viewModel.detailMemberInfo.collectAsStateWithLifecycle()
 
 
     Row(

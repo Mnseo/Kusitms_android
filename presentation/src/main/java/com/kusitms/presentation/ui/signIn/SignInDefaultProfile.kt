@@ -8,18 +8,15 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.ScaffoldState
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.kusitms.presentation.R
 import com.kusitms.presentation.common.theme.KusitmsScaffoldNonScroll
 import com.kusitms.presentation.common.ui.KusitmsMarginVerticalSpacer
@@ -33,7 +30,6 @@ import com.kusitms.presentation.ui.signIn.KusitmsInputField
 import com.kusitms.presentation.ui.signIn.PartBottomSheet
 import com.kusitms.presentation.ui.signIn.SignInFixedInput
 import com.kusitms.presentation.ui.signIn.component.LikeCatergoryBottomSheet
-import kotlinx.coroutines.launch
 
 
 @Composable

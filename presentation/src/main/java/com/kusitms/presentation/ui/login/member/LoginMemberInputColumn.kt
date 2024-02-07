@@ -14,7 +14,6 @@ import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
 import com.kusitms.presentation.model.login.LoginStatus
 import com.kusitms.presentation.model.login.LoginViewModel
-import com.kusitms.presentation.model.signIn.InputState
 import com.kusitms.presentation.ui.signIn.KusitmsInputField
 
 @Composable
