@@ -15,9 +15,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -31,8 +28,8 @@ class ProfileEditViewModel @Inject constructor(
     private var _infoProfile: LoginMemberProfile = LoginMemberProfile("", "", "", "", false)
     var infoProfile: LoginMemberProfile = _infoProfile
 
-    private val _detailMemberInfo = MutableStateFlow<MemberInfoDetailModel?>(null)
-    val detailMemberInfo: StateFlow<MemberInfoDetailModel?> = _detailMemberInfo.asStateFlow()
+    private var _detailMemberInfo : MemberInfoDetailModel = MemberInfoDetailModel("", "", listOf(), "", "", listOf())
+    var detailMemberInfo: MemberInfoDetailModel = _detailMemberInfo
 
 
     init {
@@ -206,20 +203,11 @@ class ProfileEditViewModel @Inject constructor(
 
     private fun getMemberInfoDetail() {
         viewModelScope.launch {
-            try {
-                val detailResult = getMemberInfoDetailUseCase()
-                    .map { Result.success(it) }
-                    .catch { exception ->
-                        emit(Result.failure<MemberInfoDetailModel>(exception))
-                    }
-                    .single()
-
-                detailResult.onSuccess { detailInfo ->
-                    _detailMemberInfo.value = detailInfo
-                    _major.value = detailInfo.major
-                }.onFailure { exception ->
-                }
-            } catch (e: Exception) {
+            val profileResult = getMemberInfoDetailUseCase.fetchLoginMemberProfile()
+            if (profileResult.isSuccess) {
+                _detailMemberInfo = profileResult.getOrNull()!!
+                _major.value = _detailMemberInfo.major.toString()
+                detailMemberInfo = _detailMemberInfo
             }
         }
     }

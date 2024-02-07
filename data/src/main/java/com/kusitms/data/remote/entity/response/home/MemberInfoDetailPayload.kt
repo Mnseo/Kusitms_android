@@ -5,12 +5,12 @@ import com.kusitms.domain.model.profile.InterestModel
 import com.kusitms.domain.model.profile.LinkModel
 
 data class MemberInfoDetailPayload(
-    val major: String,
-    val part: String,
-    val interests: List<InterestModel>,
-    val description: String,
-    val profileImage: String,
-    val links: List<LinkModel>,
+    val major: String?,
+    val part: String?,
+    val interests: List<InterestModel>?,
+    val description: String?,
+    val profileImage: String?,
+    val links: List<LinkModel>?,
 )
 
 fun MemberInfoDetailPayload.toModel() =

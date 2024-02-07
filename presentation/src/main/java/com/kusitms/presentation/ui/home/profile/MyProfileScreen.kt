@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -33,7 +32,7 @@ fun MyProfileScreen(
     onBack: () -> Unit,
     onClickModify: () -> Unit
 ) {
-    val infoUser = viewModel.infoProfile
+    val infoUser by viewModel.infoProfile.collectAsStateWithLifecycle()
     val detailMemberInfo by viewModel.detailMemberInfo.collectAsStateWithLifecycle()
 
     Column {
@@ -60,22 +59,26 @@ fun MyProfileScreen(
                 Box(modifier = Modifier.padding(horizontal = 32.dp, vertical = 8.dp)) {
                     ProfileDetailImage(
                         name = infoUser.name,
-                        profileImage = detailMemberInfo.profileImage,
+                        profileImage = detailMemberInfo.profileImage.toString(),
                         period = infoUser.period.toString(),
-                        part = detailMemberInfo.part,
-                        description = detailMemberInfo.description,
+                        part = detailMemberInfo.part.toString(),
+                        description = detailMemberInfo.description.toString(),
                     )
                 }
             }
             item {
                 Box(modifier = Modifier.padding(horizontal = 32.dp, vertical = 8.dp)) {
-                    ProfileDetailInfo(
-                        detailMemberInfo.major,
-                        detailMemberInfo.interests,
-                        infoUser.email,
-                        infoUser.phoneNumber,
-                        detailMemberInfo.links
-                    )
+                    detailMemberInfo.interests?.let {
+                        detailMemberInfo.links?.let { it1 ->
+                            ProfileDetailInfo(
+                                detailMemberInfo.major.toString(),
+                                it,
+                                infoUser.email,
+                                infoUser.phoneNumber,
+                                it1
+                            )
+                        }
+                    }
                 }
             }
         }
