@@ -229,6 +229,13 @@
     <string name="profile_search_none">궁금한 학회원 프로필을\n검색해보세요</string>
 
 
+    <!-- ProfileEdit-->
+    <string name="profile_edit_toolbar">프로필 설정</string>
+    <string name="profile_edit_modify">수정</string>
+
+
+
+
     <string name="bottom_nav_home">홈</string>
     <string name="bottom_nav_attendance">출석</string>
     <string name="bottom_nav_notice">공지</string>

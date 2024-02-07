@@ -62,6 +62,7 @@ import com.kusitms.presentation.ui.notice.NoticeScreen
 import com.kusitms.presentation.ui.notice.detail.NoticeDetailScreen
 import com.kusitms.presentation.ui.notice.search.NoticeSearchScreen
 import com.kusitms.presentation.ui.profile.ProfileScreen
+import com.kusitms.presentation.ui.profile.edit.ProfileEditScreen
 import com.kusitms.presentation.ui.profile.search.ProfileSearchScreen
 import com.kusitms.presentation.ui.setting.SettingMember
 import com.kusitms.presentation.ui.setting.SettingNonMember
@@ -271,7 +272,10 @@ fun MainNavigation() {
                     arguments = NavRoutes.MyProfileDetail.navArguments
                 ) {
                     MyProfileScreen(
-                        onBack = { navController.navigateUp() }
+                        onBack = { navController.navigateUp() },
+                        onClickModify = {
+                            navController.navigate(NavRoutes.ProfileEdit.route)
+                        }
                     )
                 }
 
@@ -362,7 +366,10 @@ fun MainNavigation() {
                     arguments = NavRoutes.ProfileDetail.navArguments
                 ) {
                     ProfileDetailScreen(
-                        onBack = { navController.navigateUp() }
+                        onBack = { navController.navigateUp() },
+                        onClickModify = {
+                            navController.navigate(NavRoutes.ProfileEdit.route)
+                        }
                     )
                 }
 
@@ -381,6 +388,9 @@ fun MainNavigation() {
                     )
                 }
 
+                kusitmsComposableWithAnimation(NavRoutes.ProfileEdit.route) {
+                    ProfileEditScreen()
+                }
 
 
                 kusitmsComposableWithAnimation(NavRoutes.ImageViewer.route) {
