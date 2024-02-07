@@ -136,10 +136,6 @@ class ProfileEditViewModel @Inject constructor(
         _introduce.value = introduce
     }
 
-    fun updateSignInStatus(signInStatus: SignInStatus) {
-        _signInStatus.value = signInStatus
-    }
-
 
     private fun validateFields() {
         _isAllFieldsValid.value = _major.value.isNotBlank() &&

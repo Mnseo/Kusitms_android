@@ -48,7 +48,7 @@ fun ProfileEditScreen(
     val scrollState = rememberScrollState()
 
     val expanded by viewModel.expended.collectAsStateWithLifecycle()
-
+    val uiState by viewModel.uiState.collectAsState()
 
     Column {
         KusitsmTopBarBackTextWithIcon(
@@ -101,7 +101,11 @@ fun ProfileEditScreen(
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.Start
         ) {
-            ProfileAdd()
+            if (uiState.currentSelectedProfileFilter == "기본 프로필") {
+                ProfileBasic(viewModel)
+            } else {
+                ProfileAdd(viewModel)
+            }
         }
     }
 }
