@@ -69,6 +69,8 @@ fun ProfileEditScreen(
     } else {
         stringResource(id = R.string.signin_member_hint1_3)
     }
+    val emailError by viewModel.emailError.collectAsState()
+    val phoneNumError by viewModel.phoneNumError.collectAsState()
 
     var isOpenPartBottomSheet by remember { mutableStateOf(false) }
     var isOpenLikeCategoryBottomSheet by remember { mutableStateOf(false) }
@@ -240,6 +242,13 @@ fun ProfileEditScreen(
                 value = email,
                 onValueChange = viewModel::updateEmail
             )
+            emailError?.let { error ->
+                Text(
+                    text = error,
+                    style = KusitmsTypo.current.Caption1,
+                    color = KusitmsColorPalette.current.Grey400
+                )
+            }
 
             //전화번호
             Spacer(modifier = Modifier.height(20.dp))
@@ -254,6 +263,14 @@ fun ProfileEditScreen(
                 value = phoneNum,
                 onValueChange = viewModel::updatePhoneNumber
             )
+            phoneNumError?.let { error ->
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = error,
+                    style = KusitmsTypo.current.Caption1,
+                    color = KusitmsColorPalette.current.Grey400
+                )
+            }
         }
     }
 }

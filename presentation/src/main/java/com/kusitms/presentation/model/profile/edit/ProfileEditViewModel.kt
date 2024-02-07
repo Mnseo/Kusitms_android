@@ -43,6 +43,13 @@ class ProfileEditViewModel @Inject constructor(
     private val _email = MutableStateFlow("")
     val email: StateFlow<String> = _email
 
+    private val _emailError = MutableStateFlow<String?>(null)
+    val emailError: StateFlow<String?> = _emailError
+
+    private val _phoneNumError = MutableStateFlow<String?>(null)
+    val phoneNumError: StateFlow<String?> = _phoneNumError
+
+
     private val _selectedImage = MutableStateFlow<Uri?>(null)
     val selectedImage: StateFlow<Uri?> = _selectedImage.asStateFlow()
 
@@ -74,11 +81,21 @@ class ProfileEditViewModel @Inject constructor(
 
     fun updateEmail(newEmail: String) {
         _email.value = newEmail
+        if (!isValidEmail(newEmail)) {
+            _emailError.value = "유효한 이메일 주소를 입력해주세요"
+        } else {
+            _emailError.value = null
+        }
         validateFields()
     }
 
     fun updatePhoneNumber(newPhoneNumber: String) {
         _phoneNum.value = newPhoneNumber
+        if (!isValidPhoneNumber(newPhoneNumber)) {
+            _phoneNumError.value = "유효한 전화번호를 입력해주세요 (010-1234-1234)"
+        } else {
+            _phoneNumError.value = null
+        }
         validateFields()
     }
 
@@ -89,4 +106,15 @@ class ProfileEditViewModel @Inject constructor(
                 _email.value.isNotBlank() &&
                 _phoneNum.value.isNotBlank()
     }
+
+    private fun isValidEmail(email: String): Boolean {
+        val emailRegex = Regex("^\\w+@[a-zA-Z_]+?\\.[a-zA-Z]{2,3}\$")
+        return email.matches(emailRegex)
+    }
+
+    private fun isValidPhoneNumber(phoneNumber: String): Boolean {
+        val phoneRegex = Regex("^01(?:0|1|[6-9])-(?:\\d{3}|\\d{4})-\\d{4}\$")
+        return phoneNumber.matches(phoneRegex)
+    }
+
 }
