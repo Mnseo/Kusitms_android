@@ -10,9 +10,7 @@ import com.bumptech.glide.Glide.init
 import com.kusitms.domain.model.home.AttendCurrentModel
 import com.kusitms.domain.model.home.AttendInfoModel
 import com.kusitms.domain.model.home.AttendModel
-import com.kusitms.domain.usecase.home.GetAttendCurrentListUseCase
-import com.kusitms.domain.usecase.home.GetAttendInfoUseCase
-import com.kusitms.domain.usecase.home.GetAttendScoreUseCase
+import com.kusitms.domain.usecase.home.*
 import com.kusitms.presentation.R
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -34,7 +32,9 @@ import javax.inject.Inject
 class AttendViewModel @Inject constructor(
     getAttendCurrentListUseCase: GetAttendCurrentListUseCase,
     getAttendInfoUseCase: GetAttendInfoUseCase,
-    getAttendScoreUseCase: GetAttendScoreUseCase
+    getAttendScoreUseCase: GetAttendScoreUseCase,
+    postAttendCheckUseCase: PostAttendCheckUseCase,
+    getAttendQrUseCase: GetAttendQrUseCase
 ):ViewModel() {
 
     val attendListInit: StateFlow<List<AttendCurrentModel>> = getAttendCurrentListUseCase()
@@ -67,10 +67,6 @@ class AttendViewModel @Inject constructor(
         started = SharingStarted.Eagerly,
         initialValue = AttendModel(0, 0, 0, 0, "수료 가능한 점수에요")
     )
-
-    private val _attendCurrentList = MutableStateFlow<List<AttendCurrentModel>>(emptyList())
-    val attendCurrentList : StateFlow<List<AttendCurrentModel>> = _attendCurrentList.asStateFlow()
-
 
     fun formatDate(dateString: String): String {
         val originalFormat = SimpleDateFormat("MM월 dd일", Locale.KOREA)
