@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -37,8 +38,6 @@ import com.kusitms.presentation.common.ui.theme.KusitmsTypo
 import com.kusitms.presentation.model.profile.edit.ProfileEditViewModel
 import com.kusitms.presentation.ui.ImageVector.ImagePhoto
 import com.kusitms.presentation.ui.ImageVector.StudyIcon
-import com.kusitms.presentation.ui.signIn.TextColumn
-import com.kusitms.presentation.ui.signIn.Title2Column
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -90,6 +89,8 @@ fun ProfileAdd(
         KusitmsMarginVerticalSpacer(size = 10)
         IntroEditColumn(viewModel)
         KusitmsMarginVerticalSpacer(size = 4)
+        ProfileLink(viewModel)
+        Spacer(modifier = Modifier.weight(1f))
     }
 }
 
@@ -199,5 +200,4 @@ fun IntroEditTextField(viewModel: ProfileEditViewModel) {
         )
     }
 }
-
 

@@ -112,6 +112,7 @@ class ProfileEditViewModel @Inject constructor(
         }
     }
 
+
     fun addLinkItem() {
         val newLinkItem = LinkItem(LinkType.LINK, "") //기본 설정값
         _linkItems.value = _linkItems.value + newLinkItem
