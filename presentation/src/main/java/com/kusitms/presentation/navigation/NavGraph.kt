@@ -1,6 +1,8 @@
 package com.kusitms.presentation.navigation
 
 import ProfileDetailScreen
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.EnterTransition
@@ -36,6 +38,7 @@ import com.kusitms.presentation.common.ui.KusitmsBottomNavigationBar
 import com.kusitms.presentation.common.ui.KusitmsBottomNavigationItem
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.util.NavUtil.shownBottomBarNavRouteSet
+import com.kusitms.presentation.model.home.attend.AttendViewModel
 import com.kusitms.presentation.model.login.LoginViewModel
 import com.kusitms.presentation.model.login.findPw.FindPwViewModel
 import com.kusitms.presentation.model.setting.SettingViewModel
@@ -69,6 +72,7 @@ import com.kusitms.presentation.ui.splash.SplashScreen
 import com.kusitms.presentation.ui.viewer.ImageViewerScreen
 import com.kusitms.presentation.ui.viewer.ImageViewerViewModel
 
+
 @Composable
 fun MainNavigation() {
     val navController = rememberNavController()
@@ -82,6 +86,7 @@ fun MainNavigation() {
     val imageViewerViewModel: ImageViewerViewModel = hiltViewModel()
     val splashViewModel: SplashViewModel = hiltViewModel()
     val snackbarHostState = remember { SnackbarHostState() }
+    val attendViewModel: AttendViewModel = hiltViewModel()
 
 
     Scaffold(
@@ -232,10 +237,13 @@ fun MainNavigation() {
                     )
                 }
 
-                kusitmsComposableWithAnimation(NavRoutes.AttendanceScreen.route) {
-                    AttendScreen(
-                        navController
-                    )
+                kusitmsComposableWithAnimation(NavRoutes.AttendScreen.route) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        AttendScreen(
+                            attendViewModel,
+                            navController
+                        )
+                    }
                 }
 
                 kusitmsComposableWithAnimation(NavRoutes.CameraPreview.route) {
@@ -288,7 +296,6 @@ fun MainNavigation() {
 
                 // NoticeScreen
                 kusitmsComposableWithAnimation(NavRoutes.Notice.route) {
-
                     NoticeScreen(
                         viewModel = hiltViewModel(),
                         onNoticeClick = {

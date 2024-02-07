@@ -34,9 +34,10 @@ fun AttendBtnOn(navController: NavHostController) {
     }
 }
 
-@Preview
 @Composable
-fun AttendBtnOff() {
+fun AttendBtnOff(
+    leftTime: String
+) {
     Button(
         modifier = Modifier
             .wrapContentWidth()
@@ -51,7 +52,7 @@ fun AttendBtnOff() {
             verticalArrangement = Arrangement.Center
         ) {
             Text(text = stringResource(R.string.attend_btn_attend_wait), style = KusitmsTypo.current.Text_Semibold, color = KusitmsColorPalette.current.Grey400)
-            Text(text = stringResource(R.string.attend_btn_attend_wait), style = KusitmsTypo.current.Text_Semibold, color = KusitmsColorPalette.current.Grey400)
+            Text(text = leftTime, style = KusitmsTypo.current.Text_Semibold, color = KusitmsColorPalette.current.Grey400)
         }
     }
 }

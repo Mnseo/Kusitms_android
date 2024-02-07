@@ -7,3 +7,21 @@ data class LoginMemberProfile(
     val phoneNumber: String,
     val memberDetailExist: Boolean
 )
+
+data class LoginMemberModel(
+    val email:String,
+    val password: String
+)
+
+data class LoginEmailModel(
+    val email:String
+)
+
+data class LoginPasswordModel(
+    val password: String
+)
+
+data class LoginEmailVerifyModel(
+    val email: String,
+    val code : String
+)

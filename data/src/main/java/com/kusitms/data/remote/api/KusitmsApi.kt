@@ -1,9 +1,7 @@
 package com.kusitms.data.remote.api
 
 import com.kusitms.data.remote.entity.BaseResponse
-import com.kusitms.data.remote.entity.request.CommentContentRequestBody
-import com.kusitms.data.remote.entity.request.ReportCommentRequestBody
-import com.kusitms.data.remote.entity.request.UpdatePasswordRequest
+import com.kusitms.data.remote.entity.request.*
 import com.kusitms.data.remote.entity.response.CheckPasswordPayload
 import com.kusitms.data.remote.entity.response.FindPwCheckEmailResponse
 import com.kusitms.data.remote.entity.response.LoginMemberProfileResponse
@@ -24,10 +22,9 @@ import retrofit2.http.*
 
 
 interface KusitmsApi {
-    @GET("v1/auth/login/MEMBER")
+    @POST("v1/auth/login/MEMBER")
     suspend fun loginMember(
-        @Query("email") email: String,
-        @Query("password") password: String,
+        @Body loginRequestBody: LoginRequestBody
     ): LoginResponse
 
     @Multipart
@@ -132,39 +129,36 @@ interface KusitmsApi {
     ): BaseResponse<Int>
 
 
-    // SignInNonMember
+    // SignInNonMember (회원가입 가능 체크)
     @FormUrlEncoded
     @POST("v1/member/check/register")
     suspend fun signInRequestCheck(
-        @Field("email") email: String,
-        @Field("password") password: String,
+        @Body loginRequestBody: LoginRequestBody
     ): SignInRequestResponse
 
-    @FormUrlEncoded
+    @FormUrlEncoded //회원가입
     @POST("v1/member/register")
     suspend fun signInRequest(
-        @Field("email") email: String,
-        @Field("password") password: String,
+        @Body loginRequestBody: LoginRequestBody
     ): BaseResponse<Unit>
 
     // FindPw
     @FormUrlEncoded
-    @POST("v1/member/email")
+    @POST("v1/member/email") //이메일 존재 확인
     suspend fun verifyEmailCheck(
-        @Field("email") email: String,
+        @Body checkEmailRequestBody: CheckEmailRequestBody
     ): FindPwCheckEmailResponse
 
     @FormUrlEncoded
     @POST("v1/member/verify")
     suspend fun sendCode(
-        @Field("email") email: String,
+        @Body checkEmailRequestBody: CheckEmailRequestBody
     ): BaseResponse<Unit>
 
     @FormUrlEncoded
-    @POST("v1/member/verify/code")
+    @POST("v1/member/verify/code") //이메일 코드 검증
     suspend fun verifyCode(
-        @Field("email") email: String,
-        @Field("code") code: String,
+        @Body emailVerifyRequestBody: EmailVerifyRequestBody
     ): FindPwCodeVerifyResponse
 
     @PUT("v1/member/password/unauthenticated")
@@ -176,7 +170,7 @@ interface KusitmsApi {
 
     @POST("v1/member/password")
     suspend fun checkPassword(
-        @Query("password") password: String,
+        @Body passwordRequestBody: PasswordRequestBody
     ): BaseResponse<CheckPasswordPayload>
 
     @PUT("v1/member/password")
@@ -207,9 +201,13 @@ interface KusitmsApi {
     @GET("v1/attend/info")
     suspend fun getAttendInfo(): BaseResponse<AttendInfoPayload>
 
-
     //커리큘럼 출석 조회
     @GET("v1/attend/lists")
     suspend fun getAttendCurrentList(): BaseResponse<List<AttendCurrentPayLoad>>
+
+    //출석 정보 조회
+    @GET("v1/attend")
+    suspend fun getAttendScore(): BaseResponse<AttendPayload>
+
 
 }

@@ -21,7 +21,7 @@ enum class TopLevelDestination(
     ATTENDANCE(
         icon = KusitmsIcons.BottomNavAttendance,
         iconTextId = R.string.bottom_nav_attendance,
-        route = ""
+        route = NavRoutes.AttendScreen.route
     ),
     NOTICE(
         icon = KusitmsIcons.BottomNavNotice,

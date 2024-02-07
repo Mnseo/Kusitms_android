@@ -1,5 +1,6 @@
 package com.kusitms.presentation.ui.home.attend
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -25,9 +26,12 @@ import com.kusitms.presentation.model.home.attend.AttendViewModel
 fun CurriItem(
     model: AttendCurrentModel
 ) {
+    Log.d("model data", model.time.toString())
+    Log.d("model data", model.date.toString())
     Row(modifier = Modifier
         .fillMaxWidth()
-        .background(color = KusitmsColorPalette.current.Grey600)
+        .padding(horizontal = 20.dp)
+        .background(color = KusitmsColorPalette.current.Grey800)
         .height(78.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically

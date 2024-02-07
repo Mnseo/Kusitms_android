@@ -7,6 +7,7 @@ object NavUtil {
     val shownBottomBarNavRouteSet = setOf(
         NavRoutes.Notice.route,
         NavRoutes.HomeScreen.route,
-        NavRoutes.Profile.route
+        NavRoutes.Profile.route,
+        NavRoutes.AttendScreen.route
     )
 }

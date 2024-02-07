@@ -1,7 +1,11 @@
 package com.kusitms.data.repository
 
+import android.util.Log
 import com.kusitms.data.local.AuthDataStore
 import com.kusitms.data.remote.api.KusitmsApi
+import com.kusitms.data.remote.entity.request.LoginRequestBody
+import com.kusitms.data.remote.entity.request.mapToLoginRequestBody
+import com.kusitms.domain.model.login.LoginMemberModel
 import com.kusitms.domain.repository.LoginRepository
 import javax.inject.Inject
 
@@ -14,8 +18,11 @@ class LoginRepositoryImpl @Inject constructor(
         password: String
     ): Result<Unit> {
         return try {
-            val response = kusitmsApi.loginMember(email, password)
+            val model = LoginMemberModel(email,password)
+            val request = mapToLoginRequestBody(model)
+            val response = kusitmsApi.loginMember(request)
             if (response.result.code == 200 && response.payload != null) {
+                Log.d("auth", response.payload.accessToken.toString())
                 AuthDataStore().authToken = response.payload.accessToken
                 AuthDataStore().refreshToken = response.payload.refreshToken
                 Result.success(Unit)
@@ -26,7 +33,4 @@ class LoginRepositoryImpl @Inject constructor(
             Result.failure(e)
         }
     }
-
-
-
 }

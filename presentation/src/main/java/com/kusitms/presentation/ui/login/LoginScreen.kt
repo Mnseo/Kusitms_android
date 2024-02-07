@@ -4,16 +4,7 @@ import LoginLogoIv
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -89,7 +80,7 @@ fun ButtonColumn(navController: NavHostController) {
             .fillMaxWidth()
             .padding(horizontal = 20.dp)
             .height(255.dp),
-        horizontalAlignment = Alignment.Start,
+        horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
         Button(
@@ -119,7 +110,7 @@ fun ButtonColumn(navController: NavHostController) {
             Text(text = stringResource(id = R.string.login_btn2), style = KusitmsTypo.current.SubTitle2_Semibold, color = KusitmsColorPalette.current.Grey600)
         }
         Spacer(modifier = Modifier.height(20.dp))
-        LoginTalkBall.DrawLoginTalk(modifier = Modifier.padding(horizontal = 20.dp))
+        LoginTalkBall.DrawLoginTalk(modifier = Modifier.offset(x = (-90).dp))
         loginBottomColumn(navController)
     }
 }
@@ -129,8 +120,7 @@ fun loginBottomColumn(navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 0.dp)
-            .height(90.dp),
+            .padding(horizontal = 0.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
