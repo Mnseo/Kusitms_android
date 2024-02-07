@@ -7,7 +7,9 @@ data class AttendCheckRequestBody(
     val text: String
 )
 
-fun AttendCheckModel.toBody() =
-    AttendCheckRequestBody(
-        curriculumId, text
+fun mapToAttendCheckRequestBody(model: AttendCheckModel): AttendCheckRequestBody {
+    return AttendCheckRequestBody(
+        curriculumId = model.curriculumId,
+        text = model.text
     )
+}

@@ -2,6 +2,8 @@ package com.kusitms.data.repository
 
 import android.os.Build.VERSION_CODES.P
 import com.kusitms.data.remote.api.KusitmsApi
+import com.kusitms.data.remote.entity.request.AttendCheckRequestBody
+import com.kusitms.data.remote.entity.request.mapToAttendCheckRequestBody
 import com.kusitms.data.remote.entity.response.home.toModel
 import com.kusitms.domain.model.home.*
 import com.kusitms.domain.model.profile.ProfileModel
@@ -146,6 +148,22 @@ class HomeRepositoryImpl @Inject constructor(
                 Result.failure(RuntimeException("QR 코드 조회 실패: ${response.result.message}"))
             }
         } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    override suspend fun postAttendCheck(curriculumId: Int, qrText: String): Result<Unit> {
+        return try {
+            val model = AttendCheckModel(curriculumId, qrText)
+            val request = mapToAttendCheckRequestBody(model)
+            val response = kusitmsApi.attendCheck(request)
+
+            if(response.result.code == 200) {
+                Result.success(Unit)
+            } else {
+                Result.failure(RuntimeException("출석 실패: ${response.result.message}"))
+            }
+        } catch(e: Exception) {
             Result.failure(e)
         }
     }
