@@ -13,32 +13,31 @@ import com.kusitms.presentation.model.signIn.LinkType
 import com.kusitms.presentation.model.signIn.SignInStatus
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class ProfileEditViewModel @Inject constructor(
     private val getInfoMemberUseCase: GetLoginMemberProfileUseCase,
-    getMemberInfoDetailUseCase: GetMemberInfoDetailUseCase,
+    private val getMemberInfoDetailUseCase: GetMemberInfoDetailUseCase,
 ) : ViewModel() {
+
 
     private var _infoProfile: LoginMemberProfile = LoginMemberProfile("", "", "", "", false)
     var infoProfile: LoginMemberProfile = _infoProfile
 
-    val detailMemberInfo = getMemberInfoDetailUseCase().catch {
-    }.stateIn(
-        viewModelScope,
-        started = SharingStarted.Eagerly,
-        initialValue = MemberInfoDetailModel()
-    )
+    private val _detailMemberInfo = MutableStateFlow<MemberInfoDetailModel?>(null)
+    val detailMemberInfo: StateFlow<MemberInfoDetailModel?> = _detailMemberInfo.asStateFlow()
+
 
     init {
         getUserProfile()
+        getMemberInfoDetail()
     }
 
     private val _uiState = MutableStateFlow(ProfileEditUiState())
@@ -66,7 +65,7 @@ class ProfileEditViewModel @Inject constructor(
     val phoneNum: StateFlow<String> = _phoneNum
 
     private val _email = MutableStateFlow("")
-    val email: StateFlow<String> = _email
+    val email: MutableStateFlow<String> = _email
 
     private val _emailError = MutableStateFlow<String?>(null)
     val emailError: StateFlow<String?> = _emailError
@@ -85,7 +84,7 @@ class ProfileEditViewModel @Inject constructor(
     val introduce: StateFlow<String> = _introduce
 
     private val _signInStatus = MutableStateFlow(SignInStatus.DEFAULT)
-    val signInStatus : StateFlow<SignInStatus> = _signInStatus
+    val signInStatus: StateFlow<SignInStatus> = _signInStatus
 
     private val _selectedPart = MutableStateFlow<String?>(null)
     val selectedPart: StateFlow<String?> = _selectedPart
@@ -149,7 +148,6 @@ class ProfileEditViewModel @Inject constructor(
     }
 
 
-
     fun addLinkItem() {
         val newLinkItem = LinkItem(LinkType.LINK, "") //기본 설정값
         _linkItems.value = _linkItems.value + newLinkItem
@@ -199,10 +197,33 @@ class ProfileEditViewModel @Inject constructor(
             if (profileResult.isSuccess) {
                 _infoProfile = profileResult.getOrNull()!!
                 _name.value = _infoProfile.name
-                _email.value = infoProfile.email
-                _phoneNum.value = infoProfile.phoneNumber
+                _email.value = _infoProfile.email
+                _phoneNum.value = _infoProfile.phoneNumber
                 infoProfile = _infoProfile
             }
         }
     }
+
+    private fun getMemberInfoDetail() {
+        viewModelScope.launch {
+            try {
+                val detailResult = getMemberInfoDetailUseCase()
+                    .map { Result.success(it) }
+                    .catch { exception ->
+                        emit(Result.failure<MemberInfoDetailModel>(exception))
+                    }
+                    .single()
+
+                detailResult.onSuccess { detailInfo ->
+                    _detailMemberInfo.value = detailInfo
+                    _major.value = detailInfo.major
+                }.onFailure { exception ->
+                }
+            } catch (e: Exception) {
+            }
+        }
+    }
+
+
+
 }

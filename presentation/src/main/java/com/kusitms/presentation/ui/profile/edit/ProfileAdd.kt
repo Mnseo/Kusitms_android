@@ -97,7 +97,7 @@ fun ProfileAdd(
 @OptIn(ExperimentalCoroutinesApi::class)
 @Composable
 fun PhotoColumn(viewModel: ProfileEditViewModel) {
-    val imageUri by viewModel.selectedImage.collectAsState() // This should be a Uri? in your ViewModel
+    val imageUri by viewModel.selectedImage.collectAsState()
 
     val imagePickerLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->

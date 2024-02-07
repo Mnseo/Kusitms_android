@@ -47,6 +47,8 @@ fun ProfileEditScreen(
 ) {
     val scrollState = rememberScrollState()
 
+    val infoUser = viewModel.infoProfile
+    val detailMemberInfo = viewModel.detailMemberInfo
     val expanded by viewModel.expended.collectAsStateWithLifecycle()
     val uiState by viewModel.uiState.collectAsState()
 
@@ -118,8 +120,6 @@ private fun ProfileFilterButton(
     viewModel: ProfileEditViewModel,
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    val infoUser = viewModel.infoProfile
-    val detailMemberInfo by viewModel.detailMemberInfo.collectAsStateWithLifecycle()
 
 
     Row(

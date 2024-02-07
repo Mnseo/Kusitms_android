@@ -1,11 +1,13 @@
 package com.kusitms.presentation.model.home.profile
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kusitms.domain.model.home.MemberInfoDetailModel
 import com.kusitms.domain.model.login.LoginMemberProfile
 import com.kusitms.domain.usecase.home.GetMemberInfoDetailUseCase
 import com.kusitms.domain.usecase.signin.GetLoginMemberProfileUseCase
+import com.kusitms.presentation.model.profile.detail.ProfileDetailViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.catch
@@ -23,6 +25,7 @@ class MyProfileViewModel @Inject constructor(
     var infoProfile: LoginMemberProfile = _infoProfile
 
     val detailMemberInfo = getMemberInfoDetailUseCase().catch {
+
     }.stateIn(
         viewModelScope,
         started = SharingStarted.Eagerly,
@@ -42,4 +45,6 @@ class MyProfileViewModel @Inject constructor(
             }
         }
     }
+
+
 }
