@@ -1,19 +1,24 @@
 package com.kusitms.data.repository
 
+import android.content.Context
+import android.net.ConnectivityManager
 import com.kusitms.data.local.AuthDataStore
 import com.kusitms.data.local.DataStoreUtils
 import com.kusitms.data.remote.api.KusitmsApi
 import com.kusitms.domain.model.login.LoginMemberProfile
 import com.kusitms.domain.model.login.TokenModel
 import com.kusitms.domain.repository.AuthRepository
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
+
 class AuthRepositoryImpl @Inject constructor(
     private val authDataStore: AuthDataStore,
-    private val kusitmsApi: KusitmsApi
+    private val kusitmsApi: KusitmsApi,
+    @ApplicationContext private val context: Context
 ): AuthRepository {
     override suspend fun getLoginMemberProfile(): Result<LoginMemberProfile?> {
         return try {
@@ -63,5 +68,11 @@ class AuthRepositoryImpl @Inject constructor(
         } catch (e:Exception) {
             Result.failure(e)
         }
+    }
+
+    override fun checkInternetConnection(): Boolean {
+        val connectivity = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val activeNetwork = connectivity.activeNetworkInfo
+        return activeNetwork != null && activeNetwork.isConnected
     }
 }
