@@ -6,13 +6,11 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Text
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -25,7 +23,6 @@ import com.kusitms.presentation.model.signIn.SignInViewModel
 import com.kusitms.presentation.model.signIn.categories
 import com.kusitms.presentation.model.signIn.mapCategoryToValue
 import com.kusitms.presentation.ui.ImageVector.xIcon
-import kotlinx.coroutines.launch
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -58,7 +55,7 @@ fun PartBottomSheet(
                 horizontalAlignment = Alignment.Start,
                 verticalArrangement = Arrangement.Top
             ) {
-                partSnackTitle( onClick = { onChangeOpenBottomSheet(false) } )
+                PartSnackTitle( onClick = { onChangeOpenBottomSheet(false) } )
                 KusitmsMarginVerticalSpacer(size = 20)
                 partSelectColumn(viewModel = viewModel)
             }
@@ -87,7 +84,7 @@ fun partSelectColumn(viewModel: SignInViewModel) {
 }
 
 @Composable
-fun partSnackTitle(onClick: () -> Unit) {
+fun PartSnackTitle(onClick: () -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()

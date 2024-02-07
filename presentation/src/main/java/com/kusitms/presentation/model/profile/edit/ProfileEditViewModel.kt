@@ -79,6 +79,17 @@ class ProfileEditViewModel @Inject constructor(
         validateFields()
     }
 
+
+    fun updateSelectedPart(part: String) {
+        _selectedPart.value = part
+        validateFields()
+    }
+
+    fun updateInterests(interestItems: List<InterestItem>) {
+        _interests.value = interestItems
+        validateFields()
+    }
+
     fun updateEmail(newEmail: String) {
         _email.value = newEmail
         if (!isValidEmail(newEmail)) {
@@ -111,6 +122,7 @@ class ProfileEditViewModel @Inject constructor(
             _linkItems.value = updatedItems
         }
     }
+
 
 
     fun addLinkItem() {
@@ -154,4 +166,5 @@ class ProfileEditViewModel @Inject constructor(
         val phoneRegex = Regex("^01(?:0|1|[6-9])-(?:\\d{3}|\\d{4})-\\d{4}\$")
         return phoneNumber.matches(phoneRegex)
     }
+
 }
