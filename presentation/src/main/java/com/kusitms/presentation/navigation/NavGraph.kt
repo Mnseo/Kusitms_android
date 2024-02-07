@@ -2,7 +2,6 @@ package com.kusitms.presentation.navigation
 
 import ProfileDetailScreen
 import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.EnterTransition
@@ -389,7 +388,9 @@ fun MainNavigation() {
                 }
 
                 kusitmsComposableWithAnimation(NavRoutes.ProfileEdit.route) {
-                    ProfileEditScreen()
+                    ProfileEditScreen(
+                        onBack = { navController.navigateUp() }
+                    )
                 }
 
 

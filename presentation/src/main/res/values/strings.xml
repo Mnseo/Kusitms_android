@@ -232,6 +232,9 @@
     <!-- ProfileEdit-->
     <string name="profile_edit_toolbar">프로필 설정</string>
     <string name="profile_edit_modify">수정</string>
+    <string name="profile_edit_filter">프로필 선택 필터</string>
+    <string name="profile_edit_basic">기본 프로필</string>
+    <string name="profile_edit_add">추가 프로필</string>
 
 
 
