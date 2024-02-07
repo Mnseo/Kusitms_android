@@ -15,4 +15,7 @@ interface HomeRepository {
     suspend fun getAttendCurrentList(): Result<List<AttendCurrentModel>>
     suspend fun getAttendInfo(): Result<AttendInfoModel>
     suspend fun getAttendScore(): Result<AttendModel>
+    suspend fun getAttendQrText(
+        curriculumId: Int
+    ): Result<AttendQRModel>
 }

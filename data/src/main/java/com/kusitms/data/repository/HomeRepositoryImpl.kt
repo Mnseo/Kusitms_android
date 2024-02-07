@@ -134,4 +134,19 @@ class HomeRepositoryImpl @Inject constructor(
             Result.failure(e)
         }
     }
+
+    override suspend fun getAttendQrText(
+        curriculumId: Int
+    ): Result<AttendQRModel> {
+        return try {
+            val response = kusitmsApi.getQrText(curriculumId)
+            if(response.result.code == 200) {
+                Result.success(response.payload.toModel())
+            } else {
+                Result.failure(RuntimeException("QR 코드 조회 실패: ${response.result.message}"))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 }
