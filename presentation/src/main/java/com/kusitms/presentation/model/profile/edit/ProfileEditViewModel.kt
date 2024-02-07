@@ -72,9 +72,21 @@ class ProfileEditViewModel @Inject constructor(
         validateFields()
     }
 
+    fun updateEmail(newEmail: String) {
+        _email.value = newEmail
+        validateFields()
+    }
+
+    fun updatePhoneNumber(newPhoneNumber: String) {
+        _phoneNum.value = newPhoneNumber
+        validateFields()
+    }
+
     private fun validateFields() {
         _isAllFieldsValid.value = _major.value.isNotBlank() &&
                 _selectedPart.value != null &&
-                _interests.value.isNotEmpty()
+                _interests.value.isNotEmpty() &&
+                _email.value.isNotBlank() &&
+                _phoneNum.value.isNotBlank()
     }
 }
