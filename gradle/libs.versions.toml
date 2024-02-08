@@ -12,6 +12,9 @@ hilt-navigation= "1.0.0"
 # compose material3
 material3="1.1.1"
 
+#zxing
+zxing = "4.2.0"
+
 # navigation
 navigation-compose ="2.7.0-alpha01"
 
@@ -70,6 +73,9 @@ test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "a
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso-core" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 
+#zxing
+zxing = {group = "com.journeyapps", name="zxing-android-embedded", version.ref="zxing"}
+
 # timber
 timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
 
@@ -104,6 +110,7 @@ lifecycle-runtime = { group = "androidx.lifecycle", name = "lifecycle-runtime-co
 lifecycle-viewmodel= { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "androidx-lifecycle" }
 # dataStore
 dataStore = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "dataStore" }
+dataStore-core = { group = "androidx.datastore", name = "datastore-core", version.ref = "dataStore" }
 # hilt
 hilt-compile = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
 hilt= { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
@@ -155,7 +162,8 @@ camerax=[
     "camera2",
     "camera2-lifecycle",
     "camera2-view",
-    "mlkit"
+    "mlkit",
+    "zxing"
 ]
 
 lifecycle = [
@@ -175,7 +183,7 @@ network = [
     "okhttp3-logging-interceptor"
 ]
 
-dataStore = ["dataStore"]
+dataStore = ["dataStore", "dataStore-core"]
 
 retrofitSerialization = [
     "kotlinx-serialization-json",

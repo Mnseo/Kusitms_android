@@ -38,6 +38,7 @@ import kotlinx.coroutines.delay
 fun SplashScreen(viewModel: SplashViewModel, navController: NavController) {
     val tokenStatus by viewModel.tokenStatus.collectAsState()
     val snackbarHostState = remember { viewModel.snackbarHostState }
+    val isLogin by viewModel.isLogin.collectAsState()
 
     val snackbarMessage = when (tokenStatus) {
         TokenStatus.INVALID -> "토큰 상태가 유효하지 않습니다"
@@ -55,6 +56,20 @@ fun SplashScreen(viewModel: SplashViewModel, navController: NavController) {
             }
             TokenStatus.DEFAULT, TokenStatus.INVALID, TokenStatus.SERVER -> {
                 viewModel.showInvalidTokenMessage()
+                delay(2000)
+                navController.navigate(NavRoutes.LogInScreen.route) {
+                    popUpTo(NavRoutes.SplashScreen.route) { inclusive = true }
+                }
+            }
+            else -> Unit
+        }
+    }
+    LaunchedEffect(isLogin) {
+        when (isLogin) {
+            isLogin -> {
+
+            }
+            !isLogin -> {
                 delay(2000)
                 navController.navigate(NavRoutes.LogInScreen.route) {
                     popUpTo(NavRoutes.SplashScreen.route) { inclusive = true }

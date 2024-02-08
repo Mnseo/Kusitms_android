@@ -21,7 +21,8 @@ import java.io.File
 import javax.inject.Inject
 
 class SignInRepositoryImpl @Inject constructor(
-    private val kusitmsApi: KusitmsApi
+    private val kusitmsApi: KusitmsApi,
+    private val authDataStore: AuthDataStore
 ): SignInRepository {
     override suspend fun getLoginMemberProfile(): Result<LoginMemberProfile> {
         return try {
@@ -36,7 +37,7 @@ class SignInRepositoryImpl @Inject constructor(
                     phoneNumber = response.payload.phoneNumber,
                     memberDetailExist = response.payload.memberDetailExist
                 )
-                AuthDataStore().loginMemberProfile = profile
+                authDataStore.saveLoginMemberProfile(profile)
                 Result.success(profile)
             }
         } catch (e: Exception) {

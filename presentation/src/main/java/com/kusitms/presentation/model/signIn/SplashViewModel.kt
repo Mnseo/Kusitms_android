@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kusitms.domain.usecase.home.GetNetworkStatusUseCase
 import com.kusitms.domain.usecase.signin.GetAuthTokenUseCase
+import com.kusitms.domain.usecase.signin.GetIsLoginUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -18,7 +19,8 @@ enum class TokenStatus { VALID, INVALID, DEFAULT, SERVER }
 @HiltViewModel
 class SplashViewModel @Inject constructor(
     private val getAuthTokenUseCase: GetAuthTokenUseCase,
-    private val getNetworkStatusUseCase: GetNetworkStatusUseCase
+    private val getNetworkStatusUseCase: GetNetworkStatusUseCase,
+    private val getIsLoginUseCase: GetIsLoginUseCase
 ): ViewModel() {
 
     private val _tokenStatus = MutableStateFlow(TokenStatus.DEFAULT)
@@ -26,6 +28,9 @@ class SplashViewModel @Inject constructor(
 
     private val _networkStatus = MutableStateFlow(true)
     val networkStatus : StateFlow<Boolean> = _networkStatus
+
+    private val _isLogin = MutableStateFlow(true)
+    val isLogin : StateFlow<Boolean> = _isLogin
 
     val snackbarHostState = SnackbarHostState()
 
@@ -58,7 +63,8 @@ class SplashViewModel @Inject constructor(
                         _networkStatus.value = getNetworkStatusUseCase()
                         if(_networkStatus.value) {
                             updateTokenStatus(TokenStatus.VALID)
-                        } else {
+                        }
+                        else {
                             updateTokenStatus(TokenStatus.SERVER)
                             showInvalidTokenMessage()
                         }
@@ -70,6 +76,15 @@ class SplashViewModel @Inject constructor(
                 .onFailure {
                     updateTokenStatus(TokenStatus.INVALID)
                     showInvalidTokenMessage()
+                }
+            getIsLoginUseCase()
+                .onSuccess {
+                if (it != null) {
+                    _isLogin.value = it
+                }
+            }
+                .onFailure {
+                    _isLogin.value = false
                 }
         }
     }
