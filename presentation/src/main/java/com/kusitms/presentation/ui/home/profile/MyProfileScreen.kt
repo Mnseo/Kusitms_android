@@ -30,6 +30,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 fun MyProfileScreen(
     viewModel: MyProfileViewModel = hiltViewModel(),
     onBack: () -> Unit,
+    onClickModify: () -> Unit
 ) {
     val infoUser = viewModel.infoProfile
     val detailMemberInfo by viewModel.detailMemberInfo.collectAsStateWithLifecycle()
@@ -44,7 +45,9 @@ fun MyProfileScreen(
                 text = stringResource(id = R.string.profile_detail_edit),
                 style = KusitmsTypo.current.Text_Medium,
                 color = KusitmsColorPalette.current.Main400,
-                modifier = Modifier.clickable { /* 수정 */ }
+                modifier = Modifier.clickable {
+                    onClickModify()
+                }
             )
         }
         LazyColumn(

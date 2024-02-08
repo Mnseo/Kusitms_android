@@ -95,5 +95,7 @@ sealed class NavRoutes(
         fun createRoute(memberId: Int) = "ProfileDetail/${memberId}"
     }
 
+    object ProfileEdit : NavRoutes(route = "ProfileEdit")
+
     object ImageViewer : NavRoutes("ImageViewer")
 }

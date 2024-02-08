@@ -13,10 +13,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModel
 import com.kusitms.presentation.R
 import com.kusitms.presentation.common.ui.KusitmsMarginVerticalSpacer
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
+import com.kusitms.presentation.model.profile.edit.ProfileEditViewModel
 import com.kusitms.presentation.model.signIn.SignInViewModel
 import com.kusitms.presentation.model.signIn.linkCategories
 import com.kusitms.presentation.ui.ImageVector.xIcon
@@ -25,7 +27,7 @@ import com.kusitms.presentation.ui.ImageVector.xIcon
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LinkBottomSheet(
-    viewModel: SignInViewModel,
+    viewModel: ViewModel,
     openBottomSheet: Boolean = false,
     linkItemIndex: Int,
     onChangeOpenBottomSheet: (Boolean, Any?) -> Unit = { b: Boolean, any: Any? -> }
@@ -63,13 +65,17 @@ fun LinkBottomSheet(
 }
 
 @Composable
-fun LinkSelectColumn(viewModel: SignInViewModel, linkItemIndex: Int) {
+fun LinkSelectColumn(viewModel: ViewModel, linkItemIndex: Int) {
     LazyColumn(modifier = Modifier.padding(horizontal = 12.dp)) {
         items(linkCategories) { category ->
             LinkItem(
                 category = category,
                 onClick = {
-                    viewModel.updateLinkTypeAt(linkItemIndex, category.linkType)
+                    if (viewModel is SignInViewModel) {
+                        viewModel.updateLinkTypeAt(linkItemIndex, category.linkType)
+                    } else if (viewModel is ProfileEditViewModel) {
+                        viewModel.updateLinkTypeAt(linkItemIndex, category.linkType)
+                    }
                 }
             )
         }

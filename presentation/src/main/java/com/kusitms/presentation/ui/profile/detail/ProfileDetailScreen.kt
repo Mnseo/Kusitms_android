@@ -27,6 +27,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 fun ProfileDetailScreen(
     viewModel: ProfileDetailViewModel = hiltViewModel(),
     onBack: () -> Unit,
+    onClickModify: () -> Unit
 ) {
     val profile by viewModel.profile.collectAsStateWithLifecycle()
     val isMember = viewModel.infoProfile
@@ -47,14 +48,9 @@ fun ProfileDetailScreen(
                     text = stringResource(id = R.string.profile_detail_edit),
                     style = KusitmsTypo.current.Text_Medium,
                     color = KusitmsColorPalette.current.Main400,
-                    modifier = Modifier.clickable { /* 수정 */ }
-                )
-            } else {
-                Text(
-                    text = stringResource(id = R.string.profile_detail_block),
-                    style = KusitmsTypo.current.Text_Medium,
-                    color = KusitmsColorPalette.current.Grey400,
-                    modifier = Modifier.clickable { /* 차단 */ }
+                    modifier = Modifier.clickable {
+                        onClickModify()
+                    }
                 )
             }
         }
