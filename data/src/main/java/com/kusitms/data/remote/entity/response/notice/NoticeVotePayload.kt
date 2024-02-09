@@ -1,9 +1,9 @@
 package com.kusitms.data.remote.entity.response.notice
 
-import com.kusitms.domain.model.notice.NoticeModel
 import com.kusitms.domain.model.notice.NoticeVoteItem
 import com.kusitms.domain.model.notice.NoticeVoteMember
 import com.kusitms.domain.model.notice.NoticeVoteModel
+import com.kusitms.domain.model.notice.VotingStatus
 
 data class NoticeVotePayload(
     val items: List<NoticeVoteItemPayload>? = emptyList(),
@@ -33,7 +33,7 @@ fun NoticeVotePayload.toModel() =
         title = title ?: "",
         voteAttendId = voteAttendId ?: -1,
         voteId = voteId ?: 0,
-        possibleVote = voteAttendId == null
+        possibleVote = if(voteAttendId == null) VotingStatus.PreVoting else VotingStatus.ReVoting
     )
 
 fun NoticeVoteItemPayload.toModel(
