@@ -28,7 +28,9 @@ fun AttendBtnOn(navController: NavHostController) {
             .height(64.dp) ,
         colors = ButtonDefaults.buttonColors(containerColor = KusitmsColorPalette.current.Main600) ,
         shape = RoundedCornerShape(size = 12.dp),
-        onClick = { navController.navigate(NavRoutes.CameraPreview.route) }
+        onClick = {
+            navController.navigate(NavRoutes.CameraPreview.route)
+        }
     ) {
         Text(text = stringResource(R.string.attend_btn_attend), style = KusitmsTypo.current.Text_Semibold, color = KusitmsColorPalette.current.White, maxLines = 1)
     }

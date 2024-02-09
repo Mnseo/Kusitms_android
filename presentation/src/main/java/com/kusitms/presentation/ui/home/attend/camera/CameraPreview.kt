@@ -14,10 +14,11 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Button
-import androidx.compose.material.Text
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.*
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -33,6 +34,7 @@ import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -42,7 +44,9 @@ import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.common.InputImage
 import com.google.zxing.*
 import com.google.zxing.common.HybridBinarizer
+import com.kusitms.presentation.R
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
+import com.kusitms.presentation.common.ui.theme.KusitmsTypo
 import com.kusitms.presentation.model.home.attend.AttendViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -51,8 +55,20 @@ import kotlinx.coroutines.launch
 @Composable
 fun CameraScreen(
     viewModel: AttendViewModel,
-    navController: NavController
 ) {
+    val snackbarHostState = remember { SnackbarHostState() }
+    val snackbarContentState = remember { mutableStateOf<Pair<AttendViewModel.AttendSnackBarEvent, String>>(AttendViewModel.AttendSnackBarEvent.None to "") }
+
+    LaunchedEffect(key1 = Unit) {
+        viewModel.snackbarEvent.collect { event ->
+            val message = when (event) {
+                AttendViewModel.AttendSnackBarEvent.Attend_success -> "출석이 완료되었습니다"
+                AttendViewModel.AttendSnackBarEvent.Attend_fail -> "QR코드를 다시 확인해주세요"
+                else -> "화면 정가운데에 QR코드를 스캔해주세요"
+            }
+            snackbarContentState.value = event to message
+        }
+    }
     ComposablePermission(
         permission = Manifest.permission.CAMERA,
         onDenied = { requester ->
@@ -69,9 +85,62 @@ fun CameraScreen(
                 viewModel.updateScannedQrCode(qrText)
                 viewModel.postAttendCheck()
             }
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.TopCenter
+            ) {
+                CameraSnackbar(snackbarHostState = snackbarHostState) {
+                    val (event, message) = snackbarContentState.value
+                    when (event) {
+                        AttendViewModel.AttendSnackBarEvent.Attend_success -> {
+                            Text(text = message, style= KusitmsTypo.current.Text_Semibold, color = KusitmsColorPalette.current.Grey200)
+                        }
+                        AttendViewModel.AttendSnackBarEvent.Attend_fail -> {
+                                Image(painterResource(id = R.drawable.ic_warning_sigb), contentDescription = null)
+                                Spacer(modifier = Modifier.width(10.dp))
+                                Text(text = message, style= KusitmsTypo.current.Text_Semibold, color = KusitmsColorPalette.current.Sub2)
+                        }
+                        else -> {  Text(text = message, style= KusitmsTypo.current.Text_Semibold, color = KusitmsColorPalette.current.Grey200) }
+                    }
+                }
+            }
             CameraPreview(onQrCodeScanned = onQrCodeScanned)
         }
     )
+}
+
+@Composable
+fun CameraSnackbar(
+    snackbarHostState: SnackbarHostState,
+    content: @Composable () -> Unit
+) {
+    SnackbarHost(
+        hostState = snackbarHostState,
+        modifier = Modifier
+            .padding(top = 64.dp)
+            .fillMaxWidth(),
+        snackbar = { snackbarData ->
+            Box(modifier = androidx.compose.ui.Modifier
+                .fillMaxWidth()
+                .height(48.dp)
+                .padding(horizontal = 20.dp)
+                .background(
+                    color = KusitmsColorPalette.current.Grey600,
+                    shape = RoundedCornerShape(12.dp)
+                )
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight()
+                        .padding(horizontal = 24.dp),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    content()
+                }
+            }
+        })
 }
 
 @Composable
@@ -252,7 +321,6 @@ fun CameraPreview(onQrCodeScanned: (String) -> Unit) {
         cameraProvider.unbindAll() // 기존 바인딩 제거
 
         try {
-            // 카메라와 분석기 바인딩
             cameraProvider.bindToLifecycle(
                 lifecycleOwner,
                 CameraSelector.DEFAULT_BACK_CAMERA,
@@ -264,10 +332,7 @@ fun CameraPreview(onQrCodeScanned: (String) -> Unit) {
         }
     }
 
-    // Compose에 카메라 프리뷰 표시
     AndroidView({ previewView }, modifier = Modifier.fillMaxSize())
-
-    // QR 코드 스캔 영역 표시 (CameraOverlay)
     CameraOverlay()
 }
 

@@ -162,6 +162,6 @@ class AttendViewModel @Inject constructor(
     }
 
     enum class AttendSnackBarEvent {
-        Attend_success, Attend_fail
+        Attend_success, Attend_fail, None
     }
 }
