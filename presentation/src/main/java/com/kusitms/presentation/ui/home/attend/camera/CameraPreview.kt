@@ -39,6 +39,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.common.InputImage
@@ -57,6 +58,8 @@ fun CameraScreen(
     viewModel: AttendViewModel,
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
+    val qrEnabled by viewModel.qrEnabled.collectAsState()
+    val lifecycleScope = LocalLifecycleOwner.current.lifecycleScope
     val snackbarContentState = remember { mutableStateOf<Pair<AttendViewModel.AttendSnackBarEvent, String>>(AttendViewModel.AttendSnackBarEvent.None to "") }
 
     LaunchedEffect(key1 = Unit) {
@@ -66,7 +69,9 @@ fun CameraScreen(
                 AttendViewModel.AttendSnackBarEvent.Attend_fail -> "QR코드를 다시 확인해주세요"
                 else -> "화면 정가운데에 QR코드를 스캔해주세요"
             }
-            snackbarContentState.value = event to message
+            lifecycleScope.launch {
+                snackbarHostState.showSnackbar(message)
+            }
         }
     }
     ComposablePermission(
@@ -82,7 +87,7 @@ fun CameraScreen(
         },
         onGranted = {
             val onQrCodeScanned: (String) -> Unit = { qrText ->
-                if(qrText != "") {
+                if(qrText != "" && qrEnabled) {
                     viewModel.updateScannedQrCode(qrText)
                     viewModel.postAttendCheck()
                 }

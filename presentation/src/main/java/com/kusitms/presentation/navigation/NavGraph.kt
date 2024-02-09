@@ -171,8 +171,7 @@ fun MainNavigation() {
 
                 kusitmsComposableWithAnimation(NavRoutes.CameraPreview.route) {
                     CameraScreen(
-                        attendViewModel,
-                        navController
+                        attendViewModel
                     )
                 }
 

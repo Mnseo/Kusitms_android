@@ -17,7 +17,9 @@ import com.kusitms.presentation.R
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.ui.notice.detail.NoticeDetailViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.text.SimpleDateFormat
@@ -37,14 +39,13 @@ class AttendViewModel @Inject constructor(
     private val getAttendInfoUseCase: GetAttendInfoUseCase,
     private val getAttendScoreUseCase: GetAttendScoreUseCase,
     getAttendQrUseCase: GetAttendQrUseCase,
-    private val getIsLoginUseCase: GetIsLoginUseCase,
     private val PostAttendCheckUseCase: PostAttendCheckUseCase
 ):ViewModel() {
 
     private val _attendListInit =  MutableStateFlow<List<AttendCurrentModel>>(emptyList())
     val attendListInit : StateFlow<List<AttendCurrentModel>> = _attendListInit.asStateFlow()
 
-    private val _upcomingAttend =  MutableStateFlow(AttendInfoModel(0, "", false, "", ""))
+    private val _upcomingAttend =  MutableStateFlow(AttendInfoModel(0, "커리큘럼이 없습니다", false, "", ""))
     val upcomingAttend : StateFlow<AttendInfoModel> = _upcomingAttend.asStateFlow()
 
     private val _attendScore =  MutableStateFlow(AttendModel(0, 0, 0, 0, "수료 가능한 점수에요"))
@@ -74,7 +75,7 @@ class AttendViewModel @Inject constructor(
                         )
                     }
                 }.collect {
-                    _attendListInit
+                    _attendListInit.value = it
                 }
         }
     }
@@ -87,7 +88,7 @@ class AttendViewModel @Inject constructor(
                 }.collect {
                     _upcomingAttend.emit(it)
                     _attendCheckModel.emit(
-                        AttendCheckModel(curriculumId = it.curriculumId, text = "")
+                        AttendCheckModel(curriculumId = it.curriculumId, text = it.curriculumName)
                     )
                 }
         }
@@ -122,17 +123,21 @@ class AttendViewModel @Inject constructor(
 
     fun postAttendCheck() {
         viewModelScope.launch {
-            val model = attendCheckModel
-            PostAttendCheckUseCase(curriculumId = model.value.curriculumId, qrText = model.value.text).
-            catch {
-                Log.d("출석 확인", "출석 실패")
-                _snackbarEvent.emit(AttendSnackBarEvent.Attend_fail)
-            }
-                .collectLatest {
-                    Log.d("출석 확인", "출석 성공")
-                    _snackbarEvent.emit(AttendSnackBarEvent.Attend_success)
-                    _qrEnabled.value = true
+            while (isActive) {
+                val model = attendCheckModel.value
+                if(model.curriculumId != 0) {
+                    PostAttendCheckUseCase(curriculumId = model.curriculumId, qrText = model.text)
+                        .onFailure{
+                            _snackbarEvent.emit(AttendSnackBarEvent.Attend_fail)
+                        }
+                        .onSuccess {
+                            Log.d("출석 확인", "출석 성공")
+                            _snackbarEvent.emit(AttendSnackBarEvent.Attend_success)
+                            _qrEnabled.value = false
+                        }
+                    delay(10000L) // 다음 반복까지 10초 대기
                 }
+            }
         }
     }
 

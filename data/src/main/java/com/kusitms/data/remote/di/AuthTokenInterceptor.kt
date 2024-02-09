@@ -23,18 +23,25 @@ class AuthTokenInterceptor @Inject constructor(
              authDataStore.authToken.first()
          } ?: ""
 
+        val refresh: String? = runBlocking {
+            authDataStore.refreshToken.first()
+        }?: ""
+
         // "auth/logout" 엔드포인트 확인
-        if (originalRequest.url.encodedPath.endsWith("auth/logout")) {
-            // logout 엔드포인트의 경우 refreshToken 사용
-            requestBuilder.addHeader("Authorization", "${authDataStore.refreshToken}")
-        } else if(originalRequest.url.encodedPath.endsWith("auth/logout"))
-        else {
-            // 다른 엔드포인트의 경우 authToken 사용
+        if (!token.isNullOrEmpty()) {
             requestBuilder.addHeader("Authorization", "$token")
         }
 
-        Log.d("Token is","${authDataStore.authToken}")
-        Log.d("Token is","${authDataStore.refreshToken}")
+        // 로그아웃 요청에는 리프레시 토큰도 추가
+        if (originalRequest.url.encodedPath.endsWith("v1/auth/logout")) {
+            val refreshToken: String? = runBlocking {
+                authDataStore.refreshToken.first()
+            }
+            if (!refreshToken.isNullOrEmpty()) {
+                requestBuilder.addHeader("RefreshToken", "$refresh")
+            }
+        }
+
         var request = requestBuilder.build()
         var response = chain.proceed(request)
 

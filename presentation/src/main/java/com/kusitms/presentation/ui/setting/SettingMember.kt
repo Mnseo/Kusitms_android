@@ -50,18 +50,21 @@ fun SettingMember(
             SettingViewModel.SettingStatus.SIGNOUT -> {
                 openDialogState = true
             }
-            //처리.. 필요..
             SettingViewModel.SettingStatus.ERROR, SettingViewModel.SettingStatus.DEFAULT -> {}
             else -> {}
         }
     }
 
     if(openDialogState) {
+        val titleResId = settingStatus.getTitleResId()
+        val contentResId = settingStatus.getContentResId()
+        val okTextResId = settingStatus.getOkTextResId()
+        
         KusitmsDialog(
-            title = stringResource(id = R.string.logout_dialog_title),
+            title = stringResource(id = titleResId),
             content = {
                 Text(
-                    text = stringResource(id = R.string.logout_dialog_content),
+                    text = stringResource(id = contentResId),
                     textAlign = TextAlign.Center,
                     style = KusitmsTypo.current.Caption1,
                     color = KusitmsColorPalette.current.Grey400
@@ -69,14 +72,19 @@ fun SettingMember(
                 KusitmsMarginVerticalSpacer(size = 24)
             },
             okColor = KusitmsColorPalette.current.Sub2,
-            okText = "로그아웃하기",
+            okText = stringResource(id = okTextResId),
             onOk = {
-                viewModel.logOut()
+                when (settingStatus) {
+                    SettingViewModel.SettingStatus.LOGOUT -> viewModel.logOut()
+                    SettingViewModel.SettingStatus.SIGNOUT -> viewModel.signOut()
+                    else -> {}
+                }
+                openDialogState = false
             },
             onCancel = {
-             !openDialogState
+                openDialogState = false
+                viewModel.updateSettingStatus(SettingViewModel.SettingStatus.DEFAULT)
             }) {
-        openDialogState = false
         }
     }
 

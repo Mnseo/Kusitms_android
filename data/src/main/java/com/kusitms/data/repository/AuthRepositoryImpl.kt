@@ -2,6 +2,7 @@ package com.kusitms.data.repository
 
 import android.content.Context
 import android.net.ConnectivityManager
+import android.util.Log
 import com.kusitms.data.local.AuthDataStore
 import com.kusitms.data.local.DataStoreUtils
 import com.kusitms.data.remote.api.KusitmsApi
@@ -43,7 +44,9 @@ class AuthRepositoryImpl @Inject constructor(
     override suspend fun logOutMember(): Result<Unit> {
         return try {
             val response = kusitmsApi.logOutMember()
+            Log.d("response", response.toString())
             if (response.result.code == 200) {
+                Log.d("로그아웃", "성공")
                 authDataStore.clearAllData()
                 Result.success(Unit)
             } else {

@@ -1,5 +1,6 @@
 package com.kusitms.presentation.model.setting
 
+import android.util.Log
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.UriHandler
@@ -41,13 +42,17 @@ class SettingViewModel @Inject constructor(
 
     fun logOut() {
         viewModelScope.launch {
-            memberLogOutUseCase()
-                .onSuccess {
+            try {
+                val result = memberLogOutUseCase()
+                if (result.isSuccess) {
+                    Log.d("로그아웃", "성공")
                     updateSettingStatus(SettingStatus.LOGOUT_SUCCESS)
-                }
-                .onFailure {
+                } else {
                     updateSettingStatus(SettingStatus.ERROR)
                 }
+            } catch (e: Exception) {
+                updateSettingStatus(SettingStatus.ERROR)
+            }
         }
     }
 
@@ -80,6 +85,14 @@ class SettingViewModel @Inject constructor(
             return when (this) {
                 LOGOUT -> R.string.logout_dialog_content
                 SIGNOUT -> R.string.signout_dialog_content
+                else -> R.string.signout_blank_title
+            }
+        }
+        @StringRes
+        fun getOkTextResId(): Int {
+            return when (this) {
+                LOGOUT -> R.string.logout_dialog_ok
+                SIGNOUT -> R.string.signout_dialog_ok
                 else -> R.string.signout_blank_title
             }
         }

@@ -119,7 +119,7 @@ fun AttendPreColumn(
     navController: NavHostController
 ) {
     val curri by viewModel.upcomingAttend.collectAsState()
-    val curriculum = curri?.curriculumName ?: ""
+    val curriculum = curri.curriculumName ?: "커리큘럼이 없습니다"
     val eventDateTime = viewModel.combineDateAndTime(curri.date, curri.time)
     val currentTime = remember { mutableStateOf(LocalDateTime.now()) }
     val duration = eventDateTime?.let {
