@@ -58,9 +58,3 @@ object LeftArrow {
             alignment = Alignment.Center)
     }
 }
-
-@Preview(showBackground = true)
-@Composable
-fun previewArrow() {
-    LeftArrow.DrawRightArrow()
-}

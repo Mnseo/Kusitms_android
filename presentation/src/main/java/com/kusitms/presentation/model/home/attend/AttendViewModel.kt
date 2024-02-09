@@ -7,14 +7,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bumptech.glide.Glide.init
+import com.kusitms.domain.model.home.AttendCheckModel
 import com.kusitms.domain.model.home.AttendCurrentModel
 import com.kusitms.domain.model.home.AttendInfoModel
 import com.kusitms.domain.model.home.AttendModel
-import com.kusitms.domain.usecase.home.GetAttendCurrentListUseCase
-import com.kusitms.domain.usecase.home.GetAttendInfoUseCase
-import com.kusitms.domain.usecase.home.GetAttendScoreUseCase
+import com.kusitms.domain.usecase.home.*
+import com.kusitms.domain.usecase.signin.GetIsLoginUseCase
 import com.kusitms.presentation.R
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
+import com.kusitms.presentation.ui.notice.detail.NoticeDetailViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -32,45 +33,77 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AttendViewModel @Inject constructor(
-    getAttendCurrentListUseCase: GetAttendCurrentListUseCase,
-    getAttendInfoUseCase: GetAttendInfoUseCase,
-    getAttendScoreUseCase: GetAttendScoreUseCase
+    private val getAttendCurrentListUseCase: GetAttendCurrentListUseCase,
+    private val getAttendInfoUseCase: GetAttendInfoUseCase,
+    private val getAttendScoreUseCase: GetAttendScoreUseCase,
+    getAttendQrUseCase: GetAttendQrUseCase,
+    private val getIsLoginUseCase: GetIsLoginUseCase,
+    private val PostAttendCheckUseCase: PostAttendCheckUseCase
 ):ViewModel() {
 
-    val attendListInit: StateFlow<List<AttendCurrentModel>> = getAttendCurrentListUseCase()
-        .catch { e ->
-        }
-        .map { list ->
-            list.map { model ->
-                model.copy(
-                    date = formatDate(model.date),
-                    time = formatTime(model.time)
-                )
-            }
-        }
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.Eagerly,
-            initialValue = emptyList()
-        )
+    private val _attendListInit =  MutableStateFlow<List<AttendCurrentModel>>(emptyList())
+    val attendListInit : StateFlow<List<AttendCurrentModel>> = _attendListInit.asStateFlow()
 
-    val upcomingAttend = getAttendInfoUseCase().catch {
-    }.stateIn(
-        viewModelScope,
-        started =  SharingStarted.Eagerly,
-        initialValue = AttendInfoModel(0, "", false, "", "")
+    private val _upcomingAttend =  MutableStateFlow(AttendInfoModel(0, "", false, "", ""))
+    val upcomingAttend : StateFlow<AttendInfoModel> = _upcomingAttend.asStateFlow()
+
+    private val _attendScore =  MutableStateFlow(AttendModel(0, 0, 0, 0, "수료 가능한 점수에요"))
+    val attendScore : StateFlow<AttendModel> = _attendScore.asStateFlow()
+
+    private val _attendCheckModel = MutableStateFlow(
+        AttendCheckModel(curriculumId = upcomingAttend.value.curriculumId, text = "")
     )
+    val attendCheckModel = _attendCheckModel.asStateFlow()
 
-    val attendScore = getAttendScoreUseCase().catch {
-    }.stateIn(
-        viewModelScope,
-        started = SharingStarted.Eagerly,
-        initialValue = AttendModel(0, 0, 0, 0, "수료 가능한 점수에요")
-    )
+    private val _snackbarEvent = MutableSharedFlow<AttendSnackBarEvent>()
+    val snackbarEvent : SharedFlow<AttendSnackBarEvent> = _snackbarEvent.asSharedFlow()
 
-    private val _attendCurrentList = MutableStateFlow<List<AttendCurrentModel>>(emptyList())
-    val attendCurrentList : StateFlow<List<AttendCurrentModel>> = _attendCurrentList.asStateFlow()
+    fun getAttendList(){
+        viewModelScope.launch {
+            getAttendCurrentListUseCase()
+                .catch { e ->
+                }
+                .map { list ->
+                    list.map { model ->
+                        model.copy(
+                            date = formatDate(model.date),
+                            time = formatTime(model.time)
+                        )
+                    }
+                }.collect {
+                    _attendListInit
+                }
+        }
+    }
 
+    fun getUpcomingAttend() {
+        viewModelScope.launch {
+            getAttendInfoUseCase()
+                .catch {
+                    //TODO 에러처리
+                }.collect {
+                    _upcomingAttend.emit(it)
+                    _attendCheckModel.emit(
+                        AttendCheckModel(curriculumId = it.curriculumId, text = "")
+                    )
+                }
+        }
+    }
+
+    fun getAttendScore(){
+        viewModelScope.launch {
+            getAttendScoreUseCase()
+                .catch {
+                    //TODO 에러처리
+                }.collect {
+                    _attendScore.emit(it)
+                }
+        }
+    }
+
+    fun updateScannedQrCode(qrText: String) {
+        _attendCheckModel.value = _attendCheckModel.value.copy(text = qrText)
+    }
 
     fun formatDate(dateString: String): String {
         val originalFormat = SimpleDateFormat("MM월 dd일", Locale.KOREA)
@@ -81,6 +114,21 @@ class AttendViewModel @Inject constructor(
         } catch (e: Exception) {
             Log.d("변환 실패", "date")
             dateString
+        }
+    }
+
+    fun postAttendCheck() {
+        viewModelScope.launch {
+            val model = attendCheckModel
+            PostAttendCheckUseCase(curriculumId = model.value.curriculumId, qrText = model.value.text).
+            catch {
+                Log.d("출석 확인", "출석 실패")
+                _snackbarEvent.emit(AttendSnackBarEvent.Attend_fail)
+            }
+                .collectLatest {
+                    Log.d("출석 확인", "출석 성공")
+                    _snackbarEvent.emit(AttendSnackBarEvent.Attend_success)
+                }
         }
     }
 
@@ -132,5 +180,9 @@ class AttendViewModel @Inject constructor(
                 LATE -> R.drawable.ic_attend_late
             }
         }
+    }
+
+    enum class AttendSnackBarEvent {
+        Attend_success, Attend_fail
     }
 }

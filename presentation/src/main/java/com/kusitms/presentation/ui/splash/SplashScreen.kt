@@ -5,6 +5,10 @@ import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Scaffold
+import androidx.compose.material.SnackbarData
+import androidx.compose.material.SnackbarHost
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -21,6 +25,8 @@ import coil.request.ImageRequest
 import coil.size.Size
 import coil.size.Size.Companion.ORIGINAL
 import com.kusitms.presentation.R
+import com.kusitms.presentation.common.ui.KusitmsMarginVerticalSpacer
+import com.kusitms.presentation.common.ui.KusitmsSnackBar
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
 import com.kusitms.presentation.model.signIn.SplashViewModel
@@ -31,6 +37,13 @@ import kotlinx.coroutines.delay
 @Composable
 fun SplashScreen(viewModel: SplashViewModel, navController: NavController) {
     val tokenStatus by viewModel.tokenStatus.collectAsState()
+    val snackbarHostState = remember { viewModel.snackbarHostState }
+    val isLogin by viewModel.isLogin.collectAsState()
+
+    val snackbarMessage = when (tokenStatus) {
+        TokenStatus.INVALID -> "토큰 상태가 유효하지 않습니다"
+        TokenStatus.SERVER -> "네트워크 연결이 끊어졌습니다" else -> ""
+    }
 
     LaunchedEffect(tokenStatus) {
         viewModel.verifyToken()
@@ -41,7 +54,22 @@ fun SplashScreen(viewModel: SplashViewModel, navController: NavController) {
                     popUpTo(NavRoutes.SplashScreen.route) { inclusive = true }
                 }
             }
-            TokenStatus.DEFAULT, TokenStatus.INVALID -> {
+            TokenStatus.DEFAULT, TokenStatus.INVALID, TokenStatus.SERVER -> {
+                viewModel.showInvalidTokenMessage()
+                delay(2000)
+                navController.navigate(NavRoutes.LogInScreen.route) {
+                    popUpTo(NavRoutes.SplashScreen.route) { inclusive = true }
+                }
+            }
+            else -> Unit
+        }
+    }
+    LaunchedEffect(isLogin) {
+        when (isLogin) {
+            isLogin -> {
+
+            }
+            !isLogin -> {
                 delay(2000)
                 navController.navigate(NavRoutes.LogInScreen.route) {
                     popUpTo(NavRoutes.SplashScreen.route) { inclusive = true }
@@ -51,7 +79,43 @@ fun SplashScreen(viewModel: SplashViewModel, navController: NavController) {
         }
     }
 
-    Splash()
+    Scaffold(
+        snackbarHost = { SnackbarHost(
+            hostState = snackbarHostState,
+            snackbar = {snackbarData: SnackbarData ->
+                Box(modifier = androidx.compose.ui.Modifier
+                    .fillMaxWidth()
+                    .height(48.dp)
+                    .padding(horizontal = 20.dp)
+                    .background(
+                        color = KusitmsColorPalette.current.Grey600,
+                        shape = RoundedCornerShape(12.dp)
+                    )
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .fillMaxHeight()
+                            .padding(horizontal = 24.dp),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(text= snackbarMessage, color = KusitmsColorPalette.current.Grey200, style= KusitmsTypo.current.Text_Semibold)
+                    }
+                }
+                KusitmsMarginVerticalSpacer(size = 40)
+            }
+        ) }
+    ) {
+        Column(
+            Modifier
+                .fillMaxSize()
+                .padding(it)
+        ) {
+            Splash()
+        }
+    }
+
 }
 
 @Composable

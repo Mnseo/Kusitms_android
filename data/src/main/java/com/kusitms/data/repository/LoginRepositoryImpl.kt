@@ -11,7 +11,8 @@ import javax.inject.Inject
 
 
 class LoginRepositoryImpl @Inject constructor(
-    private val kusitmsApi: KusitmsApi
+    private val kusitmsApi: KusitmsApi,
+    private val authDataStore: AuthDataStore
 ): LoginRepository {
     override suspend fun LoginMember(
         email: String,
@@ -23,8 +24,11 @@ class LoginRepositoryImpl @Inject constructor(
             val response = kusitmsApi.loginMember(request)
             if (response.result.code == 200 && response.payload != null) {
                 Log.d("auth", response.payload.accessToken.toString())
-                AuthDataStore().authToken = response.payload.accessToken
-                AuthDataStore().refreshToken = response.payload.refreshToken
+
+                authDataStore.saveAuthToken(response.payload.accessToken)
+                authDataStore.saveRefreshToken(response.payload.refreshToken)
+                authDataStore.updateLogin(true)
+
                 Result.success(Unit)
             } else {
                 Result.failure(RuntimeException("로그인 실패: ${response.result.message}"))

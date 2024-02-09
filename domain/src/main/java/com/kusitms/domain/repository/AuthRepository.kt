@@ -13,4 +13,8 @@ interface AuthRepository {
     suspend fun signOutMember(): Result<Unit>
 
     suspend fun getAuthToken() :Result<TokenModel?>
+
+    fun checkInternetConnection(): Boolean
+
+    suspend fun getIsLogin(): Result<Boolean?>
 }

@@ -47,6 +47,7 @@ import com.kusitms.presentation.model.signIn.SplashViewModel
 import com.kusitms.presentation.ui.home.HomeScreen
 import com.kusitms.presentation.ui.home.attend.AttendScreen
 import com.kusitms.presentation.ui.home.attend.camera.CameraPreview
+import com.kusitms.presentation.ui.home.attend.camera.CameraScreen
 import com.kusitms.presentation.ui.home.profile.MyProfileScreen
 import com.kusitms.presentation.ui.home.team.HomeTeamDetailScreen
 import com.kusitms.presentation.ui.login.LoginScreen
@@ -167,6 +168,14 @@ fun MainNavigation() {
                         navController
                     )
                 }
+
+                kusitmsComposableWithAnimation(NavRoutes.CameraPreview.route) {
+                    CameraScreen(
+                        attendViewModel,
+                        navController
+                    )
+                }
+
                 kusitmsComposableWithAnimation(NavRoutes.SignInProfileComplete.route) {
                     SignInProfileComplete(
                         signInViewModel,
@@ -244,10 +253,6 @@ fun MainNavigation() {
                             navController
                         )
                     }
-                }
-
-                kusitmsComposableWithAnimation(NavRoutes.CameraPreview.route) {
-                    CameraPreview()
                 }
 
                 //HomeScreen
