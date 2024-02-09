@@ -1,42 +1,79 @@
 package com.kusitms.data.local
 
+import android.content.Context
 import android.util.Log
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.preferencesDataStore
 import com.google.gson.Gson
 import com.kusitms.domain.model.login.LoginMemberProfile
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 import javax.inject.Singleton
 
-@Singleton
-class AuthDataStore {
-    private val KEY_AUTH_TOKEN = "KEY_AUTH_TOKEN"
-    private val KEY_REFRESH_TOKEN = "KEY_REFRESH_TOKEN"
-    private val KEY_LOGIN_MEMBER_PROFILE = "KEY_LOGIN_MEMBER_PROFILE"
+class AuthDataStore @Inject constructor(private val context: Context) {
+    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
+    companion object {
+        val AUTH_TOKEN_KEY = stringPreferencesKey("auth_token")
+        val REFRESH_TOKEN_KEY = stringPreferencesKey("refresh_token")
+        val IS_LOGIN = booleanPreferencesKey("is_login")
+        val KEY_LOGIN_MEMBER_PROFILE = stringPreferencesKey("login_member_profile")
+    }
 
-    var authToken: String
-        get() = DataStoreUtils.getSyncData(KEY_AUTH_TOKEN, "")
-        set(value) {
-            DataStoreUtils.saveSyncStringData(KEY_AUTH_TOKEN, value)
+    suspend fun saveAuthToken(token: String) {
+        context.dataStore.edit { preferences ->
+            preferences[AUTH_TOKEN_KEY] = token
+        }
+    }
+
+    suspend fun saveLoginMemberProfile(profile: LoginMemberProfile?) {
+        val json = Gson().toJson(profile)
+        context.dataStore.edit { preferences ->
+            preferences[KEY_LOGIN_MEMBER_PROFILE] = json
+        }
+    }
+
+    val loginMemberProfile: Flow<LoginMemberProfile?> = context.dataStore.data
+        .map { preferences ->
+            val json = preferences[KEY_LOGIN_MEMBER_PROFILE] ?: return@map null
+            return@map Gson().fromJson(json, LoginMemberProfile::class.java)
         }
 
-    var refreshToken: String
-        get() = DataStoreUtils.getSyncData(KEY_REFRESH_TOKEN, "")
-        set(value) {
-            DataStoreUtils.saveSyncStringData(KEY_REFRESH_TOKEN, value)
+    suspend fun updateLogin(isLogin: Boolean) {
+        context.dataStore.edit { preferences ->
+            preferences[IS_LOGIN] =  isLogin
+        }
+    }
+
+    suspend fun saveRefreshToken(token: String) {
+        context.dataStore.edit { preferences ->
+            preferences[REFRESH_TOKEN_KEY] = token
+        }
+    }
+
+    suspend fun clearAllData() {
+        context.dataStore.edit { preferences ->
+            preferences.clear()
+        }
+    }
+
+    val authToken: Flow<String?> = context.dataStore.data
+        .map { preferences ->
+            preferences[AUTH_TOKEN_KEY]
         }
 
-    var loginMemberProfile: LoginMemberProfile?
-        get() {
-            val json = DataStoreUtils.getSyncData(KEY_LOGIN_MEMBER_PROFILE, "")
-            return if (json.isNotEmpty()) {
-                Gson().fromJson(json, LoginMemberProfile::class.java)
-            } else {
-                null
-            }
+    val refreshToken: Flow<String?> = context.dataStore.data
+        .map { preferences ->
+            preferences[REFRESH_TOKEN_KEY]
         }
-        set(value) {
-            val json = Gson().toJson(value)
-            DataStoreUtils.saveSyncStringData(KEY_LOGIN_MEMBER_PROFILE, json)
-            Log.d("AuthDataStore_loginMemberProfile", "Saving LoginMemberProfile: $json")
+
+    val isLogin: Flow<Boolean?> = context.dataStore.data
+        .map { preferences ->
+            preferences[IS_LOGIN]
         }
 }

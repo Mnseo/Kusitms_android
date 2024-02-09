@@ -209,5 +209,21 @@ interface KusitmsApi {
     @GET("v1/attend")
     suspend fun getAttendScore(): BaseResponse<AttendPayload>
 
+    //출석 QR 조회
+    @GET("v1/attend/text/{curriculumId}")
+    suspend fun getQrText(
+        @Path("curriculumId") curriculumId: Int
+    ):BaseResponse<AttendQrTextPayload>
 
+    //결석 처리
+    @POST("v1/attend/absent/{curriculumId}")
+    suspend fun postAbsent(
+        @Path("curriculumId") curriculumId: Int
+    ): BaseResponse<Unit>
+
+    //출석 처리
+    @POST("v1/attend")
+    suspend fun attendCheck(
+        @Body attendCheckRequestBody: AttendCheckRequestBody
+    ): BaseResponse<Unit>
 }
