@@ -102,7 +102,7 @@ class ProfileEditViewModel @Inject constructor(
 
 
     fun updateSelectedPart(part: String) {
-        _selectedPart.value = part
+        _selectedPart.value = mapPartToKorean(part)
         validateFields()
     }
 
@@ -207,11 +207,19 @@ class ProfileEditViewModel @Inject constructor(
             if (profileResult.isSuccess) {
                 _detailMemberInfo = profileResult.getOrNull()!!
                 _major.value = _detailMemberInfo.major.toString()
+                _selectedPart.value = mapPartToKorean(_detailMemberInfo.part.toString())
+
                 detailMemberInfo = _detailMemberInfo
             }
         }
     }
 
-
-
+    private fun mapPartToKorean(part: String): String {
+        return when (part) {
+            "PLANNING" -> "기획"
+            "DESIGN" -> "디자인"
+            "DEVELOPMENT" -> "개발"
+            else -> part
+        }
+    }
 }
