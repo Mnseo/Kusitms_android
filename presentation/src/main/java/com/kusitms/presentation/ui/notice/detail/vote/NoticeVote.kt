@@ -41,6 +41,7 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
@@ -50,6 +51,8 @@ import coil.request.ImageRequest
 import com.kusitms.domain.model.notice.NoticeVoteItem
 import com.kusitms.domain.model.notice.NoticeVoteMember
 import com.kusitms.domain.model.notice.NoticeVoteModel
+import com.kusitms.domain.model.notice.VotingStatus
+import com.kusitms.presentation.R
 import com.kusitms.presentation.common.ui.KusitmsMarginHorizontalSpacer
 import com.kusitms.presentation.common.ui.KusitmsMarginVerticalSpacer
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
@@ -62,7 +65,7 @@ import com.kusitms.presentation.ui.ImageVector.icons.kusitmsicons.UserBackground
 @Composable
 fun NoticeVote(
     noticeVoteModel: NoticeVoteModel = NoticeVoteModel(),
-    onComplete : (Int) -> Unit
+    onComplete: (Int) -> Unit
 ) {
     var selectedNoteVoteItemList by remember { mutableStateOf<List<NoticeVoteItem>>(emptyList()) }
 
@@ -87,23 +90,38 @@ fun NoticeVote(
             )
             KusitmsMarginVerticalSpacer(size = 16)
             noticeVoteModel.items.forEach {
-                if(noticeVoteModel.possibleVote){
+                if (noticeVoteModel.possibleVote == VotingStatus.PreVoting) {
                     NoticePreVoteItem(
                         it,
                         selectedNoteVoteItemList.contains(it),
                         onClick = {
-                            selectedNoteVoteItemList = if(selectedNoteVoteItemList.contains(it)) emptyList() else listOf(it)
+                            selectedNoteVoteItemList =
+                                if (selectedNoteVoteItemList.contains(it)) emptyList() else listOf(
+                                    it
+                                )
                         }
                     )
-                }else {
+                } else {
                     NoticeVotedItem(
                         it,
-                        it.isVoted
+                        if (selectedNoteVoteItemList.isEmpty()) it.isVoted else selectedNoteVoteItemList.contains(
+                            it
+                        ),
+                        onClick = {
+                            selectedNoteVoteItemList =
+                                if (selectedNoteVoteItemList.contains(it)) emptyList() else listOf(
+                                    it
+                                )
+                        }
                     )
                 }
                 KusitmsMarginVerticalSpacer(size = 4)
             }
-            if(noticeVoteModel.possibleVote){
+            if (noticeVoteModel.possibleVote in setOf(
+                    VotingStatus.PreVoting,
+                    VotingStatus.ReVoting
+                )
+            ) {
                 KusitmsMarginVerticalSpacer(size = 12)
                 OutlinedButton(
                     modifier = Modifier
@@ -112,18 +130,24 @@ fun NoticeVote(
                     shape = RoundedCornerShape(16.dp),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = KusitmsColorPalette.current.Grey600,
-                        contentColor =  KusitmsColorPalette.current.Grey200,
-                        disabledContentColor =   KusitmsColorPalette.current.Grey500
+                        contentColor = KusitmsColorPalette.current.Grey200,
+                        disabledContentColor = KusitmsColorPalette.current.Grey500
                     ),
-                    border = BorderStroke(1.dp, color =
-                    KusitmsColorPalette.current.Grey500
+                    border = BorderStroke(
+                        1.dp, color =
+                        KusitmsColorPalette.current.Grey500
                     ),
-                    enabled = selectedNoteVoteItemList.isNotEmpty(),
+                    enabled = if (noticeVoteModel.possibleVote == VotingStatus.PreVoting) selectedNoteVoteItemList.isNotEmpty()
+                            else {
+                                if(selectedNoteVoteItemList.firstOrNull()?.voteItemId == noticeVoteModel.voteAttendId) false
+                                else selectedNoteVoteItemList.isNotEmpty()
+                            },
+
                     onClick = {
                         selectedNoteVoteItemList.firstOrNull()?.let {
                             onComplete(it.voteItemId)
                         }
-
+                        selectedNoteVoteItemList = emptyList()
                     }
                 ) {
                     Box(
@@ -132,7 +156,9 @@ fun NoticeVote(
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = "투표하기",
+                            text = if (noticeVoteModel.possibleVote == VotingStatus.PreVoting)
+                                stringResource(id = R.string.vote)
+                            else stringResource(id = R.string.reVote),
                             style = KusitmsTypo.current.SubTitle2_Semibold,
                         )
                     }
@@ -152,9 +178,9 @@ fun NoticeVote(
 
 @Composable
 fun NoticePreVoteItem(
-    noticeVoteItem : NoticeVoteItem,
-    isSelected : Boolean,
-    onClick : (NoticeVoteItem) -> Unit
+    noticeVoteItem: NoticeVoteItem,
+    isSelected: Boolean,
+    onClick: (NoticeVoteItem) -> Unit
 ) {
     OutlinedCard(
         modifier = Modifier
@@ -167,7 +193,7 @@ fun NoticePreVoteItem(
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(
             containerColor =
-                if(isSelected) KusitmsColorPalette.current.Grey500 else KusitmsColorPalette.current.Grey600,
+            if (isSelected) KusitmsColorPalette.current.Grey500 else KusitmsColorPalette.current.Grey600,
             contentColor = KusitmsColorPalette.current.Grey200
         ),
         border = BorderStroke(1.dp, color = KusitmsColorPalette.current.Grey500)
@@ -186,7 +212,7 @@ fun NoticePreVoteItem(
                 style = KusitmsTypo.current.Text_Medium,
                 color = KusitmsColorPalette.current.Grey100
             )
-            if(isSelected){
+            if (isSelected) {
                 KusitmsMarginHorizontalSpacer(size = 12)
                 Image(
                     modifier = Modifier
@@ -204,8 +230,9 @@ fun NoticePreVoteItem(
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun NoticeVotedItem(
-    noticeVoteItem : NoticeVoteItem,
-    isSelected : Boolean
+    noticeVoteItem: NoticeVoteItem,
+    isSelected: Boolean,
+    onClick: (NoticeVoteItem) -> Unit
 ) {
     var isExpandedMemberPopUp by remember { mutableStateOf(false) }
     val scrollState = rememberScrollState()
@@ -215,21 +242,17 @@ fun NoticeVotedItem(
             .wrapContentHeight()
             .fillMaxWidth()
             .heightIn(min = 48.dp)
-            .let {
-                if(noticeVoteItem.members.isNotEmpty()){
-                    if(!isExpandedMemberPopUp) it.clickable {
-                        isExpandedMemberPopUp = true
-                    } else it
-                }else it
-
+            .clickable {
+                onClick(noticeVoteItem)
             },
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(
             containerColor = KusitmsColorPalette.current.Grey600,
             contentColor = KusitmsColorPalette.current.Grey200
         ),
-        border = BorderStroke(1.dp,
-            color = if(isSelected) KusitmsColorPalette.current.Main500 else KusitmsColorPalette.current.Grey500
+        border = BorderStroke(
+            1.dp,
+            color = if (isSelected) KusitmsColorPalette.current.Main500 else KusitmsColorPalette.current.Grey500
         )
     ) {
         Column(
@@ -242,7 +265,7 @@ fun NoticeVotedItem(
                 modifier = Modifier.padding(horizontal = 12.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                if(isSelected){
+                if (isSelected) {
                     Image(
                         modifier = Modifier
                             .size(24.dp),
@@ -263,20 +286,28 @@ fun NoticeVotedItem(
                 Text(
                     text = "${noticeVoteItem.count}명",
                     style = KusitmsTypo.current.Text_Medium,
-                    color = if(isSelected) KusitmsColorPalette.current.Main500 else KusitmsColorPalette.current.Grey400
+                    color = if (isSelected) KusitmsColorPalette.current.Main500 else KusitmsColorPalette.current.Grey400
                 )
                 KusitmsMarginHorizontalSpacer(size = 4)
                 Image(
                     modifier = Modifier
                         .size(24.dp)
-                        .rotate(if(isExpandedMemberPopUp) 180f else 0f),
+                        .rotate(if (isExpandedMemberPopUp) 180f else 0f)
+                        .let {
+                            if (noticeVoteItem.members.isNotEmpty()) {
+                                if (!isExpandedMemberPopUp) it.clickable {
+                                    isExpandedMemberPopUp = true
+                                } else it
+                            } else it
+
+                        },
                     imageVector = KusitmsIcons.ArrowDown,
                     contentDescription = "선택"
                 )
             }
-            Box(){
+            Box() {
                 KusitmsMarginVerticalSpacer(size = 12)
-                if(isExpandedMemberPopUp){
+                if (isExpandedMemberPopUp) {
                     Popup(
                         alignment = Alignment.TopCenter,
                         onDismissRequest = {

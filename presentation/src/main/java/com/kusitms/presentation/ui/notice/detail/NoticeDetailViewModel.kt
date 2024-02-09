@@ -8,6 +8,7 @@ import com.kusitms.domain.model.notice.CommentModel
 import com.kusitms.domain.model.notice.NoticeModel
 import com.kusitms.domain.model.notice.NoticeVoteModel
 import com.kusitms.domain.model.notice.ReportCommentContentModel
+import com.kusitms.domain.model.notice.VotingStatus
 import com.kusitms.domain.model.report.ReportResult
 import com.kusitms.domain.usecase.notice.AddNoticeChildCommentUseCase
 import com.kusitms.domain.usecase.notice.AddNoticeCommentUseCase
@@ -226,7 +227,7 @@ class NoticeDetailViewModel @Inject constructor(
             }.collectLatest {
                 _noticeVote.emit(
                     noticeVote.value?.copy(
-                        possibleVote = false
+                        possibleVote = VotingStatus.ReVoting
                     )
                 )
                 getNoticeVote(false)

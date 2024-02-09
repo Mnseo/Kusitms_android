@@ -273,4 +273,7 @@
     <!-- ImageViewer -->
     <string name="image_viewer_error">다운로드 도중 에러가 발생하였습니다.</string>
 
+    <!-- Vote -->
+    <string name="vote">투표하기</string>
+    <string name="reVote">다시 투표하기</string>
 </resources>
