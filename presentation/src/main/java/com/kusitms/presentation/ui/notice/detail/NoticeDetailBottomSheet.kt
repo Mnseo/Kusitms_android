@@ -68,7 +68,8 @@ fun NoticeCommentBottom(
     noticeDetailViewModel: NoticeDetailViewModel = hiltViewModel(),
     targetComment : CommentModel,
     onClickChildReport : (NoticeDetailModalState.Report) -> Unit,
-    onClickChildDelete : (NoticeDetailDialogState.CommentDelete) -> Unit
+    onClickChildDelete : (NoticeDetailDialogState.CommentDelete) -> Unit,
+    onDismiss: () -> Unit = {}
 ){
     val childCommentList by noticeDetailViewModel.childCommentList.collectAsStateWithLifecycle()
 
@@ -95,7 +96,20 @@ fun NoticeCommentBottom(
         NoticeComment(
             comment = targetComment,
             commentCount = childCommentList.size,
-            isParentCommentAsReply = true
+            isParentCommentAsReply = true,
+            onClickReport = {
+                onClickChildReport(
+                    NoticeDetailModalState.Report(targetComment, targetComment.writerId)
+                )
+            },
+            onClickDelete = {
+                onClickChildDelete(
+                    NoticeDetailDialogState.CommentDelete(
+                        comment = targetComment
+                    )
+                )
+                onDismiss()
+            }
         )
         KusitmsMarginVerticalSpacer(size = 20)
 
