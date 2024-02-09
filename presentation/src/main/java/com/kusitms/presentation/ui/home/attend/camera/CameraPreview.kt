@@ -82,8 +82,10 @@ fun CameraScreen(
         },
         onGranted = {
             val onQrCodeScanned: (String) -> Unit = { qrText ->
-                viewModel.updateScannedQrCode(qrText)
-                viewModel.postAttendCheck()
+                if(qrText != "") {
+                    viewModel.updateScannedQrCode(qrText)
+                    viewModel.postAttendCheck()
+                }
             }
             Box(
                 modifier = Modifier.fillMaxSize(),
@@ -104,7 +106,7 @@ fun CameraScreen(
                     }
                 }
             }
-            CameraPreview(onQrCodeScanned = onQrCodeScanned)
+            CameraPreview(viewModel = viewModel, onQrCodeScanned = onQrCodeScanned)
         }
     )
 }
@@ -270,11 +272,12 @@ private fun createCornersPath(
 
 @Composable
 @androidx.annotation.OptIn(androidx.camera.core.ExperimentalGetImage::class)
-fun CameraPreview(onQrCodeScanned: (String) -> Unit) {
+fun CameraPreview(viewModel: AttendViewModel, onQrCodeScanned: (String) -> Unit) {
     val lifecycleOwner = LocalLifecycleOwner.current
     val context = LocalContext.current
     val cameraProviderFuture = remember { ProcessCameraProvider.getInstance(context) }
     val previewView = remember { PreviewView(context) }
+    val qrEnabled by viewModel.qrEnabled.collectAsState()
     val preview = Preview.Builder().build().also {
         it.setSurfaceProvider(previewView.surfaceProvider)
     }
@@ -285,32 +288,36 @@ fun CameraPreview(onQrCodeScanned: (String) -> Unit) {
         .build()
         .also {
             it.setAnalyzer(ContextCompat.getMainExecutor(context)) { imageProxy ->
-                val image = imageProxy.image
-                if (image != null) {
-                    val buffer = image.planes[0].buffer
-                    val bytes = ByteArray(buffer.remaining())
-                    buffer.get(bytes)
-                    val source = PlanarYUVLuminanceSource(
-                        bytes, image.width, image.height, 0, 0, image.width, image.height, false
-                    )
-                    val binaryBitmap = BinaryBitmap(HybridBinarizer(source))
-                    try {
-                        val reader = MultiFormatReader().apply {
-                            val hints = mapOf<DecodeHintType, Any>(
-                                DecodeHintType.POSSIBLE_FORMATS to listOf(
-                                    BarcodeFormat.QR_CODE
+                if(qrEnabled) {
+                    val image = imageProxy.image
+                    if (image != null) {
+                        val buffer = image.planes[0].buffer
+                        val bytes = ByteArray(buffer.remaining())
+                        buffer.get(bytes)
+                        val source = PlanarYUVLuminanceSource(
+                            bytes, image.width, image.height, 0, 0, image.width, image.height, false
+                        )
+                        val binaryBitmap = BinaryBitmap(HybridBinarizer(source))
+                        try {
+                            val reader = MultiFormatReader().apply {
+                                val hints = mapOf<DecodeHintType, Any>(
+                                    DecodeHintType.POSSIBLE_FORMATS to listOf(
+                                        BarcodeFormat.QR_CODE
+                                    )
                                 )
-                            )
-                            setHints(hints)
+                                setHints(hints)
+                            }
+                            val result = reader.decode(binaryBitmap)
+                            val qrText = result.text
+                            onQrCodeScanned(qrText)
+                        } catch (e: NotFoundException) {
+                            // QR 코드를 찾지 못함
+                        } finally {
+                            imageProxy.close()
                         }
-                        val result = reader.decode(binaryBitmap)
-                        val qrText = result.text
-                        onQrCodeScanned(qrText)
-                    } catch (e: NotFoundException) {
-                        // QR 코드를 찾지 못함
-                    } finally {
-                        imageProxy.close()
                     }
+                } else {
+                    imageProxy.close()
                 }
             }
         }

@@ -39,14 +39,20 @@ fun SettingMember(
 
     LaunchedEffect(settingStatus) {
         when(settingStatus) {
-            SettingViewModel.Companion.SettingStatus.LOGOUT, SettingViewModel.Companion.SettingStatus.SIGNOUT -> {
+            SettingViewModel.SettingStatus.LOGOUT_SUCCESS, SettingViewModel.SettingStatus.SIGNOUT_SUCCESS-> {
                 navController.navigate(NavRoutes.LogInScreen.route) {
                     popUpTo(NavRoutes.SettingMember.route) { inclusive = true }
                 }
-
-        }
+            }
+            SettingViewModel.SettingStatus.LOGOUT -> {
+                openDialogState = true
+            }
+            SettingViewModel.SettingStatus.SIGNOUT -> {
+                openDialogState = true
+            }
             //처리.. 필요..
-            SettingViewModel.Companion.SettingStatus.ERROR, SettingViewModel.Companion.SettingStatus.DEFAULT -> {}
+            SettingViewModel.SettingStatus.ERROR, SettingViewModel.SettingStatus.DEFAULT -> {}
+            else -> {}
         }
     }
 

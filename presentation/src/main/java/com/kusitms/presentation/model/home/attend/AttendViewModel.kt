@@ -65,6 +65,9 @@ class AttendViewModel @Inject constructor(
         initialValue = AttendInfoModel(0, "", false, "", "")
     )
 
+    private val _qrEnabled = MutableStateFlow(true)
+    val qrEnabled: StateFlow<Boolean> = _qrEnabled.asStateFlow()
+
     private val _attendCheckModel = MutableStateFlow(
         AttendCheckModel(curriculumId = upcomingAttend.value.curriculumId, text = "")
     )
@@ -107,6 +110,7 @@ class AttendViewModel @Inject constructor(
                 .collectLatest {
                     Log.d("출석 확인", "출석 성공")
                     _snackbarEvent.emit(AttendSnackBarEvent.Attend_success)
+                    _qrEnabled.value = true
                 }
         }
     }
