@@ -146,9 +146,10 @@ class ProfileEditViewModel @Inject constructor(
 
 
     fun addLinkItem() {
-        val newLinkItem = LinkItem(LinkType.LINK, "") //기본 설정값
-        _linkItems.value = _linkItems.value + newLinkItem
+        val newLinkItems =  LinkItem(LinkType.LINK, "") //기본 설정값
+        _linkItems.value = _linkItems.value + newLinkItems
     }
+
 
     fun updateLinkItem(index: Int, linkType: LinkType, url: String) {
         val updatedItems = _linkItems.value.toMutableList()
@@ -208,6 +209,12 @@ class ProfileEditViewModel @Inject constructor(
                 _detailMemberInfo = profileResult.getOrNull()!!
                 _major.value = _detailMemberInfo.major.toString()
                 _selectedPart.value = mapPartToKorean(_detailMemberInfo.part.toString())
+                _linkItems.value = _detailMemberInfo.links?.map { linkModel ->
+                    LinkItem(
+                        linkType = mapLinkType(linkModel.type),
+                        linkUrl = linkModel.link
+                    )
+                } ?: emptyList()
 
                 detailMemberInfo = _detailMemberInfo
             }
@@ -220,6 +227,20 @@ class ProfileEditViewModel @Inject constructor(
             "DESIGN" -> "디자인"
             "DEVELOPMENT" -> "개발"
             else -> part
+        }
+    }
+
+
+    private fun mapLinkType(type: String): LinkType {
+        return when (type) {
+            "LINK" -> LinkType.LINK
+            "BRUNCH" -> LinkType.BRUNCH
+            "TISTORY" -> LinkType.TISTORY
+            "NOTION" -> LinkType.NOTION
+            "BEHANCE" -> LinkType.BEHANCE
+            "LINKEDIN" -> LinkType.LINKEDIN
+            "GITHUB" -> LinkType.GITHUB
+            else -> LinkType.LINK
         }
     }
 }

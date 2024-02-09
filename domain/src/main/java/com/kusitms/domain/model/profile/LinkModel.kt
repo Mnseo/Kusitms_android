@@ -4,3 +4,4 @@ data class LinkModel(
     val type: String = "",
     val link: String = ""
 )
+

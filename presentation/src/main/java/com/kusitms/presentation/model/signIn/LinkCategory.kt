@@ -13,7 +13,7 @@ data class LinkItem(
 )
 
 enum class LinkType(val displayName: String, @DrawableRes val iconRes: Int?) {
-    LINK("Link", R.drawable.ic_github),
+    LINK("Link", R.drawable.ic_link),
     BRUNCH("Brunch", R.drawable.ic_brunch),
     TISTORY("Tistory", R.drawable.ic_tistory),
     NOTION("Notion", R.drawable.ic_notion),

@@ -249,23 +249,6 @@ fun LinkCheckBox(
 ) {
     var isOpenLinkBottomSheet by remember { mutableStateOf(false) }
 
-    if (isOpenLinkBottomSheet) {
-        LinkBottomSheet(
-            viewModel,
-            isOpenLinkBottomSheet,
-            linkItemIndex
-        ) { isSelected, selectedLinkType ->
-            isOpenLinkBottomSheet = isSelected
-            if (isSelected && selectedLinkType is LinkType) {
-                viewModel.updateLinkItem(
-                    linkItemIndex,
-                    selectedLinkType,
-                    viewModel.linkItems.value[linkItemIndex].linkUrl
-                )
-            }
-        }
-    }
-
     Row(
         modifier = Modifier
             .width(110.dp)
@@ -298,6 +281,23 @@ fun LinkCheckBox(
                 contentDescription = null,
                 tint = KusitmsColorPalette.current.Grey400
             )
+        }
+    }
+
+    if (isOpenLinkBottomSheet) {
+        LinkBottomSheet(
+            viewModel,
+            isOpenLinkBottomSheet,
+            linkItemIndex
+        ) { isSelected, selectedLinkType ->
+            isOpenLinkBottomSheet = isSelected
+            if (isSelected && selectedLinkType is LinkType) {
+                viewModel.updateLinkItem(
+                    linkItemIndex,
+                    selectedLinkType,
+                    viewModel.linkItems.value[linkItemIndex].linkUrl
+                )
+            }
         }
     }
 }
