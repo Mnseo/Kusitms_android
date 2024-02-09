@@ -95,13 +95,19 @@ fun NoticeScreen(
                     onClickUnreadNoticeFilter = {
                         viewModel.updateVisibleOnlyUnreadNotice(it)
                     },
-                    onNoticeClick = onNoticeClick
+                    onNoticeClick = {
+                        onNoticeClick(it)
+                        viewModel.updateNoticeAsViewedInList(it.noticeId)
+                    }
                 )
             }
             NoticeTab.CURRICULUM-> {
                 CurriculumListScreen(
                     curriculumList = curriculumList,
-                    onNoticeClick = onNoticeClick
+                    onNoticeClick = {
+                        onNoticeClick(it)
+                        viewModel.updateNoticeAsViewedInList(it.noticeId)
+                    }
                 )
             }
         }

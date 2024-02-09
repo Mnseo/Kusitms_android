@@ -155,6 +155,7 @@ class NoticeDetailViewModel @Inject constructor(
             ).catch {
                 _snackbarEvent.emit(NoticeDetailSnackbarEvent.NETWORK_ERROR)
             }.collectLatest {
+                fetchCommentList()
                 fetchChildCommentList(commentId)
             }
         }

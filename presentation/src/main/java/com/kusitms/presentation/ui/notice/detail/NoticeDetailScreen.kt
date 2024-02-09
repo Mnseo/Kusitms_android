@@ -282,6 +282,9 @@ fun NoticeDetailScreen(
                         },
                         onClickChildDelete = {
                             openDialogState = it
+                        },
+                        onDismiss = {
+                            openBottomSheet = null
                         }
                     )
                 }
