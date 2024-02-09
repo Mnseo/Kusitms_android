@@ -1,13 +1,13 @@
 package com.kusitms.presentation.ui.home.attend.camera
 
 import android.Manifest
+import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.media.audiofx.BassBoost
+import android.net.Uri
+import android.provider.Settings
 import android.util.Log
-import android.view.Surface
-import android.view.ViewGroup
-import androidx.activity.compose.ManagedActivityResultLauncher
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.Preview
@@ -23,14 +23,9 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.CornerRadius
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.*
-import androidx.compose.ui.graphics.BlendMode.Companion.Overlay
-import androidx.compose.ui.graphics.drawscope.DrawScope
-import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -39,10 +34,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.lifecycleScope
-import androidx.navigation.NavController
-import com.google.mlkit.vision.barcode.BarcodeScanning
-import com.google.mlkit.vision.common.InputImage
 import com.google.zxing.*
 import com.google.zxing.common.HybridBinarizer
 import com.kusitms.presentation.R
@@ -50,9 +41,6 @@ import com.kusitms.presentation.common.ui.KusitmsMarginHorizontalSpacer
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
 import com.kusitms.presentation.model.home.attend.AttendViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 @Composable
 fun CameraScreen(
@@ -63,15 +51,6 @@ fun CameraScreen(
 
     ComposablePermission(
         permission = Manifest.permission.CAMERA,
-        onDenied = { requester ->
-            Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
-                Text(text = "카메라 권한이 필요합니다.")
-                Spacer(modifier = Modifier.height(8.dp))
-                Button(onClick = requester) {
-                    Text(text = "권한 요청")
-                }
-            }
-        },
         onGranted = {
             val onQrCodeScanned: (String) -> Unit = { qrText ->
                 if(qrText != "" && qrEnabled) {
@@ -88,8 +67,8 @@ fun CameraScreen(
 
                 Box(
                     modifier = Modifier
-                        .align(Alignment.TopCenter) // 상위 Box의 중앙 상단에 정렬
-                        .padding(top = 64.dp) // 상단에서 64.dp 만큼 떨어짐
+                        .align(Alignment.TopCenter)
+                        .padding(top = 64.dp)
                         .fillMaxWidth()
                         .padding(horizontal = 20.dp)
                         .height(48.dp)
@@ -166,28 +145,24 @@ fun CameraOverlay() {
 @Composable
 fun ComposablePermission(
     permission: String,
-    onDenied: @Composable (requester: () -> Unit) -> Unit,
-    onGranted: @Composable () -> Unit
+    ctx: Context = LocalContext.current,
+    onGranted: @Composable () -> Unit,
 ) {
-    val ctx = LocalContext.current
-
-    // check initial state of permission, it may be already granted
-    var grantState by remember {
+    val permissionGranted = remember {
         mutableStateOf(
-            ContextCompat.checkSelfPermission(
-                ctx,
-                permission
-            ) == PackageManager.PERMISSION_GRANTED
+            ContextCompat.checkSelfPermission(ctx, permission) == PackageManager.PERMISSION_GRANTED
         )
     }
-    if (grantState) {
+    if (permissionGranted.value) {
         onGranted()
     } else {
-        val launcher: ManagedActivityResultLauncher<String, Boolean> =
-            rememberLauncherForActivityResult(contract = ActivityResultContracts.RequestPermission()) {
-                grantState = it
+        LaunchedEffect(key1 = true) {
+            val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                data = Uri.fromParts("package", ctx.packageName, null)
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK
             }
-        onDenied { launcher.launch(permission) }
+            ctx.startActivity(intent)
+        }
     }
 }
 
