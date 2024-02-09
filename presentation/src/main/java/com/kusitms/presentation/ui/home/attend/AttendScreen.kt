@@ -46,44 +46,51 @@ fun AttendScreen(
     viewModel: AttendViewModel,
     navController: NavHostController
 ) {
+
+    LaunchedEffect(Unit){
+        viewModel.getAttendList()
+        viewModel.getUpcomingAttend()
+        viewModel.getAttendScore()
+    }
+
     val attendCurrentList by viewModel.attendListInit.collectAsState()
     val scrollState = rememberScrollState()
 
+    Column(
+        modifier = Modifier
+            .wrapContentHeight()
+            .fillMaxWidth()
+            .background(color = KusitmsColorPalette.current.Grey800),
+        horizontalAlignment = Alignment.Start,
+        verticalArrangement = Arrangement.Top
+    ) {
         Column(
             modifier = Modifier
                 .wrapContentHeight()
                 .fillMaxWidth()
-                .background(color = KusitmsColorPalette.current.Grey800),
+                .background(color = KusitmsColorPalette.current.Grey900),
             horizontalAlignment = Alignment.Start,
             verticalArrangement = Arrangement.Top
         ) {
-            Column(
-                modifier = Modifier
-                    .wrapContentHeight()
-                    .fillMaxWidth()
-                    .background(color = KusitmsColorPalette.current.Grey900),
-                horizontalAlignment = Alignment.Start,
-                verticalArrangement = Arrangement.Top
-            ) {
-                AttendTopBar()
-                KusitmsMarginVerticalSpacer(size = 8)
-                AttendPreColumn(viewModel,navController)
-                KusitmsMarginVerticalSpacer(size = 24)
-                AttendRecordColumn(viewModel)
-                KusitmsMarginVerticalSpacer(size = 32)
-            }
-            if (attendCurrentList.isNotEmpty()) {
-                KusitmsMarginVerticalSpacer(size = 30)
-                attendCurrentList.forEach { model ->
-                    CurriItem(model = model)
-                }
-            } else {
-                AttendNotAttend()
-            }
-            Spacer(modifier = Modifier
-                .weight(1f)
-                .background(color = KusitmsColorPalette.current.Grey800))
+            AttendTopBar()
+            KusitmsMarginVerticalSpacer(size = 8)
+            AttendPreColumn(viewModel,navController)
+            KusitmsMarginVerticalSpacer(size = 24)
+            AttendRecordColumn(viewModel)
+            KusitmsMarginVerticalSpacer(size = 32)
         }
+        if (attendCurrentList.isNotEmpty()) {
+            KusitmsMarginVerticalSpacer(size = 30)
+            attendCurrentList.forEach { model ->
+                CurriItem(model = model)
+            }
+        } else {
+            AttendNotAttend()
+        }
+        Spacer(modifier = Modifier
+            .weight(1f)
+            .background(color = KusitmsColorPalette.current.Grey800))
+    }
     ScrollBtn(scrollState = scrollState)
 }
 

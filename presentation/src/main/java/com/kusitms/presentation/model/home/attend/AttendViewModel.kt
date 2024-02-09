@@ -34,36 +34,21 @@ import javax.inject.Inject
 @HiltViewModel
 class AttendViewModel @Inject constructor(
     private val getAttendCurrentListUseCase: GetAttendCurrentListUseCase,
-    getAttendInfoUseCase: GetAttendInfoUseCase,
-    getAttendScoreUseCase: GetAttendScoreUseCase,
+    private val getAttendInfoUseCase: GetAttendInfoUseCase,
+    private val getAttendScoreUseCase: GetAttendScoreUseCase,
     getAttendQrUseCase: GetAttendQrUseCase,
     private val getIsLoginUseCase: GetIsLoginUseCase,
     private val PostAttendCheckUseCase: PostAttendCheckUseCase
 ):ViewModel() {
 
-    val attendListInit: StateFlow<List<AttendCurrentModel>> = getAttendCurrentListUseCase()
-        .catch { e ->
-        }
-        .map { list ->
-            list.map { model ->
-                model.copy(
-                    date = formatDate(model.date),
-                    time = formatTime(model.time)
-                )
-            }
-        }
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.Eagerly,
-            initialValue = emptyList()
-        )
+    private val _attendListInit =  MutableStateFlow<List<AttendCurrentModel>>(emptyList())
+    val attendListInit : StateFlow<List<AttendCurrentModel>> = _attendListInit.asStateFlow()
 
-    val upcomingAttend = getAttendInfoUseCase().catch {
-    }.stateIn(
-        viewModelScope,
-        started =  SharingStarted.Eagerly,
-        initialValue = AttendInfoModel(0, "", false, "", "")
-    )
+    private val _upcomingAttend =  MutableStateFlow(AttendInfoModel(0, "", false, "", ""))
+    val upcomingAttend : StateFlow<AttendInfoModel> = _upcomingAttend.asStateFlow()
+
+    private val _attendScore =  MutableStateFlow(AttendModel(0, 0, 0, 0, "수료 가능한 점수에요"))
+    val attendScore : StateFlow<AttendModel> = _attendScore.asStateFlow()
 
     private val _qrEnabled = MutableStateFlow(true)
     val qrEnabled: StateFlow<Boolean> = _qrEnabled.asStateFlow()
@@ -73,19 +58,55 @@ class AttendViewModel @Inject constructor(
     )
     val attendCheckModel = _attendCheckModel.asStateFlow()
 
-    fun updateScannedQrCode(qrText: String) {
-        _attendCheckModel.value = _attendCheckModel.value.copy(text = qrText)
-    }
-
     private val _snackbarEvent = MutableSharedFlow<AttendSnackBarEvent>()
     val snackbarEvent : SharedFlow<AttendSnackBarEvent> = _snackbarEvent.asSharedFlow()
 
-    val attendScore = getAttendScoreUseCase().catch {
-    }.stateIn(
-        viewModelScope,
-        started = SharingStarted.Eagerly,
-        initialValue = AttendModel(0, 0, 0, 0, "수료 가능한 점수에요")
-    )
+    fun getAttendList(){
+        viewModelScope.launch {
+            getAttendCurrentListUseCase()
+                .catch { e ->
+                }
+                .map { list ->
+                    list.map { model ->
+                        model.copy(
+                            date = formatDate(model.date),
+                            time = formatTime(model.time)
+                        )
+                    }
+                }.collect {
+                    _attendListInit
+                }
+        }
+    }
+
+    fun getUpcomingAttend() {
+        viewModelScope.launch {
+            getAttendInfoUseCase()
+                .catch {
+                    //TODO 에러처리
+                }.collect {
+                    _upcomingAttend.emit(it)
+                    _attendCheckModel.emit(
+                        AttendCheckModel(curriculumId = it.curriculumId, text = "")
+                    )
+                }
+        }
+    }
+
+    fun getAttendScore(){
+        viewModelScope.launch {
+            getAttendScoreUseCase()
+                .catch {
+                    //TODO 에러처리
+                }.collect {
+                    _attendScore.emit(it)
+                }
+        }
+    }
+
+    fun updateScannedQrCode(qrText: String) {
+        _attendCheckModel.value = _attendCheckModel.value.copy(text = qrText)
+    }
 
     fun formatDate(dateString: String): String {
         val originalFormat = SimpleDateFormat("MM월 dd일", Locale.KOREA)
@@ -103,10 +124,10 @@ class AttendViewModel @Inject constructor(
         viewModelScope.launch {
             val model = attendCheckModel
             PostAttendCheckUseCase(curriculumId = model.value.curriculumId, qrText = model.value.text).
-                    catch {
-                        Log.d("출석 확인", "출석 실패")
-                        _snackbarEvent.emit(AttendSnackBarEvent.Attend_fail)
-                    }
+            catch {
+                Log.d("출석 확인", "출석 실패")
+                _snackbarEvent.emit(AttendSnackBarEvent.Attend_fail)
+            }
                 .collectLatest {
                     Log.d("출석 확인", "출석 성공")
                     _snackbarEvent.emit(AttendSnackBarEvent.Attend_success)
