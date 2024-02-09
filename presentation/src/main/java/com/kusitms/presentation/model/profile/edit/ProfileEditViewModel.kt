@@ -209,10 +209,17 @@ class ProfileEditViewModel @Inject constructor(
                 _detailMemberInfo = profileResult.getOrNull()!!
                 _major.value = _detailMemberInfo.major.toString()
                 _selectedPart.value = mapPartToKorean(_detailMemberInfo.part.toString())
+                _introduce.value = _detailMemberInfo.description.toString()
                 _linkItems.value = _detailMemberInfo.links?.map { linkModel ->
                     LinkItem(
                         linkType = mapLinkType(linkModel.type),
                         linkUrl = linkModel.link
+                    )
+                } ?: emptyList()
+                _interests.value = _detailMemberInfo.interests?.map { model ->
+                    InterestItem(
+                        model.category,
+                        model.content
                     )
                 } ?: emptyList()
 
@@ -242,5 +249,15 @@ class ProfileEditViewModel @Inject constructor(
             "GITHUB" -> LinkType.GITHUB
             else -> LinkType.LINK
         }
+    }
+
+    private fun mapInterestToKorean(interestItem: InterestItem): InterestItem {
+        val categoryKorean = when (interestItem.category) {
+            "PLANNING" -> "기획"
+            "DEVELOPMENT" -> "개발"
+            "DESIGN" -> "디자인"
+            else -> "기타"
+        }
+        return InterestItem(categoryKorean, interestItem.content)
     }
 }

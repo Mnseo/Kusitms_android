@@ -77,7 +77,7 @@ fun LinkColumn(viewModel: ProfileEditViewModel) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(20.dp)
+            .padding(vertical = 20.dp)
             .background(KusitmsColorPalette.current.Grey900),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {

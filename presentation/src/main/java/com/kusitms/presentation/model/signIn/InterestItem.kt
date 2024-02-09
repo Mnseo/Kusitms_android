@@ -4,3 +4,5 @@ data class InterestItem(
     val category: String,
     val content: String
 )
+
+
