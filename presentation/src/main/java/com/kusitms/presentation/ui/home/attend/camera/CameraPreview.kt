@@ -46,6 +46,7 @@ import com.google.mlkit.vision.common.InputImage
 import com.google.zxing.*
 import com.google.zxing.common.HybridBinarizer
 import com.kusitms.presentation.R
+import com.kusitms.presentation.common.ui.KusitmsMarginHorizontalSpacer
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
 import com.kusitms.presentation.model.home.attend.AttendViewModel
@@ -57,23 +58,9 @@ import kotlinx.coroutines.launch
 fun CameraScreen(
     viewModel: AttendViewModel,
 ) {
-    val snackbarHostState = remember { SnackbarHostState() }
+    val message by viewModel.snackbarEvent.collectAsState(initial = AttendViewModel.AttendSnackBarEvent.None)
     val qrEnabled by viewModel.qrEnabled.collectAsState()
-    val lifecycleScope = LocalLifecycleOwner.current.lifecycleScope
-    val snackbarContentState = remember { mutableStateOf<Pair<AttendViewModel.AttendSnackBarEvent, String>>(AttendViewModel.AttendSnackBarEvent.None to "") }
 
-    LaunchedEffect(key1 = Unit) {
-        viewModel.snackbarEvent.collect { event ->
-            val message = when (event) {
-                AttendViewModel.AttendSnackBarEvent.Attend_success -> "출석이 완료되었습니다"
-                AttendViewModel.AttendSnackBarEvent.Attend_fail -> "QR코드를 다시 확인해주세요"
-                else -> "화면 정가운데에 QR코드를 스캔해주세요"
-            }
-            lifecycleScope.launch {
-                snackbarHostState.showSnackbar(message)
-            }
-        }
-    }
     ComposablePermission(
         permission = Manifest.permission.CAMERA,
         onDenied = { requester ->
@@ -96,59 +83,62 @@ fun CameraScreen(
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.TopCenter
             ) {
-                CameraSnackbar(snackbarHostState = snackbarHostState) {
-                    val (event, message) = snackbarContentState.value
-                    when (event) {
-                        AttendViewModel.AttendSnackBarEvent.Attend_success -> {
-                            Text(text = message, style= KusitmsTypo.current.Text_Semibold, color = KusitmsColorPalette.current.Grey200)
-                        }
-                        AttendViewModel.AttendSnackBarEvent.Attend_fail -> {
-                                Image(painterResource(id = R.drawable.ic_warning_sigb), contentDescription = null)
-                                Spacer(modifier = Modifier.width(10.dp))
-                                Text(text = message, style= KusitmsTypo.current.Text_Semibold, color = KusitmsColorPalette.current.Sub2)
-                        }
-                        else -> {  Text(text = message, style= KusitmsTypo.current.Text_Semibold, color = KusitmsColorPalette.current.Grey200) }
+
+                CameraPreview(viewModel = viewModel, onQrCodeScanned = onQrCodeScanned)
+
+                Box(
+                    modifier = Modifier
+                        .align(Alignment.TopCenter) // 상위 Box의 중앙 상단에 정렬
+                        .padding(top = 64.dp) // 상단에서 64.dp 만큼 떨어짐
+                        .fillMaxWidth()
+                        .padding(horizontal = 20.dp)
+                        .height(48.dp)
+                        .background(
+                            color = KusitmsColorPalette.current.Grey600,
+                            shape = RoundedCornerShape(12.dp)
+                        )
+                ) {
+                    when(message) {
+                        AttendViewModel.AttendSnackBarEvent.Attend_fail ->
+                            Row(modifier = Modifier
+                                .fillMaxSize(),
+                                horizontalArrangement = Arrangement.Center,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Image(painter = painterResource(id = R.drawable.ic_warning_sigb), contentDescription = null)
+                                KusitmsMarginHorizontalSpacer(size = 10)
+                                Text(
+                                    text = "QR코드를 다시 확인해주세요",
+                                    style = KusitmsTypo.current.Text_Semibold,
+                                    color = KusitmsColorPalette.current.Sub2
+                                )
+                            }
+                        else -> Text(
+                            text = when (message) {
+                                AttendViewModel.AttendSnackBarEvent.Attend_success -> "출석이 완료되었습니다"
+                                AttendViewModel.AttendSnackBarEvent.None -> "화면 정가운데에 QR코드를 스캔해주세요"
+                                else -> ""
+                            },
+                            style = KusitmsTypo.current.Text_Semibold,
+                            color = KusitmsColorPalette.current.Grey200,
+                            modifier = Modifier.align(Alignment.Center)
+                        )
                     }
                 }
+
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .align(Alignment.Center),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(painter = painterResource(id = R.drawable.ic_union), contentDescription = null, tint = KusitmsColorPalette.current.White)
+                }
             }
-            CameraPreview(viewModel = viewModel, onQrCodeScanned = onQrCodeScanned)
         }
     )
 }
 
-@Composable
-fun CameraSnackbar(
-    snackbarHostState: SnackbarHostState,
-    content: @Composable () -> Unit
-) {
-    SnackbarHost(
-        hostState = snackbarHostState,
-        modifier = Modifier
-            .padding(top = 64.dp)
-            .fillMaxWidth(),
-        snackbar = { snackbarData ->
-            Box(modifier = androidx.compose.ui.Modifier
-                .fillMaxWidth()
-                .height(48.dp)
-                .padding(horizontal = 20.dp)
-                .background(
-                    color = KusitmsColorPalette.current.Grey600,
-                    shape = RoundedCornerShape(12.dp)
-                )
-            ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .fillMaxHeight()
-                        .padding(horizontal = 24.dp),
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    content()
-                }
-            }
-        })
-}
 
 @Composable
 fun CameraOverlay() {
