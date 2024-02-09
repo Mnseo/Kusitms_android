@@ -6,7 +6,7 @@ data class NoticeVoteModel(
     val total: Int = 0,
     val voteAttendId: Int = 0,
     val voteId: Int = 0,
-    val possibleVote : Boolean = true
+    val possibleVote : VotingStatus = VotingStatus.PreVoting
 )
 
 data class NoticeVoteItem(
@@ -22,3 +22,10 @@ data class NoticeVoteMember(
     val name: String = "",
     val profileImageUrl: String = ""
 )
+
+enum class VotingStatus {
+    PreVoting, // 투표 참여 전
+    ReVoting, // 다시 투표 가능
+    VotingEnded // 투표 종료
+}
+
