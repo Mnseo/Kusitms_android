@@ -34,6 +34,9 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.LifecycleOwner
 import com.google.zxing.*
 import com.google.zxing.common.HybridBinarizer
 import com.kusitms.presentation.R
@@ -148,12 +151,27 @@ fun ComposablePermission(
     ctx: Context = LocalContext.current,
     onGranted: @Composable () -> Unit,
 ) {
-    val permissionGranted = remember {
+    val lifecycleOwner : LifecycleOwner = LocalLifecycleOwner.current
+    var permissionGranted by remember {
         mutableStateOf(
             ContextCompat.checkSelfPermission(ctx, permission) == PackageManager.PERMISSION_GRANTED
         )
     }
-    if (permissionGranted.value) {
+
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if(event == Lifecycle.Event.ON_RESUME){
+                permissionGranted = ContextCompat.checkSelfPermission(ctx, permission) == PackageManager.PERMISSION_GRANTED
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
+        }
+    }
+
+    if (permissionGranted) {
         onGranted()
     } else {
         LaunchedEffect(key1 = true) {
