@@ -156,22 +156,28 @@ class AttendViewModel @Inject constructor(
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    val timeUntilEvent = upcomingAttend
-        .map { attend -> calculateTimeTerm(attend.date) }
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000L), // 스트림이 시작되는 조건
-            initialValue = ""
-        )
+    val timeUntilEvent = flow {
+        while (true) {
+            emit(LocalDateTime.now())
+            delay(60000)
+        }
+    }.flatMapLatest { currentTime ->
+        upcomingAttend.map { attend ->
+            calculateTimeTerm(attend.date, currentTime)
+        }
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000L),
+        initialValue = ""
+    )
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun calculateTimeTerm(date: String, durationMinutes: Long = 120): String {
+    fun calculateTimeTerm(date: String, currentTime: LocalDateTime): String {
         if (date.isEmpty()) return ""
 
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
         val eventDate = LocalDateTime.parse(date, formatter)
-        val currentDate = LocalDateTime.now()
-        val minutesDiff = ChronoUnit.MINUTES.between(currentDate, eventDate)
+        val minutesDiff = ChronoUnit.MINUTES.between(currentTime, eventDate)
 
         return when {
             minutesDiff > 1440 -> "D-${minutesDiff / 1440}" // 하루 이상
