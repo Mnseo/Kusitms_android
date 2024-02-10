@@ -29,6 +29,7 @@ import java.time.LocalDateTime
 import java.time.Year
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
+import java.time.temporal.ChronoUnit
 import java.util.*
 import javax.inject.Inject
 
@@ -45,7 +46,7 @@ class AttendViewModel @Inject constructor(
     private val _attendListInit =  MutableStateFlow<List<AttendCurrentModel>>(emptyList())
     val attendListInit : StateFlow<List<AttendCurrentModel>> = _attendListInit.asStateFlow()
 
-    private val _upcomingAttend =  MutableStateFlow(AttendInfoModel(0, "커리큘럼이 없습니다", false, "", ""))
+    private val _upcomingAttend =  MutableStateFlow(AttendInfoModel(0, "커리큘럼이 없습니다", false, ""))
     val upcomingAttend : StateFlow<AttendInfoModel> = _upcomingAttend.asStateFlow()
 
     private val _attendScore =  MutableStateFlow(AttendModel(0, 0, 0, 0, "수료 가능한 점수에요"))
@@ -135,8 +136,8 @@ class AttendViewModel @Inject constructor(
                             _snackbarEvent.emit(AttendSnackBarEvent.Attend_success)
                             _qrEnabled.value = false
                         }
-                    delay(10000L) // 다음 반복까지 10초 대기
                 }
+                delay(10000L) // 다음 반복까지 10초 대기
             }
         }
     }
@@ -154,24 +155,38 @@ class AttendViewModel @Inject constructor(
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    val timeUntilEvent = upcomingAttend
+        .map { attend -> calculateTimeTerm(attend.date) }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000L), // 스트림이 시작되는 조건
+            initialValue = ""
+        )
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun combineDateAndTime(date: String, time: String): LocalDateTime? {
-        val currentYear = LocalDate.now().year
-        // 날짜 형식에 연도 추가
-        val dateFormatter = DateTimeFormatter.ofPattern("MM월 dd일", Locale.KOREAN)
-        val dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 a hh:mm", Locale.KOREAN)
+    fun calculateTimeTerm(date: String, durationMinutes: Long = 120): String {
+        if (date.isEmpty()) return ""
 
-        return try {
-            // 날짜와 시간 문자열을 현재 연도와 결합
-            val dateTimeStr = "${currentYear}년 $date $time"
-            LocalDateTime.parse(dateTimeStr, dateTimeFormatter)
-        } catch (e: Exception) {
-            null // 파싱 실패 시 null 반환
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
+        val eventDate = LocalDateTime.parse(date, formatter)
+        val currentDate = LocalDateTime.now()
+        val minutesDiff = ChronoUnit.MINUTES.between(currentDate, eventDate)
+
+        return when {
+            minutesDiff > 1440 -> "D-${minutesDiff / 1440}" // 하루 이상
+            minutesDiff in 1..1439 -> {
+                val hours = minutesDiff / 60
+                val minutes = minutesDiff % 60
+                String.format("%02d:%02d",  hours, minutes)
+            } // 하루 이하
+            minutesDiff in -30..120 -> "Soon" // 이벤트 시작 2시간 이내
+            minutesDiff <= -30 -> "Ended" // 이벤트 시작 후 30분 지남
+            else -> "No Event"
         }
     }
 
-    enum class Status(val displayName: String) {
+        enum class Status(val displayName: String) {
         PRESENT("출석"),
         ABSENT("결석"),
         LATE("지각");

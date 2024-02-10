@@ -44,6 +44,9 @@ import com.kusitms.presentation.common.ui.KusitmsMarginHorizontalSpacer
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.common.ui.theme.KusitmsTypo
 import com.kusitms.presentation.model.home.attend.AttendViewModel
+import com.kusitms.presentation.ui.home.attend.AttendBtnFailure
+import com.kusitms.presentation.ui.home.attend.AttendBtnOff
+import com.kusitms.presentation.ui.home.attend.AttendBtnSuccess
 
 @Composable
 fun CameraScreen(
@@ -51,7 +54,6 @@ fun CameraScreen(
 ) {
     val message by viewModel.snackbarEvent.collectAsState(initial = AttendViewModel.AttendSnackBarEvent.None)
     val qrEnabled by viewModel.qrEnabled.collectAsState()
-
     ComposablePermission(
         permission = Manifest.permission.CAMERA,
         onGranted = {

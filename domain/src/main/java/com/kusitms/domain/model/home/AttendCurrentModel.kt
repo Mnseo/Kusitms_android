@@ -21,5 +21,4 @@ data class AttendInfoModel(
     val curriculumName: String,
     val isAttended: Boolean,
     val date: String,
-    val time:String
 )
