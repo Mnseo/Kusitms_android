@@ -17,7 +17,9 @@ import com.kusitms.presentation.R
 import com.kusitms.presentation.common.ui.theme.KusitmsColorPalette
 import com.kusitms.presentation.ui.notice.detail.NoticeDetailViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.text.SimpleDateFormat
@@ -27,6 +29,7 @@ import java.time.LocalDateTime
 import java.time.Year
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
+import java.time.temporal.ChronoUnit
 import java.util.*
 import javax.inject.Inject
 
@@ -37,18 +40,20 @@ class AttendViewModel @Inject constructor(
     private val getAttendInfoUseCase: GetAttendInfoUseCase,
     private val getAttendScoreUseCase: GetAttendScoreUseCase,
     getAttendQrUseCase: GetAttendQrUseCase,
-    private val getIsLoginUseCase: GetIsLoginUseCase,
     private val PostAttendCheckUseCase: PostAttendCheckUseCase
 ):ViewModel() {
 
     private val _attendListInit =  MutableStateFlow<List<AttendCurrentModel>>(emptyList())
     val attendListInit : StateFlow<List<AttendCurrentModel>> = _attendListInit.asStateFlow()
 
-    private val _upcomingAttend =  MutableStateFlow(AttendInfoModel(0, "", false, "", ""))
+    private val _upcomingAttend =  MutableStateFlow(AttendInfoModel(0, "커리큘럼이 없습니다", false, ""))
     val upcomingAttend : StateFlow<AttendInfoModel> = _upcomingAttend.asStateFlow()
 
     private val _attendScore =  MutableStateFlow(AttendModel(0, 0, 0, 0, "수료 가능한 점수에요"))
     val attendScore : StateFlow<AttendModel> = _attendScore.asStateFlow()
+
+    private val _qrEnabled = MutableStateFlow(true)
+    val qrEnabled: StateFlow<Boolean> = _qrEnabled.asStateFlow()
 
     private val _attendCheckModel = MutableStateFlow(
         AttendCheckModel(curriculumId = upcomingAttend.value.curriculumId, text = "")
@@ -71,7 +76,7 @@ class AttendViewModel @Inject constructor(
                         )
                     }
                 }.collect {
-                    _attendListInit
+                    _attendListInit.value = it
                 }
         }
     }
@@ -84,7 +89,7 @@ class AttendViewModel @Inject constructor(
                 }.collect {
                     _upcomingAttend.emit(it)
                     _attendCheckModel.emit(
-                        AttendCheckModel(curriculumId = it.curriculumId, text = "")
+                        AttendCheckModel(curriculumId = it.curriculumId, text = it.curriculumName)
                     )
                 }
         }
@@ -119,16 +124,21 @@ class AttendViewModel @Inject constructor(
 
     fun postAttendCheck() {
         viewModelScope.launch {
-            val model = attendCheckModel
-            PostAttendCheckUseCase(curriculumId = model.value.curriculumId, qrText = model.value.text).
-            catch {
-                Log.d("출석 확인", "출석 실패")
-                _snackbarEvent.emit(AttendSnackBarEvent.Attend_fail)
-            }
-                .collectLatest {
-                    Log.d("출석 확인", "출석 성공")
-                    _snackbarEvent.emit(AttendSnackBarEvent.Attend_success)
+            while (isActive) {
+                val model = attendCheckModel.value
+                if(model.curriculumId != 0) {
+                    PostAttendCheckUseCase(curriculumId = model.curriculumId, qrText = model.text)
+                        .onFailure{
+                            _snackbarEvent.emit(AttendSnackBarEvent.Attend_fail)
+                        }
+                        .onSuccess {
+                            Log.d("출석 확인", "출석 성공")
+                            _snackbarEvent.emit(AttendSnackBarEvent.Attend_success)
+                            _qrEnabled.value = false
+                        }
                 }
+                delay(10000L) // 다음 반복까지 10초 대기
+            }
         }
     }
 
@@ -145,24 +155,44 @@ class AttendViewModel @Inject constructor(
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    val timeUntilEvent = flow {
+        while (true) {
+            emit(LocalDateTime.now())
+            delay(60000)
+        }
+    }.flatMapLatest { currentTime ->
+        upcomingAttend.map { attend ->
+            calculateTimeTerm(attend.date, currentTime)
+        }
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000L),
+        initialValue = ""
+    )
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun combineDateAndTime(date: String, time: String): LocalDateTime? {
-        val currentYear = LocalDate.now().year
-        // 날짜 형식에 연도 추가
-        val dateFormatter = DateTimeFormatter.ofPattern("MM월 dd일", Locale.KOREAN)
-        val dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 a hh:mm", Locale.KOREAN)
+    fun calculateTimeTerm(date: String, currentTime: LocalDateTime): String {
+        if (date.isEmpty()) return ""
 
-        return try {
-            // 날짜와 시간 문자열을 현재 연도와 결합
-            val dateTimeStr = "${currentYear}년 $date $time"
-            LocalDateTime.parse(dateTimeStr, dateTimeFormatter)
-        } catch (e: Exception) {
-            null // 파싱 실패 시 null 반환
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
+        val eventDate = LocalDateTime.parse(date, formatter)
+        val minutesDiff = ChronoUnit.MINUTES.between(currentTime, eventDate)
+
+        return when {
+            minutesDiff > 1440 -> "D-${minutesDiff / 1440}" // 하루 이상
+            minutesDiff in 1..1439 -> {
+                val hours = minutesDiff / 60
+                val minutes = minutesDiff % 60
+                String.format("%02d:%02d",  hours, minutes)
+            } // 하루 이하
+            minutesDiff in -30..120 -> "Soon" // 이벤트 시작 2시간 이내
+            minutesDiff <= -30 -> "Ended" // 이벤트 시작 후 30분 지남
+            else -> "No Event"
         }
     }
 
-    enum class Status(val displayName: String) {
+        enum class Status(val displayName: String) {
         PRESENT("출석"),
         ABSENT("결석"),
         LATE("지각");
@@ -183,6 +213,6 @@ class AttendViewModel @Inject constructor(
     }
 
     enum class AttendSnackBarEvent {
-        Attend_success, Attend_fail
+        Attend_success, Attend_fail, None
     }
 }

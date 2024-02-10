@@ -8,16 +8,10 @@ import javax.inject.Inject
 class PostAttendCheckUseCase @Inject constructor(
     private val homeRepository: HomeRepository
 ) {
-    operator fun invoke(
+    suspend operator fun invoke(
         curriculumId: Int,
         qrText: String
-    ): Flow<Unit> = flow {
-        homeRepository.postAttendCheck(
-            curriculumId, qrText
-        ).onSuccess {
-            emit(Unit)
-        }.onFailure {
-            throw it
+    ): Result<Unit>  {
+            return homeRepository.postAttendCheck(curriculumId, qrText)
         }
-    }
 }

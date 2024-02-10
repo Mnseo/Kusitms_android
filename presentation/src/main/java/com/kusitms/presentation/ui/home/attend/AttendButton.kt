@@ -28,7 +28,9 @@ fun AttendBtnOn(navController: NavHostController) {
             .height(64.dp) ,
         colors = ButtonDefaults.buttonColors(containerColor = KusitmsColorPalette.current.Main600) ,
         shape = RoundedCornerShape(size = 12.dp),
-        onClick = { navController.navigate(NavRoutes.CameraPreview.route) }
+        onClick = {
+            navController.navigate(NavRoutes.CameraPreview.route)
+        }
     ) {
         Text(text = stringResource(R.string.attend_btn_attend), style = KusitmsTypo.current.Text_Semibold, color = KusitmsColorPalette.current.White, maxLines = 1)
     }
@@ -52,7 +54,7 @@ fun AttendBtnOff(
             verticalArrangement = Arrangement.Center
         ) {
             Text(text = stringResource(R.string.attend_btn_attend_wait), style = KusitmsTypo.current.Text_Semibold, color = KusitmsColorPalette.current.Grey400)
-            Text(text = leftTime, style = KusitmsTypo.current.Text_Semibold, color = KusitmsColorPalette.current.Grey400)
+            Text(text = leftTime, style = KusitmsTypo.current.Caption1, color = KusitmsColorPalette.current.Grey400)
         }
     }
 }
@@ -68,7 +70,7 @@ fun AttendBtnFailure() {
         onClick = {},
         enabled = false
     ) {
-        Text(text = stringResource(R.string.attend_btn_attend_failure), style = KusitmsTypo.current.Text_Semibold, color = KusitmsColorPalette.current.Sub2, maxLines = 1)
+        Text(text = stringResource(R.string.attend_btn_attend_failure), style = KusitmsTypo.current.Caption1, color = KusitmsColorPalette.current.Sub2, maxLines = 1)
     }
 }
 
@@ -83,6 +85,6 @@ fun AttendBtnSuccess() {
         onClick = {},
         enabled = false
     ) {
-        Text(text = stringResource(R.string.attend_btn_attend_success), style = KusitmsTypo.current.Text_Semibold, color = KusitmsColorPalette.current.Sub1, maxLines = 1)
+        Text(text = stringResource(R.string.attend_btn_attend_success), style = KusitmsTypo.current.Caption1, color = KusitmsColorPalette.current.Sub1, maxLines = 1)
     }
 }

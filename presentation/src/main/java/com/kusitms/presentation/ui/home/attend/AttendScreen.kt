@@ -112,6 +112,7 @@ fun AttendTopBar() {
     }
 }
 
+
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AttendPreColumn(
@@ -119,20 +120,9 @@ fun AttendPreColumn(
     navController: NavHostController
 ) {
     val curri by viewModel.upcomingAttend.collectAsState()
-    val curriculum = curri?.curriculumName ?: ""
-    val eventDateTime = viewModel.combineDateAndTime(curri.date, curri.time)
-    val currentTime = remember { mutableStateOf(LocalDateTime.now()) }
-    val duration = eventDateTime?.let {
-        Duration.between(currentTime.value, eventDateTime)
-    } ?: Duration.ZERO
+    val curriculum = curri.curriculumName
+    val timeUntilEvent by viewModel.timeUntilEvent.collectAsState()
 
-    // 주기적으로 현재 시간 상태 업데이트
-    LaunchedEffect(key1 = Unit) {
-        while (true) {
-            currentTime.value = LocalDateTime.now()
-            delay(60000)
-        }
-    }
 
     Box(modifier = Modifier
         .fillMaxWidth()
@@ -153,25 +143,35 @@ fun AttendPreColumn(
                     .height(56.dp),
                 verticalArrangement = Arrangement.Center
             ) {
-                Text(text = stringResource(R.string.attend_box1_title), style = KusitmsTypo.current.Caption1, color = KusitmsColorPalette.current.Main500)
+                Text(
+                    text = stringResource(R.string.attend_box1_title),
+                    style = KusitmsTypo.current.Caption1,
+                    color = KusitmsColorPalette.current.Main500
+                )
                 KusitmsMarginVerticalSpacer(size = 4)
-                Text(text = curriculum, style = KusitmsTypo.current.SubTitle1_Semibold, color = KusitmsColorPalette.current.White)
+                Text(
+                    text = curriculum,
+                    style = KusitmsTypo.current.SubTitle1_Semibold,
+                    color = KusitmsColorPalette.current.White
+                )
             }
-            if (duration.isNegative) {
-                val minutesAfterStart = duration.abs().toMinutes()
-                if (minutesAfterStart <= 30) {
-                    // 이벤트 시작 후 30분 이내
-                    AttendBtnOn(navController = navController) // 여기서 정책에 따라 AttendBtnFailure로 변경 가능
-                } else {
-                    // 이벤트 시작 후 30분 초과
-                    AttendBtnFailure()
+            when {
+                timeUntilEvent.startsWith("D-") -> {
+                    AttendBtnOff(timeUntilEvent)
                 }
-            } else if (duration.isZero || (duration.toMinutes() in 1..30)) {
-                // 이벤트 시작 전 30분 이내
-                AttendBtnOn(navController = navController)
-            } else {
-                // 이벤트 시작까지 30분 이상 남음
-                AttendBtnOff("D-${duration.toDaysPart()} ${duration.toHoursPart()}:${duration.toMinutesPart()}")
+                timeUntilEvent.matches(Regex("\\d{2}:\\d{2}")) -> {
+                    AttendBtnOff(timeUntilEvent) // HH:MM 형식으로 남은 시간이 표시될 때
+                }
+                timeUntilEvent == "Soon" -> {
+                    AttendBtnOn(navController)
+                }
+                timeUntilEvent == "Ended" -> {
+                    if(curri.isAttended) {
+                        AttendBtnSuccess()
+                    } else {
+                        AttendBtnFailure()
+                    }
+                }
             }
         }
     }
